@@ -1,0 +1,89 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  phone     String?  @unique
+  name      String
+  password  String
+  role      Role     @default(USER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  purchases Purchase[]
+  licenses  SpotPlayerLicense[]
+}
+
+model Course {
+  id          String  @id @default(cuid())
+  slug        String  @unique
+  title       String
+  subtitle    String
+  description String  @db.Text
+  price       Int
+  thumbnail   String?
+  duration    String?
+  lessons     Int     @default(0)
+  level       Level   @default(BEGINNER)
+  isPublished Boolean @default(false)
+  spotplayerId String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  purchases Purchase[]
+}
+
+model Purchase {
+  id        String         @id @default(cuid())
+  userId    String
+  courseId  String
+  amount    Int
+  status    PurchaseStatus @default(PENDING)
+  authority String?
+  refId     String?
+  createdAt DateTime       @default(now())
+
+  user   User   @relation(fields: [userId], references: [id])
+  course Course @relation(fields: [courseId], references: [id])
+
+  @@index([userId])
+  @@index([courseId])
+}
+
+model SpotPlayerLicense {
+  id         String    @id @default(cuid())
+  userId     String
+  courseId   String
+  licenseKey String    @unique
+  expiresAt  DateTime?
+  createdAt  DateTime  @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum Level {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+}
+
+enum PurchaseStatus {
+  PENDING
+  SUCCESS
+  FAILED
+}
