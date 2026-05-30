@@ -111,21 +111,10 @@ export default function Home() {
           {/* Big decorative background word — parallax + fade */}
           <HeroDecor />
 
-          {/* Mobile hero image — top, large */}
-          <div className="lg:hidden relative w-full flex-shrink-0 z-10" style={{ height: "48vh" }}>
-            <Image
-              src="/images/hero.png"
-              alt="مجتبا یزدان‌پناه"
-              fill
-              className="object-contain object-bottom"
-              style={{ transform: "scaleX(-1)" }}
-              priority
-            />
-          </div>
+          <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
 
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 relative w-full z-10 lg:flex-1 lg:flex lg:items-end">
-            <div className="flex items-end justify-between gap-8 w-full lg:pt-4">
-              <div className="max-w-xl pt-6 pb-8 lg:pt-0 lg:pb-20">
+            {/* Text — top on mobile, right on desktop */}
+            <div className="flex-shrink-0 max-w-xl pt-8 pb-2 lg:pt-0 lg:pb-20">
 
                 {/* Eyebrow */}
                 <div
@@ -204,10 +193,24 @@ export default function Home() {
                     <span className="text-[#a09990] text-xs font-body">+۷,۰۰۰ دانشجوی راضی</span>
                   </div>
                 </div>
-              </div>
 
-              <HeroImage />
             </div>
+
+            {/* Mobile image — bottom, touches black bar */}
+            <div className="lg:hidden relative flex-1 min-h-[40vh]">
+              <Image
+                src="/images/hero.png"
+                alt="مجتبا یزدان‌پناه"
+                fill
+                className="object-contain object-bottom"
+                style={{ transform: "scaleX(-1)" }}
+                priority
+              />
+            </div>
+
+            {/* Desktop image */}
+            <HeroImage />
+
           </div>
         </section>
 
