@@ -108,8 +108,6 @@ export default function Home() {
           className="dot-bg overflow-hidden relative flex flex-col"
           style={{ backgroundColor: "#FAF6F1", minHeight: "86vh" }}
         >
-          {/* Big decorative background word — parallax + fade */}
-          <HeroDecor />
 
           <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
 
