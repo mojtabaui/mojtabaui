@@ -111,22 +111,21 @@ export default function Home() {
           {/* Big decorative background word — parallax + fade */}
           <HeroDecor />
 
-          {/* Mobile-only hero image */}
-          <div className="lg:hidden absolute bottom-0 left-0 w-36 sm:w-48 pointer-events-none select-none" style={{ zIndex: 1 }}>
+          {/* Mobile hero image — top, large */}
+          <div className="lg:hidden relative w-full flex-shrink-0 z-10" style={{ height: "48vh" }}>
             <Image
               src="/images/hero.png"
-              alt=""
-              width={192}
-              height={240}
-              className="w-full h-auto opacity-75"
+              alt="مجتبا یزدان‌پناه"
+              fill
+              className="object-contain object-bottom"
               style={{ transform: "scaleX(-1)" }}
               priority
             />
           </div>
 
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 relative flex-1 flex items-end w-full z-10">
-            <div className="flex items-end justify-between gap-8 w-full pt-4">
-              <div className="max-w-xl pb-20">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 relative w-full z-10 lg:flex-1 lg:flex lg:items-end">
+            <div className="flex items-end justify-between gap-8 w-full lg:pt-4">
+              <div className="max-w-xl pt-6 pb-8 lg:pt-0 lg:pb-20">
 
                 {/* Eyebrow */}
                 <div
