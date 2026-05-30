@@ -111,6 +111,19 @@ export default function Home() {
           {/* Big decorative background word — parallax + fade */}
           <HeroDecor />
 
+          {/* Mobile-only hero image */}
+          <div className="lg:hidden absolute bottom-0 left-0 w-36 sm:w-48 pointer-events-none select-none" style={{ zIndex: 1 }}>
+            <Image
+              src="/images/hero.png"
+              alt=""
+              width={192}
+              height={240}
+              className="w-full h-auto opacity-75"
+              style={{ transform: "scaleX(-1)" }}
+              priority
+            />
+          </div>
+
           <div className="max-w-7xl mx-auto px-4 sm:px-6 relative flex-1 flex items-end w-full z-10">
             <div className="flex items-end justify-between gap-8 w-full pt-4">
               <div className="max-w-xl pb-20">
