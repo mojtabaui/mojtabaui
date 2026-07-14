@@ -4,21 +4,26 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import CourseCard from "./CourseCard";
 import { Course } from "@/lib/mock-data";
-import { Sparkles, Video } from "lucide-react";
+import { Sparkles, Video, Presentation } from "lucide-react";
+
+type TabKey = "infinity" | "video" | "workshop";
 
 interface Props {
   infinityCourses: Course[];
   videoCourses: Course[];
+  workshopCourses: Course[];
 }
 
-const tabs = [
-  { key: "infinity", label: "بی‌نهایت", icon: <Sparkles size={14} />, desc: "ویدیو + منتورینگ + پروژه" },
-  { key: "video",    label: "ویدیویی",  icon: <Video    size={14} />, desc: "بدون منتورینگ، به تمپو خودت" },
+const tabs: { key: TabKey; label: string; icon: React.ReactNode; desc: string }[] = [
+  { key: "infinity", label: "بی‌نهایت", icon: <Sparkles     size={14} />, desc: "ویدیو + منتورینگ + پروژه" },
+  { key: "video",    label: "ویدیویی",  icon: <Video        size={14} />, desc: "بدون منتورینگ، به تمپو خودت" },
+  { key: "workshop", label: "کارگاه‌ها", icon: <Presentation size={14} />, desc: "کارگاه‌های زنده و فشرده" },
 ];
 
-export default function CoursesClient({ infinityCourses, videoCourses }: Props) {
-  const [active, setActive] = useState<"infinity" | "video">("infinity");
-  const list = active === "infinity" ? infinityCourses : videoCourses;
+export default function CoursesClient({ infinityCourses, videoCourses, workshopCourses }: Props) {
+  const [active, setActive] = useState<TabKey>("infinity");
+  const list =
+    active === "infinity" ? infinityCourses : active === "workshop" ? workshopCourses : videoCourses;
 
   return (
     <div>
@@ -27,7 +32,7 @@ export default function CoursesClient({ infinityCourses, videoCourses }: Props) 
         {tabs.map((tab) => (
           <button
             key={tab.key}
-            onClick={() => setActive(tab.key as "infinity" | "video")}
+            onClick={() => setActive(tab.key)}
             className="relative px-5 py-2.5 rounded-xl text-sm font-body transition-colors duration-200 flex items-center gap-2"
           >
             {active === tab.key && (

@@ -1,9 +1,12 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import { Clock, Users, Layers, Check, ChevronLeft, Calendar, Star } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { courses, formatPrice } from "@/lib/mock-data";
+import BuyButton from "@/components/BuyButton";
+import WorkshopLanding from "@/components/WorkshopLanding";
+import { courses, formatPrice, typeLabel } from "@/lib/mock-data";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -14,6 +17,17 @@ const colorMap: Record<string, { bg: string; badge: string; accent: string }> = 
   "ux-infinity": { bg: "#EEF3FF", badge: "#BFDBFE", accent: "#1d4ed8" },
   "ui-offline":  { bg: "#FFF5F5", badge: "#FEE2E2", accent: "#ef4444" },
   "ux-offline":  { bg: "#F0F4FF", badge: "#DBEAFE", accent: "#2563eb" },
+  "claude-for-designers": { bg: "#FBF0EA", badge: "#F3D9C7", accent: "#C2410C" },
+};
+
+// بنر اختصاصی هر دوره — بالای ستون محتوا
+const posterMap: Record<string, string> = {
+  "ui-infinity": "/images/banner-ui-infinity.jpg",
+  "ux-infinity": "/images/banner-ux-infinity.jpg",
+  "ui-offline":  "/images/banner-ui-offline.jpg",
+  "ux-offline":  "/images/banner-ux-offline.jpg",
+  "portfolio":   "/images/banner-portfolio.jpg",
+  "prototype":   "/images/banner-prototype.jpg",
 };
 
 export default async function CourseDetailPage({ params }: Props) {
@@ -21,8 +35,19 @@ export default async function CourseDetailPage({ params }: Props) {
   const course = courses.find((c) => c.slug === slug);
   if (!course) notFound();
 
+  if (course.type === "workshop") {
+    return (
+      <>
+        <Navbar />
+        <WorkshopLanding course={course} />
+        <Footer />
+      </>
+    );
+  }
+
   const color = colorMap[slug] ?? colorMap["ui-infinity"];
-  const discipline = slug.startsWith("ui") ? "UI" : "UX";
+  const discipline = slug.startsWith("ui") ? "UI" : slug.startsWith("ux") ? "UX" : "AI";
+  const poster = posterMap[slug];
 
   const counterpartSlug = course.type === "infinity"
     ? slug.replace("-infinity", "-offline")
@@ -66,13 +91,30 @@ export default async function CourseDetailPage({ params }: Props) {
 
             <div className="grid grid-cols-1 lg:grid-cols-5 gap-12">
               <div className="lg:col-span-3">
+                {/* Banner — full square image, no crop */}
+                {poster && (
+                  <div
+                    className="relative w-full max-w-[340px] aspect-square rounded-3xl overflow-hidden shadow-md mb-7"
+                    style={{ border: `1px solid ${color.accent}22` }}
+                  >
+                    <Image
+                      src={poster}
+                      alt={course.title}
+                      fill
+                      priority
+                      sizes="340px"
+                      className="object-cover"
+                    />
+                  </div>
+                )}
+
                 {/* Eyebrow chips */}
                 <div className="flex items-center gap-2.5 mb-5 flex-wrap">
                   <span
                     className="text-[11px] font-display font-bold tracking-widest uppercase px-3 py-1 rounded-full"
                     style={{ backgroundColor: color.badge, color: color.accent }}
                   >
-                    {course.type === "infinity" ? "بی‌نهایت" : "آفلاین"}
+                    {typeLabel(course.type)}
                   </span>
                   <span className="text-[#c9c2b8] font-body text-xs">—</span>
                   <span className="text-[#6b6560] font-body text-xs">{course.level}</span>
@@ -146,12 +188,11 @@ export default async function CourseDetailPage({ params }: Props) {
                     )}
                   </div>
 
-                  <Link
-                    href="/auth/register"
-                    className="w-full flex items-center justify-center bg-[#1a1714] hover:bg-[#2d2926] text-white font-body font-semibold py-3.5 rounded-2xl transition-all mb-3 text-sm"
-                  >
-                    خرید دوره
-                  </Link>
+                  <BuyButton
+                    slug={slug}
+                    comingSoon={course.comingSoon}
+                    externalUrl={course.externalUrl}
+                  />
                   <p className="text-center text-[#a09990] text-xs font-body mb-6">
                     لایسنس اسپات پلیر خودکار به پنل شما اضافه می‌شود
                   </p>

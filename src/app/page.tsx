@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowLeft, Star, ChevronLeft, ExternalLink, Send, Layers } from "lucide-react";
+import { ArrowLeft, Star, ChevronLeft, ExternalLink, Send, Layers, Clock, Calendar, Users } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import CourseCard from "@/components/CourseCard";
@@ -11,7 +11,9 @@ import HeroImage from "@/components/HeroImage";
 import HeroDecor from "@/components/HeroDecor";
 import ParallaxY from "@/components/ParallaxY";
 import ArticleRow from "@/components/ArticleRow";
-import { courses, infinityCourses, videoCourses, stats, formatPrice, articles, freeResources, studentProjects } from "@/lib/mock-data";
+import { infinityCourses, videoCourses, workshopCourses, stats, formatPrice, articles, freeResources, featuredProjects } from "@/lib/mock-data";
+
+const workshop = workshopCourses[0];
 
 const testimonials = [
   {
@@ -356,6 +358,84 @@ export default function Home() {
           </div>
         </section>
 
+        {/* ─── Workshop Highlight ─── */}
+        {workshop && (
+          <section className="py-24 border-y relative overflow-hidden" style={{ backgroundColor: "#160e08", borderColor: "#3a2416" }}>
+            {/* copper dot pattern */}
+            <div className="absolute inset-0 dot-bg-copper pointer-events-none" />
+            {/* warm glow echoing the banner */}
+            <div
+              className="absolute -top-24 right-0 w-[520px] h-[520px] rounded-full pointer-events-none"
+              style={{ background: "radial-gradient(circle, rgba(226,120,68,0.16), transparent 70%)" }}
+            />
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 relative">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+
+                {/* Text — DOM first = RIGHT in RTL */}
+                <FadeIn>
+                  <div>
+                    <div className="inline-flex items-center gap-2 bg-white/[0.06] border border-[#E88A5C]/25 rounded-full px-3.5 py-1.5 mb-6">
+                      <span className="w-2 h-2 rounded-full bg-[#E88A5C] pulse-dot" />
+                      <span className="font-body text-xs font-semibold text-[#E88A5C]">تازه اضافه شد</span>
+                    </div>
+                    <div className="font-display text-[10px] font-bold tracking-[0.22em] uppercase text-[#E88A5C]/80 mb-3">
+                      WORKSHOP
+                    </div>
+                    <h2 className="font-body font-black text-3xl md:text-4xl text-white leading-tight mb-5">
+                      {workshop.title}
+                    </h2>
+                    <p className="text-white/55 font-body leading-relaxed mb-8 max-w-md text-base">
+                      {workshop.description}
+                    </p>
+
+                    {/* Meta chips */}
+                    <div className="flex flex-wrap items-center gap-x-6 gap-y-2 mb-9 text-sm font-body text-white/60">
+                      <span className="flex items-center gap-2">
+                        <Clock size={14} className="text-[#E88A5C]" /> {workshop.durationHours} ساعت
+                      </span>
+                      <span className="flex items-center gap-2">
+                        <Calendar size={14} className="text-[#E88A5C]" /> {workshop.sessionDate}
+                      </span>
+                      <span className="flex items-center gap-2">
+                        <Users size={14} className="text-[#E88A5C]" /> ظرفیت {workshop.capacity} نفر
+                      </span>
+                    </div>
+
+                    <Link
+                      href={`/courses/${workshop.slug}`}
+                      className="inline-flex items-center gap-2 text-white font-body font-semibold px-7 py-3.5 rounded-2xl transition-all hover:scale-[1.02] active:scale-[0.98]"
+                      style={{
+                        background: "linear-gradient(180deg, #E0743C, #C2410C)",
+                        boxShadow: "0 8px 30px -8px rgba(226,120,68,0.6)",
+                      }}
+                    >
+                      مشاهده‌ی کارگاه
+                      <ArrowLeft size={16} />
+                    </Link>
+                  </div>
+                </FadeIn>
+
+                {/* Visual — DOM second = LEFT in RTL */}
+                <FadeIn delay={0.12}>
+                  <Link
+                    href={`/courses/${workshop.slug}`}
+                    className="block relative rounded-3xl overflow-hidden shadow-2xl border border-white/10 aspect-[3/2] group"
+                  >
+                    <Image
+                      src="/images/claude-workshop.png"
+                      alt={workshop.title}
+                      fill
+                      sizes="(max-width: 1024px) 100vw, 50vw"
+                      className="object-cover group-hover:scale-[1.03] transition-transform duration-500"
+                    />
+                  </Link>
+                </FadeIn>
+
+              </div>
+            </div>
+          </section>
+        )}
+
         {/* ─── Why Infinity ─── */}
         <section className="py-24">
           <div className="max-w-7xl mx-auto px-4 sm:px-6">
@@ -530,7 +610,7 @@ export default function Home() {
             </FadeIn>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {studentProjects.slice(0, 3).map((project, i) => {
+              {featuredProjects.map((project, i) => {
                 const isUI    = project.courseType === "ui";
                 const isFigma = project.linkType   === "figma";
                 const color   = isUI ? "#FFF0EE" : "#EEF3FF";
@@ -574,7 +654,7 @@ export default function Home() {
                       <div className="p-4">
                         <h3 className="font-body font-bold text-white text-sm mb-1">{project.projectTitle}</h3>
                         <div className="flex items-center justify-between">
-                          <span className="text-white/40 text-xs font-body">{project.studentName}</span>
+                          <span className="text-white/40 text-xs font-body">پروژه گروهی</span>
                           <ExternalLink size={12} className="text-white/25 group-hover:text-white/60 transition-colors" />
                         </div>
                       </div>
@@ -761,7 +841,7 @@ export default function Home() {
                 و فوری می‌تونی شروع کنی.
               </p>
               <div className="flex items-center justify-center gap-3 flex-wrap">
-                {courses.map((c) => (
+                {infinityCourses.map((c) => (
                   <Link
                     key={c.id}
                     href={`/courses/${c.slug}`}
@@ -770,6 +850,13 @@ export default function Home() {
                     {c.title} — {formatPrice(c.price)}
                   </Link>
                 ))}
+                <Link
+                  href="/courses"
+                  className="inline-flex items-center gap-2 border border-white/20 hover:border-white/40 text-white/70 hover:text-white font-body font-semibold px-7 py-3.5 rounded-2xl transition-all text-sm hover:scale-[1.02] active:scale-[0.98]"
+                >
+                  همه‌ی دوره‌ها
+                  <ArrowLeft size={15} />
+                </Link>
               </div>
             </FadeIn>
           </div>

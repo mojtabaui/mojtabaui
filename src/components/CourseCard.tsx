@@ -4,7 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { Clock, Users, Layers, ArrowLeft, Calendar } from "lucide-react";
-import { Course, formatPrice } from "@/lib/mock-data";
+import { Course, formatPrice, typeLabel } from "@/lib/mock-data";
 
 const imageMap: Record<string, string> = {
   "ui-infinity": "/images/ui_infinity.png",
@@ -22,6 +22,7 @@ const colorMap: Record<string, { bg: string; badge: string; tag: string; accent:
   "ux-offline":  { bg: "#F0F4FF", badge: "#DBEAFE",  tag: "#DBEAFE99",  accent: "#2563eb" },
   "portfolio":   { bg: "#F0FDF4", badge: "#BBF7D0",  tag: "#BBF7D099",  accent: "#16a34a" },
   "prototype":   { bg: "#FFF7ED", badge: "#FED7AA",  tag: "#FED7AA99",  accent: "#ea580c" },
+  "claude-for-designers": { bg: "#FBF0EA", badge: "#F3D9C7", tag: "#F3D9C799", accent: "#C2410C" },
 
 };
 
@@ -98,7 +99,7 @@ export default function CourseCard({ course }: { course: Course }) {
           )}
           <span className="text-[11px] font-body font-semibold px-3 py-1 rounded-full"
             style={{ backgroundColor: c.badge, color: c.accent }}>
-            {course.type === "infinity" ? "بی‌نهایت" : "آفلاین"}
+            {typeLabel(course.type)}
           </span>
         </div>
 
@@ -121,21 +122,37 @@ export default function CourseCard({ course }: { course: Course }) {
 
         {/* ── Stats ── */}
         <div className="flex items-center flex-wrap gap-4 text-[#6b6560] text-xs font-body mb-5">
-          <span className="flex items-center gap-1.5">
-            <Clock size={12} /> {course.videoHours} ساعت ویدیو
-          </span>
-          {course.type === "infinity" ? (
-            <span className="flex items-center gap-1.5">
-              <Users size={12} /> {course.mentoringHours} ساعت منتورینگ
-            </span>
+          {course.type === "workshop" ? (
+            <>
+              <span className="flex items-center gap-1.5">
+                <Clock size={12} /> {course.durationHours} ساعت
+              </span>
+              <span className="flex items-center gap-1.5">
+                <Calendar size={12} /> {course.sessionDate}
+              </span>
+              <span className="flex items-center gap-1.5">
+                <Users size={12} /> ظرفیت {course.capacity} نفر
+              </span>
+            </>
           ) : (
-            <span className="flex items-center gap-1.5">
-              <Calendar size={12} /> پشتیبانی {course.supportMonths} ماهه
-            </span>
+            <>
+              <span className="flex items-center gap-1.5">
+                <Clock size={12} /> {course.videoHours} ساعت ویدیو
+              </span>
+              {course.type === "infinity" ? (
+                <span className="flex items-center gap-1.5">
+                  <Users size={12} /> {course.mentoringHours} ساعت منتورینگ
+                </span>
+              ) : (
+                <span className="flex items-center gap-1.5">
+                  <Calendar size={12} /> پشتیبانی {course.supportMonths} ماهه
+                </span>
+              )}
+              <span className="flex items-center gap-1.5">
+                <Layers size={12} /> {course.projects} پروژه
+              </span>
+            </>
           )}
-          <span className="flex items-center gap-1.5">
-            <Layers size={12} /> {course.projects} پروژه
-          </span>
         </div>
 
         {/* ── Tags ── */}

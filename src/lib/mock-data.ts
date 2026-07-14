@@ -1,5 +1,5 @@
 export type Level = "مقدماتی" | "متوسط" | "پیشرفته";
-export type CourseType = "infinity" | "offline";
+export type CourseType = "infinity" | "offline" | "workshop";
 
 export interface CourseTestimonial {
   name: string;
@@ -33,6 +33,11 @@ export interface Course {
   mentoringHours: number;
   supportMonths: number;
   projects: number;
+  // ── فیلدهای مخصوص کارگاه (type === "workshop") ──
+  durationHours?: number;
+  sessionDate?: string;
+  capacity?: number;
+  format?: string;
   level: Level;
   students: number;
   tags: string[];
@@ -240,6 +245,25 @@ const offlineFeatures = (projects: number) => [
 const emptyTopics: CourseTopic[] = [];
 const emptyFAQs: FAQ[] = [];
 
+// ─── Workshops (محتوای placeholder — بعداً تکمیل می‌شه) ───────
+const claudeWorkshopTopics: CourseTopic[] = [
+  { title: "جلسه ۱ · چرا Claude برای طراح محصول؟", description: "جایگاه Claude در workflow طراحی، چه کارهایی رو خوب انجام می‌ده، محدودیت‌ها و کِی نباید بهش تکیه کرد." },
+  { title: "جلسه ۱ · زبانِ Claude — پرامپت‌نویسی برای طراح‌ها", description: "اصول گفتگوی مؤثر، ساختار پرامپت، context دادن و ساختِ کتابخانه‌ی پرامپت شخصی." },
+  { title: "جلسه ۱ · ریسرچ و اینسایت", description: "از مصاحبه و دیتای خام تا سنتز، استخراج insight و ساخت persona و customer journey map." },
+  { title: "جلسه ۱ · ایده تا کانسپت + UX Writing", description: "ایده‌پردازی، ساخت user flow و نوشتن متن‌های UI و microcopy با Claude." },
+  { title: "جلسه ۲ · دیزاین‌سیستم و مستندسازی", description: "کمک Claude در تعریف توکن، مستندسازی کامپوننت‌ها و نوشتن spec و گایدلاین." },
+  { title: "جلسه ۲ · از دیزاین تا پروتوتایپ کدمحور", description: "ساخت پروتوتایپ تعاملی و صفحات کدمحور با Artifacts — بدون نیاز به برنامه‌نویس." },
+  { title: "جلسه ۲ · نقد، تست و ممیزی", description: "نقد طراحی، ارزیابی heuristic و بررسی accessibility با کمک Claude." },
+  { title: "جلسه ۲ · هندآف، iterate و جمع‌بندی", description: "آماده‌سازی تحویل به توسعه‌دهنده، بهبود تکرارشونده و نقشه‌ی راه ادامه." },
+];
+
+const claudeWorkshopFAQs: FAQ[] = [
+  { q: "پیش‌نیاز فنی داره؟", a: "نه. فقط آشنایی پایه با طراحی کافیه؛ همه‌چیز از صفر و به‌صورت دستی پیش می‌ره." },
+  { q: "دو جلسه چطور برگزار می‌شه؟", a: "دو جلسه‌ی زنده‌ی آنلاینِ ۳ ساعته در دو روز، به‌صورت تعاملی و دستی روی یه پروژه‌ی واقعی." },
+  { q: "به اشتراک Claude نیاز دارم؟", a: "نسخه‌ی رایگان Claude برای شروع کافیه؛ اگه به امکانات بیشتری نیاز شد، توی کارگاه راهنمایی می‌شی." },
+  { q: "جلسات ضبط می‌شن؟", a: "بله، هر دو جلسه ضبط می‌شن و بعد از کارگاه در دسترست هستن." },
+];
+
 export const courses: Course[] = [
   // ── UI Infinity ──────────────────────────────────────────
   {
@@ -426,11 +450,76 @@ export const courses: Course[] = [
     testimonials: [],
     externalUrl: "https://spotplayer.ir",
   },
+
+  // ── Workshop: Claude for Product Designers ───────────────
+  {
+    id: "claude-for-designers",
+    slug: "claude-for-designers",
+    type: "workshop",
+    title: "کارگاه Claude برای طراحان محصول",
+    subtitle: "CLAUDE FOR PRODUCT DESIGNERS",
+    description:
+      "دو جلسه‌ی زنده و فشرده برای اینکه Claude رو وارد workflow طراحی محصولت کنی — از ریسرچ و ایده تا پروتوتایپ کدمحور.",
+    longDescription:
+      "در دو جلسه‌ی ۳ ساعته، قدم‌به‌قدم یاد می‌گیری چطور Claude رو در کل مسیر طراحی محصول به کار بگیری: از سنتز ریسرچ و ساخت persona، تا نوشتن UX copy، مستندسازی دیزاین‌سیستم و ساخت پروتوتایپ تعاملی کدمحور با Artifacts. کارگاه کاملاً دستیه و روی یه پروژه‌ی واقعی پیش می‌ره، همراه با کتابخانه‌ی پرامپت و فایل‌های آموزشی.",
+    price: 2000000,
+    thumbnail: "",
+    videoHours: 0,
+    mentoringHours: 0,
+    supportMonths: 0,
+    projects: 0,
+    durationHours: 6,
+    sessionDate: "به‌زودی اعلام می‌شود",
+    capacity: 30,
+    format: "آنلاین · ۲ جلسه‌ی ۳ ساعته",
+    level: "متوسط",
+    students: 0,
+    tags: ["Claude", "AI", "Product Design", "Workflow"],
+    topics: claudeWorkshopTopics,
+    features: [
+      "۲ جلسه‌ی زنده‌ی ۳ ساعته (جمعاً ۶ ساعت)",
+      "کارگاه تعاملی و دستی روی یه پروژه‌ی واقعی",
+      "کتابخانه‌ی پرامپت + فایل‌های آموزشی",
+      "ضبط کامل هر دو جلسه",
+      "ظرفیت محدود",
+      "از صفر و بدون پیش‌نیاز فنی",
+    ],
+    faqs: claudeWorkshopFAQs,
+    learningOutcomes: [
+      "پرامپت‌نویسی مؤثر برای کارهای طراحی + کتابخانه‌ی پرامپت شخصی",
+      "سنتز ریسرچ و ساخت persona و journey map از دیتای خام",
+      "نوشتن UX copy و microcopy با Claude",
+      "ساخت پروتوتایپ تعاملی کدمحور با Artifacts بدون برنامه‌نویسی",
+      "مستندسازی دیزاین‌سیستم و نوشتن spec و گایدلاین",
+      "نقد طراحی و ممیزی heuristic و accessibility با هوش مصنوعی",
+    ],
+    targetAudience: [
+      "طراح‌های UI/UX و محصول که می‌خوان AI رو وارد workflow روزمره کنن",
+      "طراح‌هایی که می‌خوان سریع‌تر از ریسرچ به پروتوتایپ برسن",
+      "کسایی که از کد می‌ترسن و می‌خوان بدون برنامه‌نویس پروتوتایپ بسازن",
+      "بدون پیش‌نیاز فنی — فقط آشنایی پایه با طراحی",
+    ],
+    afterCompletion: [
+      "یه کتابخانه‌ی پرامپت آماده برای کارهای طراحی",
+      "توانایی بردن یه فیچر واقعی از ریسرچ تا پروتوتایپ با Claude",
+      "فایل‌های آموزشی و تمپلیت‌های کارگاه",
+      "ضبط کامل دو جلسه",
+    ],
+    instructor: "مجتبا یزدانپناه",
+    isNew: true,
+    comingSoon: true,
+    testimonials: [],
+  },
 ];
 
 export const infinityCourses = courses.filter((c) => c.type === "infinity");
 export const offlineCourses  = courses.filter((c) => c.type === "offline" && !c.externalUrl);
 export const videoCourses    = courses.filter((c) => c.type === "offline");
+export const workshopCourses = courses.filter((c) => c.type === "workshop");
+
+export function typeLabel(type: CourseType): string {
+  return type === "infinity" ? "بی‌نهایت" : type === "workshop" ? "کارگاه" : "آفلاین";
+}
 
 export const stats = [
   { value: "۷,۰۰۰+", label: "دانشجو" },
@@ -614,7 +703,325 @@ export const studentProjects: StudentProject[] = [
     cohort: "بی‌نهایت UI — مهر ۱۴۰۳",
     coverImage: "/images/student_work/digiden_nft.jpg",
   },
+  {
+    id: "sp4",
+    studentName: "مبینا جمشیدجم، شیرین ایازی، راهیل عمرانیان، مریم محمدی",
+    projectTitle: "Soundflow — دانلود و استریم موزیک",
+    description: "+۲۰ صفحه، +۱۰۰ کامپوننت، Auto Layout، فول ریسپانسیو (دسکتاپ و موبایل)، Prototype و Style Guide.",
+    courseType: "ui",
+    linkType: "figma",
+    url: "https://www.figma.com/community/file/1470124207420369005",
+    tags: ["UI Design", "Music", "Web App", "Prototype"],
+    cohort: "UI — مهر ۱۴۰۳",
+    coverImage: "/images/student_work/photo_2026-07-05_13-34-51.jpg",
+  },
+  {
+    id: "sp5",
+    studentName: "مینا برهانی، فاضل میکائیلی، سیران انوری",
+    projectTitle: "NFT Product Marketplace",
+    description: "+۶۰ صفحه، +۲۰ کامپوننت، Auto Layout، ریسپانسیو، Prototype و Style Guide.",
+    courseType: "ui",
+    linkType: "figma",
+    url: "https://www.figma.com/community/file/1504098789553909930",
+    tags: ["UI Design", "NFT", "Marketplace", "Web"],
+    cohort: "UI — بهمن ۱۴۰۳",
+    coverImage: "/images/student_work/photo_2026-07-05_13-35-45.jpg",
+  },
+  {
+    id: "sp6",
+    studentName: "فاطمه یوسفی، ثنا صفایی، فاطمه صفری، آیدا اسمعیلی، زینب علی‌عباسی",
+    projectTitle: "NFT Marketplace — Rare NFTs",
+    description: "+۲۰۰ صفحه، +۸۰ کامپوننت و ورینت، Auto Layout، فول ریسپانسیو، Prototype و Style Guide.",
+    courseType: "ui",
+    linkType: "figma",
+    url: "https://www.figma.com/community/file/1467881887507428083/nft-marketplace-website",
+    tags: ["UI Design", "NFT", "Marketplace", "Dark Mode"],
+    cohort: "بی‌نهایت UI — آبان ۱۴۰۳",
+    coverImage: "/images/student_work/photo_2026-07-05_13-36-08.jpg",
+  },
+  {
+    id: "sp7",
+    studentName: "مهدی اسحاقی، نرگس شاهبازی، ملیحه پورهاشمی",
+    projectTitle: "فرنگار — گالری آنلاین نقاشی",
+    description: "+۹۵ صفحه، +۵۰ کامپوننت، Auto Layout، ورینت‌نویسی، Style Guide — همراه با Case Study کامل.",
+    courseType: "ui",
+    linkType: "figma",
+    url: "https://www.figma.com/community/file/1466024126630025975/art-gallery-application-farnegar",
+    tags: ["UI Design", "Gallery", "Mobile App", "Case Study"],
+    cohort: "بی‌نهایت UI",
+    coverImage: "/images/student_work/f7a88c3d1b0c72d7d006b4fd4b5f26670d7adb62.png",
+  },
+  {
+    id: "sp8",
+    studentName: "رویا سلطان‌محمدی، زهرا محمدزاده، عاطفه نایبی، غزاله قلاعی، فاطمه سلطانی",
+    projectTitle: "نماپلاس — اپلیکیشن استریم فیلم",
+    description: "+۱۰۰ صفحه، +۵۰ کامپوننت، Auto Layout، ورینت‌نویسی، Prototype و انیمیشن، Style Guide.",
+    courseType: "ui",
+    linkType: "figma",
+    url: "https://www.figma.com/community/file/1452942610336143487",
+    tags: ["UI Design", "Streaming", "Mobile App", "Animation"],
+    cohort: "UI — مهر ۱۴۰۳",
+    coverImage: "/images/student_work/photo_2026-07-05_13-37-18.jpg",
+  },
+  {
+    id: "sp9",
+    studentName: "بهنام موسوی، کیمیا پیرنیا، فاطمه وفایی",
+    projectTitle: "IELTS — اپلیکیشن آموزش زبان",
+    description: "+۵۰ صفحه، +۱۲۰ کامپوننت، Auto Layout، ورینت‌نویسی، فلوی کامل و Style Guide.",
+    courseType: "ui",
+    linkType: "figma",
+    url: "https://www.figma.com/community/file/1442570217140975232/ielts-applicationcommunity",
+    tags: ["UI Design", "EdTech", "Mobile App", "Components"],
+    cohort: "UI — مرداد ۱۴۰۳",
+    coverImage: "/images/student_work/photo_2026-07-05_13-37-38.jpg",
+  },
+  {
+    id: "sp10",
+    studentName: "غزاله شیری، آرزو محمدعلیزاده، حدیث حیدری، نفس عمادلو",
+    projectTitle: "رگال — فروشگاه لباس بانوان",
+    description: "+۱۰۰ صفحه، +۵۰ کامپوننت، ورینت‌نویسی، نسخه موبایل، فول ریسپانسیو، Auto Layout و Style Guide.",
+    courseType: "ui",
+    linkType: "figma",
+    url: "https://www.figma.com/community/file/1442524078847947352",
+    tags: ["UI Design", "E-Commerce", "Responsive", "Fashion"],
+    cohort: "UI — مرداد ۱۴۰۳",
+    coverImage: "/images/student_work/photo_2026-07-05_13-38-25.jpg",
+  },
+  {
+    id: "sp11",
+    studentName: "محمد نصراللهی، سیما شیردل، کارن علایی، مریم گل‌افزانی",
+    projectTitle: "T.Movie — استریم فیلم و سریال",
+    description: "+۱۰ صفحه، +۳۰ کامپوننت، پروژه داشبوردی با اینتراکشن جذاب و Style Guide.",
+    courseType: "ui",
+    linkType: "figma",
+    url: "https://www.figma.com/community/file/1429484601530346250/movie-series-streaming-platform",
+    tags: ["UI Design", "Streaming", "Dashboard", "Interaction"],
+    cohort: "UI — تیر ۱۴۰۳",
+    coverImage: "/images/student_work/photo_2026-07-05_13-38-48.jpg",
+  },
+  {
+    id: "sp12",
+    studentName: "محمد عبدی، مهرداد ترابی",
+    projectTitle: "تکنوشاپ — فروشگاه لوازم دیجیتال",
+    description: "+۳۰ صفحه، +۸۰ کامپوننت، ریسپانسیو، همراه با نسخه اپلیکیشن و Style Guide.",
+    courseType: "ui",
+    linkType: "figma",
+    url: "https://www.figma.com/design/gJn8Yaar5itb1Tu8bHZzwL/technoshop%2F-eccomerce-website-(Community)?node-id=2748-9905",
+    tags: ["UI Design", "E-Commerce", "Responsive", "App"],
+    cohort: "UI — دی ۱۴۰۲",
+    coverImage: "/images/student_work/photo_2026-07-05_13-39-11.jpg",
+  },
+  {
+    id: "sp13",
+    studentName: "زهرا سعیدی، مینا احمدی، محمد عبدی، علیرضا رکنی، زهرا بعیدی",
+    projectTitle: "ورزش ۳ — بازطراحی وبسایت",
+    description: "بازطراحی +۸ صفحه، کامپوننت‌نویسی، ریسپانسیو، همراه با نسخه اپلیکیشن و Style Guide.",
+    courseType: "ui",
+    linkType: "figma",
+    url: "https://www.figma.com/community/file/1391495504933329979/varzesh-3-sports-news-websites",
+    tags: ["UI Design", "News", "Redesign", "Sports"],
+    cohort: "UI — مهر ۱۴۰۲",
+    coverImage: "/images/student_work/photo_2026-07-05_13-39-35.jpg",
+  },
+  {
+    id: "sp14",
+    studentName: "الهام جراح‌زاده، محمدجواد عظیمی، پرند محمدی",
+    projectTitle: "Music Streaming — دانلود و استریم موزیک",
+    description: "+۲۵ صفحه، +۱۰۰ کامپوننت، ورینت‌نویسی، فول ریسپانسیو (موبایل و دسکتاپ)، Auto Layout و Style Guide.",
+    courseType: "ui",
+    linkType: "figma",
+    url: "https://www.figma.com/community/file/1424405619131836758",
+    tags: ["UI Design", "Music", "Responsive", "Web App"],
+    cohort: "UI — تیر ۱۴۰۳",
+    coverImage: "/images/student_work/photo_2026-07-05_13-40-09.jpg",
+  },
+  {
+    id: "sp15",
+    studentName: "امیرحسین آذرگشت، آرش زارعی، محمدرضا جهان‌نما، زهرا وادی‌پور",
+    projectTitle: "استریم فیلم و سریال — وبسایت",
+    description: "+۲۰ صفحه، حالت دارک و لایت، فول ریسپانسیو، Prototype جذاب و Style Guide.",
+    courseType: "ui",
+    linkType: "figma",
+    url: "https://www.figma.com/community/file/1345709891812866081",
+    tags: ["UI Design", "Streaming", "Dark & Light", "Prototype"],
+    cohort: "UI — آذر ۱۴۰۲",
+    coverImage: "/images/student_work/photo_2026-07-05_13-40-49.jpg",
+  },
+  {
+    id: "sp16",
+    studentName: "نگین نوروزی",
+    projectTitle: "اپلیکیشن فروشگاه کتاب کودکان",
+    description: "+۱۵ صفحه، کامپوننت‌نویسی، Prototype و Style Guide — طراح بعد از دوره به‌عنوان طراح استخدام شد.",
+    courseType: "ui",
+    linkType: "figma",
+    url: "https://www.figma.com/community/file/1343499102868966569/online-book-app-ui-kit",
+    tags: ["UI Design", "Kids", "Mobile App", "Books"],
+    cohort: "UI — آذر ۱۴۰۲",
+    coverImage: "/images/student_work/photo_2026-07-05_13-40-58.jpg",
+  },
+  {
+    id: "sp17",
+    studentName: "الهه بصیرنیا، امیرحسین تقی‌زاده، رضا عباسی",
+    projectTitle: "MelodyMatrix — استریم موزیک",
+    description: "+۲۵ صفحه، +۴۰ کامپوننت (Responsive Cards)، Auto Layout، فول ریسپانسیو، Prototype و Style Guide.",
+    courseType: "ui",
+    linkType: "figma",
+    url: "https://www.figma.com/community/file/1343578815185390827",
+    tags: ["UI Design", "Music", "Responsive", "Prototype"],
+    cohort: "UI — آذر ۱۴۰۲",
+    coverImage: "/images/student_work/photo_2026-07-05_13-41-25.jpg",
+  },
+
+  // ── UX Case Studies ──────────────────────────────────────
+  {
+    id: "sp18",
+    studentName: "آیدا بهروزی، معصومه کمالی، زهرا قنبرطلب، محدثه آدینه، پگاه خارند",
+    projectTitle: "WH — اپلیکیشن سلامت زنان",
+    description: "طراحی یک راه‌حل یکپارچه برای بهبود تجربه سلامت زنان با تمرکز بر افزایش آگاهی و همدلی.",
+    courseType: "ux",
+    linkType: "telegram",
+    url: "https://t.me/mojtabaui/871",
+    tags: ["UX Research", "Case Study", "Health", "Mobile App"],
+    coverImage: "/images/student_work/photo_2026-07-05_13-52-24.jpg",
+  },
+  {
+    id: "sp19",
+    studentName: "حنانه فرکوش",
+    projectTitle: "بازطراحی دیوار — بهینه‌سازی ثبت آگهی",
+    description: "بازطراحی فرایند ثبت و مدیریت آگهی برای کاهش ریزش کاربر و افزایش اعتماد و امنیت معاملات.",
+    courseType: "ux",
+    linkType: "telegram",
+    url: "https://t.me/mojtabaui/845",
+    tags: ["UX Research", "Case Study", "Redesign", "Marketplace"],
+    coverImage: "/images/student_work/photo_2026-07-05_13-52-48.jpg",
+  },
+  {
+    id: "sp20",
+    studentName: "مرضیه نریمان‌پور، فاطمه‌سادات معتمدفر، مینا برهانی",
+    projectTitle: "Calmind — اتوماسیون تکالیف دانشجویان",
+    description: "راهکاری هوشمند و یکپارچه برای مدیریت تکالیف هفتگی، کنترل استرس و ثبت احساسات دانشجویان.",
+    courseType: "ux",
+    linkType: "telegram",
+    url: "https://t.me/mojtabaui/820",
+    tags: ["UX Research", "Case Study", "Student", "Mobile App"],
+    coverImage: "/images/student_work/photo_2026-07-05_13-53-10.jpg",
+  },
+  {
+    id: "sp21",
+    studentName: "بهار جوادنیا، معصومه احمدی، فریبا حیدری، شاهین سیفی آلاگوز، تکتم مظاهری",
+    projectTitle: "یونی‌مایند — سلامت روان دانشجویان",
+    description: "اپلیکیشنی برای آرام‌سازی ذهن، ثبت احساسات و مبارزه با فرسودگی ذهنی دانشجویان پراسترس.",
+    courseType: "ux",
+    linkType: "telegram",
+    url: "https://t.me/mojtabaui/818",
+    tags: ["UX Research", "Case Study", "Mental Health", "Mobile App"],
+    coverImage: "/images/student_work/photo_2026-07-05_13-53-28.jpg",
+  },
+  {
+    id: "sp22",
+    studentName: "پرند شوکت‌یاری، مژگان عبودی، سمانه عابدینی",
+    projectTitle: "پتزی — نگهداری آسان از پت",
+    description: "خلق تجربه‌ای کم‌دردسر در نگهداری پت برای افراد پرمشغله؛ رزرو همراه مطمئن و نظارت از راه دور.",
+    courseType: "ux",
+    linkType: "telegram",
+    url: "https://t.me/mojtabaui/816",
+    tags: ["UX Research", "Case Study", "Pet Care", "Mobile App"],
+    coverImage: "/images/student_work/photo_2026-07-05_13-53-45.jpg",
+  },
+  {
+    id: "sp23",
+    studentName: "کیمیا پیرنیا، باران امیرخانلو، محمد نوربخش، سعیده امامی، کیمیا فولادی",
+    projectTitle: "ویتا فیت — تعهد به ورزش و رژیم",
+    description: "ارتقای تعهد به ورزش و رژیم غذایی از طریق شخصی‌سازی و گیمیفیکیشن برای افراد پرمشغله.",
+    courseType: "ux",
+    linkType: "telegram",
+    url: "https://t.me/mojtabaui/813",
+    tags: ["UX Research", "Case Study", "Fitness", "Gamification"],
+    coverImage: "/images/student_work/photo_2026-07-05_13-54-01.jpg",
+  },
+  {
+    id: "sp24",
+    studentName: "ملیحه پورهاشمی، مهلا افخمی، مهسا وهاب‌زاده",
+    projectTitle: "DietBetes — رژیم غذایی دیابت",
+    description: "تسریع و ساده‌سازی فرایند دریافت رژیم غذایی برای افراد مبتلا به دیابت با کمک هوش مصنوعی.",
+    courseType: "ux",
+    linkType: "telegram",
+    url: "https://t.me/mojtabaui/780",
+    tags: ["UX Research", "Case Study", "Health", "AI"],
+    coverImage: "/images/student_work/photo_2026-07-05_13-54-18.jpg",
+  },
+  {
+    id: "sp25",
+    studentName: "زینب بنی‌هاشمی، هستی رد، غزل معصوم‌پور، ناهید قهرمانی، مریم حافظی",
+    projectTitle: "DevLoop — انگیزه برنامه‌نویسان تازه‌کار",
+    description: "بهبود انگیزه برنامه‌نویسان تازه‌کار در مسیر یادگیری و نمایش پروژه‌ها به کارفرما.",
+    courseType: "ux",
+    linkType: "telegram",
+    url: "https://t.me/mojtabaui/771",
+    tags: ["UX Research", "Case Study", "EdTech", "Mobile App"],
+    coverImage: "/images/student_work/photo_2026-07-05_13-54-37.jpg",
+  },
+  {
+    id: "sp26",
+    studentName: "آیدا اسماعیلی، فریماه حاصلی، مهدی حسین‌آبادی، آذرنوش میرزائی",
+    projectTitle: "آیاد — دستیار دانش‌آموز",
+    description: "برنامه‌ریزی شخصی و افزایش تمرکز دانش‌آموز با یادآوری هوشمند تسک‌ها و مدیریت زمان.",
+    courseType: "ux",
+    linkType: "telegram",
+    url: "https://t.me/mojtabaui/690",
+    tags: ["UX Research", "Case Study", "Student", "Mobile App"],
+    coverImage: "/images/student_work/photo_2026-07-05_13-54-52.jpg",
+  },
+  {
+    id: "sp27",
+    studentName: "مبینا جمشیدجم، بهار سراغی، مهین خدایاری، زینب سیاح، فائزه دشتی",
+    projectTitle: "تاکسی آنلاین کودک و نوجوان",
+    description: "سیستم حمل‌ونقل امن با نظارت والدین و تجربه سفر مطمئن برای گروه سنی کودک و نوجوان.",
+    courseType: "ux",
+    linkType: "telegram",
+    url: "https://t.me/mojtabaui/679",
+    tags: ["UX Research", "Case Study", "Mobility", "Kids"],
+    coverImage: "/images/student_work/photo_2026-07-05_13-55-08.jpg",
+  },
+  {
+    id: "sp28",
+    studentName: "صفا جهانخواه",
+    projectTitle: "پلتفرم VOD — تماشای فیلم و سریال",
+    description: "پروژه‌ای واقعی؛ تماشای فیلم و سریال، پیشنهاد هوشمند، تماشای گروهی و ارتباط با فیلم‌بازان.",
+    courseType: "ux",
+    linkType: "telegram",
+    url: "https://t.me/mojtabaui/661",
+    tags: ["UX Research", "Case Study", "Streaming", "Real Project"],
+    coverImage: "/images/student_work/photo_2026-07-05_13-55-43.jpg",
+  },
+  {
+    id: "sp29",
+    studentName: "بهشید محمدی، عارف لنگری، فاطمه یوسفی، نگین نیک‌سرشت، شیدا هدایتی",
+    projectTitle: "دستیار هوشمند تربیت فرزند",
+    description: "دریافت مشاوره اختصاصی و هوشمند تربیت فرزند با حفظ امنیت داده‌های هر مراجع.",
+    courseType: "ux",
+    linkType: "telegram",
+    url: "https://t.me/mojtabaui/659",
+    tags: ["UX Research", "Case Study", "Parenting", "Mobile App"],
+    coverImage: "/images/student_work/photo_2026-07-05_14-54-31.jpg",
+  },
+  {
+    id: "sp30",
+    studentName: "غزاله شیری",
+    projectTitle: "رگال — اپلیکیشن مزون لباس بانوان",
+    description: "راهنمای گام‌به‌گام اندازه‌گیری سایز، تجربه خرید آسان و جستجوی پیشرفته برای مزون لباس بانوان.",
+    courseType: "ux",
+    linkType: "telegram",
+    url: "https://t.me/mojtabaui/648",
+    tags: ["UX Research", "Case Study", "E-Commerce", "Fashion"],
+    coverImage: "/images/student_work/photo_2026-07-05_13-56-07.jpg",
+  },
 ];
+
+// پروژه‌های منتخب صفحه‌ی اصلی — سه‌تای اول + نماپلاس، رگال، آیلتس
+export const featuredProjects = ["sp1", "sp2", "sp3", "sp8", "sp10", "sp9"]
+  .map((id) => studentProjects.find((p) => p.id === id))
+  .filter((p): p is StudentProject => Boolean(p));
 
 export const freeResources: FreeResource[] = [
   {

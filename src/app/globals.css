@@ -52,6 +52,10 @@ body {
   background-image: radial-gradient(circle, rgba(255,255,255,0.07) 1px, transparent 1px);
   background-size: 22px 22px;
 }
+.dot-bg-copper {
+  background-image: radial-gradient(circle, rgba(232,138,92,0.10) 1px, transparent 1px);
+  background-size: 22px 22px;
+}
 
 /* ── Marquee ── */
 @keyframes marquee {

@@ -31,13 +31,16 @@ export const metadata: Metadata = {
 };
 
 import CustomCursor from "@/components/CustomCursor";
+import Providers from "@/components/Providers";
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="fa" dir="rtl" className={`${spaceGrotesk.variable} ${meem.variable}`}>
       <body className="antialiased min-h-screen flex flex-col">
-        <CustomCursor />
-        {children}
+        <Providers>
+          <CustomCursor />
+          {children}
+        </Providers>
       </body>
     </html>
   );

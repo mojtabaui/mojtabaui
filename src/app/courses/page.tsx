@@ -1,7 +1,7 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import CoursesClient from "@/components/CoursesClient";
-import { infinityCourses, videoCourses } from "@/lib/mock-data";
+import { infinityCourses, videoCourses, workshopCourses } from "@/lib/mock-data";
 
 export default function CoursesPage() {
   return (
@@ -18,6 +18,7 @@ export default function CoursesPage() {
           <CoursesClient
             infinityCourses={infinityCourses}
             videoCourses={videoCourses}
+            workshopCourses={workshopCourses}
           />
         </section>
       </main>

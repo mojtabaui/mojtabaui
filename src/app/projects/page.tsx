@@ -145,9 +145,6 @@ function ProjectCard({ project }: { project: StudentProject }) {
 
       {/* Info */}
       <div className="p-5">
-        {project.cohort && (
-          <div className="text-[10px] font-body text-[#a09990] mb-2">{project.cohort}</div>
-        )}
         <h3 className="font-body font-bold text-[#1a1714] text-sm leading-snug mb-1.5">
           {project.projectTitle}
         </h3>
