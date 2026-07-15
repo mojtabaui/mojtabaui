@@ -2,13 +2,14 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { Menu, X, User } from "lucide-react";
+import { Menu, X } from "lucide-react";
 
 const navLinks = [
   { href: "/courses", label: "دوره‌ها" },
   { href: "/projects", label: "نمونه کارها" },
   { href: "/free", label: "رایگان" },
   { href: "/articles", label: "مقالات" },
+  { href: "/certificates", label: "گواهی‌ها" },
   { href: "/#about", label: "درباره من" },
 ];
 
@@ -37,7 +38,10 @@ export default function Navbar() {
           ))}
         </nav>
 
-        <div className="hidden md:flex items-center gap-3">
+        {/* ورود / ثبت‌نام / پنل — موقتاً مخفی تا وقتی حساب کاربری رو دوباره فعال کنیم.
+            صفحه‌هاش پابرجان (/auth/login مستقیم باز می‌شه)، فقط از منو برداشته شدن.
+            برای برگردوندن: کامنت پایین رو بردار. */}
+        {/* <div className="hidden md:flex items-center gap-3">
           <Link href="/auth/login"
             className="text-[#6b6560] hover:text-[#1a1714] text-sm transition-colors font-body">
             ورود
@@ -50,7 +54,7 @@ export default function Navbar() {
             className="w-9 h-9 rounded-xl bg-white border border-[#e8e2d9] hover:border-[#7c5cfc]/40 flex items-center justify-center transition-colors text-[#6b6560]">
             <User size={15} />
           </Link>
-        </div>
+        </div> */}
 
         <button onClick={() => setIsOpen(!isOpen)}
           className="md:hidden text-[#6b6560] hover:text-[#1a1714] transition-colors">
@@ -66,7 +70,8 @@ export default function Navbar() {
               {link.label}
             </Link>
           ))}
-          <div className="pt-3 border-t border-[#e8e2d9] flex gap-3">
+          {/* ورود/ثبت‌نام موبایل — موقتاً مخفی (بالا رو ببین) */}
+          {/* <div className="pt-3 border-t border-[#e8e2d9] flex gap-3">
             <Link href="/auth/login"
               className="flex-1 text-center border border-[#e8e2d9] text-[#6b6560] text-sm py-2 rounded-xl font-body">
               ورود
@@ -75,7 +80,7 @@ export default function Navbar() {
               className="flex-1 text-center bg-[#1a1714] text-white text-sm py-2 rounded-xl font-body">
               ثبت‌نام
             </Link>
-          </div>
+          </div> */}
         </div>
       )}
     </header>

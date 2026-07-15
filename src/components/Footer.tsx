@@ -18,10 +18,12 @@ const content = [
 ];
 
 const about = [
-  { href: "/#about",                         label: "درباره من",      ext: false },
-  { href: "https://myazdanpanah.vercel.app", label: "پرتفولیو",       ext: true  },
-  { href: "/auth/login",                     label: "ورود به پنل",    ext: false },
-  { href: "/auth/register",                  label: "ثبت‌نام رایگان", ext: false },
+  { href: "/#about",                         label: "درباره من", ext: false },
+  { href: "https://myazdanpanah.vercel.app", label: "پرتفولیو",  ext: true  },
+  { href: "/#contact",                       label: "تماس با من", ext: false },
+  // ورود/ثبت‌نام موقتاً مخفی — با حساب کاربری برمی‌گردن:
+  // { href: "/auth/login",    label: "ورود به پنل",    ext: false },
+  // { href: "/auth/register", label: "ثبت‌نام رایگان", ext: false },
 ];
 
 const socials = [
@@ -51,12 +53,13 @@ export default function Footer() {
           </div>
 
           {/* CTA — DOM second = LEFT in RTL */}
+          {/* تا وقتی حساب کاربری مخفیه، CTA به‌جای ثبت‌نام به دوره‌ها می‌ره */}
           <Link
-            href="/auth/register"
+            href="/courses"
             className="inline-flex items-center gap-2 bg-white text-[#1a1714] font-body font-bold text-sm px-5 py-3 rounded-2xl hover:bg-white/90 transition-colors flex-shrink-0"
           >
             <ArrowLeft size={14} />
-            ثبت‌نام رایگان
+            مشاهده دوره‌ها
           </Link>
         </div>
       </div>
