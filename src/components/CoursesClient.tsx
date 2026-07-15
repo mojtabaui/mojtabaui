@@ -14,7 +14,7 @@ interface Props {
   workshopCourses: Course[];
 }
 
-const tabs: { key: TabKey; label: string; icon: React.ReactNode; desc: string }[] = [
+const allTabs: { key: TabKey; label: string; icon: React.ReactNode; desc: string }[] = [
   { key: "infinity", label: "بی‌نهایت", icon: <Sparkles     size={14} />, desc: "ویدیو + منتورینگ + پروژه" },
   { key: "video",    label: "ویدیویی",  icon: <Video        size={14} />, desc: "بدون منتورینگ، به تمپو خودت" },
   { key: "workshop", label: "کارگاه‌ها", icon: <Presentation size={14} />, desc: "کارگاه‌های زنده و فشرده" },
@@ -22,6 +22,10 @@ const tabs: { key: TabKey; label: string; icon: React.ReactNode; desc: string }[
 
 export default function CoursesClient({ infinityCourses, videoCourses, workshopCourses }: Props) {
   const [active, setActive] = useState<TabKey>("infinity");
+  // تب‌های خالی نمایش داده نمی‌شن (مثلاً وقتی کارگاهی فعال نیست)
+  const tabs = allTabs.filter((tab) =>
+    tab.key === "workshop" ? workshopCourses.length > 0 : true
+  );
   const list =
     active === "infinity" ? infinityCourses : active === "workshop" ? workshopCourses : videoCourses;
 

@@ -53,6 +53,8 @@ export interface Course {
   comingSoon?: boolean;
   externalUrl?: string;
   spotplayerId?: string;
+  /** موقتاً از کل سایت مخفی می‌شه: صفحه‌ی اصلی، لیست دوره‌ها و صفحه‌ی خودش (۴۰۴) */
+  hidden?: boolean;
   testimonials: CourseTestimonial[];
 }
 
@@ -264,7 +266,7 @@ const claudeWorkshopFAQs: FAQ[] = [
   { q: "جلسات ضبط می‌شن؟", a: "بله، هر دو جلسه ضبط می‌شن و بعد از کارگاه در دسترست هستن." },
 ];
 
-export const courses: Course[] = [
+const allCourses: Course[] = [
   // ── UI Infinity ──────────────────────────────────────────
   {
     id: "ui-infinity",
@@ -508,9 +510,14 @@ export const courses: Course[] = [
     instructor: "مجتبا یزدانپناه",
     isNew: true,
     comingSoon: true,
+    // موقتاً مخفی — تا وقتی روی کارگاه کار کنیم. برای برگردوندن، این خط رو بردار.
+    hidden: true,
     testimonials: [],
   },
 ];
+
+/** دوره‌های قابل نمایش — موارد hidden از کل سایت حذف می‌شن */
+export const courses = allCourses.filter((c) => !c.hidden);
 
 export const infinityCourses = courses.filter((c) => c.type === "infinity");
 export const offlineCourses  = courses.filter((c) => c.type === "offline" && !c.externalUrl);
