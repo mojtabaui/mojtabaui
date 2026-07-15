@@ -10,10 +10,11 @@ const courses = [
 ];
 
 const content = [
-  { href: "/articles", label: "مقالات"               },
-  { href: "/free",     label: "منابع رایگان"          },
-  { href: "/projects", label: "نمونه‌کارهای دانشجوها" },
-  { href: "/courses",  label: "همه دوره‌ها"           },
+  { href: "/articles",     label: "مقالات"               },
+  { href: "/free",         label: "منابع رایگان"          },
+  { href: "/projects",     label: "نمونه‌کارهای دانشجوها" },
+  { href: "/courses",      label: "همه دوره‌ها"           },
+  { href: "/certificates", label: "استعلام گواهی"         },
 ];
 
 const about = [
@@ -46,7 +47,7 @@ export default function Footer() {
               </div>
               <span className="font-display font-black text-2xl tracking-tight">mojtabaui</span>
             </div>
-            <p className="text-white/40 text-sm font-body">طراح UI/UX · مدرس · فریلنسر</p>
+            <p className="text-white/40 text-sm font-body">مدرسه دیزاین ملینا · آموزش UI/UX</p>
           </div>
 
           {/* CTA — DOM second = LEFT in RTL */}
@@ -158,7 +159,7 @@ export default function Footer() {
 
       {/* ── Bottom bar ── */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-5 border-t border-white/[0.06] flex items-center justify-between flex-wrap gap-3">
-        <span className="text-white/20 text-xs font-body">© ۱۴۰۴ mojtabaui — همه حقوق محفوظ است</span>
+        <span className="text-white/20 text-xs font-body">© ۱۴۰۴ مدرسه دیزاین ملینا — همه حقوق محفوظ است</span>
         <span className="text-white/20 text-[11px] font-display tracking-[0.25em]">UI · UX · DESIGN</span>
       </div>
 

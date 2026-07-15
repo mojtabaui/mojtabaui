@@ -11,6 +11,7 @@ import HeroImage from "@/components/HeroImage";
 import HeroDecor from "@/components/HeroDecor";
 import ParallaxY from "@/components/ParallaxY";
 import ArticleRow from "@/components/ArticleRow";
+import ContactForm from "@/components/ContactForm";
 import { infinityCourses, videoCourses, workshopCourses, stats, formatPrice, articles, freeResources, featuredProjects } from "@/lib/mock-data";
 
 const workshop = workshopCourses[0];
@@ -442,10 +443,10 @@ export default function Home() {
             <FadeIn>
               <div className="mb-14">
                 <div className="font-display text-[10px] font-bold tracking-[0.22em] uppercase text-[#a09990] mb-2">
-                  WHY INFINITY
+                  WHY OUR COURSES
                 </div>
                 <h2 className="font-body font-extrabold text-3xl md:text-4xl text-[#1a1714]">
-                  چرا بی‌نهایت؟
+                  چرا دوره‌های ما؟
                 </h2>
                 <p className="text-[#a09990] font-body text-sm mt-2">
                   فقط ویدیو نیست — یه تجربه کامل یادگیریه
@@ -456,7 +457,7 @@ export default function Home() {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-0">
               {[
                 { num: "۰۱", title: "ویدیوهای ضبط‌شده",      desc: "محتوای کامل — هر وقت خواستی، هر چند بار خواستی." },
-                { num: "۰۲", title: "۱۰ هفته منتورینگ",       desc: "جلسه گروهی هفتگی با مجتبا — بررسی پروژه و رفع اشکال." },
+                { num: "۰۲", title: "منتورینگ زنده",           desc: "توی دوره‌های بی‌نهایت — جلسه گروهی هفتگی با مجتبا." },
                 { num: "۰۳", title: "پروژه عملی",              desc: "گروهی یا فردی — واقعی و اضافه‌شدنی به پورتفولیو." },
                 { num: "۰۴", title: "برنامه هفتگی",            desc: "ساختار مشخص هر هفته — بدون سردرگمی و تلنبار شدن." },
                 { num: "۰۵", title: "پشتیبانی مدرس",           desc: "سوال داری؟ مجتبا جواب می‌ده. نه ربات، نه فرم." },
@@ -863,26 +864,27 @@ export default function Home() {
         </section>
 
         {/* ─── Contact ─── */}
-        <section id="contact" className="py-16 max-w-7xl mx-auto px-4 sm:px-6 text-center">
-          <h2 className="font-body font-bold text-2xl text-[#1a1714] mb-2">سوال داری؟</h2>
-          <p className="text-[#a09990] font-body text-sm mb-6">
-            از طریق اینستاگرام یا ایمیل باهام در تماس باش
-          </p>
-          <div className="flex justify-center gap-3 flex-wrap">
-            <a
-              href="mailto:mojtaba.yazdanpanah0771@gmail.com"
-              className="text-[#6b6560] hover:text-[#1a1714] font-body text-sm border border-[#e8e2d9] hover:border-[#1a1714]/20 bg-white px-5 py-2.5 rounded-xl transition-all"
-            >
-              mojtaba.yazdanpanah0771@gmail.com
-            </a>
-            <a
-              href="https://instagram.com/mojtabaui"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-[#6b6560] hover:text-[#1a1714] font-body text-sm border border-[#e8e2d9] hover:border-[#1a1714]/20 bg-white px-5 py-2.5 rounded-xl transition-all"
-            >
-              @mojtabaui اینستاگرام
-            </a>
+        <section id="contact" className="py-16 max-w-7xl mx-auto px-4 sm:px-6">
+          <div className="text-center">
+            <h2 className="font-body font-bold text-2xl text-[#1a1714] mb-2">سوال داری؟</h2>
+            <p className="text-[#a09990] font-body text-sm mb-6">
+              فرم رو پر کن، در اولین فرصت جوابت رو می‌دم
+            </p>
+          </div>
+
+          <div className="max-w-xl mx-auto">
+            <ContactForm />
+
+            <div className="flex justify-center mt-5">
+              <a
+                href="https://instagram.com/mojtabaui"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[#6b6560] hover:text-[#1a1714] font-body text-sm border border-[#e8e2d9] hover:border-[#1a1714]/20 bg-white px-5 py-2.5 rounded-xl transition-all"
+              >
+                @mojtabaui اینستاگرام
+              </a>
+            </div>
           </div>
         </section>
 

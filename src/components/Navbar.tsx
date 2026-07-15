@@ -24,7 +24,7 @@ export default function Navbar() {
           </div>
           <div className="leading-tight">
             <div className="font-display font-bold text-sm text-[#1a1714]">mojtabaui</div>
-            <div className="text-[#a09990] text-[10px] font-body -mt-0.5">دیزاین و فریلنسری</div>
+            <div className="text-[#a09990] text-[10px] font-body -mt-0.5">مدرسه دیزاین ملینا</div>
           </div>
         </Link>
 

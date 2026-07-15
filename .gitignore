@@ -33,6 +33,10 @@ yarn-error.log*
 # env files (can opt-in for committing if needed)
 .env*
 
+# اکسل گواهینامه‌ها — حاوی اسم دانشجوهاست و ریپو عمومیه.
+# دیتا توی دیتابیس Neon ذخیره شده؛ با prisma/import-certs.ts وارد می‌شه.
+/prisma/certs
+
 # vercel
 .vercel
 

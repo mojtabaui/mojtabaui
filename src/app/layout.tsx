@@ -19,12 +19,12 @@ const meem = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "mojtabaui | آموزش دیزاین و فریلنسری",
+  title: "مدرسه دیزاین ملینا | آموزش UI/UX و دیزاین با هوش مصنوعی",
   description:
-    "دوره‌های آموزشی حرفه‌ای طراحی رابط کاربری و تجربه کاربری. از مبتدی تا حرفه‌ای.",
+    "مدرسه دیزاین ملینا — دوره‌های حرفه‌ای طراحی رابط کاربری و تجربه کاربری، از مبتدی تا حرفه‌ای. با مجتبا یزدان‌پناه.",
   openGraph: {
-    title: "mojtabaui",
-    description: "دوره‌های آموزشی UI/UX Design",
+    title: "مدرسه دیزاین ملینا",
+    description: "دوره‌های آموزشی UI/UX Design و دیزاین با هوش مصنوعی",
     locale: "fa_IR",
     type: "website",
   },
