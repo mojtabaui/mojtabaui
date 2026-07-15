@@ -116,8 +116,9 @@ export default function Home() {
             {/* Text — top on mobile, right on desktop */}
             <div className="flex-shrink-0 max-w-xl pt-8 pb-2 lg:pt-0 lg:pb-20">
 
-                {/* Eyebrow */}
-                <div
+                {/* Eyebrow — موقتاً مخفی شده چون ثبت‌نام دوره‌های بی‌نهایت فعلاً بازه نیست.
+                    برای برگردوندن: کامنت پایین رو بردار و متن/رنگ نقطه رو آپدیت کن. */}
+                {/* <div
                   className="inline-flex items-center gap-2 bg-white border border-[#e8e2d9] rounded-full px-4 py-1.5 mb-7 fade-in-up"
                   style={{ animationDelay: "0ms" }}
                 >
@@ -125,7 +126,7 @@ export default function Home() {
                   <span className="font-body text-xs text-[#6b6560]">
                     دوره‌های بی‌نهایت — فاز جدید باز شد
                   </span>
-                </div>
+                </div> */}
 
                 <h1
                   className="font-body font-extrabold text-[clamp(1.9rem,3.4vw,3rem)] leading-[1.08] text-[#1a1714] mb-5 fade-in-up"
