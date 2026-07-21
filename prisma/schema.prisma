@@ -97,6 +97,17 @@ model ContactMessage {
   @@index([createdAt])
 }
 
+/// شماره‌هایی که برای اطلاع از تخفیف‌ها ثبت شدن
+model DiscountSubscriber {
+  id        String   @id @default(cuid())
+  phone     String   @unique
+  name      String?
+  notified  Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([createdAt])
+}
+
 enum CertTrack {
   UI
   UX

@@ -12,6 +12,7 @@ import {
   Settings,
   ArrowLeft,
   Phone,
+  BellRing,
 } from "lucide-react";
 
 export const dynamic = "force-dynamic";
@@ -20,21 +21,32 @@ export default async function AdminPage() {
   const session = await getServerSession(authOptions);
   if (session?.user?.role !== "ADMIN") redirect("/dashboard");
 
-  const [userCount, courseCount, certCount, unreadCount, messages, recentCerts] =
-    await Promise.all([
-      prisma.user.count(),
-      prisma.course.count(),
-      prisma.certificate.count(),
-      prisma.contactMessage.count({ where: { isRead: false } }),
-      prisma.contactMessage.findMany({
-        orderBy: { createdAt: "desc" },
-        take: 50,
-      }),
-      prisma.certificate.findMany({
-        orderBy: { createdAt: "desc" },
-        take: 10,
-      }),
-    ]);
+  const [
+    userCount,
+    courseCount,
+    certCount,
+    subscriberCount,
+    messages,
+    recentCerts,
+    subscribers,
+  ] = await Promise.all([
+    prisma.user.count(),
+    prisma.course.count(),
+    prisma.certificate.count(),
+    prisma.discountSubscriber.count(),
+    prisma.contactMessage.findMany({
+      orderBy: { createdAt: "desc" },
+      take: 50,
+    }),
+    prisma.certificate.findMany({
+      orderBy: { createdAt: "desc" },
+      take: 10,
+    }),
+    prisma.discountSubscriber.findMany({
+      orderBy: { createdAt: "desc" },
+      take: 100,
+    }),
+  ]);
 
   const stats = [
     {
@@ -56,9 +68,9 @@ export default async function AdminPage() {
       color: "text-emerald-400 bg-emerald-400/10",
     },
     {
-      label: "پیام خوانده‌نشده",
-      value: unreadCount.toLocaleString("fa-IR"),
-      icon: Mail,
+      label: "مشترکین تخفیف",
+      value: subscriberCount.toLocaleString("fa-IR"),
+      icon: BellRing,
       color: "text-amber-400 bg-amber-400/10",
     },
   ];
@@ -167,6 +179,54 @@ export default async function AdminPage() {
               </div>
             )}
           </div>
+        </div>
+
+        {/* Discount subscribers */}
+        <div className="bg-[#111110] border border-[#2d2c2a] rounded-2xl overflow-hidden mb-8">
+          <div className="px-6 py-4 border-b border-[#1e1d1c] flex items-center justify-between">
+            <h2 className="font-body font-semibold text-[#fafaf9] text-sm flex items-center gap-2">
+              <BellRing size={15} className="text-amber-400" />
+              مشترکین اطلاع‌رسانی تخفیف
+            </h2>
+            <span className="font-display text-xs text-[#57534e] tracking-wider uppercase">
+              {subscribers.length.toLocaleString("fa-IR")} شماره
+            </span>
+          </div>
+
+          {subscribers.length === 0 ? (
+            <div className="px-6 py-16 text-center">
+              <BellRing size={24} className="text-[#2d2c2a] mx-auto mb-3" />
+              <p className="font-body text-[#57534e] text-sm">هنوز کسی ثبت‌نام نکرده</p>
+            </div>
+          ) : (
+            <div className="divide-y divide-[#1e1d1c]">
+              {subscribers.map((sub) => (
+                <div
+                  key={sub.id}
+                  className="px-6 py-3.5 flex items-center justify-between gap-3"
+                >
+                  <div className="flex items-center gap-3 min-w-0">
+                    <a
+                      href={`tel:${sub.phone}`}
+                      dir="ltr"
+                      className="flex items-center gap-1.5 font-body text-[#fafaf9] hover:text-amber-400 text-sm transition-colors"
+                    >
+                      <Phone size={12} className="text-[#57534e]" />
+                      {sub.phone}
+                    </a>
+                    {sub.name && (
+                      <span className="font-body text-[#a8a29e] text-xs truncate">
+                        {sub.name}
+                      </span>
+                    )}
+                  </div>
+                  <span className="font-body text-[#57534e] text-xs flex-shrink-0">
+                    {sub.createdAt.toLocaleDateString("fa-IR")}
+                  </span>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
 
         {/* Contact messages */}
