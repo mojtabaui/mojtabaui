@@ -919,7 +919,7 @@ export default function Home() {
           <FadeIn>
             <div className="text-center mb-12">
               <div className="font-display text-[10px] font-bold tracking-[0.22em] uppercase text-[#8b5cf6] mb-3">
-                CONTACT
+                GET NOTIFIED
               </div>
               <h2 className="font-body font-black text-3xl md:text-4xl text-[#1a1714] leading-[1.3] mb-3">
                 از تخفیف‌ها جا نمون

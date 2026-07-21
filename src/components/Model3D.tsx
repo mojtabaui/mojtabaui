@@ -2,13 +2,14 @@
 
 import { useEffect, useRef, createElement } from "react";
 import { motion, useScroll, useTransform, useSpring, useReducedMotion } from "framer-motion";
-import { Award, Star, Users, Sparkles } from "lucide-react";
+import { Award, Star, Users, Sparkles, Percent } from "lucide-react";
 
 /**
  * نمایش مدل سه‌بعدی (public/images/3d_remember.glb) با <model-viewer> گوگل،
- * همراه با المان‌های تزئینی شناور (چیپ‌های گواهی/امتیاز/دانشجو، حلقه‌ی نقطه‌چین،
- * هاله و نقاط درخشان). مدل ثابته و فقط با درگ کاربر می‌چرخه؛ کل تصویر با اسکرول
- * کمی شناور می‌شه. در حالت reduced-motion همه‌ی حرکت‌ها خاموشن.
+ * همراه با المان‌های تزئینی شناور (چیپ‌های گواهی/امتیاز/دانشجو/تخفیف، حلقه‌های
+ * نقطه‌چین، هاله و نقاط درخشان). همه‌چیز داخل یک قاب مرکزیِ باعرض ثابت چیده شده
+ * تا چیپ‌ها نزدیک خودِ کلاه بشینن. مدل ثابته و فقط با درگ کاربر می‌چرخه؛ کل تصویر
+ * با اسکرول کمی شناور می‌شه. در حالت reduced-motion همه‌ی حرکت‌ها خاموشن.
  */
 export default function Model3D() {
   const ref = useRef<HTMLDivElement>(null);
@@ -37,15 +38,15 @@ export default function Model3D() {
     "interaction-prompt": "none",
     "shadow-intensity": "0.6",
     exposure: "1.05",
-    style: { width: "100%", height: "340px", backgroundColor: "transparent" },
+    style: { width: "100%", height: "320px", backgroundColor: "transparent" },
   };
 
-  // حرکت شناورِ ملایم برای چیپ‌ها (در reduced-motion غیرفعال)
-  const bob = (delay: number) =>
+  // حرکت شناورِ ملایم (در reduced-motion غیرفعال)
+  const bob = (delay: number, dist = 9) =>
     reduce
       ? {}
       : {
-          animate: { y: [0, -9, 0] },
+          animate: { y: [0, -dist, 0] },
           transition: {
             duration: 3.6,
             repeat: Infinity,
@@ -55,99 +56,85 @@ export default function Model3D() {
         };
 
   return (
-    <div
-      ref={ref}
-      className="relative flex items-center justify-center min-h-[420px] overflow-hidden"
-    >
-      {/* هاله‌ی بنفش پشت مدل */}
-      <div
-        className="absolute w-80 h-80 rounded-full pointer-events-none"
-        style={{ background: "radial-gradient(circle, #8b5cf62e 0%, transparent 66%)" }}
-      />
-
-      {/* حلقه‌های نقطه‌چین تزئینی */}
-      <svg
-        className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none"
-        width="380"
-        height="380"
-        viewBox="0 0 380 380"
-        fill="none"
-        aria-hidden
-      >
-        <circle
-          cx="190"
-          cy="190"
-          r="150"
-          stroke="#8b5cf6"
-          strokeOpacity="0.18"
-          strokeWidth="1.5"
-          strokeDasharray="3 9"
+    <div ref={ref} className="relative flex items-center justify-center min-h-[420px]">
+      {/* قاب مرکزی — چیپ‌ها نسبت به همین قاب نزدیک کلاه می‌شینن */}
+      <div className="relative w-full max-w-[380px] flex items-center justify-center">
+        {/* هاله‌ی بنفش پشت مدل */}
+        <div
+          className="absolute w-80 h-80 rounded-full pointer-events-none"
+          style={{ background: "radial-gradient(circle, #8b5cf62e 0%, transparent 66%)" }}
         />
-        <circle
-          cx="190"
-          cy="190"
-          r="185"
-          stroke="#1a1714"
-          strokeOpacity="0.06"
-          strokeWidth="1.5"
-        />
-      </svg>
 
-      {/* نقاط درخشان */}
-      <motion.span
-        aria-hidden
-        className="absolute top-14 right-16 w-2.5 h-2.5 rounded-full bg-[#8b5cf6] pointer-events-none"
-        {...bob(0.4)}
-      />
-      <motion.span
-        aria-hidden
-        className="absolute bottom-16 left-20 w-2 h-2 rounded-full bg-amber-400 pointer-events-none"
-        {...bob(1.1)}
-      />
-      <Sparkles
-        size={18}
-        className="absolute top-24 left-10 text-[#8b5cf6]/50 pointer-events-none"
-        aria-hidden
-      />
+        {/* حلقه‌های نقطه‌چین تزئینی */}
+        <svg
+          className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none"
+          width="360"
+          height="360"
+          viewBox="0 0 360 360"
+          fill="none"
+          aria-hidden
+        >
+          <circle cx="180" cy="180" r="132" stroke="#8b5cf6" strokeOpacity="0.2" strokeWidth="1.5" strokeDasharray="3 9" />
+          <circle cx="180" cy="180" r="168" stroke="#1a1714" strokeOpacity="0.06" strokeWidth="1.5" />
+          <circle cx="180" cy="180" r="168" stroke="#8b5cf6" strokeOpacity="0.15" strokeWidth="2" strokeDasharray="2 26" />
+        </svg>
 
-      {/* مدل سه‌بعدی — با اسکرول کمی شناور می‌شه */}
-      <motion.div style={{ y }} className="relative z-10 w-full will-change-transform">
-        {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-        {createElement("model-viewer", modelProps as any)}
-      </motion.div>
+        {/* نقاط و جرقه‌های درخشان */}
+        <motion.span aria-hidden className="absolute top-10 right-10 w-2.5 h-2.5 rounded-full bg-[#8b5cf6] pointer-events-none" {...bob(0.4)} />
+        <motion.span aria-hidden className="absolute bottom-14 right-14 w-2 h-2 rounded-full bg-amber-400 pointer-events-none" {...bob(1.1)} />
+        <motion.span aria-hidden className="absolute top-1/2 left-6 w-1.5 h-1.5 rounded-full bg-emerald-500 pointer-events-none" {...bob(1.8)} />
+        <motion.span aria-hidden className="absolute bottom-24 left-16 w-2 h-2 rounded-full bg-[#8b5cf6]/60 pointer-events-none" {...bob(0.9)} />
+        <Sparkles size={18} className="absolute top-16 left-12 text-[#8b5cf6]/50 pointer-events-none" aria-hidden />
+        <Sparkles size={14} className="absolute bottom-12 right-24 text-amber-400/60 pointer-events-none" aria-hidden />
 
-      {/* چیپ‌های شناور */}
-      <motion.div
-        className="absolute top-8 right-2 sm:right-4 z-20 flex items-center gap-2 bg-white/90 backdrop-blur-sm border border-[#e8e2d9] rounded-2xl px-3 py-2 shadow-[0_12px_30px_-12px_rgba(26,23,20,0.28)] pointer-events-none"
-        {...bob(0)}
-      >
-        <span className="w-7 h-7 rounded-lg bg-[#8b5cf6]/10 text-[#8b5cf6] flex items-center justify-center">
-          <Award size={15} />
-        </span>
-        <span className="font-body font-semibold text-xs text-[#1a1714]">گواهی معتبر</span>
-      </motion.div>
+        {/* مدل سه‌بعدی — با اسکرول کمی شناور می‌شه */}
+        <motion.div style={{ y }} className="relative z-10 w-full will-change-transform">
+          {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+          {createElement("model-viewer", modelProps as any)}
+        </motion.div>
 
-      <motion.div
-        className="absolute top-16 left-1 sm:left-3 z-20 flex items-center gap-1.5 bg-white/90 backdrop-blur-sm border border-[#e8e2d9] rounded-2xl px-3 py-2 shadow-[0_12px_30px_-12px_rgba(26,23,20,0.28)] pointer-events-none"
-        {...bob(0.7)}
-      >
-        <Star size={14} className="text-amber-400 fill-amber-400" />
-        <span className="font-display font-bold text-sm text-[#1a1714]">۴.۹</span>
-        <span className="font-body text-[10px] text-[#a09990]">از ۵</span>
-      </motion.div>
+        {/* چیپ‌های شناور — نزدیک کلاه */}
+        <motion.div
+          className="absolute top-6 right-6 z-20 flex items-center gap-2 bg-white/90 backdrop-blur-sm border border-[#e8e2d9] rounded-2xl px-3 py-2 shadow-[0_12px_30px_-12px_rgba(26,23,20,0.28)] pointer-events-none"
+          {...bob(0)}
+        >
+          <span className="w-7 h-7 rounded-lg bg-[#8b5cf6]/10 text-[#8b5cf6] flex items-center justify-center">
+            <Award size={15} />
+          </span>
+          <span className="font-body font-semibold text-xs text-[#1a1714]">گواهی معتبر</span>
+        </motion.div>
 
-      <motion.div
-        className="absolute bottom-10 left-4 sm:left-8 z-20 flex items-center gap-2 bg-white/90 backdrop-blur-sm border border-[#e8e2d9] rounded-2xl px-3 py-2 shadow-[0_12px_30px_-12px_rgba(26,23,20,0.28)] pointer-events-none"
-        {...bob(1.4)}
-      >
-        <span className="w-7 h-7 rounded-lg bg-emerald-500/10 text-emerald-600 flex items-center justify-center">
-          <Users size={15} />
-        </span>
-        <div className="leading-tight">
-          <div className="font-display font-bold text-sm text-[#1a1714]">+۷٬۰۰۰</div>
-          <div className="font-body text-[10px] text-[#a09990] -mt-0.5">دانشجو</div>
-        </div>
-      </motion.div>
+        <motion.div
+          className="absolute top-20 left-3 z-20 flex items-center gap-1.5 bg-white/90 backdrop-blur-sm border border-[#e8e2d9] rounded-2xl px-3 py-2 shadow-[0_12px_30px_-12px_rgba(26,23,20,0.28)] pointer-events-none"
+          {...bob(0.7)}
+        >
+          <Star size={14} className="text-amber-400 fill-amber-400" />
+          <span className="font-display font-bold text-sm text-[#1a1714]">۴.۹</span>
+          <span className="font-body text-[10px] text-[#a09990]">از ۵</span>
+        </motion.div>
+
+        <motion.div
+          className="absolute bottom-12 left-6 z-20 flex items-center gap-2 bg-white/90 backdrop-blur-sm border border-[#e8e2d9] rounded-2xl px-3 py-2 shadow-[0_12px_30px_-12px_rgba(26,23,20,0.28)] pointer-events-none"
+          {...bob(1.4)}
+        >
+          <span className="w-7 h-7 rounded-lg bg-emerald-500/10 text-emerald-600 flex items-center justify-center">
+            <Users size={15} />
+          </span>
+          <div className="leading-tight">
+            <div className="font-display font-bold text-sm text-[#1a1714]">+۷٬۰۰۰</div>
+            <div className="font-body text-[10px] text-[#a09990] -mt-0.5">دانشجو</div>
+          </div>
+        </motion.div>
+
+        {/* پیل تخفیف — تِمِ سکشن */}
+        <motion.div
+          className="absolute bottom-4 right-8 z-20 flex items-center gap-1.5 bg-[#8b5cf6] text-white rounded-full px-3.5 py-2 shadow-[0_12px_30px_-10px_rgba(139,92,246,0.7)] pointer-events-none"
+          {...bob(2, 7)}
+        >
+          <Percent size={13} />
+          <span className="font-body font-bold text-xs">تخفیف ویژه</span>
+        </motion.div>
+      </div>
     </div>
   );
 }
