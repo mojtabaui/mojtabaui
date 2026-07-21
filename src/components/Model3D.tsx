@@ -1,24 +1,16 @@
 "use client";
 
-import { useRef } from "react";
+import { useEffect, useRef, createElement } from "react";
 import { motion, useScroll, useTransform, useSpring, useReducedMotion } from "framer-motion";
 import { Award, Star, Users, Sparkles, Percent } from "lucide-react";
 
 /**
- * نمایش مدل سه‌بعدی از Sketchfab (Commodore Pet 8032) با پس‌زمینه‌ی شفاف،
+ * نمایش مدل سه‌بعدی (public/images/3d_remember.glb) با <model-viewer> گوگل،
  * همراه با المان‌های تزئینی شناور (چیپ‌های گواهی/امتیاز/دانشجو/تخفیف، حلقه‌های
- * نقطه‌چین، هاله و نقاط درخشان). همه داخل یک قاب مرکزیِ باعرض ثابت چیده شده تا
- * چیپ‌ها نزدیک مدل بشینن. کل تصویر با اسکرول کمی شناور می‌شه؛ در reduced-motion
- * حرکت‌ها خاموشن.
- *
- * اعتبار مدل (لایسنس Sketchfab): «Commodore Pet 8032» اثر Cécile Amstad.
+ * نقطه‌چین، هاله و نقاط درخشان). همه‌چیز داخل یک قاب مرکزیِ باعرض ثابت چیده شده
+ * تا چیپ‌ها نزدیک خودِ کلاه بشینن. مدل ثابته و فقط با درگ کاربر می‌چرخه؛ کل تصویر
+ * با اسکرول کمی شناور می‌شه. در حالت reduced-motion همه‌ی حرکت‌ها خاموشن.
  */
-
-// پارامترها: پس‌زمینه شفاف، UI تمیز، بدون شروع خودکارِ چرخش
-const SKETCHFAB_SRC =
-  "https://sketchfab.com/models/6fba25e0f32f423d8882db7e3a656400/embed" +
-  "?transparent=1&autostart=1&autospin=0&ui_infos=0&ui_controls=0&ui_watermark=0&ui_hint=0&dnt=1";
-
 export default function Model3D() {
   const ref = useRef<HTMLDivElement>(null);
   const reduce = useReducedMotion();
@@ -30,6 +22,24 @@ export default function Model3D() {
   const yRaw = useTransform(scrollYProgress, [0, 1], [40, -40]);
   const ySpring = useSpring(yRaw, { stiffness: 80, damping: 20 });
   const y = reduce ? 0 : ySpring;
+
+  // ثبت وب‌کامپوننت فقط سمت کلاینت
+  useEffect(() => {
+    import("@google/model-viewer");
+  }, []);
+
+  // مدل ثابت می‌مونه (بدون چرخش خودکار)، ولی کاربر می‌تونه با درگ بچرخونتش
+  const modelProps: Record<string, unknown> = {
+    src: "/images/3d_remember.glb",
+    alt: "المان سه‌بعدی مدرسه دیزاین ملینا",
+    "camera-controls": true,
+    "disable-zoom": true,
+    "touch-action": "pan-y",
+    "interaction-prompt": "none",
+    "shadow-intensity": "0.6",
+    exposure: "1.05",
+    style: { width: "100%", height: "320px", backgroundColor: "transparent" },
+  };
 
   // حرکت شناورِ ملایم (در reduced-motion غیرفعال)
   const bob = (delay: number, dist = 9) =>
@@ -47,7 +57,7 @@ export default function Model3D() {
 
   return (
     <div ref={ref} className="relative flex items-center justify-center min-h-[420px]">
-      {/* قاب مرکزی — چیپ‌ها نسبت به همین قاب نزدیک مدل می‌شینن */}
+      {/* قاب مرکزی — چیپ‌ها نسبت به همین قاب نزدیک کلاه می‌شینن */}
       <div className="relative w-full max-w-[380px] flex items-center justify-center">
         {/* هاله‌ی بنفش پشت مدل */}
         <div
@@ -77,18 +87,13 @@ export default function Model3D() {
         <Sparkles size={18} className="absolute top-16 left-12 text-[#8b5cf6]/50 pointer-events-none" aria-hidden />
         <Sparkles size={14} className="absolute bottom-12 right-24 text-amber-400/60 pointer-events-none" aria-hidden />
 
-        {/* مدل Sketchfab — با اسکرول کمی شناور می‌شه */}
+        {/* مدل سه‌بعدی — با اسکرول کمی شناور می‌شه */}
         <motion.div style={{ y }} className="relative z-10 w-full will-change-transform">
-          <iframe
-            title="Commodore Pet 8032"
-            src={SKETCHFAB_SRC}
-            allow="autoplay; fullscreen; xr-spatial-tracking"
-            allowFullScreen
-            className="w-full h-[340px] border-0 bg-transparent"
-          />
+          {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+          {createElement("model-viewer", modelProps as any)}
         </motion.div>
 
-        {/* چیپ‌های شناور — نزدیک مدل */}
+        {/* چیپ‌های شناور — نزدیک کلاه */}
         <motion.div
           className="absolute top-6 right-6 z-20 flex items-center gap-2 bg-white/90 backdrop-blur-sm border border-[#e8e2d9] rounded-2xl px-3 py-2 shadow-[0_12px_30px_-12px_rgba(26,23,20,0.28)] pointer-events-none"
           {...bob(0)}
@@ -130,16 +135,6 @@ export default function Model3D() {
           <span className="font-body font-bold text-xs">تخفیف ویژه</span>
         </motion.div>
       </div>
-
-      {/* اعتبار مدل (لایسنس Sketchfab) */}
-      <a
-        href="https://sketchfab.com/3d-models/commodore-pet-8032-6fba25e0f32f423d8882db7e3a656400"
-        target="_blank"
-        rel="noopener noreferrer nofollow"
-        className="absolute bottom-1 left-1/2 -translate-x-1/2 text-[10px] text-[#c8c2ba] hover:text-[#a09990] font-body transition-colors"
-      >
-        مدل: Commodore Pet 8032 — Cécile Amstad · Sketchfab
-      </a>
     </div>
   );
 }
