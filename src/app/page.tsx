@@ -132,9 +132,9 @@ export default function Home() {
                   className="font-body font-extrabold text-[clamp(1.9rem,3.4vw,3rem)] leading-[1.08] text-[#1a1714] mb-5 fade-in-up"
                   style={{ animationDelay: "80ms" }}
                 >
-                  یادگیری دیزاین{" "}
+                  آموزش اصولی و پروژه‌محورِ{" "}
                   <span className="relative inline-block">
-                    به صرف چای
+                    طراحی محصول دیجیتال
                     <svg className="absolute -bottom-1 right-0 w-full" height="6" viewBox="0 0 300 6" fill="none">
                       <path d="M0 5 Q75 0 150 5 Q225 10 300 5" stroke="#7c5cfc" strokeWidth="2.5" strokeLinecap="round" fill="none"/>
                     </svg>
@@ -145,8 +145,9 @@ export default function Home() {
                   className="text-[#6b6560] font-body text-lg leading-relaxed mb-10 max-w-lg fade-in-up"
                   style={{ animationDelay: "160ms" }}
                 >
-                  دوره‌های UI/UX با ویدیو، ۱۰ هفته منتورینگ واقعی،
-                  پروژه عملی و پشتیبانی مستقیم — از صفر بدون پیش‌نیاز.
+                  دوره‌های بی‌نهایتِ UI و UX — ویدیوی باکیفیت، منتورینگ گروهی هفتگی و
+                  پروژه‌ی واقعی. ثبت‌نام دوره‌های بی‌نهایت فعلاً بسته‌ست؛ برای شروع دوره‌ی
+                  بعدی و مشاوره‌ی رایگان در تلگرام پیام بده.
                 </p>
 
                 <div
@@ -253,12 +254,12 @@ export default function Home() {
                   WHY US
                 </div>
                 <h2 className="font-body font-black text-3xl md:text-4xl text-[#1a1714] leading-tight mb-6">
-                  ۷ سال تجربه،
+                  ۸ سال تجربه،
                   <br />
                   یه مدل آموزشی که کار می‌کنه
                 </h2>
                 <p className="text-[#6b6560] font-body leading-relaxed mb-10 text-base">
-                  ۷ سال طراحی حرفه‌ای UI/UX و ۵ سال آموزش مستقیم به دانشجوها — این تجربه باعث شد
+                  ۸ سال طراحی حرفه‌ای UI/UX و ۵ سال آموزش مستقیم به دانشجوها — این تجربه باعث شد
                   یه مدل هیبریدی طراحی کنیم که جای هیچ‌جا ندیدیم: ویدیوی ضبط‌شده با کیفیت بالا،
                   کنار جلسات منتورینگ گروهی هفتگی. نه فقط یاد می‌گیری — پروژه واقعی می‌سازی و
                   فیدبک مستقیم می‌گیری.
@@ -266,7 +267,7 @@ export default function Home() {
 
                 <div className="space-y-5">
                   {[
-                    { num: "۷+",   label: "سال تجربه حرفه‌ای طراحی UI/UX" },
+                    { num: "۸+",   label: "سال تجربه حرفه‌ای طراحی UI/UX" },
                     { num: "۵+",   label: "سال آموزش مستقیم به دانشجوها" },
                     { num: "۴۰+",  label: "کد کلاس با منتورینگ واقعی" },
                     { num: "۴۰۰+", label: "پروژه گروهی تحویل داده شده" },
@@ -751,7 +752,7 @@ export default function Home() {
                   {/* Stats */}
                   <div className="flex gap-8 mb-8 border-y border-[#e8e2d9] py-6">
                     {[
-                      { num: "+۷",  label: "سال تجربه"  },
+                      { num: "+۸",  label: "سال تجربه"  },
                       { num: "+۷K", label: "دانش‌آموز"   },
                       { num: "+۳۰", label: "پروژه تحویل‌داده‌شده" },
                     ].map(({ num, label }) => (
@@ -838,8 +839,8 @@ export default function Home() {
                 شروع کنی؟
               </h2>
               <p className="text-white/35 font-body max-w-lg mx-auto mb-10 leading-relaxed">
-                بعد از خرید، لایسنس اسپات پلیر خودکار تو پنلت ظاهر می‌شه
-                و فوری می‌تونی شروع کنی.
+                برای ثبت‌نام و مشاوره‌ی رایگان، در تلگرام به پشتیبانی پیام بده
+                تا مسیر درست رو باهم انتخاب کنیم.
               </p>
               <div className="flex items-center justify-center gap-3 flex-wrap">
                 {infinityCourses.map((c) => (

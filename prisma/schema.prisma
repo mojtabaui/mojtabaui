@@ -70,14 +70,15 @@ model SpotPlayerLicense {
   @@index([userId])
 }
 
-/// گواهینامه‌های صادرشده — منبع: فایل‌های اکسل در prisma/certs
+/// گواهینامه‌های صادرشده — منبع اولیه: فایل‌های اکسل در prisma/certs،
+/// از ۱۴۰۵ به بعد از پنل مدیریت صادر می‌شن.
 model Certificate {
   id          String    @id @default(cuid())
   code        String    @unique
   studentName String
   track       CertTrack
-  year        String
-  startDate   String
+  year        String? // کوادکمپ (QC) سال نداره
+  startDate   String    @default("")
   createdAt   DateTime  @default(now())
 
   @@index([code])
@@ -99,6 +100,7 @@ model ContactMessage {
 enum CertTrack {
   UI
   UX
+  QC // کوادکمپ
 }
 
 enum Role {

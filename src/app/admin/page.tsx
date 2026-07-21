@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import CertificateForm from "@/components/admin/CertificateForm";
 import {
   BookOpen,
   Users,
@@ -19,7 +20,7 @@ export default async function AdminPage() {
   const session = await getServerSession(authOptions);
   if (session?.user?.role !== "ADMIN") redirect("/dashboard");
 
-  const [userCount, courseCount, certCount, unreadCount, messages] =
+  const [userCount, courseCount, certCount, unreadCount, messages, recentCerts] =
     await Promise.all([
       prisma.user.count(),
       prisma.course.count(),
@@ -28,6 +29,10 @@ export default async function AdminPage() {
       prisma.contactMessage.findMany({
         orderBy: { createdAt: "desc" },
         take: 50,
+      }),
+      prisma.certificate.findMany({
+        orderBy: { createdAt: "desc" },
+        take: 10,
       }),
     ]);
 
@@ -110,6 +115,58 @@ export default async function AdminPage() {
               <div className="font-body text-[#57534e] text-xs">{stat.label}</div>
             </div>
           ))}
+        </div>
+
+        {/* Certificates: create form + recent list */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+          <CertificateForm />
+
+          <div className="bg-[#111110] border border-[#2d2c2a] rounded-2xl overflow-hidden">
+            <div className="px-6 py-4 border-b border-[#1e1d1c] flex items-center justify-between">
+              <h2 className="font-body font-semibold text-[#fafaf9] text-sm">
+                گواهی‌های اخیر
+              </h2>
+              <span className="font-display text-xs text-[#57534e] tracking-wider uppercase">
+                Recent
+              </span>
+            </div>
+
+            {recentCerts.length === 0 ? (
+              <div className="px-6 py-16 text-center">
+                <Award size={24} className="text-[#2d2c2a] mx-auto mb-3" />
+                <p className="font-body text-[#57534e] text-sm">هنوز گواهی‌ای صادر نشده</p>
+              </div>
+            ) : (
+              <div className="divide-y divide-[#1e1d1c]">
+                {recentCerts.map((cert) => (
+                  <div
+                    key={cert.id}
+                    className="px-6 py-4 flex items-center justify-between gap-3"
+                  >
+                    <div className="min-w-0">
+                      <p className="font-body text-[#fafaf9] text-sm truncate">
+                        {cert.studentName}
+                      </p>
+                      <p className="font-body text-[#57534e] text-xs mt-0.5">
+                        {cert.track === "UI"
+                          ? "رابط کاربری"
+                          : cert.track === "UX"
+                            ? "تجربه کاربری"
+                            : "کوادکمپ"}
+                        {cert.year ? ` — سال ${cert.year}` : ""}
+                      </p>
+                    </div>
+                    <code
+                      dir="ltr"
+                      className="font-mono text-xs text-[#8b5cf6] bg-[#0a0908] border border-[#2d2c2a] rounded-lg px-2.5 py-1 tracking-widest shrink-0"
+                    >
+                      {cert.code}
+                    </code>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Contact messages */}

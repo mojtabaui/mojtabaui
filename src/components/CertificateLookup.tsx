@@ -57,18 +57,17 @@ export default function CertificateLookup() {
             </label>
             <input
               type="text"
-              inputMode="numeric"
               dir="ltr"
               value={code}
               onChange={(e) => {
                 setCode(e.target.value);
                 setResult(null);
               }}
-              placeholder="1040401"
+              placeholder="MU1405001"
               className="w-full bg-[#FAF6F1] border border-[#e8e2d9] rounded-xl px-4 py-3 font-body text-sm text-[#1a1714] placeholder:text-[#c8c2ba] focus:outline-none focus:border-[#1a1714]/40 transition-colors"
             />
             <p className="text-[#a09990] font-body text-xs mt-1.5">
-              کد درج‌شده روی گواهی — با اعداد فارسی هم می‌تونی بزنی
+              کد درج‌شده روی گواهی — حروف کوچک و اعداد فارسی هم قبوله
             </p>
           </div>
 
@@ -104,7 +103,9 @@ export default function CertificateLookup() {
               { label: "نام دانشجو", value: result.studentName },
               { label: "دوره", value: result.courseTitle },
               { label: "تاریخ شروع", value: result.startDate },
-            ].map((row) => (
+            ]
+              .filter((row) => row.value && row.value.trim() !== "")
+              .map((row) => (
               <div key={row.label} className="flex items-start justify-between gap-4">
                 <span className="font-body text-xs text-emerald-700/60 flex-shrink-0">
                   {row.label}

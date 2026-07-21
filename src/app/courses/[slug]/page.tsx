@@ -194,7 +194,7 @@ export default async function CourseDetailPage({ params }: Props) {
                     externalUrl={course.externalUrl}
                   />
                   <p className="text-center text-[#a09990] text-xs font-body mb-6">
-                    لایسنس اسپات پلیر خودکار به پنل شما اضافه می‌شود
+                    برای ثبت‌نام و مشاوره، در تلگرام به پشتیبانی پیام بده
                   </p>
 
                   <div className="space-y-2.5 pt-5 border-t border-[#f0ebe4]">

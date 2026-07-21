@@ -8,6 +8,13 @@ function toLatinDigits(input: string): string {
     .replace(/[٠-٩]/g, (d) => String(d.charCodeAt(0) - 0x0660));
 }
 
+/** برچسب دوره بر اساس track */
+function disciplineLabel(track: string): string {
+  if (track === "UI") return "طراحی رابط کاربری";
+  if (track === "UX") return "طراحی تجربه کاربری";
+  return "کوادکمپ"; // QC
+}
+
 export async function POST(req: NextRequest) {
   const { code } = await req.json();
 
@@ -15,10 +22,16 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "کد گواهی را وارد کنید" }, { status: 400 });
   }
 
-  const normalized = toLatinDigits(code).trim();
+  // نرمال‌سازی: ارقام فارسی→لاتین، حذف فاصله و خط‌تیره، حروف بزرگ.
+  // این‌طوری «mu1405001»، «MU-1405-001» و «MU 1405 001» همه یکی می‌شن.
+  const normalized = toLatinDigits(code)
+    .toUpperCase()
+    .replace(/[\s-]/g, "")
+    .trim();
 
-  if (!/^\d{4,12}$/.test(normalized)) {
-    return NextResponse.json({ error: "کد گواهی باید فقط عدد باشد" }, { status: 400 });
+  // کدهای قدیمی فقط عدد بودن؛ کدهای جدید حرف و عدد. طول منطقی: ۳ تا ۱۴.
+  if (!/^[A-Z0-9]{3,14}$/.test(normalized)) {
+    return NextResponse.json({ error: "کد گواهی معتبر نیست" }, { status: 400 });
   }
 
   const cert = await prisma.certificate.findUnique({
@@ -30,12 +43,14 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ found: false });
   }
 
-  const discipline = cert.track === "UI" ? "طراحی رابط کاربری" : "طراحی تجربه کاربری";
+  const discipline = disciplineLabel(cert.track);
+  // کوادکمپ سال نداره؛ بقیه با «دوره <سال>» نمایش داده می‌شن
+  const courseTitle = cert.year ? `${discipline} — دوره ${cert.year}` : discipline;
 
   return NextResponse.json({
     found: true,
     studentName: cert.studentName,
-    courseTitle: `${discipline} — دوره ${cert.year}`,
+    courseTitle,
     startDate: cert.startDate,
   });
 }
