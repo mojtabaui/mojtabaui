@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
 
@@ -19,14 +20,15 @@ export default function Navbar() {
   return (
     <header className="fixed top-0 inset-x-0 z-50 bg-[#f7f4ef]/90 backdrop-blur-sm border-b border-[#e8e2d9]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between relative">
-        <Link href="/" className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-xl bg-[#1a1714] flex items-center justify-center">
-            <span className="text-white font-display font-bold text-xs">m</span>
-          </div>
-          <div className="leading-tight">
-            <div className="font-display font-bold text-sm text-[#1a1714]">mojtabaui</div>
-            <div className="text-[#a09990] text-[10px] font-body -mt-0.5">مدرسه دیزاین ملینا</div>
-          </div>
+        <Link href="/" className="flex items-center">
+          <Image
+            src="/images/logo.png"
+            alt="مدرسه دیزاین ملینا"
+            width={2676}
+            height={710}
+            priority
+            className="h-9 w-auto"
+          />
         </Link>
 
         <nav className="hidden md:flex items-center gap-8 absolute left-1/2 -translate-x-1/2">

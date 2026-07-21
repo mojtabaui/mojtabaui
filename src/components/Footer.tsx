@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { Send, Camera, Tv, Mail, ExternalLink, ArrowLeft } from "lucide-react";
 
 const courses = [
@@ -44,12 +45,16 @@ export default function Footer() {
           {/* Brand — DOM first = RIGHT in RTL */}
           <div>
             <div className="flex items-center gap-3 mb-3">
-              <div className="w-10 h-10 rounded-2xl bg-white flex items-center justify-center flex-shrink-0">
-                <span className="text-[#1a1714] font-display font-black text-base">m</span>
-              </div>
-              <span className="font-display font-black text-2xl tracking-tight">mojtabaui</span>
+              <Image
+                src="/images/logo_square.png"
+                alt="مدرسه دیزاین ملینا"
+                width={778}
+                height={710}
+                className="h-11 w-auto flex-shrink-0"
+              />
+              <span className="font-body font-black text-2xl tracking-tight">مدرسه دیزاین ملینا</span>
             </div>
-            <p className="text-white/40 text-sm font-body">مدرسه دیزاین ملینا · آموزش UI/UX</p>
+            <p className="text-white/40 text-sm font-body">آموزش تخصصی UI/UX</p>
           </div>
 
           {/* CTA — DOM second = LEFT in RTL */}
