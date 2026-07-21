@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowLeft, Star, ChevronLeft, ExternalLink, Send, Layers, Clock, Calendar, Users } from "lucide-react";
+import { ArrowLeft, Star, ChevronLeft, ExternalLink, Send, Layers, Clock, Calendar, Users, Mail, Camera } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import CourseCard from "@/components/CourseCard";
@@ -12,6 +12,7 @@ import HeroDecor from "@/components/HeroDecor";
 import ParallaxY from "@/components/ParallaxY";
 import ArticleRow from "@/components/ArticleRow";
 import ContactForm from "@/components/ContactForm";
+import Scroll3D from "@/components/Scroll3D";
 import { infinityCourses, videoCourses, workshopCourses, stats, formatPrice, articles, freeResources, featuredProjects } from "@/lib/mock-data";
 
 const workshop = workshopCourses[0];
@@ -914,27 +915,84 @@ export default function Home() {
         </section>
 
         {/* ─── Contact ─── */}
-        <section id="contact" className="py-16 max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="text-center">
-            <h2 className="font-body font-bold text-2xl text-[#1a1714] mb-2">سوال داری؟</h2>
-            <p className="text-[#a09990] font-body text-sm mb-6">
-              فرم رو پر کن، در اولین فرصت جوابت رو می‌دم
-            </p>
-          </div>
-
-          <div className="max-w-xl mx-auto">
-            <ContactForm />
-
-            <div className="flex justify-center mt-5">
-              <a
-                href="https://instagram.com/mojtabaui"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-[#6b6560] hover:text-[#1a1714] font-body text-sm border border-[#e8e2d9] hover:border-[#1a1714]/20 bg-white px-5 py-2.5 rounded-xl transition-all"
-              >
-                @mojtabaui اینستاگرام
-              </a>
+        <section id="contact" className="py-20 max-w-7xl mx-auto px-4 sm:px-6">
+          <FadeIn>
+            <div className="text-center mb-12">
+              <div className="font-display text-[10px] font-bold tracking-[0.22em] uppercase text-[#8b5cf6] mb-3">
+                CONTACT
+              </div>
+              <h2 className="font-body font-black text-3xl md:text-4xl text-[#1a1714] leading-[1.3] mb-3">
+                سوال داری؟ مستقیم بپرس.
+              </h2>
+              <p className="text-[#6b6560] font-body leading-relaxed max-w-md mx-auto">
+                خودِ مجتبا جواب می‌ده — نه ربات، نه منشی. فرم رو پر کن یا از راه‌های
+                زیر پیام بده.
+              </p>
             </div>
+          </FadeIn>
+
+          <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
+
+            {/* 3D element + channels — DOM first = RIGHT in RTL */}
+            <FadeIn>
+              <Scroll3D />
+
+              {/* Direct channels */}
+              <div className="space-y-3 max-w-md mx-auto mt-4">
+                {[
+                  {
+                    Icon: Send,
+                    label: "تلگرام پشتیبانی",
+                    handle: "@melina_support",
+                    href: "https://t.me/melina_support",
+                  },
+                  {
+                    Icon: Camera,
+                    label: "اینستاگرام",
+                    handle: "@mojtabaui",
+                    href: "https://instagram.com/mojtabaui",
+                  },
+                  {
+                    Icon: Mail,
+                    label: "ایمیل",
+                    handle: "mojtaba.yazdanpanah0771@gmail.com",
+                    href: "mailto:mojtaba.yazdanpanah0771@gmail.com",
+                  },
+                ].map(({ Icon, label, handle, href }) => (
+                  <a
+                    key={label}
+                    href={href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group flex items-center gap-4 bg-white border border-[#e8e2d9] hover:border-[#8b5cf6]/40 rounded-2xl p-4 transition-all"
+                  >
+                    <span className="w-11 h-11 rounded-xl bg-[#faf6f1] flex items-center justify-center text-[#1a1714] group-hover:bg-[#8b5cf6] group-hover:text-white transition-colors flex-shrink-0">
+                      <Icon size={18} />
+                    </span>
+                    <div className="min-w-0">
+                      <div className="font-body font-semibold text-sm text-[#1a1714]">{label}</div>
+                      <div className="font-body text-xs text-[#a09990] truncate" dir="ltr">
+                        {handle}
+                      </div>
+                    </div>
+                    <ChevronLeft
+                      size={18}
+                      className="mr-auto text-[#c8c2ba] group-hover:text-[#8b5cf6] transition-colors flex-shrink-0"
+                    />
+                  </a>
+                ))}
+              </div>
+
+              <div className="flex items-center gap-2 mt-6 text-[#6b6560] font-body text-sm">
+                <Clock size={15} className="text-emerald-500" />
+                معمولاً کمتر از چند ساعت جواب می‌دم
+              </div>
+            </FadeIn>
+
+            {/* Form — DOM second = LEFT in RTL */}
+            <FadeIn>
+              <ContactForm />
+            </FadeIn>
           </div>
         </section>
 

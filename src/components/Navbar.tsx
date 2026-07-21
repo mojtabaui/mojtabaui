@@ -22,12 +22,12 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between relative">
         <Link href="/" className="flex items-center">
           <Image
-            src="/images/logo.png"
+            src="/images/logo_square.png"
             alt="مدرسه دیزاین ملینا"
-            width={2676}
+            width={778}
             height={710}
             priority
-            className="h-9 w-auto"
+            className="h-10 w-auto"
           />
         </Link>
 
