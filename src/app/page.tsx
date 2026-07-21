@@ -129,25 +129,18 @@ export default function Home() {
                 </div>
 
                 <h1
-                  className="font-body font-extrabold text-[clamp(1.9rem,3.4vw,3rem)] leading-[1.08] text-[#1a1714] mb-5 fade-in-up"
+                  className="font-body font-extrabold text-[clamp(1.9rem,3.4vw,3rem)] leading-[1.45] text-[#1a1714] mb-6 fade-in-up"
                   style={{ animationDelay: "80ms" }}
                 >
-                  آموزش اصولی و پروژه‌محورِ{" "}
-                  <span className="relative inline-block">
-                    طراحی محصول دیجیتال
-                    <svg className="absolute -bottom-1 right-0 w-full" height="6" viewBox="0 0 300 6" fill="none">
-                      <path d="M0 5 Q75 0 150 5 Q225 10 300 5" stroke="#7c5cfc" strokeWidth="2.5" strokeLinecap="round" fill="none"/>
-                    </svg>
-                  </span>
+                  آموزش اصولی و پروژه‌محورِ طراحی محصول دیجیتال
                 </h1>
 
                 <p
                   className="text-[#6b6560] font-body text-lg leading-relaxed mb-10 max-w-lg fade-in-up"
                   style={{ animationDelay: "160ms" }}
                 >
-                  دوره‌های بی‌نهایتِ UI و UX — ویدیوی باکیفیت، منتورینگ گروهی هفتگی و
-                  پروژه‌ی واقعی. ثبت‌نام دوره‌های بی‌نهایت فعلاً بسته‌ست؛ برای شروع دوره‌ی
-                  بعدی و مشاوره‌ی رایگان در تلگرام پیام بده.
+                  دوره‌های UI و UX با ویدیوهای اصولی، پروژه‌های واقعی و منتورینگ مستقیم —
+                  از صفر تا حرفه‌ای‌شدن در طراحی محصول دیجیتال، همه چیز یکجا و بدون پیش‌نیاز.
                 </p>
 
                 <div
@@ -815,7 +808,12 @@ export default function Home() {
         </section>
 
         {/* ─── CTA ─── */}
-        <section className="py-32 bg-[#1a1714] relative overflow-hidden">
+        <section className="py-28 md:py-32 bg-[#1a1714] relative overflow-hidden">
+          {/* Violet glow */}
+          <div
+            className="absolute -top-24 left-1/2 -translate-x-1/2 w-[680px] h-[680px] rounded-full pointer-events-none"
+            style={{ background: "radial-gradient(circle, #7c5cfc26 0%, transparent 62%)" }}
+          />
           {/* Big decorative word — parallax upward */}
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none overflow-hidden">
             <ParallaxY speed={60}>
@@ -828,37 +826,88 @@ export default function Home() {
             </ParallaxY>
           </div>
 
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 text-center relative">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center relative">
             <FadeIn>
-              <div className="font-display text-[10px] font-bold tracking-[0.22em] uppercase text-white/20 mb-5">
-                GET STARTED
+              <div
+                className="inline-flex items-center gap-2 bg-white/[0.04] border border-white/10 rounded-full px-4 py-1.5 mb-6"
+              >
+                <span className="w-2 h-2 rounded-full bg-emerald-400 pulse-dot" />
+                <span className="font-body text-xs text-white/60">
+                  پشتیبانی آنلاین — همین حالا پاسخ‌گوییم
+                </span>
               </div>
-              <h2 className="font-body font-black text-4xl md:text-6xl text-white mb-5 leading-[1.05]">
-                آماده‌ای
-                <br />
-                شروع کنی؟
+
+              <h2 className="font-body font-black text-4xl md:text-6xl text-white mb-5 leading-[1.08]">
+                آماده‌ای شروع کنی؟
               </h2>
-              <p className="text-white/35 font-body max-w-lg mx-auto mb-10 leading-relaxed">
-                برای ثبت‌نام و مشاوره‌ی رایگان، در تلگرام به پشتیبانی پیام بده
-                تا مسیر درست رو باهم انتخاب کنیم.
+              <p className="text-white/40 font-body max-w-lg mx-auto mb-10 leading-relaxed">
+                ثبت‌نام دوره‌های بی‌نهایت فعلاً بسته‌ست. برای مشاوره‌ی رایگان و اطلاع از
+                شروع دوره‌ی بعدی، همین حالا در تلگرام پیام بده.
               </p>
-              <div className="flex items-center justify-center gap-3 flex-wrap">
-                {infinityCourses.map((c) => (
-                  <Link
-                    key={c.id}
-                    href={`/courses/${c.slug}`}
-                    className="bg-white/8 hover:bg-white/15 border border-white/10 hover:border-white/25 text-white font-body font-semibold px-7 py-3.5 rounded-2xl transition-all text-sm hover:scale-[1.02] active:scale-[0.98]"
-                  >
-                    {c.title} — {formatPrice(c.price)}
-                  </Link>
+
+              {/* Trust stats */}
+              <div className="flex items-stretch justify-center divide-x divide-x-reverse divide-white/10 mb-11">
+                {[
+                  { num: "+۸", label: "سال تجربه" },
+                  { num: "+۷٬۰۰۰", label: "دانشجو" },
+                  { num: "۴.۹", label: "از ۵ رضایت" },
+                ].map((s) => (
+                  <div key={s.label} className="px-6 sm:px-8">
+                    <div className="font-display font-black text-2xl md:text-3xl text-white">
+                      {s.num}
+                    </div>
+                    <div className="font-body text-white/40 text-xs mt-1">{s.label}</div>
+                  </div>
                 ))}
+              </div>
+
+              {/* Primary CTAs */}
+              <div className="flex items-center justify-center gap-3 flex-wrap mb-12">
+                <a
+                  href="https://t.me/melina_support"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 bg-white text-[#1a1714] font-body font-bold px-8 py-4 rounded-2xl hover:bg-white/90 transition-all hover:scale-[1.02] active:scale-[0.98]"
+                >
+                  <Send size={17} />
+                  مشاوره و ثبت‌نام در تلگرام
+                </a>
                 <Link
                   href="/courses"
-                  className="inline-flex items-center gap-2 border border-white/20 hover:border-white/40 text-white/70 hover:text-white font-body font-semibold px-7 py-3.5 rounded-2xl transition-all text-sm hover:scale-[1.02] active:scale-[0.98]"
+                  className="inline-flex items-center gap-2 border border-white/20 hover:border-white/40 text-white/70 hover:text-white font-body font-semibold px-7 py-4 rounded-2xl transition-all text-sm hover:scale-[1.02] active:scale-[0.98]"
                 >
                   همه‌ی دوره‌ها
                   <ArrowLeft size={15} />
                 </Link>
+              </div>
+
+              {/* Infinity course quick cards */}
+              <div className="grid sm:grid-cols-2 gap-4 max-w-2xl mx-auto text-right">
+                {infinityCourses.map((c) => (
+                  <Link
+                    key={c.id}
+                    href={`/courses/${c.slug}`}
+                    className="group bg-white/[0.04] hover:bg-white/[0.07] border border-white/10 hover:border-[#7c5cfc]/40 rounded-2xl p-5 transition-all"
+                  >
+                    <div className="flex items-center justify-between mb-2.5">
+                      <span className="font-body font-bold text-white text-sm">{c.title}</span>
+                      <ChevronLeft
+                        size={16}
+                        className="text-white/30 group-hover:text-white/70 transition-colors flex-shrink-0"
+                      />
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="font-display font-bold text-[#a78bfa]">
+                        {formatPrice(c.price)}
+                      </span>
+                      {c.originalPrice && (
+                        <span className="text-white/30 text-xs line-through font-body">
+                          {formatPrice(c.originalPrice)}
+                        </span>
+                      )}
+                    </div>
+                  </Link>
+                ))}
               </div>
             </FadeIn>
           </div>
