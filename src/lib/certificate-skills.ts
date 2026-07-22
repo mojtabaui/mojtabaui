@@ -55,7 +55,7 @@ export const TRACK_CONTENT: Record<string, TrackContent> = {
   },
   QC: {
     discipline: "QuadCamp Product Design",
-    hours: 120,
+    hours: 400,
     skills: [
       "Design foundations",
       "Figma fundamentals",
