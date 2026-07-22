@@ -7,6 +7,7 @@ import Footer from "@/components/Footer";
 import CertificateDocument from "@/components/CertificateDocument";
 import PrintButton from "@/components/PrintButton";
 import { prisma } from "@/lib/prisma";
+import QRCode from "qrcode";
 
 export const dynamic = "force-dynamic";
 
@@ -41,6 +42,13 @@ export default async function CertificatePage({ params }: Props) {
   });
   if (!cert) notFound();
 
+  // QR سمت سرور ساخته می‌شه و به‌صورت data URL جاسازی می‌شه، تا موقع چاپ
+  // به هیچ درخواست شبکه‌ای وابسته نباشه.
+  const qrDataUrl = await QRCode.toDataURL(
+    `https://mojtabaui.ir/certificate/${cert.code}`,
+    { margin: 0, width: 320, color: { dark: "#1a1714", light: "#ffffff" } }
+  );
+
   return (
     <>
       <div className="no-print">
@@ -71,7 +79,7 @@ export default async function CertificatePage({ params }: Props) {
 
           {/* سند */}
           <div className="rounded-3xl overflow-hidden border border-[#e8e2d9] shadow-[0_30px_70px_-40px_rgba(26,23,20,0.5)] bg-white">
-            <CertificateDocument cert={cert} />
+            <CertificateDocument cert={cert} qrDataUrl={qrDataUrl} />
           </div>
 
           <p className="no-print font-body text-xs text-[#a09990] text-center mt-6 leading-relaxed">

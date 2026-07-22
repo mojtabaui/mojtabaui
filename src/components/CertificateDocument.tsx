@@ -1,12 +1,14 @@
 import Image from "next/image";
+import { contentForTrack } from "@/lib/certificate-skills";
 
 /**
- * سند گواهی، در نسبت A4 افقی.
+ * سند گواهی، A4 افقی، کاملاً انگلیسی و چپ‌چین.
  *
- * این کامپوننت عمداً همه‌ی اندازه‌ها را بر حسب واحدهای نسبی همان قاب تعریف
- * می‌کند تا هم روی صفحه و هم موقع چاپ یکسان دربیاید. متن‌ها متنِ واقعی HTML
- * هستند نه تصویر، پس در PDF قابل انتخاب و جستجو می‌مانند و فونت فارسی
- * بدون افت کیفیت رندر می‌شود.
+ * ساختارش از گواهی‌های قبلی مدرسه میاد (ستون مهارت‌ها، کد، QR، امضا) ولی
+ * زبان بصریش هویت جدیده: کِرِم و مشکیِ برند با لهجه‌ی بنفش، نه قاب‌های پرکنتراست.
+ *
+ * اندازه‌ها بر حسب cqw تعریف شدن تا سند روی هر عرضی و موقع چاپ یکسان دربیاد،
+ * و متن‌ها HTML واقعی‌ان پس در PDF قابل انتخاب و جستجو می‌مونن.
  */
 
 export interface CertificateData {
@@ -18,150 +20,149 @@ export interface CertificateData {
   createdAt: Date;
 }
 
-const TRACK_LABEL: Record<string, string> = {
-  UI: "طراحی رابط کاربری",
-  UX: "طراحی تجربه کاربری",
-  QC: "کوادکمپ",
-};
-
-const fa = (n: number | string) =>
-  String(n).replace(/\d/g, (d) => "۰۱۲۳۴۵۶۷۸۹"[+d]);
-
-function faDate(d: Date) {
-  try {
-    return new Intl.DateTimeFormat("fa-IR", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    }).format(d);
-  } catch {
-    return "";
-  }
+function enDate(d: Date) {
+  return new Intl.DateTimeFormat("en-GB", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  }).format(d);
 }
 
-export default function CertificateDocument({ cert }: { cert: CertificateData }) {
-  const discipline = TRACK_LABEL[cert.track] ?? cert.track;
-  const title = cert.year ? `${discipline}، دوره ${fa(cert.year)}` : discipline;
+export default function CertificateDocument({
+  cert,
+  qrDataUrl,
+}: {
+  cert: CertificateData;
+  qrDataUrl?: string;
+}) {
+  const { discipline, hours, skills } = contentForTrack(cert.track);
 
   return (
     <div
       id="certificate"
-      className="certificate-sheet relative bg-[#FAF6F1] overflow-hidden"
+      dir="ltr"
+      className="certificate-sheet relative bg-[#FAF6F1] overflow-hidden flex"
       style={{ aspectRatio: "1.414 / 1" }}
     >
-      {/* قاب دولایه */}
-      <div className="absolute inset-[2.2%] border border-[#1a1714]/15 rounded-[6px]" />
-      <div className="absolute inset-[3.1%] border border-[#7c5cfc]/25 rounded-[3px]" />
-
-      {/* نوار تزئینی بالا سمت چپ */}
-      <div className="absolute top-0 left-[9%] w-[3.4%] h-[13%] bg-[#1a1714] flex items-end justify-center">
-        <span
-          className="block w-full"
-          style={{
-            height: "22%",
-            background: "#FAF6F1",
-            clipPath: "polygon(0 0, 50% 65%, 100% 0, 100% 100%, 0 100%)",
-          }}
-        />
-      </div>
-
-      <div className="relative h-full flex flex-col px-[8%] pt-[6.5%] pb-[4%]">
-
-        {/* سربرگ */}
-        <div className="flex items-center gap-3 mb-[3.5%]">
+      {/* ── ستون کناری ── */}
+      <aside className="w-[32%] bg-[#1a1714] text-white flex flex-col px-[3.4cqw] py-[3.6cqw]">
+        <div className="flex items-center gap-[1cqw] mb-[3.4cqw]">
           <Image
             src="/images/logo_square.png"
             alt=""
             width={778}
             height={710}
-            className="h-[clamp(28px,3.6cqw,44px)] w-auto"
+            className="h-[clamp(22px,3cqw,40px)] w-auto rounded-[4px]"
           />
           <div className="leading-tight">
-            <div className="font-body font-bold text-[clamp(11px,1.5cqw,17px)] text-[#1a1714]">
-              مدرسه دیزاین ملینا
+            <div className="font-display font-bold text-[clamp(8px,1.15cqw,14px)] tracking-tight">
+              Melina Design School
             </div>
-            <div className="font-display text-[clamp(6px,0.85cqw,10px)] tracking-[0.22em] uppercase text-[#a09990]">
-              MELINA DESIGN SCHOOL
+            <div className="font-display text-[clamp(5px,0.62cqw,8px)] tracking-[0.2em] uppercase text-white/40 mt-[0.2cqw]">
+              mojtabaui.ir
             </div>
           </div>
         </div>
 
-        {/* عنوان */}
-        <h1 className="font-body font-black text-[clamp(22px,4.4cqw,52px)] text-[#1a1714] leading-[1.15] tracking-tight">
-          گواهی پایان دوره
-        </h1>
-        <div className="font-display font-bold text-[clamp(8px,1.1cqw,13px)] tracking-[0.3em] uppercase text-[#7c5cfc] mt-[1%]">
-          CERTIFICATE OF COMPLETION
+        <div className="font-display text-[clamp(6px,0.78cqw,10px)] font-bold tracking-[0.24em] uppercase text-[#a78bfa] mb-[1.4cqw]">
+          Acquired skills
         </div>
 
-        <p className="font-body text-[clamp(9px,1.15cqw,14px)] text-[#6b6560] mt-[3%]">
-          این گواهی به
+        <ul className="space-y-[0.62cqw]">
+          {skills.map((s) => (
+            <li
+              key={s}
+              className="flex items-start gap-[0.7cqw] font-display text-[clamp(5.5px,0.82cqw,11px)] leading-[1.45] text-white/75"
+            >
+              <span className="mt-[0.55cqw] w-[0.3cqw] h-[0.3cqw] min-w-[2px] min-h-[2px] rounded-full bg-[#a78bfa] shrink-0" />
+              {s}
+            </li>
+          ))}
+        </ul>
+
+        {/* QR و کد */}
+        <div className="mt-auto pt-[2cqw]">
+          {qrDataUrl && (
+            <div className="bg-white rounded-[6px] p-[0.7cqw] w-[7.6cqw] min-w-[54px]">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={qrDataUrl} alt="" className="w-full h-auto block" />
+            </div>
+          )}
+          <div
+            className="font-display font-bold text-[clamp(8px,1.15cqw,15px)] tracking-[0.14em] text-white mt-[1cqw]"
+          >
+            {cert.code}
+          </div>
+          <div className="font-display text-[clamp(5px,0.62cqw,8px)] text-white/35 mt-[0.25cqw] leading-snug">
+            Verify at mojtabaui.ir/certificates
+          </div>
+        </div>
+      </aside>
+
+      {/* ── متن اصلی ── */}
+      <section className="flex-1 relative flex flex-col px-[5cqw] py-[4.4cqw]">
+        {/* لهجه‌ی گوشه */}
+        <span className="absolute top-0 right-[5cqw] w-[0.9cqw] h-[7cqw] bg-[#7c5cfc]" />
+
+        <div className="font-display text-[clamp(6px,0.8cqw,10px)] font-bold tracking-[0.3em] uppercase text-[#7c5cfc] mb-[1.2cqw]">
+          Certificate
+        </div>
+
+        <h1 className="font-display font-bold text-[clamp(18px,3.5cqw,44px)] text-[#1a1714] leading-[1.08] tracking-tight">
+          Certificate of
+          <br />
+          Completion
+        </h1>
+
+        <p className="font-display text-[clamp(7px,1.02cqw,13px)] text-[#6b6560] mt-[2.6cqw] leading-relaxed">
+          This certificate in <span className="font-bold text-[#1a1714]">{discipline}</span> is
+          awarded by Melina Design School to
         </p>
 
-        {/* نام دانشجو */}
-        <div className="mt-[1.5%] max-w-[68%]">
-          <div className="font-body font-bold text-[clamp(20px,3.6cqw,42px)] text-[#1a1714] leading-[1.3] pb-[1%]">
+        <div className="mt-[1.1cqw]">
+          <div className="font-display font-bold text-[clamp(16px,3cqw,38px)] text-[#1a1714] leading-tight">
             {cert.studentName}
           </div>
-          <div className="h-px w-full bg-[#1a1714]/20" />
+          <div className="h-px w-[72%] bg-[#1a1714]/15 mt-[1cqw]" />
         </div>
 
-        <p className="font-body text-[clamp(9px,1.2cqw,15px)] text-[#4a4540] leading-[1.9] mt-[2.5%] max-w-[72%]">
-          بابت گذراندن کامل دوره‌ی <span className="font-bold text-[#1a1714]">{title}</span> در
-          مدرسه دیزاین ملینا، همراه با انجام پروژه‌های عملی، اهدا می‌شود.
+        <p className="font-display text-[clamp(6.5px,0.95cqw,12px)] text-[#4a4540] leading-[1.8] mt-[1.8cqw] max-w-[88%]">
+          in recognition of completing {hours} hours of rigorous {discipline.toLowerCase()} training,
+          covering the skills listed alongside, and delivering a complete hands on project.
+          We wish them continued success in their future endeavors.
         </p>
 
-        {/* مهر */}
-        <div className="absolute left-[8%] top-[38%] w-[15%] aspect-square">
-          <div className="absolute inset-0 rounded-full border-2 border-[#7c5cfc]/30" />
-          <div className="absolute inset-[9%] rounded-full border border-[#7c5cfc]/20" />
-          <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
-            <span className="font-display font-black text-[clamp(10px,1.7cqw,20px)] text-[#7c5cfc] leading-none">
-              {cert.track === "QC" ? "QC" : cert.track}
-            </span>
-            <span className="font-body text-[clamp(5px,0.72cqw,9px)] text-[#7c5cfc]/70 mt-[6%] leading-tight px-[12%]">
-              گواهی معتبر
-            </span>
+        {/* امضا */}
+        <div className="mt-auto flex items-end justify-between gap-[2cqw]">
+          <div>
+            <div className="relative h-[3.6cqw] min-h-[26px] w-[13cqw] min-w-[96px] mb-[0.5cqw]">
+              <Image
+                src="/images/sig.png"
+                alt=""
+                fill
+                sizes="200px"
+                className="object-contain object-left"
+              />
+            </div>
+            <div className="h-px w-[13cqw] min-w-[96px] bg-[#1a1714]/20 mb-[0.7cqw]" />
+            <div className="font-display font-bold text-[clamp(6.5px,0.92cqw,12px)] text-[#1a1714]">
+              Mojtaba Yazdanpanah
+            </div>
+            <div className="font-display text-[clamp(5.5px,0.72cqw,9px)] text-[#a09990] mt-[0.15cqw]">
+              Head of Melina Design School
+            </div>
           </div>
-        </div>
 
-        {/* پانوشت */}
-        <div className="mt-auto">
-          <div className="h-px w-full bg-[#1a1714]/10 mb-[2.2%]" />
-          <div className="flex items-end justify-between gap-4">
-
-            <div>
-              <div className="font-body font-bold text-[clamp(8px,1.05cqw,13px)] text-[#1a1714]">
-                مجتبا یزدانپناه
-              </div>
-              <div className="font-body text-[clamp(6px,0.85cqw,10px)] text-[#a09990] mt-[2px]">
-                بنیان‌گذار و مدرس
-              </div>
+          <div className="text-right">
+            <div className="font-display font-bold text-[clamp(6.5px,0.92cqw,12px)] text-[#1a1714]">
+              {enDate(cert.createdAt)}
             </div>
-
-            <div className="text-center">
-              <div
-                dir="ltr"
-                className="font-mono font-bold text-[clamp(9px,1.35cqw,17px)] text-[#1a1714] tracking-[0.18em]"
-              >
-                {cert.code}
-              </div>
-              <div className="font-body text-[clamp(5px,0.78cqw,9px)] text-[#a09990] mt-[3px]">
-                کد استعلام در mojtabaui.ir/certificates
-              </div>
-            </div>
-
-            <div className="text-left">
-              <div className="font-body font-bold text-[clamp(8px,1.05cqw,13px)] text-[#1a1714]">
-                {faDate(cert.createdAt)}
-              </div>
-              <div className="font-body text-[clamp(6px,0.85cqw,10px)] text-[#a09990] mt-[2px]">
-                تاریخ صدور
-              </div>
+            <div className="font-display text-[clamp(5.5px,0.72cqw,9px)] text-[#a09990] mt-[0.15cqw]">
+              Date of issue
             </div>
           </div>
         </div>
-      </div>
+      </section>
     </div>
   );
 }
