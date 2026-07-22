@@ -435,28 +435,27 @@ export default function Home() {
         {/* ─── Why Infinity ─── */}
         <section className="py-24">
           <div className="max-w-7xl mx-auto px-4 sm:px-6">
-            <div className="flex items-end justify-between gap-10 flex-wrap mb-14">
+            <div className="grid lg:grid-cols-2 gap-10 lg:gap-14 items-center mb-16">
               <FadeIn>
-                <div>
-                  <div className="font-display text-[10px] font-bold tracking-[0.22em] uppercase text-[#a09990] mb-2">
-                    WHY OUR COURSES
-                  </div>
-                  <h2 className="font-body font-extrabold text-3xl md:text-4xl text-[#1a1714]">
-                    چرا دوره‌های ما؟
-                  </h2>
-                  <p className="text-[#6b6560] font-body text-sm mt-2 max-w-md leading-relaxed">
-                    تفاوت یادگیری تنها با یادگیری هدایت‌شده، همینه که کجا تموم می‌شه.
-                  </p>
+                <div className="font-display text-[10px] font-bold tracking-[0.22em] uppercase text-[#a09990] mb-3">
+                  WHY OUR COURSES
                 </div>
+                <h2 className="font-body font-extrabold text-3xl md:text-4xl lg:text-[2.75rem] text-[#1a1714] leading-[1.3] mb-4">
+                  چرا دوره‌های ما؟
+                </h2>
+                <p className="text-[#6b6560] font-body text-base leading-relaxed max-w-lg">
+                  تفاوت یادگیری تنها با یادگیری هدایت‌شده، همینه که کجا تموم می‌شه. یکی
+                  دور خودش می‌چرخه و یکی به مقصد می‌رسه.
+                </p>
               </FadeIn>
 
-              <FadeIn delay={0.1} className="w-full max-w-[360px]">
-                <div className="relative w-full aspect-[3/2] rounded-3xl overflow-hidden border border-[#d4c8c2] bg-white">
+              <FadeIn delay={0.1}>
+                <div className="relative w-full aspect-[3/2] rounded-3xl overflow-hidden border border-[#d4c8c2] bg-white shadow-[0_28px_60px_-34px_rgba(26,23,20,0.45)]">
                   <Image
                     src="/images/why-us.jpg"
                     alt=""
                     fill
-                    sizes="360px"
+                    sizes="(max-width: 1024px) 100vw, 560px"
                     className="object-cover"
                   />
                 </div>
@@ -991,7 +990,7 @@ export default function Home() {
             </div>
           </FadeIn>
 
-          <div className="grid lg:grid-cols-[1fr_320px] gap-10 items-start">
+          <div className="grid lg:grid-cols-[1fr_440px] gap-10 lg:gap-14 items-center">
           <div className="space-y-3">
             {(infinityCourses[0]?.faqs ?? []).slice(0, 6).map((faq, i) => (
               <FadeIn key={faq.q} delay={i * 0.05}>
@@ -1014,12 +1013,12 @@ export default function Home() {
 
             {/* تصویر سکشن */}
             <FadeIn delay={0.1} className="hidden lg:block">
-              <div className="relative w-full aspect-[3/2] rounded-3xl overflow-hidden border border-[#e8e2d9] bg-white sticky top-24">
+              <div className="relative w-full aspect-[4/5] rounded-3xl overflow-hidden border border-[#e8e2d9] bg-white shadow-[0_28px_60px_-34px_rgba(26,23,20,0.4)]">
                 <Image
                   src="/images/faq.jpg"
                   alt=""
                   fill
-                  sizes="320px"
+                  sizes="440px"
                   className="object-cover"
                 />
               </div>
