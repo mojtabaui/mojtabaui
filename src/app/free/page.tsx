@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Download, Play, ArrowLeft } from "lucide-react";
+import { Play, ArrowLeft, Mic, FileText, Send } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { freeResources } from "@/lib/mock-data";
@@ -116,11 +116,12 @@ function ResourceCard({ item }: { item: (typeof freeResources)[0] }) {
       style={{ backgroundColor: item.color }}
     >
       <div className="flex items-start justify-between gap-3">
+        {/* آیکون برداری به‌جای ایموجی — ایموجی روی هر سیستم فرق می‌کنه و با توکن رنگی کنترل نمی‌شه */}
         <div
-          className="w-11 h-11 rounded-xl flex items-center justify-center text-xl flex-shrink-0"
-          style={{ backgroundColor: item.accent + "18" }}
+          className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0"
+          style={{ backgroundColor: item.accent + "18", color: item.accent }}
         >
-          {item.emoji}
+          {isCourse ? <Play size={18} /> : isVoice ? <Mic size={18} /> : <FileText size={18} />}
         </div>
         <span
           className="text-[10px] font-body px-2.5 py-1 rounded-full mt-1"
@@ -139,18 +140,17 @@ function ResourceCard({ item }: { item: (typeof freeResources)[0] }) {
         </p>
       </div>
 
+      {/* فعلاً همه‌ی منابع از طریق پشتیبانی تلگرام تحویل داده می‌شن، پس متن دکمه هم
+          همون کاری رو می‌گه که واقعاً اتفاق می‌افته (نه «دانلود» که فایل مستقیم بده) */}
       <a
-        href={item.url ?? "#"}
-        className="inline-flex items-center justify-center gap-2 text-white font-body font-semibold text-xs px-4 py-2.5 rounded-xl transition-all w-full"
+        href={item.url}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="inline-flex items-center justify-center gap-2 text-white font-body font-semibold text-xs px-4 py-2.5 rounded-xl transition-all w-full hover:opacity-90"
         style={{ backgroundColor: item.accent }}
       >
-        {isCourse ? (
-          <><Play size={12} /> شروع کن</>
-        ) : isVoice ? (
-          <><Play size={12} /> گوش بده</>
-        ) : (
-          <><Download size={12} /> دانلود رایگان</>
-        )}
+        <Send size={12} />
+        {isCourse ? "دریافت در تلگرام" : isVoice ? "گوش بده در تلگرام" : "دریافت در تلگرام"}
       </a>
     </div>
   );

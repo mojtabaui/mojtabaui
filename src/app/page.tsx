@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowLeft, Star, ChevronLeft, ExternalLink, Send, Layers, Clock, Calendar, Users } from "lucide-react";
+import { ArrowLeft, Star, ChevronLeft, ExternalLink, Send, Layers, Clock, Calendar, Users, Play, Mic, FileText } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import CourseCard from "@/components/CourseCard";
@@ -507,11 +507,18 @@ export default function Home() {
                     className="rounded-2xl p-5 flex items-start gap-4 hover:opacity-90 hover:scale-[1.01] transition-all"
                     style={{ backgroundColor: item.color }}
                   >
+                    {/* آیکون برداری به‌جای ایموجی — رندر ایموجی روی هر سیستم فرق می‌کنه */}
                     <div
-                      className="w-10 h-10 rounded-xl flex items-center justify-center text-lg flex-shrink-0"
-                      style={{ backgroundColor: item.accent + "18" }}
+                      className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
+                      style={{ backgroundColor: item.accent + "18", color: item.accent }}
                     >
-                      {item.emoji}
+                      {item.type === "course" ? (
+                        <Play size={16} />
+                      ) : item.type === "voice" ? (
+                        <Mic size={16} />
+                      ) : (
+                        <FileText size={16} />
+                      )}
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="font-body font-semibold text-[#1a1714] text-sm leading-snug mb-1">{item.title}</div>

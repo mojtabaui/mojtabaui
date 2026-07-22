@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { Send, Camera, Tv, Mail, ExternalLink, ArrowLeft } from "lucide-react";
+import { Send, Camera, Mail, ExternalLink, ArrowLeft } from "lucide-react";
 
 const courses = [
   { href: "/courses/ui-infinity", label: "UI بی‌نهایت" },
@@ -27,10 +27,11 @@ const about = [
   // { href: "/auth/register", label: "ثبت‌نام رایگان", ext: false },
 ];
 
+// یوتیوب فعلاً از لیست برداشته شده چون آدرس کانالی نداریم و لینک مرده بدتر از نبودنه.
+// آدرس کانال رو که دادی، دوباره اضافه‌ش می‌کنیم: { href: "...", label: "YouTube", Icon: Tv }
 const socials = [
   { href: "https://instagram.com/mojtabaui",           label: "Instagram", Icon: Camera },
-  { href: "#",                                          label: "Telegram",  Icon: Send   },
-  { href: "#",                                          label: "YouTube",   Icon: Tv     },
+  { href: "https://t.me/melina_support",               label: "Telegram",  Icon: Send   },
   { href: "mailto:mojtaba.yazdanpanah0771@gmail.com",  label: "Email",     Icon: Mail   },
 ];
 
@@ -167,7 +168,7 @@ export default function Footer() {
 
       {/* ── Bottom bar ── */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-5 border-t border-white/[0.06] flex items-center justify-between flex-wrap gap-3">
-        <span className="text-white/20 text-xs font-body">© ۱۴۰۴ مدرسه دیزاین ملینا — همه حقوق محفوظ است</span>
+        <span className="text-white/20 text-xs font-body">© ۱۴۰۵ مدرسه دیزاین ملینا · همه حقوق محفوظ است</span>
         <span className="text-white/20 text-[11px] font-display tracking-[0.25em]">UI · UX · DESIGN</span>
       </div>
 
