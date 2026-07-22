@@ -184,6 +184,49 @@ no words, no photorealism, no 3d render, no stock photo people.
 
 ---
 
+## 👤 پرتره‌ی مدرس (تبدیل عکس)
+
+این یکی با بقیه فرق داره: **عکس خودت رو به‌عنوان ورودی می‌دی** و ازش می‌خوای
+به این سبک تبدیلش کنه. توی ابزارهایی مثل ChatGPT یا Gemini عکس رو ضمیمه کن
+و این متن رو بفرست.
+
+- **نسبت:** ۴:۵ (پرتره)
+- **اندازه:** ۱۰۰۰ در ۱۲۵۰
+- **مسیر:** `public/images/instructor-portrait.jpg`
+
+```
+Turn the attached photo of me into an editorial cartoon portrait.
+
+Keep me clearly recognizable: same face structure, same hairstyle, same facial
+hair, same glasses and same headwear and clothing as in the photo. Do not
+beautify, do not slim, do not change my age. It should still look like me.
+
+Render it as: flat editorial vector illustration with confident clean linework,
+limited flat color fills, subtle paper grain texture, warm cream background
+#FAF6F1, near-black ink #1a1714 for lines and shadows, a single violet accent
+#7c5cfc used sparingly on one element only, soft long shadow, generous negative
+space around the head and shoulders, calm and confident expression, swiss design
+influence, portrait crop from mid chest up.
+
+No text, no letters, no words. No photorealism, no 3d render, no glossy chrome,
+no heavy gradients, no busy background.
+```
+
+### نکته‌های عملی
+
+- **چند بار امتحان کن.** تبدیل چهره سخت‌ترین کار برای این ابزارهاست و معمولاً
+  خروجی سوم یا چهارم شبیه‌تر درمیاد.
+- اگر شباهت کم بود، این جمله رو اضافه کن:
+  `match the facial proportions in the reference photo as closely as possible`
+- اگر خیلی کارتونی و بچگانه شد، این رو اضافه کن:
+  `adult editorial illustration, not childish, not caricature, restrained`
+- اگر پس‌زمینه شلوغ شد: `plain flat cream background, nothing behind the subject`
+
+**کجا استفاده می‌شه:** توی هدر صفحه‌ی لیست دوره‌ها، جای همون عدد بزرگ کم‌رنگ
+فعلی. بذارش تو مسیر بالا و بگو تا جاگذاریش کنم.
+
+---
+
 ## ۰. بلوک سبک مشترک (مهم‌ترین بخش)
 
 این متن رو **به انتهای هر پرامپت** اضافه کن. این چیزیه که همه‌ی تصویرها رو خانواده می‌کنه:
