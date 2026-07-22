@@ -90,41 +90,22 @@ export default function CertificatesPage() {
                 ))}
               </div>
 
-              {/* شکل کدها */}
-              <div className="bg-[#1a1714] rounded-3xl p-6">
-                <h3 className="font-body font-bold text-white text-sm mb-4">
-                  کد گواهی چه شکلیه؟
-                </h3>
-                <div className="space-y-3">
-                  {[
-                    { code: "MU1405001", label: "دوره‌های رابط و تجربه کاربری، از ۱۴۰۵" },
-                    { code: "QC0001", label: "گواهی‌های کوادکمپ" },
-                    { code: "1040401", label: "گواهی‌های قدیمی‌تر ۱۴۰۳ و ۱۴۰۴" },
-                  ].map(({ code, label }) => (
-                    <div key={code} className="flex items-center gap-3 flex-wrap">
-                      <code
-                        dir="ltr"
-                        className="font-mono text-sm text-white bg-white/[0.07] border border-white/10 rounded-lg px-3 py-1.5 tracking-widest"
-                      >
-                        {code}
-                      </code>
-                      <span className="font-body text-xs text-white/45">{label}</span>
-                    </div>
-                  ))}
+              {/* نمونه گواهی */}
+              <FadeIn delay={0.24}>
+                <div className="relative w-full aspect-[4/3] rounded-3xl overflow-hidden border border-[#e8e2d9] shadow-[0_24px_50px_-30px_rgba(26,23,20,0.45)] bg-white">
+                  <Image
+                    src="/images/certificate-sample.jpg"
+                    alt="نمونه گواهی مدرسه دیزاین ملینا"
+                    fill
+                    sizes="(max-width: 1024px) 100vw, 560px"
+                    className="object-cover"
+                  />
                 </div>
-                <p className="font-body text-xs text-white/35 leading-relaxed mt-5">
-                  همه‌ی گواهی‌های صادرشده معتبرن، حتی کدهای قدیمی که فقط عدد بودن.
-                </p>
-              </div>
+              </FadeIn>
             </div>
 
             {/* فرم استعلام — سمت چپ در RTL */}
             <div className="lg:sticky lg:top-24">
-              <FadeIn>
-                <div className="relative w-full aspect-[4/3] rounded-3xl overflow-hidden border border-[#e8e2d9] shadow-[0_24px_50px_-30px_rgba(26,23,20,0.45)] bg-white mb-6">
-                  <Image src="/images/certificate-sample.jpg" alt="نمونه گواهی مدرسه دیزاین ملینا" fill sizes="(max-width: 1024px) 100vw, 560px" className="object-cover" />
-                </div>
-              </FadeIn>
               <CertificateLookup />
 
               <div className="mt-6 bg-white border border-[#e8e2d9] rounded-2xl p-5 flex items-start gap-4">
