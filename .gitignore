@@ -43,3 +43,11 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# فایل‌های منبع و کاری که نباید توی ریپوی سایت باشن.
+# نسخه‌ی نهایی و قابل دانلودشون در public/downloads قرار داره.
+melina-content/
+khiyar.html
+khiyar.pdf
+mojtabaui-50-styles.pdf
+part 2.jpg
