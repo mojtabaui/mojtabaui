@@ -183,3 +183,44 @@ img, svg, video, canvas {
     transform: none;
   }
 }
+
+/* ── سند گواهی ──────────────────────────────────────────────
+   اندازه‌های داخل سند بر حسب cqw تعریف شدن، پس قاب باید
+   container باشه تا متن‌ها با عرض سند مقیاس بگیرن. */
+.certificate-sheet {
+  container-type: inline-size;
+  width: 100%;
+}
+
+/* موقع چاپ، فقط خود سند دیده می‌شه و کل صفحه‌ی A4 افقی رو پر می‌کنه.
+   print-color-adjust لازمه وگرنه مرورگر پس‌زمینه‌ی کرِم رو حذف می‌کنه. */
+@media print {
+  @page {
+    size: A4 landscape;
+    margin: 0;
+  }
+  html,
+  body {
+    background: #ffffff !important;
+  }
+  body * {
+    visibility: hidden !important;
+  }
+  #certificate,
+  #certificate * {
+    visibility: visible !important;
+  }
+  #certificate {
+    position: fixed !important;
+    inset: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    aspect-ratio: auto !important;
+    border-radius: 0 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .no-print {
+    display: none !important;
+  }
+}

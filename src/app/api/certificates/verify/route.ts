@@ -45,10 +45,11 @@ export async function POST(req: NextRequest) {
 
   const discipline = disciplineLabel(cert.track);
   // کوادکمپ سال نداره؛ بقیه با «دوره <سال>» نمایش داده می‌شن
-  const courseTitle = cert.year ? `${discipline} — دوره ${cert.year}` : discipline;
+  const courseTitle = cert.year ? `${discipline}، دوره ${cert.year}` : discipline;
 
   return NextResponse.json({
     found: true,
+    code: cert.code,
     studentName: cert.studentName,
     courseTitle,
     startDate: cert.startDate,

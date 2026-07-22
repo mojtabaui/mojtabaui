@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Award, Check, Copy } from "lucide-react";
+import { Award, Check, Copy, FileText } from "lucide-react";
 
 type Track = "UI" | "UX" | "QC";
 
@@ -111,6 +111,16 @@ export default function CertificateForm() {
                 {copied ? <Check size={13} /> : <Copy size={13} />}
                 {copied ? "کپی شد" : "کپی کد"}
               </button>
+
+              <a
+                href={`/certificate/${created.code}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1.5 text-xs font-body font-semibold text-white bg-[#8b5cf6] hover:bg-[#7c4ff0] rounded-lg px-3 py-2 transition-colors"
+              >
+                <FileText size={13} />
+                دیدن و دانلود گواهی
+              </a>
             </div>
           </div>
         )}

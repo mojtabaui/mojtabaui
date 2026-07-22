@@ -1,10 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { CheckCircle, XCircle, Search } from "lucide-react";
+import { CheckCircle, XCircle, Search, FileText } from "lucide-react";
 
 interface Result {
   found: boolean;
+  code?: string;
   studentName?: string;
   courseTitle?: string;
   startDate?: string;
@@ -116,6 +117,18 @@ export default function CertificateLookup() {
               </div>
             ))}
           </div>
+
+          {result.code && (
+            <a
+              href={`/certificate/${result.code}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-5 inline-flex items-center justify-center gap-2 w-full bg-emerald-600 hover:bg-emerald-700 text-white font-body font-bold text-sm px-5 py-3 rounded-xl transition-colors"
+            >
+              <FileText size={15} />
+              مشاهده و دانلود گواهی
+            </a>
+          )}
         </div>
       )}
 
