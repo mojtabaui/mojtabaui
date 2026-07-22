@@ -132,7 +132,7 @@ export default async function CourseDetailPage({ params }: Props) {
                   {course.subtitle}
                 </div>
 
-                <h1 className="font-body font-black text-4xl md:text-5xl text-[#1a1714] leading-[1.05] mb-5">
+                <h1 className="font-body font-black text-4xl md:text-5xl text-[#1a1714] leading-[1.25] mb-5">
                   {course.title}
                 </h1>
                 <p className="text-[#6b6560] font-body text-base leading-relaxed mb-8 max-w-lg">

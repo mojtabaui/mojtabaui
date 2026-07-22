@@ -114,3 +114,72 @@ body {
   mix-blend-mode: overlay;
   animation: grain 0.75s steps(1) infinite;
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   لایه‌ی تنظیم (Refinement)
+   این‌ها روی همه‌ی صفحات اثر می‌ذارن و کار رو «چیده‌شده» نشون می‌دن
+   به‌جای اینکه هر صفحه جدا دستکاری بشه.
+   ═══════════════════════════════════════════════════════════════ */
+
+/* حروف‌چینیِ حرفه‌ای: تیتر بین خط‌ها متعادل می‌شه و پاراگراف
+   کلمه‌ی تنها توی خط آخر جا نمی‌ذاره. مهم‌ترین تفاوت بصری بین
+   متنِ چیده‌شده و متنِ رهاشده همینه. */
+h1, h2, h3, h4 {
+  text-wrap: balance;
+}
+p, li {
+  text-wrap: pretty;
+}
+
+/* فارسی نباید با خط تیره شکسته بشه */
+body {
+  hyphens: none;
+  font-kerning: normal;
+  text-rendering: optimizeLegibility;
+}
+
+/* حلقه‌ی فوکوس. چون نشانگر موس روی دسکتاپ مخفیه، کاربر کیبورد
+   حتماً باید بدونه کجای صفحه‌ست. */
+:focus-visible {
+  outline: 2px solid #7c5cfc;
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* لینک‌های لنگری (مثل #about و #contact) زیر نوار بالای چسبان
+   گم نشن */
+[id] {
+  scroll-margin-top: 6rem;
+}
+
+/* تصویر و آیکون فاصله‌ی ناخواسته‌ی خط پایه نگیرن */
+img, svg, video, canvas {
+  display: block;
+}
+
+/* احترام به «کاهش حرکت» سیستم. بدون این، مارکی و شناوری و گرین
+   برای کسی که سرگیجه می‌گیره هم اجرا می‌شن. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .animate-marquee,
+  .float-slow,
+  .pulse-dot,
+  .grain-animated {
+    animation: none !important;
+  }
+  .fade-in-up {
+    animation: none !important;
+    opacity: 1;
+    transform: none;
+  }
+}

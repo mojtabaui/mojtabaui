@@ -17,17 +17,21 @@ export default function FreePage() {
         {/* Hero */}
         <section className="dot-bg-dark bg-[#1a1714] py-20">
           <div className="max-w-7xl mx-auto px-4 sm:px-6">
-            <div className="max-w-xl">
-              <div className="inline-flex items-center gap-2 bg-white/10 rounded-full px-4 py-1.5 mb-6">
-                <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                <span className="font-body text-xs text-white/70">همه چیز رایگان، بدون ثبت‌نام</span>
+            <div className="flex items-end justify-between gap-8 flex-wrap">
+              <div className="max-w-xl">
+                <div className="font-display text-[10px] font-bold tracking-[0.22em] uppercase text-[#7c5cfc] mb-4">
+                  FREE
+                </div>
+                <h1 className="font-body font-black text-4xl md:text-5xl text-white leading-[1.25] mb-4">
+                  آموزش‌های رایگان
+                </h1>
+                <p className="text-white/50 font-body text-lg leading-relaxed">
+                  ویدیو، ویس و فایل آماده. بدون ثبت‌نام، بردار و استفاده کن.
+                </p>
               </div>
-              <h1 className="font-body font-extrabold text-4xl md:text-5xl text-white leading-tight mb-5">
-                آموزش‌های رایگان
-              </h1>
-              <p className="text-white/50 font-body text-lg leading-relaxed">
-                ویدیو، ویس و فایل آماده. بردار و استفاده کن.
-              </p>
+              <div className="font-display font-black text-white/[0.07] text-7xl leading-none select-none">
+                {String(freeResources.length).replace(/\d/g, (d) => "۰۱۲۳۴۵۶۷۸۹"[+d])}
+              </div>
             </div>
           </div>
         </section>
