@@ -11,6 +11,7 @@ const courses = [
 ];
 
 const content = [
+  { href: "/checklist",    label: "چک‌لیست یادگیری"        },
   { href: "/articles",     label: "مقالات"               },
   { href: "/free",         label: "منابع رایگان"          },
   { href: "/projects",     label: "نمونه‌کارهای دانشجوها" },

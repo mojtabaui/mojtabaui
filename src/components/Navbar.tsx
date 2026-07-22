@@ -9,6 +9,7 @@ const navLinks = [
   { href: "/courses", label: "دوره‌ها" },
   { href: "/projects", label: "نمونه کارها" },
   { href: "/free", label: "رایگان" },
+  { href: "/checklist", label: "چک‌لیست" },
   { href: "/articles", label: "مقالات" },
   { href: "/certificates", label: "گواهی‌ها" },
   { href: "/#about", label: "درباره من" },
