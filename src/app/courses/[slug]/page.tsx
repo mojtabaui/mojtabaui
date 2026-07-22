@@ -1,6 +1,5 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import Image from "next/image";
 import {
   Clock,
   Users,
@@ -20,6 +19,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import BuyButton from "@/components/BuyButton";
 import WorkshopLanding from "@/components/WorkshopLanding";
+import CourseHeroVisual from "@/components/CourseHeroVisual";
 import { courses, formatPrice, typeLabel, featuredProjects } from "@/lib/mock-data";
 import { contentFor, disciplineOf, uiVsUx, guarantees } from "@/lib/course-content";
 
@@ -35,15 +35,8 @@ const colorMap: Record<string, { bg: string; badge: string; accent: string }> = 
   "claude-for-designers": { bg: "#FBF0EA", badge: "#F3D9C7", accent: "#C2410C" },
 };
 
-// بنر اختصاصی هر دوره — بالای ستون محتوا
-const posterMap: Record<string, string> = {
-  "ui-infinity": "/images/banner-ui-infinity.jpg",
-  "ux-infinity": "/images/banner-ux-infinity.jpg",
-  "ui-offline":  "/images/banner-ui-offline.jpg",
-  "ux-offline":  "/images/banner-ux-offline.jpg",
-  "portfolio":   "/images/banner-portfolio.jpg",
-  "prototype":   "/images/banner-prototype.jpg",
-};
+// بنرهای عکسی جای خودشون رو به <CourseHeroVisual> دادن (تصویر گرافیکیِ ساخته‌شده).
+// فایل‌های banner-*.jpg هنوز در public/images هستن اگه خواستی برگردی.
 
 export default async function CourseDetailPage({ params }: Props) {
   const { slug } = await params;
@@ -62,7 +55,6 @@ export default async function CourseDetailPage({ params }: Props) {
 
   const color = colorMap[slug] ?? colorMap["ui-infinity"];
   const discipline = slug.startsWith("ui") ? "UI" : slug.startsWith("ux") ? "UX" : "AI";
-  const poster = posterMap[slug];
 
   const counterpartSlug = course.type === "infinity"
     ? slug.replace("-infinity", "-offline")
@@ -112,21 +104,13 @@ export default async function CourseDetailPage({ params }: Props) {
             <div className="grid grid-cols-1 lg:grid-cols-5 gap-12">
               <div className="lg:col-span-3">
                 {/* Banner — full square image, no crop */}
-                {poster && (
-                  <div
-                    className="relative w-full max-w-[340px] aspect-square rounded-3xl overflow-hidden shadow-md mb-7"
-                    style={{ border: `1px solid ${color.accent}22` }}
-                  >
-                    <Image
-                      src={poster}
-                      alt={course.title}
-                      fill
-                      priority
-                      sizes="340px"
-                      className="object-cover"
-                    />
-                  </div>
-                )}
+                <CourseHeroVisual
+                  mark={discipline}
+                  subtitle={course.subtitle}
+                  color={color}
+                  videoHours={course.videoHours}
+                  tags={course.tags}
+                />
 
                 {/* Eyebrow chips */}
                 <div className="flex items-center gap-2.5 mb-5 flex-wrap">
