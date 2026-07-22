@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowLeft, Star, ChevronLeft, ExternalLink, Send, Layers, Clock, Calendar, Users, Play, Mic, FileText } from "lucide-react";
+import { ArrowLeft, Star, ChevronLeft, ExternalLink, Send, Layers, Clock, Calendar, Users, Play, Mic, FileText, Check, Minus, Plus } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import CourseCard from "@/components/CourseCard";
@@ -477,6 +477,152 @@ export default function Home() {
           </div>
         </section>
 
+        {/* ─── Compare formats ─── */}
+        <section className="py-24 bg-white border-y border-[#e8e2d9]">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6">
+            <FadeIn>
+              <div className="mb-12 max-w-xl">
+                <div className="font-display text-[10px] font-bold tracking-[0.22em] uppercase text-[#a09990] mb-2">
+                  WHICH ONE
+                </div>
+                <h2 className="font-body font-extrabold text-3xl md:text-4xl text-[#1a1714] mb-3">
+                  کدوم نسخه به تو می‌خوره؟
+                </h2>
+                <p className="text-[#6b6560] font-body leading-relaxed">
+                  محتوای ویدیویی هر دو نسخه دقیقاً یکیه. فرق‌شون توی همراهیه.
+                </p>
+              </div>
+            </FadeIn>
+
+            <div className="grid md:grid-cols-2 gap-5 max-w-4xl">
+              {[
+                {
+                  name: "بی‌نهایت",
+                  tag: "پیشنهاد ما",
+                  price: infinityCourses[0]?.price,
+                  desc: "برای کسی که می‌خواد کنارش کسی باشه و مسیرش منظم بمونه.",
+                  featured: true,
+                  rows: [
+                    { label: "۵۵ ساعت ویدیوی کامل", has: true },
+                    { label: "۵ پروژه عملی", has: true },
+                    { label: "۲۰ ساعت منتورینگ زنده", has: true },
+                    { label: "برنامه‌ی هفتگی و گروه هم‌دوره‌ای", has: true },
+                    { label: "فیدبک مستقیم روی کارت", has: true },
+                    { label: "گواهی پایان دوره", has: true },
+                  ],
+                },
+                {
+                  name: "آفلاین",
+                  tag: "اقتصادی‌تر",
+                  price: videoCourses.find((c) => c.slug === "ui-offline")?.price,
+                  desc: "برای کسی که خودش منظمه و می‌خواد با تمپوی خودش جلو بره.",
+                  featured: false,
+                  rows: [
+                    { label: "۵۵ ساعت ویدیوی کامل", has: true },
+                    { label: "۵ پروژه عملی", has: true },
+                    { label: "۲۰ ساعت منتورینگ زنده", has: false },
+                    { label: "برنامه‌ی هفتگی و گروه هم‌دوره‌ای", has: false },
+                    { label: "پشتیبانی تیکتی ۱۲ ماهه", has: true },
+                    { label: "گواهی پایان دوره", has: true },
+                  ],
+                },
+              ].map((plan, i) => (
+                <FadeIn key={plan.name} delay={i * 0.1}>
+                  <div
+                    className={`h-full rounded-3xl p-7 border transition-all ${
+                      plan.featured
+                        ? "bg-[#1a1714] border-[#1a1714] shadow-[0_24px_50px_-28px_rgba(26,23,20,0.7)]"
+                        : "bg-[#FAF6F1] border-[#e8e2d9]"
+                    }`}
+                  >
+                    <div className="flex items-center justify-between gap-3 mb-4">
+                      <h3
+                        className={`font-body font-black text-xl ${
+                          plan.featured ? "text-white" : "text-[#1a1714]"
+                        }`}
+                      >
+                        {plan.name}
+                      </h3>
+                      <span
+                        className={`text-[10px] font-body font-bold px-2.5 py-1 rounded-full ${
+                          plan.featured
+                            ? "bg-[#7c5cfc] text-white"
+                            : "bg-white text-[#6b6560] border border-[#e8e2d9]"
+                        }`}
+                      >
+                        {plan.tag}
+                      </span>
+                    </div>
+
+                    <p
+                      className={`font-body text-sm leading-relaxed mb-5 ${
+                        plan.featured ? "text-white/45" : "text-[#6b6560]"
+                      }`}
+                    >
+                      {plan.desc}
+                    </p>
+
+                    {plan.price && (
+                      <div
+                        className={`font-body font-black text-2xl mb-6 ${
+                          plan.featured ? "text-white" : "text-[#1a1714]"
+                        }`}
+                      >
+                        {formatPrice(plan.price)}
+                      </div>
+                    )}
+
+                    <ul className="space-y-3 mb-7">
+                      {plan.rows.map((row) => (
+                        <li key={row.label} className="flex items-start gap-2.5">
+                          <span
+                            className={`w-4 h-4 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5 ${
+                              row.has
+                                ? plan.featured
+                                  ? "bg-emerald-400/20 text-emerald-400"
+                                  : "bg-emerald-500/10 text-emerald-600"
+                                : plan.featured
+                                  ? "bg-white/[0.06] text-white/25"
+                                  : "bg-[#e8e2d9] text-[#a09990]"
+                            }`}
+                          >
+                            {row.has ? <Check size={10} /> : <Minus size={10} />}
+                          </span>
+                          <span
+                            className={`font-body text-sm leading-relaxed ${
+                              row.has
+                                ? plan.featured
+                                  ? "text-white/80"
+                                  : "text-[#4a4540]"
+                                : plan.featured
+                                  ? "text-white/25 line-through"
+                                  : "text-[#a09990] line-through"
+                            }`}
+                          >
+                            {row.label}
+                          </span>
+                        </li>
+                      ))}
+                    </ul>
+
+                    <Link
+                      href={plan.featured ? "/courses/ui-infinity" : "/courses/ui-offline"}
+                      className={`inline-flex items-center justify-center gap-2 w-full font-body font-bold text-sm px-6 py-3.5 rounded-2xl transition-all hover:scale-[1.01] ${
+                        plan.featured
+                          ? "bg-white text-[#1a1714] hover:bg-white/90"
+                          : "bg-[#1a1714] text-white hover:bg-[#2d2926]"
+                      }`}
+                    >
+                      جزئیات دوره
+                      <ChevronLeft size={15} />
+                    </Link>
+                  </div>
+                </FadeIn>
+              ))}
+            </div>
+          </div>
+        </section>
+
         {/* ─── Free Resources ─── */}
         <section className="py-24 bg-white border-y border-[#e8e2d9]">
           <div className="max-w-7xl mx-auto px-4 sm:px-6">
@@ -812,6 +958,43 @@ export default function Home() {
               </FadeIn>
 
             </div>
+          </div>
+        </section>
+
+        {/* ─── FAQ ─── */}
+        <section className="py-24 max-w-7xl mx-auto px-4 sm:px-6">
+          <FadeIn>
+            <div className="mb-12 max-w-xl">
+              <div className="font-display text-[10px] font-bold tracking-[0.22em] uppercase text-[#a09990] mb-2">
+                FAQ
+              </div>
+              <h2 className="font-body font-extrabold text-3xl md:text-4xl text-[#1a1714] mb-3">
+                سوالای پرتکرار
+              </h2>
+              <p className="text-[#6b6560] font-body leading-relaxed">
+                اگر جوابت اینجا نبود، توی تلگرام بپرس.
+              </p>
+            </div>
+          </FadeIn>
+
+          <div className="max-w-3xl space-y-3">
+            {(infinityCourses[0]?.faqs ?? []).slice(0, 6).map((faq, i) => (
+              <FadeIn key={faq.q} delay={i * 0.05}>
+                <details className="group bg-white border border-[#e8e2d9] rounded-2xl overflow-hidden hover:border-[#1a1714]/20 transition-colors">
+                  <summary className="flex items-center justify-between gap-4 px-6 py-5 cursor-pointer list-none">
+                    <span className="font-body font-semibold text-[#1a1714] text-sm leading-relaxed">
+                      {faq.q}
+                    </span>
+                    <span className="w-7 h-7 rounded-full bg-[#f7f4ef] text-[#6b6560] flex items-center justify-center flex-shrink-0 transition-transform group-open:rotate-45">
+                      <Plus size={14} />
+                    </span>
+                  </summary>
+                  <div className="px-6 pb-5 -mt-1">
+                    <p className="font-body text-sm text-[#6b6560] leading-[1.9]">{faq.a}</p>
+                  </div>
+                </details>
+              </FadeIn>
+            ))}
           </div>
         </section>
 
