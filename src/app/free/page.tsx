@@ -2,6 +2,9 @@ import Link from "next/link";
 import { Play, ArrowLeft, Mic, FileText, Send, Download } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import FadeIn from "@/components/FadeIn";
+import ParallaxY from "@/components/ParallaxY";
+import MarqueeBand from "@/components/MarqueeBand";
 import { freeResources } from "@/lib/mock-data";
 
 const courses  = freeResources.filter((r) => r.type === "course");
@@ -15,8 +18,18 @@ export default function FreePage() {
       <main className="flex-1 pt-16 min-h-screen bg-[#FAF6F1]">
 
         {/* Hero */}
-        <section className="dot-bg-dark bg-[#1a1714] py-20">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6">
+        <section className="dot-bg-dark bg-[#1a1714] py-20 relative overflow-hidden">
+          <div className="absolute inset-0 flex items-center justify-start pointer-events-none select-none overflow-hidden">
+            <ParallaxY speed={50}>
+              <span
+                className="font-display font-black leading-none block text-white"
+                style={{ fontSize: "clamp(8rem, 22vw, 17rem)", opacity: 0.04, marginRight: "-1.5rem" }}
+              >
+                FREE
+              </span>
+            </ParallaxY>
+          </div>
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 relative">
             <div className="flex items-end justify-between gap-8 flex-wrap">
               <div className="max-w-xl">
                 <div className="font-display text-[10px] font-bold tracking-[0.22em] uppercase text-[#7c5cfc] mb-4">
@@ -46,8 +59,10 @@ export default function FreePage() {
             </div>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {courses.map((item) => (
-              <ResourceCard key={item.id} item={item} />
+            {courses.map((item, i) => (
+              <FadeIn key={item.id} delay={i * 0.08}>
+                <ResourceCard item={item} />
+              </FadeIn>
             ))}
           </div>
         </section>
@@ -63,8 +78,10 @@ export default function FreePage() {
               </div>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {voices.map((item) => (
-                <ResourceCard key={item.id} item={item} />
+              {voices.map((item, i) => (
+                <FadeIn key={item.id} delay={i * 0.08}>
+                  <ResourceCard item={item} />
+                </FadeIn>
               ))}
             </div>
           </div>
@@ -80,11 +97,15 @@ export default function FreePage() {
             </div>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {files.map((item) => (
-              <ResourceCard key={item.id} item={item} />
+            {files.map((item, i) => (
+              <FadeIn key={item.id} delay={i * 0.08}>
+                <ResourceCard item={item} />
+              </FadeIn>
             ))}
           </div>
         </section>
+
+        <MarqueeBand />
 
         {/* CTA */}
         <section className="py-16 bg-[#f7f4ef] border-t border-[#e8e2d9]">

@@ -2,6 +2,9 @@ import Link from "next/link";
 import { Clock, ChevronLeft, Calendar } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import FadeIn from "@/components/FadeIn";
+import ParallaxY from "@/components/ParallaxY";
+import MarqueeBand from "@/components/MarqueeBand";
 import { articles } from "@/lib/mock-data";
 
 export const metadata = {
@@ -19,10 +22,22 @@ export default function ArticlesPage() {
       <main className="flex-1 pt-16 min-h-screen bg-[#FAF6F1]">
 
         {/* Header */}
-        <section className="dot-bg pt-16 pb-12">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6">
+        <section className="dot-bg pt-16 pb-12 relative overflow-hidden">
+          {/* واژه‌ی تزئینیِ بزرگ پس‌زمینه، با پارالاکس */}
+          <div className="absolute inset-0 flex items-center justify-start pointer-events-none select-none overflow-hidden">
+            <ParallaxY speed={50}>
+              <span
+                className="font-display font-black leading-none block text-[#1a1714]"
+                style={{ fontSize: "clamp(8rem, 22vw, 17rem)", opacity: 0.035, marginRight: "-1.5rem" }}
+              >
+                JOURNAL
+              </span>
+            </ParallaxY>
+          </div>
+
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 relative">
             <div className="flex items-end justify-between gap-8 flex-wrap">
-              <div className="max-w-xl">
+              <FadeIn className="max-w-xl">
                 <div className="font-display text-[10px] font-bold tracking-[0.22em] uppercase text-[#7c5cfc] mb-4">
                   JOURNAL
                 </div>
@@ -32,16 +47,19 @@ export default function ArticlesPage() {
                 <p className="text-[#6b6560] font-body text-lg leading-relaxed">
                   آموزش متنی، نکته‌های عملی و تجربه‌های واقعی از طراحی محصول. همه رایگان.
                 </p>
-              </div>
-              <div className="font-display font-black text-[#1a1714]/[0.07] text-7xl leading-none select-none">
-                {String(articles.length).replace(/\d/g, (d) => "۰۱۲۳۴۵۶۷۸۹"[+d])}
-              </div>
+              </FadeIn>
+              <ParallaxY speed={26}>
+                <div className="font-display font-black text-[#1a1714]/[0.07] text-7xl leading-none select-none">
+                  {String(articles.length).replace(/\d/g, (d) => "۰۱۲۳۴۵۶۷۸۹"[+d])}
+                </div>
+              </ParallaxY>
             </div>
           </div>
         </section>
 
         {/* Featured */}
         <section className="max-w-7xl mx-auto px-4 sm:px-6 pb-4">
+          <FadeIn>
           <Link href={`/articles/${featured.slug}`} className="group block">
             <article
               className="relative overflow-hidden rounded-[2rem] border transition-all hover:shadow-[0_28px_60px_-30px_rgba(26,23,20,0.4)]"
@@ -99,10 +117,16 @@ export default function ArticlesPage() {
               </div>
             </article>
           </Link>
+          </FadeIn>
         </section>
 
+        {/* نوار متحرک، همون زبان بصری صفحه‌ی اصلی */}
+        <div className="mt-12">
+          <MarqueeBand />
+        </div>
+
         {/* Grid */}
-        <section className="pb-24 max-w-7xl mx-auto px-4 sm:px-6">
+        <section className="pb-24 pt-4 max-w-7xl mx-auto px-4 sm:px-6">
           <div className="flex items-center gap-4 py-8">
             <span className="font-display text-[10px] font-bold tracking-[0.2em] uppercase text-[#a09990]">
               ALL ARTICLES
@@ -112,8 +136,8 @@ export default function ArticlesPage() {
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {rest.map((article, i) => (
+              <FadeIn key={article.id} delay={(i % 3) * 0.08} className="h-full">
               <Link
-                key={article.id}
                 href={`/articles/${article.slug}`}
                 className="group block h-full"
               >
@@ -158,6 +182,7 @@ export default function ArticlesPage() {
                   </div>
                 </article>
               </Link>
+              </FadeIn>
             ))}
           </div>
         </section>

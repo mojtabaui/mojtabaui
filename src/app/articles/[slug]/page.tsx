@@ -3,6 +3,8 @@ import Link from "next/link";
 import { Clock, ChevronLeft, Tag, Calendar, Send } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import FadeIn from "@/components/FadeIn";
+import ParallaxY from "@/components/ParallaxY";
 import { articles } from "@/lib/mock-data";
 
 interface Props {
@@ -28,13 +30,16 @@ export default async function ArticleDetailPage({ params }: Props) {
           style={{ backgroundColor: article.color }}
         >
           {/* واترمارک دسته‌بندی */}
-          <span
-            className="absolute -bottom-8 left-0 font-display font-black leading-none select-none pointer-events-none hidden md:block"
-            style={{ fontSize: "9rem", color: article.accent, opacity: 0.07 }}
-            aria-hidden
-          >
-            {article.tags[0]}
-          </span>
+          <div className="absolute -bottom-8 left-0 pointer-events-none select-none hidden md:block" aria-hidden>
+            <ParallaxY speed={34}>
+              <span
+                className="font-display font-black leading-none block"
+                style={{ fontSize: "9rem", color: article.accent, opacity: 0.07 }}
+              >
+                {article.tags[0]}
+              </span>
+            </ParallaxY>
+          </div>
 
           <div className="max-w-3xl mx-auto px-4 sm:px-6 relative">
             <Link
@@ -108,7 +113,7 @@ export default async function ArticleDetailPage({ params }: Props) {
           </div>
 
           {/* CTA پایان مقاله */}
-          <div
+          <FadeIn><div
             className="mt-10 rounded-3xl p-8 border relative overflow-hidden"
             style={{ backgroundColor: article.color, borderColor: `${article.accent}26` }}
           >
@@ -138,7 +143,7 @@ export default async function ArticleDetailPage({ params }: Props) {
                 <ChevronLeft size={14} />
               </Link>
             </div>
-          </div>
+          </div></FadeIn>
 
           {/* Related articles */}
           {others.length > 0 && (
@@ -151,9 +156,9 @@ export default async function ArticleDetailPage({ params }: Props) {
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                {others.map((other) => (
+                {others.map((other, i) => (
+                  <FadeIn key={other.id} delay={i * 0.08}>
                   <Link
-                    key={other.id}
                     href={`/articles/${other.slug}`}
                     className="group bg-white border border-[#e8e2d9] rounded-2xl p-5 hover:border-[#1a1714]/20 hover:-translate-y-0.5 transition-all block relative overflow-hidden"
                   >
@@ -175,6 +180,7 @@ export default async function ArticleDetailPage({ params }: Props) {
                       {other.readTime} دقیقه
                     </span>
                   </Link>
+                  </FadeIn>
                 ))}
               </div>
             </div>

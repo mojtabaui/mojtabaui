@@ -3,9 +3,11 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useState } from "react";
-import { ExternalLink, Send, Layers, ArrowLeft } from "lucide-react";
+import { ExternalLink, Send, Layers, ArrowLeft, Monitor, ClipboardList } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import FadeIn from "@/components/FadeIn";
+import ParallaxY from "@/components/ParallaxY";
 import { studentProjects, type StudentProject } from "@/lib/mock-data";
 
 type Filter = "all" | "ui" | "ux";
@@ -24,10 +26,20 @@ export default function ProjectsPage() {
       <main className="flex-1 pt-16 min-h-screen bg-[#FAF6F1]">
 
         {/* Header */}
-        <section className="dot-bg pt-16 pb-12">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6">
+        <section className="dot-bg pt-16 pb-12 relative overflow-hidden">
+          <div className="absolute inset-0 flex items-center justify-start pointer-events-none select-none overflow-hidden">
+            <ParallaxY speed={50}>
+              <span
+                className="font-display font-black leading-none block text-[#1a1714]"
+                style={{ fontSize: "clamp(8rem, 22vw, 17rem)", opacity: 0.035, marginRight: "-1.5rem" }}
+              >
+                WORK
+              </span>
+            </ParallaxY>
+          </div>
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 relative">
             <div className="flex items-end justify-between gap-8 flex-wrap">
-              <div className="max-w-xl">
+              <FadeIn className="max-w-xl">
                 <div className="font-display text-[10px] font-bold tracking-[0.22em] uppercase text-[#7c5cfc] mb-4">
                   STUDENT WORK
                 </div>
@@ -38,7 +50,7 @@ export default function ProjectsPage() {
                   پروژه‌های واقعی دانشجوهای دوره‌های رابط و تجربه کاربری، روی فیگما یا به
                   شکل کیس استادی.
                 </p>
-              </div>
+              </FadeIn>
               <div className="font-display font-black text-[#1a1714]/[0.07] text-7xl leading-none select-none">
                 {String(studentProjects.length).replace(/\d/g, (d) => "۰۱۲۳۴۵۶۷۸۹"[+d])}
               </div>
@@ -77,8 +89,10 @@ export default function ProjectsPage() {
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-              {shown.map((project) => (
-                <ProjectCard key={project.id} project={project} />
+              {shown.map((project, i) => (
+                <FadeIn key={project.id} delay={(i % 3) * 0.08}>
+                  <ProjectCard project={project} />
+                </FadeIn>
               ))}
             </div>
           )}
@@ -131,7 +145,9 @@ function ProjectCard({ project }: { project: StudentProject }) {
             className="w-full h-full flex items-center justify-center text-4xl"
             style={{ backgroundColor: color }}
           >
-            <span className="opacity-30">{isUI ? "🖥" : "📋"}</span>
+            <span style={{ color: accent, opacity: 0.35 }}>
+              {isUI ? <Monitor size={40} /> : <ClipboardList size={40} />}
+            </span>
           </div>
         )}
         {/* Badge overlay */}

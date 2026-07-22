@@ -20,6 +20,8 @@ import Footer from "@/components/Footer";
 import BuyButton from "@/components/BuyButton";
 import WorkshopLanding from "@/components/WorkshopLanding";
 import CourseHeroVisual from "@/components/CourseHeroVisual";
+import FadeIn from "@/components/FadeIn";
+import ParallaxY from "@/components/ParallaxY";
 import { courses, formatPrice, typeLabel, featuredProjects } from "@/lib/mock-data";
 import { contentFor, disciplineOf, uiVsUx, guarantees } from "@/lib/course-content";
 
@@ -79,17 +81,19 @@ export default async function CourseDetailPage({ params }: Props) {
         <section style={{ backgroundColor: color.bg }} className="dot-bg py-20 relative overflow-hidden">
           {/* big decorative discipline word */}
           <div className="absolute inset-0 flex items-center justify-start pointer-events-none select-none overflow-hidden">
-            <span
-              className="font-display font-black leading-none"
-              style={{
-                fontSize: "clamp(9rem, 26vw, 20rem)",
-                color: color.accent,
-                opacity: 0.05,
-                marginRight: "-1rem",
-              }}
-            >
-              {discipline}
-            </span>
+            <ParallaxY speed={55}>
+              <span
+                className="font-display font-black leading-none block"
+                style={{
+                  fontSize: "clamp(9rem, 26vw, 20rem)",
+                  color: color.accent,
+                  opacity: 0.05,
+                  marginRight: "-1rem",
+                }}
+              >
+                {discipline}
+              </span>
+            </ParallaxY>
           </div>
 
           <div className="max-w-7xl mx-auto px-4 sm:px-6 relative">
@@ -120,7 +124,7 @@ export default async function CourseDetailPage({ params }: Props) {
                   >
                     {typeLabel(course.type)}
                   </span>
-                  <span className="text-[#c9c2b8] font-body text-xs">—</span>
+                  <span className="text-[#c9c2b8] font-body text-xs select-none">·</span>
                   <span className="text-[#6b6560] font-body text-xs">{course.level}</span>
                 </div>
 
@@ -235,7 +239,7 @@ export default async function CourseDetailPage({ params }: Props) {
         {/* ── Basics: UI/UX چیست؟ ── */}
         <section className="py-20 bg-[#f7f4ef] border-t border-[#e8e2d9]">
           <div className="max-w-7xl mx-auto px-4 sm:px-6">
-            <div className="max-w-3xl mb-10">
+            <FadeIn className="max-w-3xl mb-10">
               <div
                 className="font-display text-[10px] font-bold tracking-[0.22em] uppercase mb-3"
                 style={{ color: color.accent }}
@@ -246,7 +250,7 @@ export default async function CourseDetailPage({ params }: Props) {
                 اصلاً UI و UX چی هستن؟
               </h2>
               <p className="font-body text-[#6b6560] leading-relaxed">{content.intro}</p>
-            </div>
+            </FadeIn>
 
             {/* دو کارت مقایسه — کارتِ مرتبط با این دوره هایلایت می‌شه */}
             <div className="grid md:grid-cols-2 gap-5 mb-12">
@@ -496,7 +500,8 @@ export default async function CourseDetailPage({ params }: Props) {
               <div className="absolute top-2 bottom-2 right-[19px] w-px bg-[#e8e2d9] hidden sm:block" />
               <div className="space-y-5">
                 {content.roadmap.map((step, i) => (
-                  <div key={step.title} className="flex items-start gap-5 relative">
+                  <FadeIn key={step.title} delay={i * 0.07}>
+                  <div className="flex items-start gap-5 relative">
                     <span
                       className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 font-display font-black text-sm relative z-10 border-4 border-white"
                       style={{ backgroundColor: color.badge, color: color.accent }}
@@ -510,6 +515,7 @@ export default async function CourseDetailPage({ params }: Props) {
                       </p>
                     </div>
                   </div>
+                  </FadeIn>
                 ))}
               </div>
             </div>
@@ -848,9 +854,9 @@ export default async function CourseDetailPage({ params }: Props) {
             </div>
 
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
-              {guarantees.map((g) => (
+              {guarantees.map((g, i) => (
+                <FadeIn key={g.title} delay={i * 0.07}>
                 <div
-                  key={g.title}
                   className="bg-white border border-[#e8e2d9] rounded-3xl p-6"
                 >
                   <span
@@ -862,6 +868,7 @@ export default async function CourseDetailPage({ params }: Props) {
                   <h3 className="font-body font-bold text-sm text-[#1a1714] mb-2">{g.title}</h3>
                   <p className="font-body text-sm text-[#6b6560] leading-relaxed">{g.desc}</p>
                 </div>
+                </FadeIn>
               ))}
             </div>
           </div>

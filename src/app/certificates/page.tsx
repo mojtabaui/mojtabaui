@@ -3,6 +3,8 @@ import { ShieldCheck, ScanLine, BadgeCheck, Send } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import CertificateLookup from "@/components/CertificateLookup";
+import FadeIn from "@/components/FadeIn";
+import ParallaxY from "@/components/ParallaxY";
 
 export const metadata: Metadata = {
   title: "استعلام گواهی | مدرسه دیزاین ملینا",
@@ -34,8 +36,18 @@ export default function CertificatesPage() {
       <main className="flex-1 pt-16 min-h-screen bg-[#FAF6F1]">
 
         {/* Header */}
-        <section className="dot-bg pt-16 pb-10">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 text-center">
+        <section className="dot-bg pt-16 pb-10 relative overflow-hidden">
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none overflow-hidden">
+            <ParallaxY speed={50}>
+              <span
+                className="font-display font-black leading-none block text-[#1a1714]"
+                style={{ fontSize: "clamp(7rem, 20vw, 15rem)", opacity: 0.035 }}
+              >
+                VERIFY
+              </span>
+            </ParallaxY>
+          </div>
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 text-center relative">
             <div className="font-display text-[10px] font-bold tracking-[0.22em] uppercase text-[#7c5cfc] mb-4">
               CERTIFICATE
             </div>
@@ -56,8 +68,8 @@ export default function CertificatesPage() {
             <div>
               <div className="space-y-4 mb-8">
                 {steps.map(({ Icon, title, desc }, i) => (
+                  <FadeIn key={title} delay={i * 0.08}>
                   <div
-                    key={title}
                     className="flex items-start gap-4 bg-white border border-[#e8e2d9] rounded-2xl p-5"
                   >
                     <span className="w-11 h-11 rounded-xl bg-[#7c5cfc]/10 text-[#7c5cfc] flex items-center justify-center flex-shrink-0">
@@ -73,6 +85,7 @@ export default function CertificatesPage() {
                       <p className="font-body text-sm text-[#6b6560] leading-relaxed">{desc}</p>
                     </div>
                   </div>
+                  </FadeIn>
                 ))}
               </div>
 

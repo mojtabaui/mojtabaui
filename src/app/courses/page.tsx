@@ -1,6 +1,9 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import CoursesClient from "@/components/CoursesClient";
+import FadeIn from "@/components/FadeIn";
+import ParallaxY from "@/components/ParallaxY";
+import MarqueeBand from "@/components/MarqueeBand";
 import { infinityCourses, videoCourses, workshopCourses, courses } from "@/lib/mock-data";
 
 export const metadata = {
@@ -22,10 +25,22 @@ export default function CoursesPage() {
       <main className="flex-1 pt-16 bg-[#FAF6F1]">
 
         {/* Header */}
-        <section className="dot-bg pt-16 pb-12">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6">
+        <section className="dot-bg pt-16 pb-12 relative overflow-hidden">
+          {/* واژه‌ی تزئینیِ پس‌زمینه با پارالاکس */}
+          <div className="absolute inset-0 flex items-center justify-start pointer-events-none select-none overflow-hidden">
+            <ParallaxY speed={50}>
+              <span
+                className="font-display font-black leading-none block text-[#1a1714]"
+                style={{ fontSize: "clamp(8rem, 22vw, 17rem)", opacity: 0.035, marginRight: "-1.5rem" }}
+              >
+                LEARN
+              </span>
+            </ParallaxY>
+          </div>
+
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 relative">
             <div className="flex items-end justify-between gap-8 flex-wrap mb-10">
-              <div className="max-w-xl">
+              <FadeIn className="max-w-xl">
                 <div className="font-display text-[10px] font-bold tracking-[0.22em] uppercase text-[#7c5cfc] mb-4">
                   COURSES
                 </div>
@@ -35,34 +50,40 @@ export default function CoursesPage() {
                 <p className="text-[#6b6560] font-body text-lg leading-relaxed">
                   از صفر تا حرفه‌ای. با منتورینگ زنده یا کاملاً خودخوان، هر طور که به تو می‌خوره.
                 </p>
-              </div>
+              </FadeIn>
 
-              <div className="font-display font-black text-[#1a1714]/[0.07] text-7xl leading-none select-none">
-                {fa(visible.length)}
-              </div>
+              <ParallaxY speed={26}>
+                <div className="font-display font-black text-[#1a1714]/[0.07] text-7xl leading-none select-none">
+                  {fa(visible.length)}
+                </div>
+              </ParallaxY>
             </div>
 
             {/* آمار کوتاه */}
-            <div className="grid grid-cols-3 max-w-lg bg-white border border-[#e8e2d9] rounded-3xl overflow-hidden">
-              {[
-                { num: fa(visible.length), label: "دوره" },
-                { num: `${fa(totalHours)}+`, label: "ساعت آموزش" },
-                { num: `${fa(totalProjects)}+`, label: "پروژه عملی" },
-              ].map((s, i) => (
-                <div
-                  key={s.label}
-                  className={`px-5 py-5 text-center ${i < 2 ? "border-l border-[#f0ebe4]" : ""}`}
-                >
-                  <div className="font-display font-black text-2xl text-[#1a1714]">{s.num}</div>
-                  <div className="font-body text-[#a09990] text-xs mt-1">{s.label}</div>
-                </div>
-              ))}
-            </div>
+            <FadeIn delay={0.12}>
+              <div className="grid grid-cols-3 max-w-lg bg-white border border-[#e8e2d9] rounded-3xl overflow-hidden">
+                {[
+                  { num: fa(visible.length), label: "دوره" },
+                  { num: `${fa(totalHours)}+`, label: "ساعت آموزش" },
+                  { num: `${fa(totalProjects)}+`, label: "پروژه عملی" },
+                ].map((s, i) => (
+                  <div
+                    key={s.label}
+                    className={`px-5 py-5 text-center ${i < 2 ? "border-l border-[#f0ebe4]" : ""}`}
+                  >
+                    <div className="font-display font-black text-2xl text-[#1a1714]">{s.num}</div>
+                    <div className="font-body text-[#a09990] text-xs mt-1">{s.label}</div>
+                  </div>
+                ))}
+              </div>
+            </FadeIn>
           </div>
         </section>
 
+        <MarqueeBand />
+
         {/* Grid */}
-        <section className="pb-24 max-w-7xl mx-auto px-4 sm:px-6">
+        <section className="pb-24 pt-16 max-w-7xl mx-auto px-4 sm:px-6">
           <CoursesClient
             infinityCourses={infinityCourses}
             videoCourses={videoCourses}
