@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import { Clock, ChevronLeft, Tag, Calendar, Send } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -78,6 +79,22 @@ export default async function ArticleDetailPage({ params }: Props) {
             </div>
           </div>
         </section>
+
+        {/* کاور مقاله */}
+        {article.cover && (
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 -mt-10 relative z-10">
+            <div className="relative w-full aspect-[16/9] rounded-3xl overflow-hidden border border-[#e8e2d9] shadow-[0_28px_60px_-30px_rgba(26,23,20,0.45)] bg-[#f7f4ef]">
+              <Image
+                src={article.cover}
+                alt=""
+                fill
+                priority
+                sizes="(max-width: 896px) 100vw, 896px"
+                className="object-cover"
+              />
+            </div>
+          </div>
+        )}
 
         {/* Body */}
         <section className="py-16 max-w-3xl mx-auto px-4 sm:px-6">

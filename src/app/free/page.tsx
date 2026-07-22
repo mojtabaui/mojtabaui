@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { Play, ArrowLeft, Mic, FileText, Send, Download } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -142,6 +143,18 @@ function ResourceCard({ item }: { item: (typeof freeResources)[0] }) {
       className="rounded-2xl p-6 flex flex-col gap-4"
       style={{ backgroundColor: item.color }}
     >
+      {item.image && (
+        <div className="relative w-full aspect-square rounded-2xl overflow-hidden border border-black/[0.06] bg-white -mt-1">
+          <Image
+            src={item.image}
+            alt=""
+            fill
+            sizes="(max-width: 768px) 100vw, 320px"
+            className="object-cover"
+          />
+        </div>
+      )}
+
       <div className="flex items-start justify-between gap-3">
         {/* آیکون برداری به‌جای ایموجی — ایموجی روی هر سیستم فرق می‌کنه و با توکن رنگی کنترل نمی‌شه */}
         <div

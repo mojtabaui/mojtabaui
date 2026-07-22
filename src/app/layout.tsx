@@ -22,11 +22,19 @@ export const metadata: Metadata = {
   title: "مدرسه دیزاین ملینا | آموزش UI/UX و دیزاین با هوش مصنوعی",
   description:
     "مدرسه دیزاین ملینا — دوره‌های حرفه‌ای طراحی رابط کاربری و تجربه کاربری، از مبتدی تا حرفه‌ای. با مجتبا یزدان‌پناه.",
+  metadataBase: new URL("https://mojtabaui.ir"),
   openGraph: {
     title: "مدرسه دیزاین ملینا",
     description: "دوره‌های آموزشی UI/UX Design و دیزاین با هوش مصنوعی",
     locale: "fa_IR",
     type: "website",
+    images: [{ url: "/og.jpg", width: 1200, height: 630, alt: "مدرسه دیزاین ملینا" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "مدرسه دیزاین ملینا",
+    description: "دوره‌های آموزشی UI/UX Design و دیزاین با هوش مصنوعی",
+    images: ["/og.jpg"],
   },
 };
 

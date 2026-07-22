@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import { Check, ChevronLeft, Clock, Send, ArrowLeft } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -51,11 +52,18 @@ export default function ChecklistPage() {
                 </p>
               </FadeIn>
 
-              <ParallaxY speed={26}>
-                <div className="font-display font-black text-[#1a1714]/[0.07] text-7xl leading-none select-none">
-                  {fa(stages.length)}
+              <FadeIn delay={0.1} className="w-full max-w-[320px]">
+                <div className="relative w-full aspect-[3/2] rounded-3xl overflow-hidden border border-[#e8e2d9] shadow-[0_24px_50px_-30px_rgba(26,23,20,0.5)] bg-white">
+                  <Image
+                    src="/images/checklist-hero.jpg"
+                    alt=""
+                    fill
+                    priority
+                    sizes="320px"
+                    className="object-cover"
+                  />
                 </div>
-              </ParallaxY>
+              </FadeIn>
             </div>
 
             {/* آمار */}

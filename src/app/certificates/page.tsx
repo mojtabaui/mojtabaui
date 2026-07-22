@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { ShieldCheck, ScanLine, BadgeCheck, Send } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import Image from "next/image";
 import CertificateLookup from "@/components/CertificateLookup";
 import FadeIn from "@/components/FadeIn";
 import ParallaxY from "@/components/ParallaxY";
@@ -119,6 +120,11 @@ export default function CertificatesPage() {
 
             {/* فرم استعلام — سمت چپ در RTL */}
             <div className="lg:sticky lg:top-24">
+              <FadeIn>
+                <div className="relative w-full aspect-[4/3] rounded-3xl overflow-hidden border border-[#e8e2d9] shadow-[0_24px_50px_-30px_rgba(26,23,20,0.45)] bg-white mb-6">
+                  <Image src="/images/certificate-sample.jpg" alt="نمونه گواهی مدرسه دیزاین ملینا" fill sizes="(max-width: 1024px) 100vw, 560px" className="object-cover" />
+                </div>
+              </FadeIn>
               <CertificateLookup />
 
               <div className="mt-6 bg-white border border-[#e8e2d9] rounded-2xl p-5 flex items-start gap-4">

@@ -553,6 +553,8 @@ export interface Article {
   category: string;
   color: string;
   accent: string;
+  /** کاور مقاله در public/images/articles — نداشتنش مشکلی ایجاد نمی‌کنه */
+  cover?: string;
   downloadFile?: { name: string; size: string; url: string };
 }
 
@@ -560,6 +562,7 @@ export const articles: Article[] = [
   {
     id: "1",
     slug: "ai-and-designer-job",
+    cover: "/images/articles/ai-and-designer-job.jpg",
     title: "هوش مصنوعی جای طراح‌ها رو می‌گیره؟",
     excerpt: "جواب کوتاه: نه. ولی طراحی که از هوش مصنوعی استفاده می‌کنه، جای طراحی که استفاده نمی‌کنه رو می‌گیره. بذار دقیق‌تر حرف بزنیم.",
     body: [
@@ -580,6 +583,7 @@ export const articles: Article[] = [
   {
     id: "2",
     slug: "prompting-for-designers",
+    cover: "/images/articles/prompting-for-designers.jpg",
     title: "پرامپت‌نویسی برای طراح‌ها، فراتر از «یه صفحه لاگین بساز»",
     excerpt: "بیشتر طراح‌ها از هوش مصنوعی خروجی بی‌کیفیت می‌گیرن چون بد سوال می‌پرسن. ساختار یک درخواست خوب رو با هم مرور کنیم.",
     body: [
@@ -600,6 +604,7 @@ export const articles: Article[] = [
   {
     id: "3",
     slug: "designing-ai-interfaces",
+    cover: "/images/articles/designing-ai-interfaces.jpg",
     title: "طراحی رابط برای محصولات هوش مصنوعی",
     excerpt: "محصولات هوش مصنوعی یک مشکل قدیمی رو برگردوندن: کاربر نمی‌دونه سیستم چقدر مطمئنه و کِی اشتباه می‌کنه. اینجا وظیفه‌ی ماست.",
     body: [
@@ -620,6 +625,7 @@ export const articles: Article[] = [
   {
     id: "4",
     slug: "form-design-mistakes",
+    cover: "/images/articles/form-design-mistakes.jpg",
     title: "۱۰ اشتباه رایج در طراحی فرم‌ها",
     excerpt: "فرم جاییه که کاربر یا کارش راه می‌افته یا بی‌خیال می‌شه. بیشتر اشتباه‌ها هم تکراری و قابل پیشگیری‌ان.",
     body: [
@@ -641,6 +647,7 @@ export const articles: Article[] = [
   {
     id: "5",
     slug: "design-system-guide",
+    cover: "/images/articles/design-system-guide.jpg",
     title: "دیزاین سیستم رو از کجا شروع کنیم",
     excerpt: "دیزاین سیستم فقط مجموعه‌ای از کامپوننت‌ها نیست. یک زبان مشترکه بین طراح و برنامه‌نویس. بیاید از پایه بسازیمش.",
     body: [
@@ -661,6 +668,7 @@ export const articles: Article[] = [
   {
     id: "6",
     slug: "color-in-ui",
+    cover: "/images/articles/color-in-ui.jpg",
     title: "رنگ در رابط کاربری، فراتر از سلیقه",
     excerpt: "انتخاب رنگ توی محصول یک تصمیم کارکردیه نه ذوقی. بیاید ببینیم یک پالت درست چطور ساخته می‌شه.",
     body: [
@@ -681,6 +689,7 @@ export const articles: Article[] = [
   {
     id: "7",
     slug: "accessibility-basics",
+    cover: "/images/articles/accessibility-basics.jpg",
     title: "دسترس‌پذیری، کاری که نکردنش یعنی حذف کردن آدم‌ها",
     excerpt: "دسترس‌پذیری یک قابلیت اضافه برای گروه کوچکی از کاربرها نیست. کیفیت پایه‌ی کار شماست.",
     body: [
@@ -701,6 +710,7 @@ export const articles: Article[] = [
   {
     id: "8",
     slug: "portfolio-guide",
+    cover: "/images/articles/portfolio-guide.jpg",
     title: "پورتفولیویی که کارفرما تا آخر می‌خونه",
     excerpt: "بیشتر پورتفولیوها گالری تصویرن. چیزی که استخدام‌کننده دنبالشه، طرز فکر شماست نه تعداد صفحه‌هاتون.",
     body: [
@@ -721,6 +731,7 @@ export const articles: Article[] = [
   {
     id: "9",
     slug: "user-research-basics",
+    cover: "/images/articles/user-research-basics.jpg",
     title: "تحقیق کاربر بدون بودجه و بدون تیم",
     excerpt: "لازم نیست آزمایشگاه و بودجه داشته باشید. پنج تا مکالمه‌ی درست، بیشتر از صد تا حدس ارزش داره.",
     body: [
@@ -741,6 +752,7 @@ export const articles: Article[] = [
   {
     id: "10",
     slug: "first-design-job",
+    cover: "/images/articles/first-design-job.jpg",
     title: "اولین کار طراحی، چطور شروع کنیم",
     excerpt: "بین «دوره رو تموم کردم» تا «اولین پروژه رو گرفتم» یک فاصله‌ای هست که کسی درباره‌ش حرف نمی‌زنه.",
     body: [
@@ -774,6 +786,8 @@ export interface FreeResource {
   color: string;
   accent: string;
   emoji: string;
+  /** کاور تصویری، فقط برای منابعی که داریم */
+  image?: string;
 }
 
 // ─── Student Projects ────────────────────────────────────────
@@ -1188,6 +1202,7 @@ export const freeResources: FreeResource[] = [
   {
     id: "file-1",
     type: "file",
+    image: "/images/free/50-styles.jpg",
     title: "۵۰ استایل طراحی رابط کاربری",
     description: "۵۰ استایل بصری با نمونه و توضیح، برای اینکه بدونی هر سبک کجا جواب می‌ده.",
     meta: "PDF · ۵.۹ مگابایت",
@@ -1199,6 +1214,7 @@ export const freeResources: FreeResource[] = [
   {
     id: "file-2",
     type: "file",
+    image: "/images/free/700-chatgpt.jpg",
     title: "۷۰۰ پرامپت چت جی‌پی‌تی",
     description: "مجموعه‌ی ۷۰۰ پرامپت آماده که مستقیم کپی کنی و توی کارت استفاده کنی.",
     meta: "PDF · ۱.۵ مگابایت",

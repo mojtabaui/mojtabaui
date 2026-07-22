@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { Clock, ChevronLeft, Calendar } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -74,6 +75,19 @@ export default function ArticlesPage() {
                 ۰۱
               </span>
 
+              {featured.cover && (
+                <div className="relative w-full aspect-[16/9] md:aspect-[21/9] overflow-hidden">
+                  <Image
+                    src={featured.cover}
+                    alt=""
+                    fill
+                    priority
+                    sizes="(max-width: 1280px) 100vw, 1280px"
+                    className="object-cover transition-transform duration-700 group-hover:scale-[1.02]"
+                  />
+                </div>
+              )}
+
               <div className="relative p-8 md:p-12 max-w-3xl">
                 <div className="flex items-center gap-2.5 mb-5 flex-wrap">
                   <span
@@ -141,44 +155,50 @@ export default function ArticlesPage() {
                 href={`/articles/${article.slug}`}
                 className="group block h-full"
               >
-                <article className="relative h-full bg-white border border-[#e8e2d9] rounded-3xl p-6 flex flex-col hover:border-[#1a1714]/20 hover:-translate-y-1 hover:shadow-[0_20px_40px_-24px_rgba(26,23,20,0.35)] transition-all overflow-hidden">
-                  {/* خط لهجه‌دار بالای کارت */}
-                  <span
-                    className="absolute top-0 right-6 left-6 h-[3px] rounded-b-full"
-                    style={{ backgroundColor: article.accent }}
-                  />
-                  {/* شماره‌ی کم‌رنگ */}
-                  <span
-                    className="absolute top-4 left-5 font-display font-black text-4xl leading-none select-none pointer-events-none"
-                    style={{ color: article.accent, opacity: 0.12 }}
-                    aria-hidden
-                  >
-                    {String(i + 2).padStart(2, "0")}
-                  </span>
-
-                  <span
-                    className="self-start text-[10px] font-body font-semibold px-2.5 py-1 rounded-full mb-4 mt-1"
-                    style={{ backgroundColor: article.color, color: article.accent }}
-                  >
-                    {article.category}
-                  </span>
-
-                  <h2 className="font-body font-bold text-[#1a1714] leading-snug mb-2.5 group-hover:opacity-70 transition-opacity">
-                    {article.title}
-                  </h2>
-                  <p className="text-[#6b6560] font-body text-sm leading-relaxed line-clamp-3 mb-6">
-                    {article.excerpt}
-                  </p>
-
-                  <div className="mt-auto pt-4 border-t border-[#f0ebe4] flex items-center justify-between">
-                    <span className="flex items-center gap-1.5 text-[#a09990] text-xs font-body">
-                      <Clock size={11} />
-                      {article.readTime} دقیقه
-                    </span>
-                    <ChevronLeft
-                      size={15}
-                      className="text-[#c8c2ba] group-hover:text-[#1a1714] group-hover:-translate-x-0.5 transition-all"
+                <article className="relative h-full bg-white border border-[#e8e2d9] rounded-3xl flex flex-col hover:border-[#1a1714]/20 hover:-translate-y-1 hover:shadow-[0_20px_40px_-24px_rgba(26,23,20,0.35)] transition-all overflow-hidden">
+                  {/* کاور، و اگر نبود همون خط لهجه‌دار قبلی */}
+                  {article.cover ? (
+                    <div className="relative w-full aspect-[16/9] overflow-hidden bg-[#f7f4ef]">
+                      <Image
+                        src={article.cover}
+                        alt=""
+                        fill
+                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                        className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                      />
+                    </div>
+                  ) : (
+                    <span
+                      className="absolute top-0 right-6 left-6 h-[3px] rounded-b-full"
+                      style={{ backgroundColor: article.accent }}
                     />
+                  )}
+
+                  <div className="p-6 flex flex-col flex-1">
+                    <span
+                      className="self-start text-[10px] font-body font-semibold px-2.5 py-1 rounded-full mb-4"
+                      style={{ backgroundColor: article.color, color: article.accent }}
+                    >
+                      {article.category}
+                    </span>
+
+                    <h2 className="font-body font-bold text-[#1a1714] leading-snug mb-2.5 group-hover:opacity-70 transition-opacity">
+                      {article.title}
+                    </h2>
+                    <p className="text-[#6b6560] font-body text-sm leading-relaxed line-clamp-3 mb-6">
+                      {article.excerpt}
+                    </p>
+
+                    <div className="mt-auto pt-4 border-t border-[#f0ebe4] flex items-center justify-between">
+                      <span className="flex items-center gap-1.5 text-[#a09990] text-xs font-body">
+                        <Clock size={11} />
+                        {article.readTime} دقیقه
+                      </span>
+                      <ChevronLeft
+                        size={15}
+                        className="text-[#c8c2ba] group-hover:text-[#1a1714] group-hover:-translate-x-0.5 transition-all"
+                      />
+                    </div>
                   </div>
                 </article>
               </Link>
