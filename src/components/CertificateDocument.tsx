@@ -20,6 +20,84 @@ export interface CertificateData {
   createdAt: Date;
 }
 
+/**
+ * مهر گرد سند. با SVG و textPath ساخته شده تا متن واقعاً روی دایره خم بشه،
+ * نه اینکه تصویر باشه. این‌طوری موقع چاپ برداری و تیز می‌مونه.
+ */
+function Seal({ track }: { track: string }) {
+  const accent = "#7c5cfc";
+  return (
+    <svg viewBox="0 0 200 200" className="w-full h-full" aria-hidden>
+      <defs>
+        {/* کمان بالا: از چپ به راست از روی بالای دایره */}
+        <path id="seal-top" d="M 32,100 a 68,68 0 0 1 136,0" fill="none" />
+        {/* کمان پایین: سوئیپ برعکس تا متن وارونه نشه */}
+        <path id="seal-bottom" d="M 38,100 a 62,62 0 0 0 124,0" fill="none" />
+      </defs>
+
+      <circle cx="100" cy="100" r="86" fill="none" stroke={accent} strokeWidth="2.5" opacity="0.85" />
+      <circle cx="100" cy="100" r="76" fill="none" stroke={accent} strokeWidth="1" opacity="0.45" />
+
+      <text
+        fill={accent}
+        fontSize="15"
+        fontWeight="700"
+        letterSpacing="3.4"
+        style={{ fontFamily: "var(--font-space-grotesk), sans-serif" }}
+      >
+        <textPath href="#seal-top" startOffset="50%" textAnchor="middle">
+          MELINA SCHOOL
+        </textPath>
+      </text>
+
+      <text
+        fill={accent}
+        fontSize="10"
+        fontWeight="700"
+        letterSpacing="3"
+        opacity="0.75"
+        style={{ fontFamily: "var(--font-space-grotesk), sans-serif" }}
+      >
+        <textPath href="#seal-bottom" startOffset="50%" textAnchor="middle">
+          OFFICIAL SEAL
+        </textPath>
+      </text>
+
+      {/* نقطه‌های جداکننده در چپ و راست */}
+      <circle cx="17" cy="100" r="2.6" fill={accent} opacity="0.7" />
+      <circle cx="183" cy="100" r="2.6" fill={accent} opacity="0.7" />
+
+      {/* مرکز */}
+      <text
+        x="100"
+        y="96"
+        textAnchor="middle"
+        fill={accent}
+        fontSize="34"
+        fontWeight="700"
+        letterSpacing="1"
+        style={{ fontFamily: "var(--font-space-grotesk), sans-serif" }}
+      >
+        {track}
+      </text>
+      <line x1="72" y1="110" x2="128" y2="110" stroke={accent} strokeWidth="1.4" opacity="0.5" />
+      <text
+        x="100"
+        y="126"
+        textAnchor="middle"
+        fill={accent}
+        fontSize="9"
+        fontWeight="700"
+        letterSpacing="1.6"
+        opacity="0.7"
+        style={{ fontFamily: "var(--font-space-grotesk), sans-serif" }}
+      >
+        CERTIFIED
+      </text>
+    </svg>
+  );
+}
+
 function enDate(d: Date) {
   return new Intl.DateTimeFormat("en-GB", {
     year: "numeric",
@@ -101,8 +179,10 @@ export default function CertificateDocument({
 
       {/* ── متن اصلی ── */}
       <section className="flex-1 relative flex flex-col px-[5cqw] py-[4.4cqw]">
-        {/* لهجه‌ی گوشه */}
-        <span className="absolute top-0 right-[5cqw] w-[0.9cqw] h-[7cqw] bg-[#7c5cfc]" />
+        {/* مهر گرد */}
+        <div className="absolute top-[4cqw] right-[5cqw] w-[clamp(78px,13cqw,168px)] aspect-square">
+          <Seal track={cert.track} />
+        </div>
 
         <div className="font-display text-[clamp(7.5px,0.98cqw,13px)] font-bold tracking-[0.3em] uppercase text-[#7c5cfc] mb-[1.2cqw]">
           Certificate
