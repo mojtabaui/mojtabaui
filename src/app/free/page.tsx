@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Play, ArrowLeft, Mic, FileText, Send } from "lucide-react";
+import { Play, ArrowLeft, Mic, FileText, Send, Download } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { freeResources } from "@/lib/mock-data";
@@ -109,6 +109,8 @@ export default function FreePage() {
 function ResourceCard({ item }: { item: (typeof freeResources)[0] }) {
   const isVoice = item.type === "voice";
   const isCourse = item.type === "course";
+  // فایل‌های واقعیِ روی سایت با / شروع می‌شن، بقیه لینک تلگرامن
+  const isDirect = item.url?.startsWith("/") ?? false;
 
   return (
     <div
@@ -140,17 +142,27 @@ function ResourceCard({ item }: { item: (typeof freeResources)[0] }) {
         </p>
       </div>
 
-      {/* فعلاً همه‌ی منابع از طریق پشتیبانی تلگرام تحویل داده می‌شن، پس متن دکمه هم
-          همون کاری رو می‌گه که واقعاً اتفاق می‌افته (نه «دانلود» که فایل مستقیم بده) */}
+      {/* فایل‌هایی که واقعاً روی سایت هستن مستقیم دانلود می‌شن؛ بقیه از طریق
+          پشتیبانی تلگرام تحویل داده می‌شن و متن دکمه همون رو می‌گه */}
       <a
         href={item.url}
-        target="_blank"
-        rel="noopener noreferrer"
+        {...(isDirect
+          ? { download: "" }
+          : { target: "_blank", rel: "noopener noreferrer" })}
         className="inline-flex items-center justify-center gap-2 text-white font-body font-semibold text-xs px-4 py-2.5 rounded-xl transition-all w-full hover:opacity-90"
         style={{ backgroundColor: item.accent }}
       >
-        <Send size={12} />
-        {isCourse ? "دریافت در تلگرام" : isVoice ? "گوش بده در تلگرام" : "دریافت در تلگرام"}
+        {isDirect ? (
+          <>
+            <Download size={12} />
+            دانلود رایگان
+          </>
+        ) : (
+          <>
+            <Send size={12} />
+            {isVoice ? "گوش بده در تلگرام" : "دریافت در تلگرام"}
+          </>
+        )}
       </a>
     </div>
   );
