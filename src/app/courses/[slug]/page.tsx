@@ -1,12 +1,27 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
-import { Clock, Users, Layers, Check, ChevronLeft, Calendar, Star } from "lucide-react";
+import {
+  Clock,
+  Users,
+  Layers,
+  Check,
+  ChevronLeft,
+  Calendar,
+  Star,
+  Palette,
+  Search,
+  Award,
+  ShieldCheck,
+  Send,
+  ExternalLink,
+} from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import BuyButton from "@/components/BuyButton";
 import WorkshopLanding from "@/components/WorkshopLanding";
-import { courses, formatPrice, typeLabel } from "@/lib/mock-data";
+import { courses, formatPrice, typeLabel, featuredProjects } from "@/lib/mock-data";
+import { contentFor, disciplineOf, uiVsUx, guarantees } from "@/lib/course-content";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -57,6 +72,11 @@ export default async function CourseDetailPage({ params }: Props) {
   const discountPct = course.originalPrice
     ? Math.round((1 - course.price / course.originalPrice) * 100)
     : null;
+
+  // محتوای معرفی رشته / پیش‌نیاز / مسیر یادگیری بر اساس رشته‌ی دوره
+  const content = contentFor(slug);
+  const focus = disciplineOf(slug); // UI | UX | SKILL — کارت مرتبط هایلایت می‌شه
+  const projects = featuredProjects.slice(0, 3);
 
   return (
     <>
@@ -228,6 +248,99 @@ export default async function CourseDetailPage({ params }: Props) {
           </div>
         </section>
 
+        {/* ── Basics: UI/UX چیست؟ ── */}
+        <section className="py-20 bg-[#f7f4ef] border-t border-[#e8e2d9]">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6">
+            <div className="max-w-3xl mb-10">
+              <div
+                className="font-display text-[10px] font-bold tracking-[0.22em] uppercase mb-3"
+                style={{ color: color.accent }}
+              >
+                BASICS
+              </div>
+              <h2 className="font-body font-black text-2xl md:text-3xl text-[#1a1714] leading-[1.4] mb-4">
+                اصلاً UI و UX چی هستن؟
+              </h2>
+              <p className="font-body text-[#6b6560] leading-relaxed">{content.intro}</p>
+            </div>
+
+            {/* دو کارت مقایسه — کارتِ مرتبط با این دوره هایلایت می‌شه */}
+            <div className="grid md:grid-cols-2 gap-5 mb-12">
+              {[
+                { key: "UI", Icon: Palette, ...uiVsUx.ui },
+                { key: "UX", Icon: Search, ...uiVsUx.ux },
+              ].map(({ key, Icon, label, question, desc, items }) => {
+                const active = focus === key;
+                return (
+                  <div
+                    key={key}
+                    className="rounded-3xl p-6 bg-white border transition-colors relative"
+                    style={{
+                      borderColor: active ? color.accent : "#e8e2d9",
+                      boxShadow: active ? `0 18px 40px -22px ${color.accent}` : undefined,
+                    }}
+                  >
+                    {active && (
+                      <span
+                        className="absolute -top-2.5 right-6 text-[10px] font-body font-bold px-2.5 py-1 rounded-full text-white"
+                        style={{ backgroundColor: color.accent }}
+                      >
+                        تمرکز این دوره
+                      </span>
+                    )}
+                    <div className="flex items-center gap-3 mb-3">
+                      <span
+                        className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
+                        style={{ backgroundColor: color.badge, color: color.accent }}
+                      >
+                        <Icon size={18} />
+                      </span>
+                      <div>
+                        <div className="font-body font-bold text-sm text-[#1a1714]">{label}</div>
+                        <div className="font-body text-xs text-[#a09990]">{question}</div>
+                      </div>
+                    </div>
+                    <p className="font-body text-sm text-[#6b6560] leading-relaxed mb-4">{desc}</p>
+                    <ul className="flex flex-wrap gap-2">
+                      {items.map((it) => (
+                        <li
+                          key={it}
+                          className="text-[11px] font-body text-[#6b6560] bg-[#f7f4ef] border border-[#e8e2d9] px-2.5 py-1 rounded-lg"
+                        >
+                          {it}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* این دوره به درد کیا می‌خوره */}
+            <div className="max-w-3xl">
+              <h3 className="font-body font-bold text-lg text-[#1a1714] mb-5">
+                این دوره به درد کیا می‌خوره؟
+              </h3>
+              <div className="grid sm:grid-cols-2 gap-3">
+                {content.goodFor.map((item) => (
+                  <div
+                    key={item}
+                    className="flex items-start gap-3 bg-white border border-[#e8e2d9] rounded-2xl px-4 py-3"
+                  >
+                    <span
+                      className="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5"
+                      style={{ backgroundColor: color.badge, color: color.accent }}
+                    >
+                      <Check size={12} />
+                    </span>
+                    <span className="font-body text-sm text-[#6b6560] leading-relaxed">{item}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* ── Overview ── */}
         <section className="py-20 bg-white border-t border-[#e8e2d9]">
           <div className="max-w-7xl mx-auto px-4 sm:px-6">
@@ -272,6 +385,36 @@ export default async function CourseDetailPage({ params }: Props) {
                   </ul>
                 </div>
               ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ── Prerequisites ── */}
+        <section className="py-16 border-t border-[#e8e2d9]">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6">
+            <div className="max-w-3xl">
+              <div
+                className="font-display text-[10px] font-bold tracking-[0.22em] uppercase mb-3"
+                style={{ color: color.accent }}
+              >
+                PREREQUISITES
+              </div>
+              <h2 className="font-body font-black text-2xl md:text-3xl text-[#1a1714] leading-[1.4] mb-6">
+                قبلش چی باید بلد باشی؟
+              </h2>
+              <ul className="space-y-3">
+                {content.prerequisites.map((item) => (
+                  <li key={item} className="flex items-start gap-3">
+                    <span
+                      className="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5"
+                      style={{ backgroundColor: color.badge, color: color.accent }}
+                    >
+                      <Check size={12} />
+                    </span>
+                    <span className="font-body text-[#6b6560] leading-relaxed">{item}</span>
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
         </section>
@@ -342,6 +485,49 @@ export default async function CourseDetailPage({ params }: Props) {
                   </div>
                 );
               })}
+            </div>
+          </div>
+        </section>
+
+        {/* ── Roadmap ── */}
+        <section className="py-20 bg-white border-t border-[#e8e2d9]">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6">
+            <div className="max-w-3xl mb-10">
+              <div
+                className="font-display text-[10px] font-bold tracking-[0.22em] uppercase mb-3"
+                style={{ color: color.accent }}
+              >
+                ROADMAP
+              </div>
+              <h2 className="font-body font-black text-2xl md:text-3xl text-[#1a1714] leading-[1.4] mb-3">
+                مسیر یادگیری، قدم به قدم
+              </h2>
+              <p className="font-body text-[#6b6560] leading-relaxed">
+                از صفر شروع می‌کنی و هر قدم روی قدم قبلی سوار می‌شه — آخرش یه خروجی واقعی داری.
+              </p>
+            </div>
+
+            <div className="relative">
+              {/* خط عمودی مسیر */}
+              <div className="absolute top-2 bottom-2 right-[19px] w-px bg-[#e8e2d9] hidden sm:block" />
+              <div className="space-y-5">
+                {content.roadmap.map((step, i) => (
+                  <div key={step.title} className="flex items-start gap-5 relative">
+                    <span
+                      className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 font-display font-black text-sm relative z-10 border-4 border-white"
+                      style={{ backgroundColor: color.badge, color: color.accent }}
+                    >
+                      {String(i + 1).replace(/\d/g, (d) => "۰۱۲۳۴۵۶۷۸۹"[+d])}
+                    </span>
+                    <div className="pt-1.5">
+                      <h3 className="font-body font-bold text-[#1a1714] mb-1">{step.title}</h3>
+                      <p className="font-body text-sm text-[#6b6560] leading-relaxed max-w-2xl">
+                        {step.desc}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </section>
@@ -549,6 +735,89 @@ export default async function CourseDetailPage({ params }: Props) {
           </section>
         )}
 
+        {/* ── Student work ── */}
+        {projects.length > 0 && (
+          <section className="py-20 bg-white border-t border-[#e8e2d9]">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6">
+              <div className="flex items-end justify-between flex-wrap gap-4 mb-8">
+                <div>
+                  <div
+                    className="font-display text-[10px] font-bold tracking-[0.22em] uppercase mb-3"
+                    style={{ color: color.accent }}
+                  >
+                    STUDENT WORK
+                  </div>
+                  <h2 className="font-body font-black text-2xl md:text-3xl text-[#1a1714] leading-[1.4]">
+                    نمونه‌کار دانشجوها
+                  </h2>
+                </div>
+                <Link
+                  href="/projects"
+                  className="inline-flex items-center gap-2 text-sm font-body text-[#6b6560] hover:text-[#1a1714] border border-[#e8e2d9] hover:border-[#1a1714]/20 px-4 py-2.5 rounded-xl transition-colors"
+                >
+                  همه‌ی نمونه‌کارها
+                  <ChevronLeft size={14} />
+                </Link>
+              </div>
+
+              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                {projects.map((p) => (
+                  <a
+                    key={p.id}
+                    href={p.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group bg-[#f7f4ef] border border-[#e8e2d9] hover:border-[#1a1714]/20 rounded-3xl p-5 transition-all"
+                  >
+                    <div className="flex items-start justify-between gap-3 mb-2">
+                      <h3 className="font-body font-bold text-[#1a1714] text-sm leading-snug">
+                        {p.projectTitle}
+                      </h3>
+                      <ExternalLink
+                        size={14}
+                        className="text-[#c8c2ba] group-hover:text-[#1a1714] transition-colors flex-shrink-0 mt-0.5"
+                      />
+                    </div>
+                    <p className="font-body text-xs text-[#a09990] mb-3">{p.studentName}</p>
+                    <p className="font-body text-sm text-[#6b6560] leading-relaxed line-clamp-3">
+                      {p.description}
+                    </p>
+                  </a>
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
+
+        {/* ── Certificate ── */}
+        <section className="py-14 bg-[#1a1714] border-t border-[#e8e2d9]">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6">
+            <div className="flex items-center justify-between flex-wrap gap-6">
+              <div className="flex items-start gap-4 max-w-xl">
+                <span className="w-12 h-12 rounded-2xl bg-white/10 text-white flex items-center justify-center flex-shrink-0">
+                  <Award size={20} />
+                </span>
+                <div>
+                  <h2 className="font-body font-bold text-white text-lg mb-1.5">
+                    گواهی پایان دوره، قابل استعلام
+                  </h2>
+                  <p className="font-body text-white/50 text-sm leading-relaxed">
+                    بعد از اتمام دوره گواهی می‌گیری که یه کد یکتا داره — هر کسی (و هر کارفرمایی)
+                    می‌تونه اعتبارش رو همین‌جا روی سایت چک کنه.
+                  </p>
+                </div>
+              </div>
+              <Link
+                href="/certificates"
+                className="inline-flex items-center gap-2 bg-white hover:bg-white/90 text-[#1a1714] font-body font-bold text-sm px-6 py-3.5 rounded-2xl transition-colors flex-shrink-0"
+              >
+                استعلام گواهی
+                <ChevronLeft size={15} />
+              </Link>
+            </div>
+          </div>
+        </section>
+
         {/* ── Instructor ── */}
         <section className="py-16 bg-white border-t border-[#e8e2d9]">
           <div className="max-w-7xl mx-auto px-4 sm:px-6">
@@ -574,6 +843,72 @@ export default async function CourseDetailPage({ params }: Props) {
               >
                 <ChevronLeft size={14} className="rotate-180" />
                 دیدن همه دوره‌ها
+              </Link>
+            </div>
+          </div>
+        </section>
+
+        {/* ── Guarantees ── */}
+        <section className="py-20 border-t border-[#e8e2d9]">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6">
+            <div className="max-w-3xl mb-9">
+              <div
+                className="font-display text-[10px] font-bold tracking-[0.22em] uppercase mb-3"
+                style={{ color: color.accent }}
+              >
+                WHY US
+              </div>
+              <h2 className="font-body font-black text-2xl md:text-3xl text-[#1a1714] leading-[1.4]">
+                چی تحویل می‌گیری؟
+              </h2>
+            </div>
+
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+              {guarantees.map((g) => (
+                <div
+                  key={g.title}
+                  className="bg-white border border-[#e8e2d9] rounded-3xl p-6"
+                >
+                  <span
+                    className="w-10 h-10 rounded-xl flex items-center justify-center mb-4"
+                    style={{ backgroundColor: color.badge, color: color.accent }}
+                  >
+                    <ShieldCheck size={18} />
+                  </span>
+                  <h3 className="font-body font-bold text-sm text-[#1a1714] mb-2">{g.title}</h3>
+                  <p className="font-body text-sm text-[#6b6560] leading-relaxed">{g.desc}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ── Final CTA ── */}
+        <section className="py-20 bg-[#1a1714] border-t border-[#e8e2d9]">
+          <div className="max-w-3xl mx-auto px-4 sm:px-6 text-center">
+            <h2 className="font-body font-black text-3xl md:text-4xl text-white leading-[1.3] mb-4">
+              هنوز مطمئن نیستی این دوره مناسبته؟
+            </h2>
+            <p className="font-body text-white/45 leading-relaxed mb-8 max-w-lg mx-auto">
+              قبل از ثبت‌نام بپرس. توی تلگرام بگو الان کجای مسیری و چی می‌خوای —
+              اگه این دوره برات مناسب نبود، خودم صادقانه می‌گم.
+            </p>
+            <div className="flex items-center justify-center gap-3 flex-wrap">
+              <a
+                href="https://t.me/melina_support"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 bg-white hover:bg-white/90 text-[#1a1714] font-body font-bold px-8 py-4 rounded-2xl transition-all hover:scale-[1.02] active:scale-[0.98]"
+              >
+                <Send size={17} />
+                مشاوره و ثبت‌نام در تلگرام
+              </a>
+              <Link
+                href="/courses"
+                className="inline-flex items-center gap-2 border border-white/20 hover:border-white/40 text-white/70 hover:text-white font-body font-semibold px-7 py-4 rounded-2xl transition-all text-sm"
+              >
+                مقایسه با بقیه دوره‌ها
+                <ChevronLeft size={15} />
               </Link>
             </div>
           </div>
