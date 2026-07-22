@@ -27,8 +27,6 @@ const about = [
   // { href: "/auth/register", label: "ثبت‌نام رایگان", ext: false },
 ];
 
-// یوتیوب فعلاً از لیست برداشته شده چون آدرس کانالی نداریم و لینک مرده بدتر از نبودنه.
-// آدرس کانال رو که دادی، دوباره اضافه‌ش می‌کنیم: { href: "...", label: "YouTube", Icon: Tv }
 const socials = [
   { href: "https://instagram.com/mojtabaui",           label: "Instagram", Icon: Camera },
   { href: "https://t.me/melina_support",               label: "Telegram",  Icon: Send   },

@@ -20,13 +20,13 @@ export default function FreePage() {
             <div className="max-w-xl">
               <div className="inline-flex items-center gap-2 bg-white/10 rounded-full px-4 py-1.5 mb-6">
                 <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                <span className="font-body text-xs text-white/70">همه چیز رایگان — بدون ثبت‌نام</span>
+                <span className="font-body text-xs text-white/70">همه چیز رایگان، بدون ثبت‌نام</span>
               </div>
               <h1 className="font-body font-extrabold text-4xl md:text-5xl text-white leading-tight mb-5">
                 آموزش‌های رایگان
               </h1>
               <p className="text-white/50 font-body text-lg leading-relaxed">
-                ویدیو، ویس و فایل — رایگان. بردار برو.
+                ویدیو، ویس و فایل آماده. بردار و استفاده کن.
               </p>
             </div>
           </div>
@@ -35,7 +35,7 @@ export default function FreePage() {
         {/* Free Course */}
         <section className="py-16 max-w-7xl mx-auto px-4 sm:px-6">
           <div className="flex items-center gap-3 mb-8">
-            <span className="text-2xl">🎬</span>
+            <span className="w-10 h-10 rounded-xl bg-[#7c5cfc]/10 text-[#7c5cfc] flex items-center justify-center flex-shrink-0"><Play size={18} /></span>
             <div>
               <h2 className="font-body font-bold text-xl text-[#1a1714]">دوره رایگان</h2>
               <p className="text-[#a09990] text-xs font-body">ویدیوهای آموزشی بدون نیاز به ثبت‌نام</p>
@@ -52,10 +52,10 @@ export default function FreePage() {
         <section className="py-16 bg-white border-y border-[#e8e2d9]">
           <div className="max-w-7xl mx-auto px-4 sm:px-6">
             <div className="flex items-center gap-3 mb-8">
-              <span className="text-2xl">🎙</span>
+              <span className="w-10 h-10 rounded-xl bg-[#7c5cfc]/10 text-[#7c5cfc] flex items-center justify-center flex-shrink-0"><Mic size={18} /></span>
               <div>
                 <h2 className="font-body font-bold text-xl text-[#1a1714]">ویس‌های رایگان</h2>
-                <p className="text-[#a09990] text-xs font-body">پادکست‌های کوتاه — آموزش در مسیر</p>
+                <p className="text-[#a09990] text-xs font-body">پادکست‌های کوتاه برای شنیدن در مسیر</p>
               </div>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -69,10 +69,10 @@ export default function FreePage() {
         {/* Free Files */}
         <section className="py-16 max-w-7xl mx-auto px-4 sm:px-6">
           <div className="flex items-center gap-3 mb-8">
-            <span className="text-2xl">📁</span>
+            <span className="w-10 h-10 rounded-xl bg-[#7c5cfc]/10 text-[#7c5cfc] flex items-center justify-center flex-shrink-0"><FileText size={18} /></span>
             <div>
               <h2 className="font-body font-bold text-xl text-[#1a1714]">فایل‌های رایگان</h2>
-              <p className="text-[#a09990] text-xs font-body">تمپلیت، کیت، چک‌لیست — مستقیم بردار</p>
+              <p className="text-[#a09990] text-xs font-body">تمپلیت، کیت و چک‌لیست آماده</p>
             </div>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">

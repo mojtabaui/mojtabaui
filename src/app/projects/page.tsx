@@ -24,20 +24,25 @@ export default function ProjectsPage() {
       <main className="flex-1 pt-16 min-h-screen bg-[#FAF6F1]">
 
         {/* Header */}
-        <section className="dot-bg py-16">
+        <section className="dot-bg pt-16 pb-12">
           <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="max-w-xl">
-            <div className="inline-flex items-center gap-2 bg-white border border-[#e8e2d9] rounded-full px-4 py-1.5 mb-6">
-              <div className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
-              <span className="font-body text-xs text-[#6b6560]">پروژه‌های واقعی دانشجوها</span>
+            <div className="flex items-end justify-between gap-8 flex-wrap">
+              <div className="max-w-xl">
+                <div className="font-display text-[10px] font-bold tracking-[0.22em] uppercase text-[#7c5cfc] mb-4">
+                  STUDENT WORK
+                </div>
+                <h1 className="font-body font-black text-4xl md:text-5xl text-[#1a1714] leading-[1.25] mb-4">
+                  نمونه کارها
+                </h1>
+                <p className="text-[#6b6560] font-body text-lg leading-relaxed">
+                  پروژه‌های واقعی دانشجوهای دوره‌های رابط و تجربه کاربری، روی فیگما یا به
+                  شکل کیس استادی.
+                </p>
+              </div>
+              <div className="font-display font-black text-[#1a1714]/[0.07] text-7xl leading-none select-none">
+                {String(studentProjects.length).replace(/\d/g, (d) => "۰۱۲۳۴۵۶۷۸۹"[+d])}
+              </div>
             </div>
-            <h1 className="font-body font-extrabold text-4xl md:text-5xl text-[#1a1714] leading-tight mb-4">
-              نمونه کارها
-            </h1>
-            <p className="text-[#6b6560] font-body text-lg leading-relaxed">
-              پروژه‌های دانشجوهای دوره‌های UI و UX — روی Figma یا به شکل Case Study.
-            </p>
-          </div>
           </div>
         </section>
 
