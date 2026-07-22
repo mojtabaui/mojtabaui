@@ -435,19 +435,33 @@ export default function Home() {
         {/* ─── Why Infinity ─── */}
         <section className="py-24">
           <div className="max-w-7xl mx-auto px-4 sm:px-6">
-            <FadeIn>
-              <div className="mb-14">
-                <div className="font-display text-[10px] font-bold tracking-[0.22em] uppercase text-[#a09990] mb-2">
-                  WHY OUR COURSES
+            <div className="flex items-end justify-between gap-10 flex-wrap mb-14">
+              <FadeIn>
+                <div>
+                  <div className="font-display text-[10px] font-bold tracking-[0.22em] uppercase text-[#a09990] mb-2">
+                    WHY OUR COURSES
+                  </div>
+                  <h2 className="font-body font-extrabold text-3xl md:text-4xl text-[#1a1714]">
+                    چرا دوره‌های ما؟
+                  </h2>
+                  <p className="text-[#6b6560] font-body text-sm mt-2 max-w-md leading-relaxed">
+                    تفاوت یادگیری تنها با یادگیری هدایت‌شده، همینه که کجا تموم می‌شه.
+                  </p>
                 </div>
-                <h2 className="font-body font-extrabold text-3xl md:text-4xl text-[#1a1714]">
-                  چرا دوره‌های ما؟
-                </h2>
-                <p className="text-[#a09990] font-body text-sm mt-2">
-                  فقط ویدیو نیست — یه تجربه کامل یادگیریه
-                </p>
-              </div>
-            </FadeIn>
+              </FadeIn>
+
+              <FadeIn delay={0.1} className="w-full max-w-[360px]">
+                <div className="relative w-full aspect-[3/2] rounded-3xl overflow-hidden border border-[#d4c8c2] bg-white">
+                  <Image
+                    src="/images/why-us.jpg"
+                    alt=""
+                    fill
+                    sizes="360px"
+                    className="object-cover"
+                  />
+                </div>
+              </FadeIn>
+            </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-0">
               {[
@@ -977,7 +991,8 @@ export default function Home() {
             </div>
           </FadeIn>
 
-          <div className="max-w-3xl space-y-3">
+          <div className="grid lg:grid-cols-[1fr_320px] gap-10 items-start">
+          <div className="space-y-3">
             {(infinityCourses[0]?.faqs ?? []).slice(0, 6).map((faq, i) => (
               <FadeIn key={faq.q} delay={i * 0.05}>
                 <details className="group bg-white border border-[#e8e2d9] rounded-2xl overflow-hidden hover:border-[#1a1714]/20 transition-colors">
@@ -995,6 +1010,20 @@ export default function Home() {
                 </details>
               </FadeIn>
             ))}
+          </div>
+
+            {/* تصویر سکشن */}
+            <FadeIn delay={0.1} className="hidden lg:block">
+              <div className="relative w-full aspect-[3/2] rounded-3xl overflow-hidden border border-[#e8e2d9] bg-white sticky top-24">
+                <Image
+                  src="/images/faq.jpg"
+                  alt=""
+                  fill
+                  sizes="320px"
+                  className="object-cover"
+                />
+              </div>
+            </FadeIn>
           </div>
         </section>
 

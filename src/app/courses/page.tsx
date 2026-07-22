@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import CoursesClient from "@/components/CoursesClient";
@@ -52,11 +53,28 @@ export default function CoursesPage() {
                 </p>
               </FadeIn>
 
-              <ParallaxY speed={26}>
-                <div className="font-display font-black text-[#1a1714]/[0.07] text-7xl leading-none select-none">
-                  {fa(visible.length)}
+              {/* پرتره‌ی مدرس */}
+              <FadeIn delay={0.1}>
+                <div className="relative flex items-end gap-4">
+                  <div className="hidden sm:block text-left pb-2">
+                    <div className="font-display text-[10px] font-bold tracking-[0.2em] uppercase text-[#a09990] mb-1">
+                      INSTRUCTOR
+                    </div>
+                    <div className="font-body font-bold text-sm text-[#1a1714]">مجتبا یزدانپناه</div>
+                    <div className="font-body text-xs text-[#a09990] mt-0.5">۸ سال تجربه</div>
+                  </div>
+                  <div className="relative w-[150px] sm:w-[190px] aspect-[4/5] rounded-3xl overflow-hidden border border-[#e8e2d9] shadow-[0_24px_50px_-30px_rgba(26,23,20,0.55)] bg-white flex-shrink-0">
+                    <Image
+                      src="/images/instructor-portrait.jpg"
+                      alt="مجتبا یزدانپناه، مدرس دوره‌ها"
+                      fill
+                      priority
+                      sizes="190px"
+                      className="object-cover"
+                    />
+                  </div>
                 </div>
-              </ParallaxY>
+              </FadeIn>
             </div>
 
             {/* آمار کوتاه */}
