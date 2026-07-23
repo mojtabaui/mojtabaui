@@ -264,3 +264,42 @@ img, svg, video, canvas {
   background-repeat: repeat;
   background-size: 190px 190px;
 }
+
+/* ── سند چاپی برنامه‌ی هفتگی ───────────────────────────────
+   اندازه‌ها میلی‌متری‌ان نه پیکسلی، تا خروجی چاپ با چیزی که روی
+   صفحه دیده می‌شه یکی باشه. */
+.sheet {
+  width: 210mm;
+  height: 297mm;
+  margin-inline: auto;
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 10px 40px -20px rgba(26, 23, 20, 0.45);
+}
+
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 0;
+  }
+  .planner .sheet {
+    box-shadow: none;
+    break-after: page;
+    page-break-after: always;
+  }
+  .planner .sheet:last-child {
+    break-after: auto;
+    page-break-after: auto;
+  }
+  .planner,
+  .planner * {
+    visibility: visible !important;
+  }
+  body :not(.planner):not(.planner *) {
+    visibility: hidden;
+  }
+  .planner {
+    position: absolute;
+    inset: 0;
+  }
+}
