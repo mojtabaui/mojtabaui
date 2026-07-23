@@ -3,8 +3,8 @@
 import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { Clock, Users, Layers, ArrowLeft, Calendar } from "lucide-react";
-import { Course, formatPrice, typeLabel } from "@/lib/mock-data";
+import { Clock, Users, Layers, ArrowLeft, Calendar, User } from "lucide-react";
+import { Course, formatPrice, formatStudents, typeLabel } from "@/lib/mock-data";
 
 const imageMap: Record<string, string> = {
   "ui-infinity": "/images/ui_infinity.png",
@@ -146,6 +146,12 @@ export default function CourseCard({ course }: { course: Course }) {
                 <Layers size={12} /> {course.projects} پروژه
               </span>
             </>
+          )}
+          {/* دوره‌های تازه هنوز دانشجو ندارن، پس عدد صفر رو نشون نمی‌دیم */}
+          {course.students > 0 && (
+            <span className="flex items-center gap-1.5">
+              <User size={12} /> {formatStudents(course.students)} دانشجو
+            </span>
           )}
         </div>
 

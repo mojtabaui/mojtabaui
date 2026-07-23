@@ -14,6 +14,7 @@ import {
   ShieldCheck,
   Send,
   ExternalLink,
+  User,
 } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -22,7 +23,7 @@ import WorkshopLanding from "@/components/WorkshopLanding";
 import CourseHeroVisual from "@/components/CourseHeroVisual";
 import FadeIn from "@/components/FadeIn";
 import ParallaxY from "@/components/ParallaxY";
-import { courses, formatPrice, typeLabel, featuredProjects } from "@/lib/mock-data";
+import { courses, formatPrice, formatStudents, typeLabel, featuredProjects } from "@/lib/mock-data";
 import { contentFor, disciplineOf, uiVsUx, guarantees } from "@/lib/course-content";
 
 interface Props {
@@ -151,6 +152,10 @@ export default async function CourseDetailPage({ params }: Props) {
                       ? { label: `${course.mentoringHours} ساعت منتورینگ`, icon: <Users size={13} /> }
                       : { label: `پشتیبانی ${course.supportMonths} ماهه`, icon: <Calendar size={13} /> },
                     { label: `${course.projects} پروژه عملی`, icon: <Layers size={13} /> },
+                    // دوره‌های تازه هنوز دانشجو ندارن، پس عدد صفر رو نشون نمی‌دیم
+                    ...(course.students > 0
+                      ? [{ label: `${formatStudents(course.students)} دانشجو`, icon: <User size={13} /> }]
+                      : []),
                   ].map((s, i, arr) => (
                     <span key={i} className="flex items-center">
                       <span className="flex items-center gap-1.5 text-sm font-body text-[#6b6560]">
@@ -648,7 +653,7 @@ export default async function CourseDetailPage({ params }: Props) {
                     className="absolute -top-3 left-5 font-display font-black leading-none select-none pointer-events-none"
                     style={{ fontSize: "7rem", color: color.accent, opacity: 0.06 }}
                   >
-                    "
+                    &ldquo;
                   </div>
                   <div className="relative">
                     <p className="font-body text-base text-[#1a1714] leading-relaxed mb-6 font-medium">

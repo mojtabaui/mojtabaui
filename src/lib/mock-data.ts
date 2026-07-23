@@ -310,7 +310,7 @@ const allCourses: Course[] = [
     supportMonths: 0,
     projects: 5,
     level: "مقدماتی",
-    students: 1634,
+    students: 1918,
     tags: ["Figma", "UI Design", "Design System", "Typography", "Components", "Atomic Design"],
     topics: uiTopics,
     features: infinityFeatures(5, 20),
@@ -341,7 +341,7 @@ const allCourses: Course[] = [
     supportMonths: 0,
     projects: 2,
     level: "مقدماتی",
-    students: 990,
+    students: 1546,
     tags: ["UX Research", "Figma", "Miro", "FigJam", "Case Study", "Wireframe"],
     topics: uxTopics,
     features: infinityFeatures(2, 20),
@@ -372,7 +372,7 @@ const allCourses: Course[] = [
     supportMonths: 12,
     projects: 5,
     level: "مقدماتی",
-    students: 0,
+    students: 337,
     tags: ["Figma", "UI Design", "Design System", "Typography", "Components"],
     topics: uiTopics,
     features: offlineFeatures(5),
@@ -403,7 +403,7 @@ const allCourses: Course[] = [
     supportMonths: 12,
     projects: 2,
     level: "مقدماتی",
-    students: 0,
+    students: 294,
     tags: ["UX Research", "Figma", "Miro", "FigJam", "Case Study"],
     topics: uxTopics,
     features: offlineFeatures(2),
@@ -432,7 +432,7 @@ const allCourses: Course[] = [
     supportMonths: 0,
     projects: 4,
     level: "مقدماتی",
-    students: 0,
+    students: 431,
     tags: ["Portfolio", "Case Study", "Career", "UI/UX"],
     topics: portfolioTopics,
     features: [],
@@ -461,7 +461,7 @@ const allCourses: Course[] = [
     supportMonths: 0,
     projects: 2,
     level: "متوسط",
-    students: 0,
+    students: 631,
     tags: ["Figma", "Prototype", "Interaction", "Animation"],
     topics: prototypeTopics,
     features: [],
@@ -555,6 +555,11 @@ export const stats = [
   { value: "۴۰+",    label: "کد کلاس" },
   { value: "۹۰+",    label: "ساعت محتوا" },
 ];
+
+/** تعداد دانشجو با ارقام فارسی و جداکننده‌ی هزارگان */
+export function formatStudents(n: number): string {
+  return n.toLocaleString("fa-IR");
+}
 
 export function formatPrice(price: number): string {
   return price.toLocaleString("fa-IR") + " تومان";
