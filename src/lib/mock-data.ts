@@ -245,6 +245,31 @@ const offlineFeatures = (projects: number) => [
 ];
 
 const emptyTopics: CourseTopic[] = [];
+
+// ── سرفصل دوره پروتوتایپ ─────────────────────────────────
+const prototypeTopics: CourseTopic[] = [
+  { title: "تعامل در فیگما", description: "مقدمه‌ی تعامل، پروتوتایپ، تریگر و ریسپانس، اسکرول عمودی و افقی، کامپوننت تعاملی و پروتوتایپ یک پروژه‌ی کامل. سیزده درس." },
+  { title: "پروژه‌ی نهایی فیگما", description: "دکمه، هاور دسته‌ها، منو، ورودی و کارت، بنر و کارت متحرک، اسپلش، صفحه‌ی محصول، کاروسل، فیلتر تعاملی و احراز هویت. سیزده درس." },
+  { title: "شروع کار با پروتوپای", description: "معرفی ابزار و کانال تلگرام دوره." },
+  { title: "فصل ۱: مبانی تعامل", description: "کنش و واکنش، تفاوت تعامل با انیمیشن، تریگر، ریسپانس، آبجکت و مثلث تعامل. هفت درس." },
+  { title: "فصل ۲: تور پروتوپای", description: "معرفی محیط، مدیریت فایل و پلاگین فیگما." },
+  { title: "فصل ۳: پروتوپای", description: "داشبورد، ابزارهای پایه و شکل، متن، کانتینر، فریم دستگاه، صحنه، پنل لایه، تایم‌لاین، تریگرها، ریسپانس‌ها، پنل پراپرتی، ناحیه‌ی لمسی و سه مینی‌پروژه. هفده درس." },
+  { title: "فصل ۴: شرط‌ها", description: "توهم داشتن انتخاب، و شرط‌ها در عمل." },
+  { title: "فصل ۵: زنجیره", description: "مقدمه، Start، Chain، Range و Detect. پنج درس." },
+  { title: "فصل ۶: متغیر", description: "مقدمه، ساخت متغیر و سه تمرین متغیر در عمل. پنج درس." },
+  { title: "فصل ۷: اسکرول", description: "اسکرول و پیجینگ." },
+  { title: "فصل ۸: پروژه‌ی نهایی", description: "ساخت کامل اپ Fitsho: هیرو، درباره، و چهار مرحله‌ی محاسبه‌گر BMI. هفت درس." },
+  { title: "فصل ۹: اشتراک‌گذاری و تمرین", description: "ضبط با سیستم و با گوشی، تمرینات بخش اول و Scroll to. شش درس." },
+];
+
+// ── سرفصل دوره پرتفولیو ──────────────────────────────────
+const portfolioTopics: CourseTopic[] = [
+  { title: "انواع پرتفولیو و Portfoliobox", description: "انواع پرتفولیو، چرایی انتخاب Portfoliobox و ساخت گام‌به‌گام آن. یازده درس." },
+  { title: "پرتفولیو با وردپرس", description: "از مفهوم دامنه و هاست تا نصب وردپرس و کار با المنتور. طراحی هیرو، خدمات، مهارت‌ها، نمونه‌کار، بنر، بلاگ، نویگیشن و فوتر، به‌علاوه‌ی نسخه‌ی واکنش‌گرای همه‌شان و بهینه‌سازی تصاویر. چهل درس." },
+  { title: "پرتفولیو PDF", description: "سایز و طراحی کاور، صفحه‌ی درباره من، نمونه‌کار و تماس، کاور پشت، خروجی بهینه و تکنیک‌های تکمیلی. نه درس." },
+  { title: "پرتفولیو اینستاگرام", description: "پرسونال برندینگ، چیدمان پرتفولیو، ارتباط مستقیم، شبکه‌سازی، اتوماسیون و تیم‌سازی. هفت درس." },
+  { title: "رزومه‌ی طراح", description: "ساخت یک رزومه‌ی حرفه‌ای در شش درس." },
+];
 const emptyFAQs: FAQ[] = [];
 
 // ─── Workshops (محتوای placeholder — بعداً تکمیل می‌شه) ───────
@@ -278,8 +303,7 @@ const allCourses: Course[] = [
       "از فیگما تا دیزاین سیستم. ۵ پروژه‌ی واقعی و ۲۰ ساعت منتورینگ گروهی.",
     longDescription:
       "۵۵ ساعت ویدیو + ۲۰ ساعت منتورینگ آنلاین — یاد می‌گیری چطور با مخاطبیت ارتباط برقرار کنی، برند واقعی بسازی و به عنوان طراح UI حرفه‌ای وارد بازار کار بشی.",
-    price: 7000000,
-    originalPrice: 9000000,
+    price: 9000000,
     thumbnail: "/assets/courses/ui-infinity.jpg",
     videoHours: 55,
     mentoringHours: 20,
@@ -310,8 +334,7 @@ const allCourses: Course[] = [
       "از تحقیق کاربر تا معماری اطلاعات. ۲ پروژه‌ی واقعی و ۲۰ ساعت منتورینگ.",
     longDescription:
       "۳۵ ساعت ویدیو + ۲۰ ساعت منتورینگ آنلاین — از Design Thinking تا Case Study واقعی. یاد می‌گیری چطور مسئله کاربر رو پیدا کنی، تحلیل کنی و بهش راه‌حل بدی.",
-    price: 7000000,
-    originalPrice: 9000000,
+    price: 9000000,
     thumbnail: "/assets/courses/ux-infinity.jpg",
     videoHours: 35,
     mentoringHours: 20,
@@ -342,8 +365,7 @@ const allCourses: Course[] = [
       "همون محتوای دوره‌ی بی‌نهایت: ۵۵ ساعت ویدیو، ۵ پروژه‌ی واقعی و یک سال پشتیبانی. فقط جلسات منتورینگ رو نداره.",
     longDescription:
       "همون ویدیوها و پروژه‌های دوره‌ی بی‌نهایت، با یک سال پشتیبانی تیکتی. برای کسی که می‌خواد با تمپوی خودش جلو بره.",
-    price: 4000000,
-    originalPrice: 6000000,
+    price: 6000000,
     thumbnail: "/assets/courses/ui-offline.jpg",
     videoHours: 55,
     mentoringHours: 0,
@@ -374,8 +396,7 @@ const allCourses: Course[] = [
       "همان محتوای دوره بی‌نهایت — ۳۵ ساعت ویدیو، ۲ پروژه واقعی، پشتیبانی ۱ ساله. بدون جلسات منتورینگ.",
     longDescription:
       "همون ویدیوها و پروژه‌های دوره‌ی بی‌نهایت، با یک سال پشتیبانی تیکتی. برای کسی که می‌خواد با تمپوی خودش جلو بره.",
-    price: 4000000,
-    originalPrice: 6000000,
+    price: 6000000,
     thumbnail: "/assets/courses/ux-offline.jpg",
     videoHours: 35,
     mentoringHours: 0,
@@ -404,16 +425,16 @@ const allCourses: Course[] = [
     subtitle: "PORTFOLIO DESIGN",
     description: "چطور یه پرتفولیو UI/UX بسازی که استخدام‌کننده رو متقاعد کنه — از Case Study تا نمایش پروژه.",
     longDescription: "",
-    price: 0,
+    price: 4000000,
     thumbnail: "",
-    videoHours: 0,
+    videoHours: 13,
     mentoringHours: 0,
     supportMonths: 0,
-    projects: 0,
+    projects: 4,
     level: "مقدماتی",
     students: 0,
     tags: ["Portfolio", "Case Study", "Career", "UI/UX"],
-    topics: emptyTopics,
+    topics: portfolioTopics,
     features: [],
     faqs: emptyFAQs,
     learningOutcomes: [],
@@ -433,16 +454,16 @@ const allCourses: Course[] = [
     subtitle: "PROTOTYPE DESIGN",
     description: "ساخت پروتوتایپ تعاملی حرفه‌ای در فیگما — از انیمیشن‌های پایه تا فلوهای پیچیده.",
     longDescription: "",
-    price: 0,
+    price: 2000000,
     thumbnail: "",
-    videoHours: 0,
+    videoHours: 11,
     mentoringHours: 0,
     supportMonths: 0,
-    projects: 0,
+    projects: 2,
     level: "متوسط",
     students: 0,
     tags: ["Figma", "Prototype", "Interaction", "Animation"],
-    topics: emptyTopics,
+    topics: prototypeTopics,
     features: [],
     faqs: emptyFAQs,
     learningOutcomes: [],

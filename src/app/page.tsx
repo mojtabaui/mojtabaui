@@ -514,10 +514,10 @@ export default function Home() {
               {[
                 {
                   name: "بی‌نهایت",
-                  tag: "پیشنهاد ما",
+                  tag: "ثبت‌نام بسته",
                   price: infinityCourses[0]?.price,
-                  desc: "برای کسی که می‌خواد کنارش کسی باشه و مسیرش منظم بمونه.",
-                  featured: true,
+                  desc: "برای کسی که می‌خواد کنارش کسی باشه. ثبت‌نامش فعلاً بازنیست.",
+                  featured: false,
                   rows: [
                     { label: "۵۵ ساعت ویدیوی کامل", has: true },
                     { label: "۵ پروژه عملی", has: true },
@@ -529,15 +529,15 @@ export default function Home() {
                 },
                 {
                   name: "آفلاین",
-                  tag: "اقتصادی‌تر",
+                  tag: "الان باز است",
                   price: videoCourses.find((c) => c.slug === "ui-offline")?.price,
-                  desc: "برای کسی که خودش منظمه و می‌خواد با تمپوی خودش جلو بره.",
-                  featured: false,
+                  desc: "همون محتوا و همون برنامه‌ی هفتگی، با تمپوی خودت.",
+                  featured: true,
                   rows: [
                     { label: "۵۵ ساعت ویدیوی کامل", has: true },
                     { label: "۵ پروژه عملی", has: true },
                     { label: "۲۰ ساعت منتورینگ زنده", has: false },
-                    { label: "برنامه‌ی هفتگی و گروه هم‌دوره‌ای", has: false },
+                    { label: "برنامه‌ی هفتگی", has: true },
                     { label: "پشتیبانی تیکتی ۱۲ ماهه", has: true },
                     { label: "گواهی پایان دوره", has: true },
                   ],
@@ -1107,7 +1107,7 @@ export default function Home() {
 
               {/* Infinity course quick cards */}
               <div className="grid sm:grid-cols-2 gap-4 max-w-2xl mx-auto text-right">
-                {infinityCourses.map((c) => (
+                {videoCourses.slice(0, 2).map((c) => (
                   <Link
                     key={c.id}
                     href={`/courses/${c.slug}`}
