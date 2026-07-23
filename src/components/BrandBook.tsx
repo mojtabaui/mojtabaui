@@ -4,10 +4,14 @@ import BrandMark, { BrandGlyph } from "@/components/BrandMark";
 /**
  * برندبوک در قالب استوری اینستاگرام.
  *
- * هر اسلاید دقیقاً نسبت ۹:۱۶ داره و اندازه‌ها بر حسب cqw تعریف شدن، پس
- * چه روی صفحه‌ی بزرگ ببینیش چه اسکرین‌شات ۱۰۸۰ در ۱۹۲۰ بگیری، چیدمان
- * یکسان می‌مونه. محتواش هم از خود سایت اومده نه از نو، تا با چیزی که
- * مخاطب توی سایت می‌بینه یکی باشه.
+ * هر اسلاید نسبت ۹:۱۶ داره و همه‌ی اندازه‌ها بر حسب cqw هستن، پس چه روی
+ * صفحه ببینیش چه ۱۰۸۰ در ۱۹۲۰ خروجی بگیری، چیدمان یکی می‌مونه.
+ *
+ * ساخت بصری هر اسلاید سه لایه‌ست:
+ *   • زمینه: رنگ تخت به‌علاوه‌ی بافت نقطه یا دانه
+ *   • لایه‌ی تزئینی: حرف یا نشانِ غول‌پیکر که از لبه می‌زنه بیرون
+ *   • محتوا: متن، روی همه
+ * همون منطقی که کل سایت باهاش ساخته شده.
  */
 
 const INK = "#1a1714";
@@ -17,261 +21,374 @@ const VIOLET = "#7c5cfc";
 function Slide({
   children,
   bg = CREAM,
-  className = "",
+  dots,
+  dark,
 }: {
   children: React.ReactNode;
   bg?: string;
-  className?: string;
+  dots?: boolean;
+  dark?: boolean;
 }) {
   return (
     <div
-      className={`story-slide relative overflow-hidden flex flex-col ${className}`}
+      className="story-slide relative overflow-hidden flex flex-col"
       style={{ aspectRatio: "9 / 16", backgroundColor: bg }}
     >
+      {dots && (
+        <div
+          className={`absolute inset-0 pointer-events-none ${dark ? "dot-bg-dark" : "dot-bg"}`}
+        />
+      )}
+      {/* دانه‌ی فیلم، به کل اسلاید عمق و گرمی می‌ده */}
+      <div
+        className="grain-static absolute inset-0 pointer-events-none mix-blend-overlay"
+        style={{ opacity: dark ? 0.13 : 0.075 }}
+      />
       {children}
     </div>
   );
 }
 
-/** شماره‌ی صفحه در پانویس هر اسلاید */
-function Foot({ n, total, dark }: { n: string; total: string; dark?: boolean }) {
-  const c = dark ? "text-white/30" : "text-[#a09990]";
+function Foot({ n, dark }: { n: string; dark?: boolean }) {
+  const c = dark ? "text-white/25" : "text-[#1a1714]/25";
   return (
-    <div className={`mt-auto flex items-center justify-between ${c}`}>
-      <span className="font-display text-[2cqw] tracking-[0.24em] uppercase">
+    <div className={`relative mt-auto flex items-center justify-between ${c}`}>
+      <span className="font-display text-[1.9cqw] tracking-[0.26em] uppercase">
         Melina Design School
       </span>
-      <span className="font-display text-[2cqw] tracking-[0.2em]">
-        {n} / {total}
-      </span>
+      <span className="font-display text-[1.9cqw] tracking-[0.2em]">{n} / ۰۸</span>
     </div>
   );
 }
-
-const TOTAL = "۰۸";
 
 export default function BrandBook() {
   return (
     <div className="grid gap-8 sm:grid-cols-2 xl:grid-cols-3">
 
       {/* ۰۱ — جلد */}
-      <Slide bg={INK}>
-        <div className="flex-1 flex flex-col items-center justify-center px-[9cqw] text-center">
-          <div className="w-[34cqw]">
+      <Slide bg={INK} dots dark>
+        {/* سیبیل غول‌پیکر که از بالا بیرون زده */}
+        <div className="absolute -top-[14cqw] -left-[26cqw] w-[150cqw] opacity-[0.07] pointer-events-none">
+          <BrandGlyph className="w-full h-auto text-white" />
+        </div>
+
+        <div className="relative flex-1 flex flex-col justify-end px-[9cqw] pb-[4cqw]">
+          <div className="w-[26cqw] mb-[8cqw]">
             <BrandMark className="w-full h-auto" bg={CREAM} fg={INK} rounded={28} />
           </div>
-          <h1 className="font-body font-black text-[7.4cqw] text-white leading-[1.45] mt-[7cqw]">
-            مدرسه دیزاین ملینا
+          <h1 className="font-body font-black text-[9.6cqw] text-white leading-[1.32]">
+            مدرسه
+            <br />
+            دیزاین ملینا
           </h1>
-          <p className="font-display text-[2.5cqw] tracking-[0.3em] uppercase text-white/35 mt-[2.5cqw]">
-            Brand Book
-          </p>
+          <div className="flex items-center gap-[3cqw] mt-[5cqw]">
+            <span className="h-px w-[12cqw] bg-[#a78bfa]" />
+            <span className="font-display text-[2.4cqw] tracking-[0.32em] uppercase text-[#a78bfa]">
+              Brand Book
+            </span>
+          </div>
         </div>
         <div className="px-[9cqw] pb-[8cqw]">
-          <Foot n="۰۱" total={TOTAL} dark />
+          <Foot n="۰۱" dark />
         </div>
       </Slide>
 
-      {/* ۰۲ — اسم از کجا آمد */}
-      <Slide>
-        <div className="flex-1 flex flex-col justify-center px-[9cqw]">
-          <span className="text-[#7c5cfc] mb-[5cqw]">
-            <BrandGlyph className="w-[16cqw] h-auto" />
-          </span>
-          <div className="font-display text-[2.2cqw] font-bold tracking-[0.26em] uppercase text-[#a09990] mb-[3cqw]">
+      {/* ۰۲ — اسم */}
+      <Slide dots>
+        {/* واژه‌ی غول‌پیکر که از لبه می‌زنه بیرون */}
+        <div
+          className="absolute -right-[10cqw] top-[16cqw] font-display font-black leading-none pointer-events-none select-none"
+          style={{ fontSize: "34cqw", color: INK, opacity: 0.05 }}
+        >
+          MELINA
+        </div>
+        {/* بال، چرخیده */}
+        <div className="absolute -left-[16cqw] bottom-[16cqw] w-[62cqw] rotate-[-14deg] opacity-[0.13] pointer-events-none">
+          <BrandGlyph className="w-full h-auto text-[#7c5cfc]" />
+        </div>
+
+        <div className="relative flex-1 flex flex-col justify-center px-[9cqw]">
+          <div className="font-display text-[2.1cqw] font-bold tracking-[0.28em] uppercase text-[#7c5cfc] mb-[3.5cqw]">
             The Name
           </div>
-          <h2 className="font-body font-black text-[6.4cqw] text-[#1a1714] leading-[1.4] mb-[5cqw]">
-            ملینا یعنی قناری زرد
+          <h2 className="font-body font-black text-[8cqw] text-[#1a1714] leading-[1.36]">
+            ملینا یعنی
+            <br />
+            قناری زرد
           </h2>
-          <p className="font-body text-[3.3cqw] text-[#4a4540] leading-[2.1]">
-            پرنده‌ی کوچیکی که صداش رو از پشت پنجره هم می‌شنوی. دنبال اسمی بودم که
-            حس امید بده، چون آدم‌هایی که میان دیزاین یاد بگیرن، بیشترشون دارن یک
-            چیزی رو پشت سر می‌ذارن.
+          <div className="h-px w-[22cqw] bg-[#1a1714]/15 my-[5.5cqw]" />
+          <p className="font-body text-[3.2cqw] text-[#4a4540] leading-[2.15] max-w-[80%]">
+            پرنده‌ی کوچیکی که صداش رو از پشت پنجره هم می‌شنوی. دنبال اسمی بودم که حس
+            امید بده، چون آدم‌هایی که میان دیزاین یاد بگیرن، بیشترشون دارن یک چیزی رو
+            پشت سر می‌ذارن.
           </p>
         </div>
         <div className="px-[9cqw] pb-[8cqw]">
-          <Foot n="۰۲" total={TOTAL} />
+          <Foot n="۰۲" />
         </div>
       </Slide>
 
-      {/* ۰۳ — چرا ساخته شد */}
-      <Slide bg="#E4DAD5">
-        <div className="flex-1 flex flex-col justify-center px-[9cqw]">
-          <div className="font-display text-[2.2cqw] font-bold tracking-[0.26em] uppercase text-[#8a7b74] mb-[3cqw]">
+      {/* ۰۳ — چرا ساخته شد، روی پرتره */}
+      <Slide bg={INK} dark>
+        <div className="absolute inset-0">
+          <Image
+            src="/images/instructor-portrait.jpg"
+            alt=""
+            fill
+            sizes="500px"
+            className="object-cover object-top opacity-[0.42] grayscale"
+          />
+          {/* گرادیان تا متن پایین خوانا بمونه */}
+          <div
+            className="absolute inset-0"
+            style={{
+              background:
+                "linear-gradient(to top, #1a1714 30%, rgba(26,23,20,0.72) 55%, rgba(26,23,20,0.15) 100%)",
+            }}
+          />
+        </div>
+
+        <div className="relative flex-1 flex flex-col justify-end px-[9cqw] pb-[3cqw]">
+          <div className="font-display text-[2.1cqw] font-bold tracking-[0.28em] uppercase text-[#a78bfa] mb-[4cqw]">
             Why It Exists
           </div>
-          <p className="font-body font-black text-[5.4cqw] text-[#1a1714] leading-[1.55]">
-            چیزی که یادگیری رو ممکن می‌کنه تکنیک نیست. اینه که یک نفر حواسش به تو
-            باشه.
+          <p className="font-body font-black text-[6.2cqw] text-white leading-[1.5]">
+            چیزی که یادگیری رو ممکن می‌کنه تکنیک نیست. اینه که یک نفر حواسش به تو باشه.
           </p>
-          <p className="font-body text-[3.2cqw] text-[#4a4540] leading-[2.1] mt-[5cqw]">
-            من خودم خیلی جاها این حس رو نداشتم. برای همین این مدرسه رو ساختم.
-          </p>
-          <div className="flex items-center gap-[3cqw] mt-[7cqw]">
+          <div className="flex items-center gap-[3.5cqw] mt-[6cqw]">
             <Image
               src="/images/sig.png"
               alt=""
               width={690}
               height={252}
-              className="h-[9cqw] w-auto opacity-90"
+              className="h-[8cqw] w-auto invert opacity-80"
             />
-            <div className="font-body font-bold text-[2.6cqw] text-[#1a1714]">
+            <div className="font-body font-bold text-[2.5cqw] text-white/70">
               مجتبا یزدانپناه
             </div>
           </div>
         </div>
         <div className="px-[9cqw] pb-[8cqw]">
-          <Foot n="۰۳" total={TOTAL} />
+          <Foot n="۰۳" dark />
         </div>
       </Slide>
 
       {/* ۰۴ — نشان */}
       <Slide>
-        <div className="flex-1 flex flex-col justify-center px-[9cqw]">
-          <div className="font-display text-[2.2cqw] font-bold tracking-[0.26em] uppercase text-[#a09990] mb-[5cqw]">
+        {/* سیبیل عظیم و بریده، پشت همه */}
+        <div className="absolute -bottom-[20cqw] -right-[30cqw] w-[150cqw] opacity-[0.06] rotate-[8deg] pointer-events-none">
+          <BrandGlyph className="w-full h-auto text-[#1a1714]" />
+        </div>
+
+        <div className="relative flex-1 flex flex-col justify-center px-[9cqw]">
+          <div className="font-display text-[2.1cqw] font-bold tracking-[0.28em] uppercase text-[#7c5cfc] mb-[2.5cqw]">
             The Mark
           </div>
-          <div className="grid grid-cols-2 gap-[4cqw]">
-            <div className="aspect-square rounded-[4cqw] bg-[#1a1714] flex items-center justify-center">
-              <BrandGlyph className="w-[52%] h-auto text-[#FAF6F1]" />
+          <h2 className="font-body font-black text-[6cqw] text-[#1a1714] leading-[1.4] mb-[6cqw]">
+            سیبیل
+          </h2>
+
+          <div className="grid grid-cols-2 gap-[3.5cqw]">
+            <div className="aspect-square rounded-[4cqw] bg-[#1a1714] flex items-center justify-center shadow-[0_4cqw_9cqw_-5cqw_rgba(26,23,20,0.6)]">
+              <BrandGlyph className="w-[54%] h-auto text-[#FAF6F1]" />
             </div>
-            <div className="aspect-square rounded-[4cqw] border border-[#e8e2d9] bg-white flex items-center justify-center">
-              <BrandGlyph className="w-[52%] h-auto text-[#1a1714]" />
+            <div className="aspect-square rounded-[4cqw] bg-white border border-[#e8e2d9] flex items-center justify-center">
+              <BrandGlyph className="w-[54%] h-auto text-[#1a1714]" />
             </div>
-            <div className="aspect-square rounded-[4cqw] bg-[#7c5cfc] flex items-center justify-center">
-              <BrandGlyph className="w-[52%] h-auto text-white" />
+            <div className="aspect-square rounded-[4cqw] bg-[#7c5cfc] flex items-center justify-center shadow-[0_4cqw_9cqw_-5cqw_rgba(124,92,252,0.7)]">
+              <BrandGlyph className="w-[54%] h-auto text-white" />
             </div>
-            <div className="aspect-square rounded-[4cqw] border border-[#e8e2d9] flex items-center justify-center">
-              <BrandMark className="w-[62%] h-auto" rounded={28} />
+            <div className="aspect-square rounded-[4cqw] bg-[#E4DAD5] flex items-center justify-center">
+              <BrandMark className="w-[64%] h-auto" rounded={28} />
             </div>
           </div>
-          <p className="font-body text-[2.7cqw] text-[#6b6560] leading-[2] mt-[5cqw]">
-            سیبیل. چون همه با همین می‌شناسنش. لبه‌هاش هم مثل بال قناریه.
+
+          <p className="font-body text-[2.8cqw] text-[#6b6560] leading-[2] mt-[5.5cqw]">
+            چون همه با همین می‌شناسنش. لبه‌هاش هم مثل بال قناریه.
           </p>
         </div>
         <div className="px-[9cqw] pb-[8cqw]">
-          <Foot n="۰۴" total={TOTAL} />
+          <Foot n="۰۴" />
         </div>
       </Slide>
 
-      {/* ۰۵ — رنگ */}
+      {/* ۰۵ — رنگ، بلوک‌های تمام‌عرض */}
       <Slide>
-        <div className="flex-1 flex flex-col justify-center px-[9cqw]">
-          <div className="font-display text-[2.2cqw] font-bold tracking-[0.26em] uppercase text-[#a09990] mb-[5cqw]">
-            Colour
+        <div className="relative flex-1 flex flex-col">
+          <div className="px-[9cqw] pt-[9cqw] pb-[5cqw]">
+            <div className="font-display text-[2.1cqw] font-bold tracking-[0.28em] uppercase text-[#7c5cfc] mb-[2.5cqw]">
+              Colour
+            </div>
+            <h2 className="font-body font-black text-[6cqw] text-[#1a1714] leading-[1.4]">
+              چهار رنگ، نه بیشتر
+            </h2>
           </div>
-          <div className="space-y-[3cqw]">
+
+          {/* بلوک‌های تمام‌عرض، هر کدام برچسب داخل خودش */}
+          <div className="flex-1 flex flex-col">
             {[
-              { hex: "#1a1714", name: "مشکی برند", use: "متن و سطح تیره" },
-              { hex: "#FAF6F1", name: "کرم", use: "پس‌زمینه‌ی اصلی", border: true },
-              { hex: "#7c5cfc", name: "بنفش", use: "فقط تاکید" },
-              { hex: "#e8e2d9", name: "خط و حاشیه", use: "جداکننده‌ها" },
+              { hex: "#1a1714", name: "مشکی برند", use: "متن و سطح تیره", on: "#FAF6F1" },
+              { hex: "#FAF6F1", name: "کرم", use: "پس‌زمینه‌ی اصلی", on: "#1a1714" },
+              { hex: "#7c5cfc", name: "بنفش", use: "فقط تاکید", on: "#ffffff" },
+              { hex: "#e8e2d9", name: "خط و حاشیه", use: "جداکننده‌ها", on: "#1a1714" },
             ].map((c) => (
-              <div key={c.hex} className="flex items-center gap-[4cqw]">
-                <span
-                  className="w-[16cqw] h-[16cqw] rounded-[3cqw] flex-shrink-0"
-                  style={{
-                    backgroundColor: c.hex,
-                    border: c.border ? "1px solid #e8e2d9" : undefined,
-                  }}
-                />
+              <div
+                key={c.hex}
+                className="flex-1 flex items-center justify-between px-[9cqw]"
+                style={{ backgroundColor: c.hex }}
+              >
                 <div>
-                  <div className="font-body font-bold text-[3.1cqw] text-[#1a1714]">
+                  <div
+                    className="font-body font-bold text-[3.4cqw]"
+                    style={{ color: c.on }}
+                  >
                     {c.name}
                   </div>
                   <div
-                    dir="ltr"
-                    className="font-display text-[2.6cqw] text-[#a09990] tracking-[0.12em] mt-[0.6cqw]"
+                    className="font-body text-[2.4cqw] mt-[0.5cqw]"
+                    style={{ color: c.on, opacity: 0.55 }}
                   >
-                    {c.hex}
-                  </div>
-                  <div className="font-body text-[2.4cqw] text-[#6b6560] mt-[0.4cqw]">
                     {c.use}
                   </div>
+                </div>
+                <div
+                  dir="ltr"
+                  className="font-display font-bold text-[2.8cqw] tracking-[0.14em]"
+                  style={{ color: c.on, opacity: 0.75 }}
+                >
+                  {c.hex}
                 </div>
               </div>
             ))}
           </div>
         </div>
-        <div className="px-[9cqw] pb-[8cqw]">
-          <Foot n="۰۵" total={TOTAL} />
+        <div className="px-[9cqw] py-[6cqw] bg-[#FAF6F1]">
+          <Foot n="۰۵" />
         </div>
       </Slide>
 
       {/* ۰۶ — تایپوگرافی */}
-      <Slide bg={INK}>
-        <div className="flex-1 flex flex-col justify-center px-[9cqw]">
-          <div className="font-display text-[2.2cqw] font-bold tracking-[0.26em] uppercase text-white/35 mb-[5cqw]">
+      <Slide bg={INK} dark>
+        {/* میمِ عظیم و بریده */}
+        <div
+          className="absolute -top-[6cqw] -left-[4cqw] font-body font-black leading-none pointer-events-none select-none text-white"
+          style={{ fontSize: "62cqw", opacity: 0.055 }}
+        >
+          م
+        </div>
+
+        <div className="relative flex-1 flex flex-col justify-center px-[9cqw]">
+          <div className="font-display text-[2.1cqw] font-bold tracking-[0.28em] uppercase text-[#a78bfa] mb-[5cqw]">
             Typography
           </div>
-          <div className="font-body font-black text-[11cqw] text-white leading-[1.3]">
-            میم
+
+          <div className="font-body font-black text-[13cqw] text-white leading-[1.15]">
+            آ ب پ
           </div>
-          <div className="h-px w-full bg-white/12 my-[5cqw]" />
-          <div className="font-body font-black text-[4.6cqw] text-white leading-[1.5] mb-[2cqw]">
-            تیتر سیاه و فشرده
+          <div className="font-display text-[2.3cqw] tracking-[0.24em] uppercase text-white/30 mt-[2cqw]">
+            Meem · Display &amp; Body
           </div>
-          <div className="font-body text-[3cqw] text-white/55 leading-[2]">
-            متن بدنه با فاصله‌ی خط باز، چون فارسی به فضا احتیاج داره و خوانایی از
-            هر افکتی مهم‌تره.
-          </div>
-          <div className="font-display text-[2.4cqw] tracking-[0.3em] uppercase text-[#a78bfa] mt-[5cqw]">
-            Latin Eyebrow
+
+          <div className="h-px w-full bg-white/10 my-[6cqw]" />
+
+          <div className="space-y-[3.5cqw]">
+            <div>
+              <div className="font-body font-black text-[5cqw] text-white leading-[1.45]">
+                تیتر سیاه و فشرده
+              </div>
+              <div className="font-display text-[2cqw] tracking-[0.2em] uppercase text-white/25 mt-[1cqw]">
+                Black · leading 1.4
+              </div>
+            </div>
+            <div>
+              <div className="font-body text-[3cqw] text-white/60 leading-[2.1]">
+                متن بدنه با فاصله‌ی خط باز، چون فارسی به فضا احتیاج داره و خوانایی از
+                هر افکتی مهم‌تره.
+              </div>
+              <div className="font-display text-[2cqw] tracking-[0.2em] uppercase text-white/25 mt-[1.5cqw]">
+                Light · leading 2
+              </div>
+            </div>
           </div>
         </div>
         <div className="px-[9cqw] pb-[8cqw]">
-          <Foot n="۰۶" total={TOTAL} dark />
+          <Foot n="۰۶" dark />
         </div>
       </Slide>
 
       {/* ۰۷ — لحن */}
-      <Slide>
-        <div className="flex-1 flex flex-col justify-center px-[9cqw]">
-          <div className="font-display text-[2.2cqw] font-bold tracking-[0.26em] uppercase text-[#a09990] mb-[5cqw]">
+      <Slide bg="#E4DAD5">
+        <div
+          className="absolute -top-[10cqw] right-[4cqw] font-display font-black leading-none pointer-events-none select-none"
+          style={{ fontSize: "48cqw", color: INK, opacity: 0.05 }}
+        >
+          &quot;
+        </div>
+
+        <div className="relative flex-1 flex flex-col justify-center px-[9cqw]">
+          <div className="font-display text-[2.1cqw] font-bold tracking-[0.28em] uppercase text-[#8a5cf6] mb-[2.5cqw]">
             Voice
           </div>
-          <div className="space-y-[4cqw]">
+          <h2 className="font-body font-black text-[6cqw] text-[#1a1714] leading-[1.4] mb-[6cqw]">
+            حرفی که فقط ما
+            <br />
+            می‌تونیم بزنیم
+          </h2>
+
+          <div className="space-y-[4.5cqw]">
             {[
               { no: "جامع‌ترین دوره", yes: "۵۵ ساعت ویدیو و ۵ پروژه" },
               { no: "تجربه‌ی یادگیری بی‌نظیر", yes: "هر هفته فیدبک می‌گیری" },
               { no: "همه چیزی که نیاز داری", yes: "لازم نیست قبلش چیزی بلد باشی" },
             ].map((r) => (
-              <div key={r.yes}>
-                <div className="font-body text-[2.9cqw] text-[#c8c2ba] line-through leading-[1.8]">
-                  {r.no}
-                </div>
-                <div className="font-body font-bold text-[3.4cqw] text-[#1a1714] leading-[1.8] mt-[0.8cqw]">
-                  {r.yes}
+              <div key={r.yes} className="flex gap-[3.5cqw]">
+                <span className="font-display font-black text-[2.4cqw] text-[#1a1714]/20 mt-[1cqw]">
+                  ✕
+                </span>
+                <div>
+                  <div className="font-body text-[2.9cqw] text-[#1a1714]/35 line-through leading-[1.7]">
+                    {r.no}
+                  </div>
+                  <div className="font-body font-black text-[3.6cqw] text-[#1a1714] leading-[1.7] mt-[1cqw]">
+                    {r.yes}
+                  </div>
                 </div>
               </div>
             ))}
           </div>
-          <p className="font-body text-[2.7cqw] text-[#6b6560] leading-[2] mt-[6cqw]">
-            هر جمله‌ای که هر مدرسه‌ی دیگه‌ای هم می‌تونه بگه، حذف می‌شه.
-          </p>
         </div>
         <div className="px-[9cqw] pb-[8cqw]">
-          <Foot n="۰۷" total={TOTAL} />
+          <Foot n="۰۷" />
         </div>
       </Slide>
 
       {/* ۰۸ — پایان */}
-      <Slide bg={VIOLET}>
-        <div className="flex-1 flex flex-col items-center justify-center px-[9cqw] text-center">
-          <BrandGlyph className="w-[26cqw] h-auto text-white" />
-          <p className="font-body font-black text-[5.6cqw] text-white leading-[1.5] mt-[7cqw]">
-            که هیچ‌کس وسط راه حس نکنه تنها مونده.
+      <Slide bg={VIOLET} dark>
+        <div className="absolute -bottom-[24cqw] -left-[24cqw] w-[150cqw] opacity-[0.12] pointer-events-none">
+          <BrandGlyph className="w-full h-auto text-white" />
+        </div>
+
+        <div className="relative flex-1 flex flex-col justify-center px-[9cqw]">
+          <div className="w-[20cqw] mb-[8cqw]">
+            <BrandGlyph className="w-full h-auto text-white" />
+          </div>
+          <p className="font-body font-black text-[6.6cqw] text-white leading-[1.5]">
+            که هیچ‌کس وسط راه
+            <br />
+            حس نکنه تنها مونده.
           </p>
-          <div
-            dir="ltr"
-            className="font-display text-[2.8cqw] tracking-[0.28em] uppercase text-white/60 mt-[7cqw]"
-          >
-            mojtabaui.ir
+          <div className="flex items-center gap-[3cqw] mt-[8cqw]">
+            <span className="h-px w-[12cqw] bg-white/40" />
+            <span
+              dir="ltr"
+              className="font-display text-[2.6cqw] tracking-[0.3em] uppercase text-white/70"
+            >
+              mojtabaui.ir
+            </span>
           </div>
         </div>
         <div className="px-[9cqw] pb-[8cqw]">
-          <Foot n="۰۸" total={TOTAL} dark />
+          <Foot n="۰۸" dark />
         </div>
       </Slide>
     </div>
