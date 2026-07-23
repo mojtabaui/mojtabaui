@@ -165,10 +165,11 @@ export default function CustomCursor() {
                 transformBox: "view-box",
                 transformOrigin: `${STACHE_PIVOT.x}px ${STACHE_PIVOT.y}px`,
               }}
-              /* همیشه پر می‌زنه؛ ساکن که باشه آروم و کم‌دامنه، در حرکت تندتر و بازتر */
-              animate={{ rotate: [0, dir * (isMoving ? 15 : 6), 0] }}
+              /* همیشه پر می‌زنه. دو سرعت به هم نزدیک‌تر شدن و دامنه بازتر شده،
+                 پس تفاوت حالت‌ها حس می‌شه ولی پرش ناگهانی نداره. */
+              animate={{ rotate: [0, dir * (isMoving ? 19 : 12), 0] }}
               transition={{
-                duration: isMoving ? 0.55 : 1.9,
+                duration: isMoving ? 0.72 : 1.35,
                 repeat: Infinity,
                 ease: "easeInOut",
               }}
