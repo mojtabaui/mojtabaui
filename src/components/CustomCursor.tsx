@@ -2,7 +2,12 @@
 
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { motion, useMotionValue, useSpring, useReducedMotion } from "framer-motion";
-import { STACHE_LEFT, STACHE_RIGHT, STACHE_PIVOT } from "@/components/BrandMark";
+import {
+  STACHE_LEFT,
+  STACHE_RIGHT,
+  STACHE_PIVOT,
+  STACHE_HINGE,
+} from "@/components/BrandMark";
 
 const FINE_POINTER = "(hover: hover) and (pointer: fine)";
 
@@ -147,6 +152,7 @@ export default function CustomCursor() {
         transition={{ type: "spring", stiffness: 520, damping: 24 }}
       >
         <svg viewBox="0 4 120 108" width={30} height={27} aria-hidden>
+          {/* هر بال به سمت خودش می‌چرخه: راست به راست، چپ به چپ */}
           {[
             { d: STACHE_LEFT, dir: -1 },
             { d: STACHE_RIGHT, dir: 1 },
@@ -159,14 +165,22 @@ export default function CustomCursor() {
                 transformBox: "view-box",
                 transformOrigin: `${STACHE_PIVOT.x}px ${STACHE_PIVOT.y}px`,
               }}
-              animate={isMoving ? { rotate: [0, dir * -9, 0] } : { rotate: 0 }}
+              animate={isMoving ? { rotate: [0, dir * 15, 0] } : { rotate: 0 }}
               transition={
                 isMoving
-                  ? { duration: 0.62, repeat: Infinity, ease: "easeInOut" }
+                  ? { duration: 0.55, repeat: Infinity, ease: "easeInOut" }
                   : { type: "spring", stiffness: 260, damping: 20 }
               }
             />
           ))}
+          {/* لولای ثابت، درز مرکزی را می‌پوشاند */}
+          <ellipse
+            cx={STACHE_HINGE.cx}
+            cy={STACHE_HINGE.cy}
+            rx={STACHE_HINGE.rx}
+            ry={STACHE_HINGE.ry}
+            fill="currentColor"
+          />
         </svg>
       </motion.div>
     </>
