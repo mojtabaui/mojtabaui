@@ -155,14 +155,14 @@ export default function Home() {
                     مشاهده دوره‌ها
                     <ArrowLeft size={16} />
                   </Link>
-                  <a
-                    href="https://instagram.com/mojtabaui"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 text-[#6b6560] hover:text-[#1a1714] font-body text-sm transition-colors border border-[#e8e2d9] hover:border-[#1a1714]/20 px-5 py-3.5 rounded-2xl bg-white"
+                  {/* دکمه‌ی ثانویه به‌جای اینستاگرام: چیزی که واقعاً قدم بعدی کاربره */}
+                  <Link
+                    href="/checklist"
+                    className="inline-flex items-center gap-2 text-[#6b6560] hover:text-[#1a1714] font-body text-sm transition-colors border border-[#e8e2d9] hover:border-[#1a1714]/20 px-5 py-3.5 rounded-2xl bg-white hover:bg-[#faf8f5]"
                   >
-                    @mojtabaui
-                  </a>
+                    از کجا شروع کنم؟
+                    <ChevronLeft size={15} />
+                  </Link>
                 </div>
 
                 {/* Social proof */}

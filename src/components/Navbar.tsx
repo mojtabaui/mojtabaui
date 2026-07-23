@@ -24,7 +24,7 @@ export default function Navbar() {
 
         {/* نشان و نام برند — راست در RTL */}
         <Link href="/" className="flex items-center gap-2.5 flex-shrink-0">
-          <BrandMark size={38} rounded={11} />
+          <BrandMark size={38} rounded={15} />
           <span className="font-body font-bold text-[15px] text-[#1a1714] whitespace-nowrap">
             مدرسه دیزاین ملینا
           </span>

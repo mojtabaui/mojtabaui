@@ -1,4 +1,5 @@
 import Image from "next/image";
+import BrandMark from "@/components/BrandMark";
 import { contentForTrack } from "@/lib/certificate-skills";
 
 /**
@@ -125,13 +126,7 @@ export default function CertificateDocument({
       {/* ── ستون کناری ── */}
       <aside className="w-[34%] bg-[#1a1714] text-white flex flex-col px-[4cqw] py-[4.2cqw]">
         <div className="flex items-center gap-[1cqw] mb-[3.4cqw]">
-          <Image
-            src="/images/logo_square.png"
-            alt=""
-            width={778}
-            height={710}
-            className="h-[clamp(26px,3.6cqw,48px)] w-auto rounded-[4px]"
-          />
+          <BrandMark size={54} rounded={16} bg="#FAF6F1" fg="#1a1714" className="flex-shrink-0" />
           <div className="leading-tight">
             <div className="font-display font-bold text-[clamp(10px,1.4cqw,18px)] tracking-tight">
               Melina Design School

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import Image from "next/image";
+import BrandMark from "@/components/BrandMark";
 import { Send, Camera, Mail, ExternalLink, ArrowLeft } from "lucide-react";
 
 const courses = [
@@ -45,13 +45,7 @@ export default function Footer() {
           {/* Brand — DOM first = RIGHT in RTL */}
           <div>
             <div className="flex items-center gap-3 mb-3">
-              <Image
-                src="/images/logo_square.png"
-                alt="مدرسه دیزاین ملینا"
-                width={778}
-                height={710}
-                className="h-11 w-auto flex-shrink-0"
-              />
+              <BrandMark size={46} rounded={16} bg="#FAF6F1" fg="#1a1714" className="flex-shrink-0" />
               <span className="font-body font-black text-2xl tracking-tight">مدرسه دیزاین ملینا</span>
             </div>
             <p className="text-white/40 text-sm font-body">آموزش تخصصی UI/UX</p>
