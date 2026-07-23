@@ -34,18 +34,20 @@ export const STACHE_PIVOT = { x: 60, y: 63 };
 export const STACHE_HINGE = { cx: 60, cy: 63, rx: 7, ry: 9.5 };
 
 interface Props {
-  /** اندازه بر حسب پیکسل */
+  /** اندازه بر حسب پیکسل. اگر ندی، کلاس اندازه رو کنترل می‌کنه */
   size?: number;
   className?: string;
+  style?: React.CSSProperties;
 }
 
 /** سیبیل تنها، بدون قاب. رنگش را از currentColor می‌گیرد. */
-export function BrandGlyph({ size, className }: Props) {
+export function BrandGlyph({ size, className, style }: Props) {
   return (
     <svg
       viewBox="0 4 120 108"
       {...(size ? { width: size, height: (size * 108) / 120 } : {})}
       className={className}
+      style={style}
       xmlns="http://www.w3.org/2000/svg"
       aria-hidden
     >
