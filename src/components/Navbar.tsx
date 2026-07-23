@@ -8,7 +8,7 @@ import BrandMark from "@/components/BrandMark";
 const navLinks = [
   { href: "/courses", label: "دوره‌ها" },
   { href: "/projects", label: "نمونه کارها" },
-  { href: "/free", label: "رایگان" },
+  { href: "/free", label: "منابع رایگان" },
   { href: "/checklist", label: "چک‌لیست یادگیری" },
   { href: "/articles", label: "مقالات" },
   { href: "/certificates", label: "گواهی‌ها" },
@@ -30,13 +30,15 @@ export default function Navbar() {
           </span>
         </Link>
 
-        {/* منو، دقیقاً وسط */}
-        <nav className="hidden lg:flex items-center gap-7 absolute left-1/2 -translate-x-1/2">
+        {/* منو، دقیقاً وسط.
+            عنوان‌ها بلندن، پس در lg فشرده‌تر می‌شن تا با نشان و دکمه تلاقی نکنن
+            و از xl به بعد فاصله‌ی راحتشون رو می‌گیرن. */}
+        <nav className="hidden lg:flex items-center gap-4 xl:gap-7 absolute left-1/2 -translate-x-1/2">
           {navLinks.map((link) => (
             <Link
               key={link.href}
               href={link.href}
-              className="text-[#6b6560] hover:text-[#1a1714] transition-colors text-sm font-body whitespace-nowrap"
+              className="text-[#6b6560] hover:text-[#1a1714] transition-colors text-[13px] xl:text-sm font-body whitespace-nowrap"
             >
               {link.label}
             </Link>
