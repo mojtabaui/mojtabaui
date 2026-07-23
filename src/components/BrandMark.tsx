@@ -45,7 +45,7 @@ export default function BrandMark({
   size = 40,
   bg = "#1a1714",
   fg = "#FAF6F1",
-  rounded = 30,
+  rounded = 28,
   className,
 }: MarkProps) {
   return (
