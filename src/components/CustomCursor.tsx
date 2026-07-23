@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useState, useSyncExternalStore } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { motion, useMotionValue, useSpring, useReducedMotion } from "framer-motion";
-import { BrandGlyph } from "@/components/BrandMark";
+import { STACHE_LEFT, STACHE_RIGHT, STACHE_PIVOT } from "@/components/BrandMark";
 
 const FINE_POINTER = "(hover: hover) and (pointer: fine)";
 
@@ -39,6 +39,11 @@ function useFinePointer() {
 export default function CustomCursor() {
   const [isHovering, setIsHovering] = useState(false);
   const [isDown, setIsDown] = useState(false);
+  const [isMoving, setIsMoving] = useState(false);
+  // با ref نگه می‌داریم تا هر mousemove باعث رندر دوباره نشه؛
+  // فقط لحظه‌ی شروع و پایان حرکت state عوض می‌شه
+  const movingRef = useRef(false);
+  const idleTimer = useRef<number | undefined>(undefined);
   const [ripples, setRipples] = useState<{ id: number; x: number; y: number }[]>([]);
   const reduce = useReducedMotion();
 
@@ -59,6 +64,16 @@ export default function CustomCursor() {
     const onMove = (e: MouseEvent) => {
       mouseX.set(e.clientX);
       mouseY.set(e.clientY);
+
+      if (!movingRef.current) {
+        movingRef.current = true;
+        setIsMoving(true);
+      }
+      window.clearTimeout(idleTimer.current);
+      idleTimer.current = window.setTimeout(() => {
+        movingRef.current = false;
+        setIsMoving(false);
+      }, 160);
     };
     const onOver = (e: MouseEvent) => {
       const t = e.target as Element;
@@ -82,6 +97,7 @@ export default function CustomCursor() {
     window.addEventListener("mousedown", onDown);
     window.addEventListener("mouseup", onUp);
     return () => {
+      window.clearTimeout(idleTimer.current);
       window.removeEventListener("mousemove", onMove);
       window.removeEventListener("mouseover", onOver);
       window.removeEventListener("mousedown", onDown);
@@ -119,7 +135,7 @@ export default function CustomCursor() {
         transition={{ duration: 0.25, ease: "easeOut" }}
       />
 
-      {/* سیبیل برند */}
+      {/* سیبیل برند، با بال‌هایی که موقع حرکت آروم می‌زنن */}
       <motion.div
         className="fixed top-0 left-0 pointer-events-none z-[9999] text-[#1a1714]"
         style={{ translateX: glyphX, translateY: glyphY }}
@@ -130,7 +146,28 @@ export default function CustomCursor() {
         }}
         transition={{ type: "spring", stiffness: 520, damping: 24 }}
       >
-        <BrandGlyph size={30} />
+        <svg viewBox="0 4 120 108" width={30} height={27} aria-hidden>
+          {[
+            { d: STACHE_LEFT, dir: -1 },
+            { d: STACHE_RIGHT, dir: 1 },
+          ].map(({ d, dir }) => (
+            <motion.path
+              key={dir}
+              d={d}
+              fill="currentColor"
+              style={{
+                transformBox: "view-box",
+                transformOrigin: `${STACHE_PIVOT.x}px ${STACHE_PIVOT.y}px`,
+              }}
+              animate={isMoving ? { rotate: [0, dir * -9, 0] } : { rotate: 0 }}
+              transition={
+                isMoving
+                  ? { duration: 0.62, repeat: Infinity, ease: "easeInOut" }
+                  : { type: "spring", stiffness: 260, damping: 20 }
+              }
+            />
+          ))}
+        </svg>
       </motion.div>
     </>
   );
