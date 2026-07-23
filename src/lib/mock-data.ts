@@ -1259,4 +1259,16 @@ export const freeResources: FreeResource[] = [
     accent: "#16a34a",
     emoji: "📋",
   },
+  {
+    id: "file-capsule",
+    type: "file",
+    title: "کتابچه کپسول UI/UX",
+    description:
+      "شروع سریع یادگیری: مقدمه و تاریخچه‌ی این حوزه، سیستمی که یه طراح لازم داره، و خلاصه‌ی هر مبحث UX و UI همراه با منابع یادگیری همون مبحث. از مقالات و تجربه‌ی خودم جمع شده.",
+    meta: "کتابچه · تلگرام",
+    url: "https://t.me/mojtabaui/643",
+    color: "#FFF7ED",
+    accent: "#ea580c",
+    emoji: "📘",
+  },
 ];

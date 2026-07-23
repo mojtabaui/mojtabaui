@@ -9,7 +9,7 @@ const navLinks = [
   { href: "/courses", label: "دوره‌ها" },
   { href: "/projects", label: "نمونه کارها" },
   { href: "/free", label: "رایگان" },
-  { href: "/checklist", label: "چک‌لیست" },
+  { href: "/checklist", label: "چک‌لیست یادگیری" },
   { href: "/articles", label: "مقالات" },
   { href: "/certificates", label: "گواهی‌ها" },
   { href: "/#about", label: "درباره من" },
@@ -43,8 +43,17 @@ export default function Navbar() {
           ))}
         </nav>
 
-        {/* حساب کاربری و دکمه‌ی اقدام — چپ در RTL */}
+        {/* دکمه‌ی اقدام و حساب کاربری — چپ در RTL.
+            در RTL اولین عنصرِ DOM سمت راست می‌شینه، پس CTA اول میاد تا
+            آیکن حساب سمت چپِ دکمه بیفته. */}
         <div className="hidden md:flex items-center gap-3 flex-shrink-0">
+          <Link
+            href="/courses"
+            className="inline-flex items-center gap-2 bg-[#1a1714] hover:bg-[#2d2926] text-white font-body font-semibold text-sm px-5 py-2.5 rounded-xl transition-all hover:scale-[1.02] active:scale-[0.98]"
+          >
+            شروع کن
+            <ArrowLeft size={15} />
+          </Link>
 
           {/* حساب کاربری هنوز فعال نیست، پس button غیرفعاله نه لینک.
               راهنمای «به زودی» با hover و focus هر دو باز می‌شه تا کاربر
@@ -65,14 +74,6 @@ export default function Navbar() {
               به زودی
             </span>
           </div>
-
-          <Link
-            href="/courses"
-            className="inline-flex items-center gap-2 bg-[#1a1714] hover:bg-[#2d2926] text-white font-body font-semibold text-sm px-5 py-2.5 rounded-xl transition-all hover:scale-[1.02] active:scale-[0.98]"
-          >
-            شروع کن
-            <ArrowLeft size={15} />
-          </Link>
         </div>
 
         <button

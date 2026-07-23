@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { Play, ArrowLeft, Mic, FileText, Send, Download } from "lucide-react";
+import { Play, ArrowLeft, Mic, FileText, Send, Download, BookOpen } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import FadeIn from "@/components/FadeIn";
@@ -61,7 +61,7 @@ export default function FreePage() {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {courses.map((item, i) => (
-              <FadeIn key={item.id} delay={i * 0.08}>
+              <FadeIn key={item.id} delay={i * 0.08} className="h-full">
                 <ResourceCard item={item} />
               </FadeIn>
             ))}
@@ -80,7 +80,7 @@ export default function FreePage() {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {voices.map((item, i) => (
-                <FadeIn key={item.id} delay={i * 0.08}>
+                <FadeIn key={item.id} delay={i * 0.08} className="h-full">
                   <ResourceCard item={item} />
                 </FadeIn>
               ))}
@@ -99,7 +99,7 @@ export default function FreePage() {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {files.map((item, i) => (
-              <FadeIn key={item.id} delay={i * 0.08}>
+              <FadeIn key={item.id} delay={i * 0.08} className="h-full">
                 <ResourceCard item={item} />
               </FadeIn>
             ))}
@@ -135,15 +135,16 @@ export default function FreePage() {
 function ResourceCard({ item }: { item: (typeof freeResources)[0] }) {
   const isVoice = item.type === "voice";
   const isCourse = item.type === "course";
+  const isFile = item.type === "file";
   // فایل‌های واقعیِ روی سایت با / شروع می‌شن، بقیه لینک تلگرامن
   const isDirect = item.url?.startsWith("/") ?? false;
 
   return (
     <div
-      className="rounded-2xl p-6 flex flex-col gap-4"
+      className="rounded-2xl p-6 flex flex-col gap-4 h-full"
       style={{ backgroundColor: item.color }}
     >
-      {item.image && (
+      {item.image ? (
         <div className="relative w-full aspect-square rounded-2xl overflow-hidden border border-black/[0.06] bg-white -mt-1">
           <Image
             src={item.image}
@@ -153,6 +154,24 @@ function ResourceCard({ item }: { item: (typeof freeResources)[0] }) {
             className="object-cover"
           />
         </div>
+      ) : (
+        isFile && (
+          // فایلی که هنوز کاور نداره: به‌جای اینکه ردیف بشکنه، یک قاب تزئینی
+          // هم‌اندازه می‌شینه تا ریتم گرید حفظ بشه
+          <div
+            className="relative w-full aspect-square rounded-2xl overflow-hidden border border-black/[0.06] bg-white -mt-1 flex items-center justify-center"
+            style={{ color: item.accent }}
+          >
+            <div
+              className="absolute inset-0 opacity-[0.07]"
+              style={{
+                backgroundImage: `radial-gradient(currentColor 1px, transparent 1px)`,
+                backgroundSize: "14px 14px",
+              }}
+            />
+            <BookOpen size={72} strokeWidth={1.1} className="relative opacity-30" />
+          </div>
+        )
       )}
 
       <div className="flex items-start justify-between gap-3">

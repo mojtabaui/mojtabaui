@@ -31,6 +31,28 @@ function useFinePointer() {
 }
 
 /**
+ * آیا سطحِ زیر نشانگر تیره‌ست.
+ *
+ * از خود عنصر شروع می‌کنیم و بالا می‌ریم تا اولین پس‌زمینه‌ی غیرشفاف. سیبیلِ
+ * مشکی روی فوتر و هیروهای تیره اصلاً دیده نمی‌شد، و علامت‌گذاری دستیِ هر
+ * سکشن تیره یعنی هر سکشن جدیدی که اضافه بشه دوباره همین باگ برمی‌گرده.
+ * این‌طوری خودش تشخیص می‌ده و روی دکمه‌های مشکی هم درست کار می‌کنه.
+ */
+function isOnDarkSurface(start: Element | null): boolean {
+  let node: Element | null = start;
+  while (node && node !== document.documentElement) {
+    const m = getComputedStyle(node).backgroundColor.match(/rgba?\(([^)]+)\)/);
+    if (m) {
+      const [r, g, b, a = 1] = m[1].split(",").map(parseFloat);
+      // نیمه‌شفاف‌ها را رد می‌کنیم چون رنگ نهایی‌شان معلوم نیست
+      if (a > 0.6) return (0.299 * r + 0.587 * g + 0.114 * b) / 255 < 0.5;
+    }
+    node = node.parentElement;
+  }
+  return false;
+}
+
+/**
  * نشانگر سفارشی: خودِ سیبیلِ برند.
  *
  * سه لایه داره:
@@ -45,6 +67,7 @@ export default function CustomCursor() {
   const [isHovering, setIsHovering] = useState(false);
   const [isDown, setIsDown] = useState(false);
   const [isMoving, setIsMoving] = useState(false);
+  const [onDark, setOnDark] = useState(false);
   // با ref نگه می‌داریم تا هر mousemove باعث رندر دوباره نشه؛
   // فقط لحظه‌ی شروع و پایان حرکت state عوض می‌شه
   const movingRef = useRef(false);
@@ -85,6 +108,7 @@ export default function CustomCursor() {
       setIsHovering(
         !!t.closest("a, button, summary, input, textarea, select, [role='button'], [data-cursor-hover]")
       );
+      setOnDark(isOnDarkSurface(t));
     };
     const onDown = (e: MouseEvent) => {
       setIsDown(true);
@@ -118,8 +142,14 @@ export default function CustomCursor() {
       {ripples.map((p) => (
         <motion.span
           key={p.id}
-          className="fixed top-0 left-0 pointer-events-none z-[9997] rounded-full border border-[#7c5cfc]"
-          style={{ translateX: p.x, translateY: p.y, marginLeft: -14, marginTop: -14 }}
+          className="fixed top-0 left-0 pointer-events-none z-[9997] rounded-full border"
+          style={{
+            translateX: p.x,
+            translateY: p.y,
+            marginLeft: -14,
+            marginTop: -14,
+            borderColor: onDark ? "#a78bfa" : "#7c5cfc",
+          }}
           initial={{ width: 28, height: 28, opacity: 0.55 }}
           animate={{ width: 78, height: 78, marginLeft: -39, marginTop: -39, opacity: 0 }}
           transition={{ duration: 0.6, ease: "easeOut" }}
@@ -128,7 +158,7 @@ export default function CustomCursor() {
 
       {/* حلقه‌ی دنبال‌کننده */}
       <motion.div
-        className="fixed top-0 left-0 pointer-events-none z-[9998] rounded-full border border-[#1a1714]/25"
+        className="fixed top-0 left-0 pointer-events-none z-[9998] rounded-full border"
         style={{ translateX: ringX, translateY: ringY }}
         animate={{
           width: isHovering ? 54 : 34,
@@ -136,18 +166,20 @@ export default function CustomCursor() {
           marginLeft: isHovering ? -27 : -17,
           marginTop: isHovering ? -27 : -17,
           opacity: isHovering ? 0.45 : 0.2,
+          borderColor: onDark ? "#FAF6F1" : "#1a1714",
         }}
         transition={{ duration: 0.25, ease: "easeOut" }}
       />
 
       {/* سیبیل برند، با بال‌هایی که موقع حرکت آروم می‌زنن */}
       <motion.div
-        className="fixed top-0 left-0 pointer-events-none z-[9999] text-[#1a1714]"
+        className="fixed top-0 left-0 pointer-events-none z-[9999]"
         style={{ translateX: glyphX, translateY: glyphY }}
         animate={{
           scale: isDown ? 0.78 : isHovering ? 1.28 : 1,
           marginLeft: -15,
           marginTop: -7,
+          color: onDark ? "#FAF6F1" : "#1a1714",
         }}
         transition={{ type: "spring", stiffness: 520, damping: 24 }}
       >
