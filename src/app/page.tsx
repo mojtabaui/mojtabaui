@@ -108,15 +108,17 @@ export default function Home() {
       <main className="flex-1">
 
         {/* ─── Hero ─── */}
+        {/* ارتفاع با clamp بسته شده. بدون سقف، روی نمایشگر بلند (مثلاً ۱۴۴۰) هیرو
+            بیش از ۱۲۰۰ پیکسل می‌شد و چون محتوا ته‌چینه، بالای صفحه خالی می‌موند. */}
         <section
           className="dot-bg overflow-hidden relative flex flex-col"
-          style={{ backgroundColor: "#FAF6F1", minHeight: "86vh" }}
+          style={{ backgroundColor: "#FAF6F1", minHeight: "clamp(560px, 86vh, 860px)" }}
         >
 
           <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
 
             {/* Text — top on mobile, right on desktop */}
-            <div className="flex-shrink-0 max-w-xl pt-8 pb-2 lg:pt-0 lg:pb-20">
+            <div className="flex-shrink-0 max-w-xl 2xl:max-w-2xl pt-8 pb-2 lg:pt-0 lg:pb-20">
 
                 {/* Eyebrow */}
                 <div
