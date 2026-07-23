@@ -1,9 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import { useState } from "react";
-import { Menu, X } from "lucide-react";
+import { Menu, X, ArrowLeft } from "lucide-react";
+import BrandMark from "@/components/BrandMark";
 
 const navLinks = [
   { href: "/courses", label: "دوره‌ها" },
@@ -21,69 +21,66 @@ export default function Navbar() {
   return (
     <header className="fixed top-0 inset-x-0 z-50 bg-[#f7f4ef]/90 backdrop-blur-sm border-b border-[#e8e2d9]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between relative">
-        <Link href="/" className="flex items-center">
-          <Image
-            src="/images/logo_square.png"
-            alt="مدرسه دیزاین ملینا"
-            width={778}
-            height={710}
-            priority
-            className="h-10 w-auto"
-          />
+
+        {/* نشان و نام برند — راست در RTL */}
+        <Link href="/" className="flex items-center gap-2.5 flex-shrink-0">
+          <BrandMark size={38} rounded={11} />
+          <span className="font-body font-bold text-[15px] text-[#1a1714] whitespace-nowrap">
+            مدرسه دیزاین ملینا
+          </span>
         </Link>
 
-        <nav className="hidden md:flex items-center gap-8 absolute left-1/2 -translate-x-1/2">
+        {/* منو، دقیقاً وسط */}
+        <nav className="hidden lg:flex items-center gap-7 absolute left-1/2 -translate-x-1/2">
           {navLinks.map((link) => (
-            <Link key={link.href} href={link.href}
-              className="text-[#6b6560] hover:text-[#1a1714] transition-colors text-sm font-body">
+            <Link
+              key={link.href}
+              href={link.href}
+              className="text-[#6b6560] hover:text-[#1a1714] transition-colors text-sm font-body whitespace-nowrap"
+            >
               {link.label}
             </Link>
           ))}
         </nav>
 
-        {/* ورود / ثبت‌نام / پنل — موقتاً مخفی تا وقتی حساب کاربری رو دوباره فعال کنیم.
-            صفحه‌هاش پابرجان (/auth/login مستقیم باز می‌شه)، فقط از منو برداشته شدن.
-            برای برگردوندن: کامنت پایین رو بردار. */}
-        {/* <div className="hidden md:flex items-center gap-3">
-          <Link href="/auth/login"
-            className="text-[#6b6560] hover:text-[#1a1714] text-sm transition-colors font-body">
-            ورود
-          </Link>
-          <Link href="/auth/register"
-            className="bg-[#1a1714] hover:bg-[#2d2926] text-white text-sm px-4 py-2 rounded-xl transition-colors font-body font-medium">
-            ثبت‌نام رایگان
-          </Link>
-          <Link href="/dashboard"
-            className="w-9 h-9 rounded-xl bg-white border border-[#e8e2d9] hover:border-[#7c5cfc]/40 flex items-center justify-center transition-colors text-[#6b6560]">
-            <User size={15} />
-          </Link>
-        </div> */}
+        {/* دکمه‌ی اقدام — چپ در RTL */}
+        <Link
+          href="/courses"
+          className="hidden md:inline-flex items-center gap-2 bg-[#1a1714] hover:bg-[#2d2926] text-white font-body font-semibold text-sm px-5 py-2.5 rounded-xl transition-all hover:scale-[1.02] active:scale-[0.98] flex-shrink-0"
+        >
+          شروع کن
+          <ArrowLeft size={15} />
+        </Link>
 
-        <button onClick={() => setIsOpen(!isOpen)}
-          className="md:hidden text-[#6b6560] hover:text-[#1a1714] transition-colors">
+        <button
+          onClick={() => setIsOpen(!isOpen)}
+          aria-label={isOpen ? "بستن منو" : "باز کردن منو"}
+          className="lg:hidden text-[#6b6560] hover:text-[#1a1714] transition-colors md:mr-4"
+        >
           {isOpen ? <X size={22} /> : <Menu size={22} />}
         </button>
       </div>
 
       {isOpen && (
-        <div className="md:hidden border-t border-[#e8e2d9] bg-[#f7f4ef] px-4 py-4 space-y-3">
+        <div className="lg:hidden border-t border-[#e8e2d9] bg-[#f7f4ef] px-4 py-4 space-y-3">
           {navLinks.map((link) => (
-            <Link key={link.href} href={link.href} onClick={() => setIsOpen(false)}
-              className="block text-[#6b6560] hover:text-[#1a1714] py-2 text-sm font-body transition-colors">
+            <Link
+              key={link.href}
+              href={link.href}
+              onClick={() => setIsOpen(false)}
+              className="block text-[#6b6560] hover:text-[#1a1714] py-2 text-sm font-body transition-colors"
+            >
               {link.label}
             </Link>
           ))}
-          {/* ورود/ثبت‌نام موبایل — موقتاً مخفی (بالا رو ببین) */}
-          {/* <div className="pt-3 border-t border-[#e8e2d9] flex gap-3">
-            <Link href="/auth/login"
-              className="flex-1 text-center border border-[#e8e2d9] text-[#6b6560] text-sm py-2 rounded-xl font-body">
-              ورود
-            </Link>
-            <Link href="/auth/register"
-              className="flex-1 text-center bg-[#1a1714] text-white text-sm py-2 rounded-xl font-body">
-              ثبت‌نام
-            </Link>
-          </div> */}
+          <Link
+            href="/courses"
+            onClick={() => setIsOpen(false)}
+            className="md:hidden flex items-center justify-center gap-2 bg-[#1a1714] text-white font-body font-semibold text-sm py-3 rounded-xl mt-2"
+          >
+            شروع کن
+            <ArrowLeft size={15} />
+          </Link>
         </div>
       )}
     </header>
