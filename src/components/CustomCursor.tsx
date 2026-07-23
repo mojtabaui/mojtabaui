@@ -165,12 +165,13 @@ export default function CustomCursor() {
                 transformBox: "view-box",
                 transformOrigin: `${STACHE_PIVOT.x}px ${STACHE_PIVOT.y}px`,
               }}
-              animate={isMoving ? { rotate: [0, dir * 15, 0] } : { rotate: 0 }}
-              transition={
-                isMoving
-                  ? { duration: 0.55, repeat: Infinity, ease: "easeInOut" }
-                  : { type: "spring", stiffness: 260, damping: 20 }
-              }
+              /* همیشه پر می‌زنه؛ ساکن که باشه آروم و کم‌دامنه، در حرکت تندتر و بازتر */
+              animate={{ rotate: [0, dir * (isMoving ? 15 : 6), 0] }}
+              transition={{
+                duration: isMoving ? 0.55 : 1.9,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
             />
           ))}
           {/* لولای ثابت، درز مرکزی را می‌پوشاند */}
