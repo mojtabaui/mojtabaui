@@ -1,16 +1,12 @@
 /**
- * کاندیدهای لوگو، نسخه‌ی دوم.
+ * کاندیدهای لوگو، نسخه‌ی سوم.
  *
- * سه خانواده:
- *   • M لاتین با ساخت هندسی
- *   • سیبیل و عینک، یعنی همون چیزی که مخاطب باهاش می‌شناستش
- *   • فرم‌های مینیمال داخل مربع گردگوشه، هم‌خانواده با رفرنسی که پسندید
+ * تمرکز روی M لاتین با فرم‌های ساده. سیبیل توپر که پسندیده شد نگه داشته شده،
+ * به‌علاوه‌ی چند هیبرید که در اون‌ها M غالبه و سیبیل فقط در دی‌ان‌ای فرمه.
+ * ترکیب عینک و سیبیل حذف شد.
  *
- * قاعده‌های مشترک: قاب ۱۲۰×۱۲۰، ضخامت خط ۱۱، سر خط گرد.
- * هر مارک uid می‌گیره چون ماسک‌ها id یکتا لازم دارن.
+ * قاب ۱۲۰×۱۲۰. هر مارک uid می‌گیره چون ماسک‌ها id یکتا لازم دارن.
  */
-
-const SW = 11;
 
 interface MarkProps {
   color?: string;
@@ -23,129 +19,277 @@ const box = {
   xmlns: "http://www.w3.org/2000/svg",
 } as const;
 
-/* ── اجزای مشترک ───────────────────────────────────────── */
+/* ── خانواده‌ی M ────────────────────────────────────────── */
 
-/** سیبیل: دو سوئیش قرینه که وسط به هم می‌رسن */
-function Stache({ color, sw = SW }: { color: string; sw?: number }) {
-  return (
-    <g fill="none" stroke={color} strokeWidth={sw} strokeLinecap="round">
-      <path d="M60 74 C48 88 28 86 20 68" />
-      <path d="M60 74 C72 88 92 86 100 68" />
-    </g>
-  );
-}
-
-/** عینک: دو حلقه با پل وسط */
-function Glasses({ color, sw = 9 }: { color: string; sw?: number }) {
-  return (
-    <g fill="none" stroke={color} strokeWidth={sw} strokeLinecap="round">
-      <circle cx="36" cy="44" r="17" />
-      <circle cx="84" cy="44" r="17" />
-      <path d="M53 44 H67" />
-    </g>
-  );
-}
-
-/** M هندسی، خط‌کشی‌شده روی گرید */
-function MStrokes({ color, sw = SW }: { color: string; sw?: number }) {
-  return (
-    <path
-      d="M22 96 V34 L60 74 L98 34 V96"
-      fill="none"
-      stroke={color}
-      strokeWidth={sw}
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-  );
-}
-
-/* ── کاندیدها ──────────────────────────────────────────── */
-
-/** ۰۱ — M تک‌خط، خالص و بی‌ادعا */
-export function MarkM({ color = "#1a1714", className }: MarkProps) {
+/** ۰۱ — M تک‌خط با گوشه‌های تیز */
+export function MarkMSharp({ color = "#1a1714", className }: MarkProps) {
   return (
     <svg {...box} className={className}>
-      <MStrokes color={color} />
+      <path
+        d="M20 98 V28 L60 72 L100 28 V98"
+        fill="none"
+        stroke={color}
+        strokeWidth="12"
+        strokeLinejoin="miter"
+      />
     </svg>
   );
 }
 
-/** ۰۲ — M بریده از مربع گردگوشه. هم‌خانواده با رفرنس. */
+/** ۰۲ — همان با گوشه‌های گرد. نرم‌تر و امروزی‌تر. */
+export function MarkMRound({ color = "#1a1714", className }: MarkProps) {
+  return (
+    <svg {...box} className={className}>
+      <path
+        d="M22 96 V34 L60 72 L98 34 V96"
+        fill="none"
+        stroke={color}
+        strokeWidth="13"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+/** ۰۳ — M توپر. سیلوئت پرکنتراست. */
+export function MarkMSolid({ color = "#1a1714", className }: MarkProps) {
+  return (
+    <svg {...box} className={className}>
+      <path
+        fill={color}
+        d="M16 100 V24 h20 L60 58 L84 24 h20 V100 H86 V52 L60 86 L34 52 V100 Z"
+      />
+    </svg>
+  );
+}
+
+/** ۰۴ — M با درّه‌ی منحنی. همون‌جاست که سیبیل قایم شده. */
+export function MarkMSoft({ color = "#1a1714", className }: MarkProps) {
+  return (
+    <svg {...box} className={className}>
+      <path
+        d="M22 96 V38 C22 32 30 30 34 36 L60 74 L86 36 C90 30 98 32 98 38 V96"
+        fill="none"
+        stroke={color}
+        strokeWidth="13"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+/** ۰۵ — M از دو شِوران جدا */
+export function MarkMChevron({ color = "#1a1714", className }: MarkProps) {
+  return (
+    <svg {...box} className={className}>
+      <g
+        fill="none"
+        stroke={color}
+        strokeWidth="13"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        <path d="M20 84 L40 42 L60 84" />
+        <path d="M60 84 L80 42 L100 84" />
+      </g>
+    </svg>
+  );
+}
+
+/** ۰۶ — M بریده از مربع گردگوشه */
 export function MarkMSquare({ color = "#1a1714", uid, className }: MarkProps) {
   const id = `msq-${uid}`;
   return (
     <svg {...box} className={className}>
       <mask id={id}>
         <rect width="120" height="120" fill="#fff" />
-        <g transform="translate(60,62) scale(0.62) translate(-60,-62)">
-          <MStrokes color="#000" sw={16} />
-        </g>
+        <path
+          d="M36 84 V44 L60 70 L84 44 V84"
+          fill="none"
+          stroke="#000"
+          strokeWidth="12"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
       </mask>
       <rect width="120" height="120" rx="30" fill={color} mask={`url(#${id})`} />
     </svg>
   );
 }
 
-/** ۰۳ — M توپر با درّه‌ی تیز. سیلوئت پرکنتراست. */
-export function MarkMSolid({ color = "#1a1714", className }: MarkProps) {
+/** ۰۷ — M توپر داخل مربع گردگوشه */
+export function MarkMSquareFill({ color = "#1a1714", className }: MarkProps) {
   return (
     <svg {...box} className={className}>
+      <rect width="120" height="120" rx="30" fill={color} />
       <path
-        fill={color}
-        d="M18 100 V30 h16 L60 62 L86 30 h16 V100 H86 V56 L60 88 L34 56 V100 Z"
+        d="M34 86 V38 h13 L60 60 L73 38 h13 V86 H74 V56 L60 78 L46 56 V86 Z"
+        fill="#FAF6F1"
       />
     </svg>
   );
 }
 
-/** ۰۴ — M با شکاف گرید از وسط */
+/** ۰۸ — M پهن و کوتاه. وزن افقی. */
+export function MarkMWide({ color = "#1a1714", className }: MarkProps) {
+  return (
+    <svg {...box} className={className}>
+      <path
+        d="M10 86 V44 L60 78 L110 44 V86"
+        fill="none"
+        stroke={color}
+        strokeWidth="14"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+/** ۰۹ — M با شکاف گرید */
 export function MarkMGutter({ color = "#1a1714", uid, className }: MarkProps) {
   const id = `mgt-${uid}`;
   return (
     <svg {...box} className={className}>
       <mask id={id}>
         <rect width="120" height="120" fill="#fff" />
-        <rect x="0" y="60" width="120" height="8" fill="#000" />
+        <rect x="0" y="58" width="120" height="9" fill="#000" />
       </mask>
       <g mask={`url(#${id})`}>
-        <MStrokes color={color} />
+        <path
+          d="M22 96 V34 L60 72 L98 34 V96"
+          fill="none"
+          stroke={color}
+          strokeWidth="13"
+          strokeLinecap="butt"
+          strokeLinejoin="miter"
+        />
       </g>
     </svg>
   );
 }
 
-/** ۰۵ — سیبیل تنها. ساده‌ترین شکل امضای شخصی. */
-export function MarkStache({ color = "#1a1714", className }: MarkProps) {
+/** ۱۰ — M از دو مثلث توپر */
+export function MarkMTriangles({ color = "#1a1714", className }: MarkProps) {
   return (
     <svg {...box} className={className}>
-      <g transform="translate(0,-12)">
-        <Stache color={color} sw={13} />
+      <g fill={color}>
+        <path d="M16 96 L40 32 L60 84 L44 84 L38 66 L30 96 Z" />
+        <path d="M104 96 L80 32 L60 84 L76 84 L82 66 L90 96 Z" />
       </g>
     </svg>
   );
 }
 
-/** ۰۶ — عینک و سیبیل. همون چیزی که باهاش می‌شناسنت. */
-export function MarkFace({ color = "#1a1714", className }: MarkProps) {
+/** ۱۱ — M که پاهاش کمی به بیرون خم شده. اشاره‌ی دور به سیبیل. */
+export function MarkMCurl({ color = "#1a1714", className }: MarkProps) {
   return (
     <svg {...box} className={className}>
-      <Glasses color={color} />
-      <Stache color={color} sw={10} />
+      <path
+        d="M16 92 C16 60 20 40 34 38 L60 74 L86 38 C100 40 104 60 104 92"
+        fill="none"
+        stroke={color}
+        strokeWidth="13"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
     </svg>
   );
 }
 
-/** ۰۷ — عینک و سیبیل داخل مربع گردگوشه */
-export function MarkFaceSquare({ color = "#1a1714", uid, className }: MarkProps) {
-  const id = `fsq-${uid}`;
+/** ۱۲ — M در حلقه. مناسب مهر و فاویکون. */
+export function MarkMBadge({ color = "#1a1714", className }: MarkProps) {
+  return (
+    <svg {...box} className={className}>
+      <circle cx="60" cy="60" r="52" fill="none" stroke={color} strokeWidth="8" />
+      <path
+        d="M38 78 V44 L60 66 L82 44 V78"
+        fill="none"
+        stroke={color}
+        strokeWidth="11"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+/** ۱۳ — M با یک پای بلندتر. حس حرکت و صعود. */
+export function MarkMRise({ color = "#1a1714", className }: MarkProps) {
+  return (
+    <svg {...box} className={className}>
+      <path
+        d="M22 98 V46 L60 82 L98 26 V98"
+        fill="none"
+        stroke={color}
+        strokeWidth="13"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+/** ۱۴ — M استنسیلی، از سه پاره‌ی جدا */
+export function MarkMStencil({ color = "#1a1714", className }: MarkProps) {
+  return (
+    <svg {...box} className={className}>
+      <g
+        fill="none"
+        stroke={color}
+        strokeWidth="13"
+        strokeLinecap="round"
+      >
+        <path d="M22 96 V38" />
+        <path d="M30 32 L60 62 L90 32" />
+        <path d="M98 96 V38" />
+      </g>
+    </svg>
+  );
+}
+
+/** ۱۵ — M از دو قوس. نرم و گرد. */
+export function MarkMArch({ color = "#1a1714", className }: MarkProps) {
+  return (
+    <svg {...box} className={className}>
+      <path
+        d="M20 96 V56 a20 20 0 0 1 40 0 V96 M60 56 a20 20 0 0 1 40 0 V96"
+        fill="none"
+        stroke={color}
+        strokeWidth="13"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+/** ۱۶ — سیبیل توپر، همون که پسندیدی. بدون عینک. */
+export function MarkStacheSolid({ color = "#1a1714", className }: MarkProps) {
+  return (
+    <svg {...box} className={className}>
+      <path
+        fill={color}
+        d="M60 56 C76 40 104 40 112 60 C100 50 78 56 66 72 C63 76 57 76 54 72 C42 56 20 50 8 60 C16 40 44 40 60 56 Z"
+      />
+    </svg>
+  );
+}
+
+/** ۱۷ — سیبیل توپر در مربع گردگوشه */
+export function MarkStacheSquare({ color = "#1a1714", uid, className }: MarkProps) {
+  const id = `stq-${uid}`;
   return (
     <svg {...box} className={className}>
       <mask id={id}>
         <rect width="120" height="120" fill="#fff" />
-        <g transform="translate(60,60) scale(0.66) translate(-60,-60)">
-          <Glasses color="#000" sw={11} />
-          <Stache color="#000" sw={12} />
+        <g transform="translate(60,62) scale(0.66) translate(-60,-58)">
+          <path
+            fill="#000"
+            d="M60 56 C76 40 104 40 112 60 C100 50 78 56 66 72 C63 76 57 76 54 72 C42 56 20 50 8 60 C16 40 44 40 60 56 Z"
+          />
         </g>
       </mask>
       <rect width="120" height="120" rx="30" fill={color} mask={`url(#${id})`} />
@@ -153,105 +297,35 @@ export function MarkFaceSquare({ color = "#1a1714", uid, className }: MarkProps)
   );
 }
 
-/** ۰۸ — سیبیل که هم‌زمان M هم هست. دو معنا در یک فرم. */
-export function MarkMStache({ color = "#1a1714", className }: MarkProps) {
-  return (
-    <svg {...box} className={className}>
-      {/* دو حلقه‌ی عینک به دو نقطه تقلیل پیدا کرده */}
-      <circle cx="38" cy="34" r="7" fill={color} />
-      <circle cx="82" cy="34" r="7" fill={color} />
-      <g
-        fill="none"
-        stroke={color}
-        strokeWidth={SW}
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      >
-        <path d="M20 60 V88 M20 60 C30 56 50 60 60 76 C70 60 90 56 100 60 M100 60 V88" />
-      </g>
-    </svg>
-  );
-}
-
-/** ۰۹ — فرم پلکانی مینیمال. مستقیم از حس رفرنس. */
-export function MarkStep({ color = "#1a1714", uid, className }: MarkProps) {
-  const id = `stp-${uid}`;
-  return (
-    <svg {...box} className={className}>
-      <mask id={id}>
-        <rect width="120" height="120" fill="#fff" />
-        <path d="M34 34 H62 V62 H86 V86 H34 Z" fill="#000" />
-      </mask>
-      <rect width="120" height="120" rx="30" fill={color} mask={`url(#${id})`} />
-    </svg>
-  );
-}
-
-/** ۱۰ — M از دو مستطیل جابه‌جا. ساخت کاملاً هندسی. */
-export function MarkMBlocks({ color = "#1a1714", className }: MarkProps) {
-  return (
-    <svg {...box} className={className}>
-      <g fill={color}>
-        <rect x="20" y="28" width="16" height="64" rx="8" />
-        <rect x="84" y="28" width="16" height="64" rx="8" />
-        <rect
-          x="44"
-          y="34"
-          width="16"
-          height="46"
-          rx="8"
-          transform="rotate(-28 52 57)"
-        />
-        <rect
-          x="60"
-          y="34"
-          width="16"
-          height="46"
-          rx="8"
-          transform="rotate(28 68 57)"
-        />
-      </g>
-    </svg>
-  );
-}
-
-/** ۱۱ — M داخل حلقه. برای مهر و فاویکون. */
-export function MarkMBadge({ color = "#1a1714", className }: MarkProps) {
-  return (
-    <svg {...box} className={className}>
-      <circle cx="60" cy="60" r="54" fill="none" stroke={color} strokeWidth="7" />
-      <g transform="translate(60,60) scale(0.56) translate(-60,-62)">
-        <MStrokes color={color} sw={14} />
-      </g>
-    </svg>
-  );
-}
-
-/** ۱۲ — سیبیل توپر، بدون خط. وزن سنگین و سیلوئت قوی. */
-export function MarkStacheSolid({ color = "#1a1714", className }: MarkProps) {
+/** ۱۸ — M توپر با درّه‌ی منحنی. جایی که M و سیبیل یکی می‌شن. */
+export function MarkMStacheSolid({ color = "#1a1714", className }: MarkProps) {
   return (
     <svg {...box} className={className}>
       <path
         fill={color}
-        d="M60 52 C74 40 100 40 108 58 C98 50 78 54 66 68 C63 71 57 71 54 68 C42 54 22 50 12 58 C20 40 46 40 60 52 Z"
+        d="M14 98 C14 56 22 32 38 30 C48 30 54 44 60 62 C66 44 72 30 82 30 C98 32 106 56 106 98 H88 C88 66 86 50 80 50 C74 50 68 68 60 88 C52 68 46 50 40 50 C34 50 32 66 32 98 Z"
       />
-      <circle cx="40" cy="30" r="7" fill={color} />
-      <circle cx="80" cy="30" r="7" fill={color} />
     </svg>
   );
 }
 
 export const MARKS = [
-  { key: "m", label: "M تک‌خط", Comp: MarkM },
-  { key: "msquare", label: "M در مربع", Comp: MarkMSquare },
+  { key: "msharp", label: "M تیز", Comp: MarkMSharp },
+  { key: "mround", label: "M گردگوشه", Comp: MarkMRound },
   { key: "msolid", label: "M توپر", Comp: MarkMSolid },
+  { key: "msoft", label: "M با درّه‌ی منحنی", Comp: MarkMSoft },
+  { key: "mchevron", label: "M شِورانی", Comp: MarkMChevron },
+  { key: "msquare", label: "M بریده از مربع", Comp: MarkMSquare },
+  { key: "msquarefill", label: "M توپر در مربع", Comp: MarkMSquareFill },
+  { key: "mwide", label: "M پهن", Comp: MarkMWide },
   { key: "mgutter", label: "M با شکاف", Comp: MarkMGutter },
-  { key: "mblocks", label: "M بلوکی", Comp: MarkMBlocks },
+  { key: "mtri", label: "M از دو مثلث", Comp: MarkMTriangles },
+  { key: "mcurl", label: "M با پای خمیده", Comp: MarkMCurl },
   { key: "mbadge", label: "M در حلقه", Comp: MarkMBadge },
-  { key: "step", label: "فرم پلکانی", Comp: MarkStep },
-  { key: "stache", label: "سیبیل تنها", Comp: MarkStache },
-  { key: "face", label: "عینک و سیبیل", Comp: MarkFace },
-  { key: "facesquare", label: "عینک و سیبیل در مربع", Comp: MarkFaceSquare },
-  { key: "mstache", label: "سیبیل که M هم هست", Comp: MarkMStache },
-  { key: "stachesolid", label: "سیبیل توپر", Comp: MarkStacheSolid },
+  { key: "mrise", label: "M صعودی", Comp: MarkMRise },
+  { key: "mstencil", label: "M استنسیلی", Comp: MarkMStencil },
+  { key: "march", label: "M دو قوسی", Comp: MarkMArch },
+  { key: "stache", label: "سیبیل توپر", Comp: MarkStacheSolid },
+  { key: "stachesq", label: "سیبیل در مربع", Comp: MarkStacheSquare },
+  { key: "mstache", label: "M توپر با درّه‌ی سیبیلی", Comp: MarkMStacheSolid },
 ] as const;
