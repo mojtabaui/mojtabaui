@@ -127,6 +127,22 @@ export default async function CourseDetailPage({ params }: Props) {
                   </span>
                   <span className="text-[#c9c2b8] font-body text-xs select-none">·</span>
                   <span className="text-[#6b6560] font-body text-xs">{course.level}</span>
+
+                  {/* تعداد دانشجو، به‌جای اینکه لای ردیف آمار گم بشه، چیپ مستقل
+                      خودش رو داره. دوره‌ی تازه هنوز دانشجو نداره پس چیپ نمیاد. */}
+                  {course.students > 0 && (
+                    <span
+                      className="inline-flex items-center gap-1.5 text-[12px] font-body font-bold px-3 py-1 rounded-full border"
+                      style={{
+                        color: color.accent,
+                        borderColor: color.accent + "33",
+                        backgroundColor: color.accent + "0f",
+                      }}
+                    >
+                      <User size={12} />
+                      {formatStudents(course.students)} دانشجو
+                    </span>
+                  )}
                 </div>
 
                 {/* Label */}
@@ -152,10 +168,6 @@ export default async function CourseDetailPage({ params }: Props) {
                       ? { label: `${course.mentoringHours} ساعت منتورینگ`, icon: <Users size={13} /> }
                       : { label: `پشتیبانی ${course.supportMonths} ماهه`, icon: <Calendar size={13} /> },
                     { label: `${course.projects} پروژه عملی`, icon: <Layers size={13} /> },
-                    // دوره‌های تازه هنوز دانشجو ندارن، پس عدد صفر رو نشون نمی‌دیم
-                    ...(course.students > 0
-                      ? [{ label: `${formatStudents(course.students)} دانشجو`, icon: <User size={13} /> }]
-                      : []),
                   ].map((s, i, arr) => (
                     <span key={i} className="flex items-center">
                       <span className="flex items-center gap-1.5 text-sm font-body text-[#6b6560]">

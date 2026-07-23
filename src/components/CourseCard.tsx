@@ -43,6 +43,20 @@ export default function CourseCard({ course }: { course: Course }) {
         style={{ backgroundColor: c.bg }}
         className="rounded-3xl p-7 cursor-pointer"
       >
+        {/* ── تگ دانشجو، بالای عکس در گوشه‌ی چپ ──
+            justify-end در RTL یعنی لبه‌ی چپ. دوره‌ی بدون دانشجو تگ نمی‌گیره. */}
+        {course.students > 0 && (
+          <div className="flex justify-end -mt-2 mb-2">
+            <span
+              className="inline-flex items-center gap-1.5 text-[11px] font-body font-bold px-2.5 py-1 rounded-full"
+              style={{ backgroundColor: c.badge, color: c.accent }}
+            >
+              <User size={11} />
+              {formatStudents(course.students)} دانشجو
+            </span>
+          </div>
+        )}
+
         {/* ── Header: subtitle+title (right) | image (left) ── */}
         <div className="flex items-start justify-between gap-5 mb-5">
 
@@ -146,12 +160,6 @@ export default function CourseCard({ course }: { course: Course }) {
                 <Layers size={12} /> {course.projects} پروژه
               </span>
             </>
-          )}
-          {/* دوره‌های تازه هنوز دانشجو ندارن، پس عدد صفر رو نشون نمی‌دیم */}
-          {course.students > 0 && (
-            <span className="flex items-center gap-1.5">
-              <User size={12} /> {formatStudents(course.students)} دانشجو
-            </span>
           )}
         </div>
 
