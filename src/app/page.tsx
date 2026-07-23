@@ -13,6 +13,7 @@ import ParallaxY from "@/components/ParallaxY";
 import ArticleRow from "@/components/ArticleRow";
 import DiscountNotifyForm from "@/components/DiscountNotifyForm";
 import Model3D from "@/components/Model3D";
+import PersonalNote from "@/components/PersonalNote";
 import { infinityCourses, videoCourses, workshopCourses, stats, formatPrice, articles, freeResources, featuredProjects } from "@/lib/mock-data";
 
 const workshop = workshopCourses[0];
@@ -691,6 +692,8 @@ export default function Home() {
             </div>
           </div>
         </section>
+
+        <PersonalNote />
 
         {/* ─── Testimonials ─── */}
         <section className="py-24 bg-[#1a1714] dot-bg-dark">
