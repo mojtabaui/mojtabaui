@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { Menu, X, ArrowLeft } from "lucide-react";
+import { Menu, X, ArrowLeft, User } from "lucide-react";
 import BrandMark from "@/components/BrandMark";
 
 const navLinks = [
@@ -43,14 +43,37 @@ export default function Navbar() {
           ))}
         </nav>
 
-        {/* دکمه‌ی اقدام — چپ در RTL */}
-        <Link
-          href="/courses"
-          className="hidden md:inline-flex items-center gap-2 bg-[#1a1714] hover:bg-[#2d2926] text-white font-body font-semibold text-sm px-5 py-2.5 rounded-xl transition-all hover:scale-[1.02] active:scale-[0.98] flex-shrink-0"
-        >
-          شروع کن
-          <ArrowLeft size={15} />
-        </Link>
+        {/* حساب کاربری و دکمه‌ی اقدام — چپ در RTL */}
+        <div className="hidden md:flex items-center gap-3 flex-shrink-0">
+
+          {/* حساب کاربری هنوز فعال نیست، پس button غیرفعاله نه لینک.
+              راهنمای «به زودی» با hover و focus هر دو باز می‌شه تا کاربر
+              کیبورد هم ببیندش. */}
+          <div className="relative group">
+            <button
+              type="button"
+              disabled
+              aria-label="حساب کاربری، به زودی"
+              className="w-10 h-10 rounded-xl bg-white border border-[#e8e2d9] flex items-center justify-center text-[#a09990] cursor-not-allowed transition-colors group-hover:border-[#1a1714]/20 group-hover:text-[#6b6560]"
+            >
+              <User size={16} />
+            </button>
+            <span
+              role="tooltip"
+              className="pointer-events-none absolute top-full left-1/2 -translate-x-1/2 mt-2 whitespace-nowrap rounded-lg bg-[#1a1714] px-2.5 py-1.5 font-body text-[11px] text-white opacity-0 transition-opacity group-hover:opacity-100 group-focus-within:opacity-100"
+            >
+              به زودی
+            </span>
+          </div>
+
+          <Link
+            href="/courses"
+            className="inline-flex items-center gap-2 bg-[#1a1714] hover:bg-[#2d2926] text-white font-body font-semibold text-sm px-5 py-2.5 rounded-xl transition-all hover:scale-[1.02] active:scale-[0.98]"
+          >
+            شروع کن
+            <ArrowLeft size={15} />
+          </Link>
+        </div>
 
         <button
           onClick={() => setIsOpen(!isOpen)}

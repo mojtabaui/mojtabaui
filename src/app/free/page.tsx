@@ -55,8 +55,8 @@ export default function FreePage() {
           <div className="flex items-center gap-3 mb-8">
             <span className="w-10 h-10 rounded-xl bg-[#7c5cfc]/10 text-[#7c5cfc] flex items-center justify-center flex-shrink-0"><Play size={18} /></span>
             <div>
-              <h2 className="font-body font-bold text-xl text-[#1a1714]">دوره رایگان</h2>
-              <p className="text-[#a09990] text-xs font-body">ویدیوهای آموزشی بدون نیاز به ثبت‌نام</p>
+              <h2 className="font-body font-bold text-xl text-[#1a1714]">دوره‌های رایگان</h2>
+              <p className="text-[#a09990] text-xs font-body">کامل و قسمت‌بندی‌شده، روی کانال تلگرام. بدون ثبت‌نام</p>
             </div>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -198,7 +198,7 @@ function ResourceCard({ item }: { item: (typeof freeResources)[0] }) {
         ) : (
           <>
             <Send size={12} />
-            {isVoice ? "گوش بده در تلگرام" : "دریافت در تلگرام"}
+            {isCourse ? "شروع دوره در تلگرام" : isVoice ? "گوش بده در تلگرام" : "دریافت در تلگرام"}
           </>
         )}
       </a>
