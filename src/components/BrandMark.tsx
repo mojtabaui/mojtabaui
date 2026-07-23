@@ -40,12 +40,11 @@ interface Props {
 }
 
 /** سیبیل تنها، بدون قاب. رنگش را از currentColor می‌گیرد. */
-export function BrandGlyph({ size = 40, className }: Props) {
+export function BrandGlyph({ size, className }: Props) {
   return (
     <svg
       viewBox="0 4 120 108"
-      width={size}
-      height={(size * 108) / 120}
+      {...(size ? { width: size, height: (size * 108) / 120 } : {})}
       className={className}
       xmlns="http://www.w3.org/2000/svg"
       aria-hidden
@@ -65,7 +64,7 @@ interface MarkProps extends Props {
 
 /** سیبیل داخل مربع گردگوشه. نشان اصلی برند. */
 export default function BrandMark({
-  size = 40,
+  size,
   bg = "#1a1714",
   fg = "#FAF6F1",
   rounded = 28,
@@ -74,8 +73,7 @@ export default function BrandMark({
   return (
     <svg
       viewBox="0 0 120 120"
-      width={size}
-      height={size}
+      {...(size ? { width: size, height: size } : {})}
       className={className}
       xmlns="http://www.w3.org/2000/svg"
       aria-hidden
