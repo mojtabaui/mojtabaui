@@ -1,8 +1,29 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
 import { motion, useMotionValue, useSpring, useReducedMotion } from "framer-motion";
 import { BrandGlyph } from "@/components/BrandMark";
+
+const FINE_POINTER = "(hover: hover) and (pointer: fine)";
+
+/**
+ * آیا این دستگاه نشانگر دقیق داره.
+ *
+ * با useSyncExternalStore خونده می‌شه نه با setState داخل effect، چون
+ * این یک مقدار خارجیه و این هوک دقیقاً برای همین ساخته شده. اسنپ‌شات
+ * سمت سرور false برمی‌گردونه تا رندر اولیه با کلاینت مطابق باشه.
+ */
+function useFinePointer() {
+  return useSyncExternalStore(
+    (onChange) => {
+      const mq = window.matchMedia(FINE_POINTER);
+      mq.addEventListener("change", onChange);
+      return () => mq.removeEventListener("change", onChange);
+    },
+    () => window.matchMedia(FINE_POINTER).matches,
+    () => false
+  );
+}
 
 /**
  * نشانگر سفارشی: خودِ سیبیلِ برند.
@@ -16,7 +37,6 @@ import { BrandGlyph } from "@/components/BrandMark";
  * نشانگری در کار نیست و مخفی‌کردن نشانگر سیستم فقط مزاحمت می‌سازه.
  */
 export default function CustomCursor() {
-  const [enabled, setEnabled] = useState(false);
   const [isHovering, setIsHovering] = useState(false);
   const [isDown, setIsDown] = useState(false);
   const [ripples, setRipples] = useState<{ id: number; x: number; y: number }[]>([]);
@@ -30,11 +50,11 @@ export default function CustomCursor() {
   const ringX = useSpring(mouseX, { stiffness: 170, damping: 26 });
   const ringY = useSpring(mouseY, { stiffness: 170, damping: 26 });
 
+  const finePointer = useFinePointer();
+  const enabled = finePointer && !reduce;
+
   useEffect(() => {
-    // فقط روی دستگاهی که واقعاً نشانگر دقیق داره
-    const fine = window.matchMedia("(hover: hover) and (pointer: fine)");
-    if (!fine.matches || reduce) return;
-    setEnabled(true);
+    if (!enabled) return;
 
     const onMove = (e: MouseEvent) => {
       mouseX.set(e.clientX);
@@ -67,7 +87,7 @@ export default function CustomCursor() {
       window.removeEventListener("mousedown", onDown);
       window.removeEventListener("mouseup", onUp);
     };
-  }, [mouseX, mouseY, reduce]);
+  }, [mouseX, mouseY, enabled]);
 
   if (!enabled) return null;
 

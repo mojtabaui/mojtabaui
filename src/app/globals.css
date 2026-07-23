@@ -15,9 +15,15 @@
 
 * { box-sizing: border-box; }
 
-/* Hide default cursor only on real pointer devices */
+/* نشانگر سیستم فقط جایی مخفی می‌شه که نشانگر سفارشی جایگزینش می‌شه */
 @media (hover: hover) and (pointer: fine) {
   * { cursor: none !important; }
+}
+
+/* در کاهش حرکت، نشانگر سفارشی رندر نمی‌شه پس باید نشانگر سیستم برگرده */
+@media (prefers-reduced-motion: reduce) {
+  *, a, button { cursor: auto !important; }
+  a, button, summary, [role='button'] { cursor: pointer !important; }
 }
 
 html {
