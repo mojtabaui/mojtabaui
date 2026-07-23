@@ -912,7 +912,7 @@ export default async function CourseDetailPage({ params }: Props) {
 }
 
 export async function generateStaticParams() {
-  return courses
-    .filter((c) => !c.externalUrl)
-    .map((c) => ({ slug: c.slug }));
+  // همه‌ی دوره‌ها پیش‌ساخت می‌شن. قبلاً دوره‌های دارای لینک بیرونی کنار گذاشته
+  // می‌شدن، چون کارت‌شون اصلاً به این صفحه نمی‌رسید.
+  return courses.map((c) => ({ slug: c.slug }));
 }

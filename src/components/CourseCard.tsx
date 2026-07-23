@@ -30,18 +30,12 @@ export default function CourseCard({ course }: { course: Course }) {
   const c   = colorMap[course.slug] ?? colorMap["ui-infinity"];
   const img = imageMap[course.slug];
 
-  const href    = course.externalUrl ?? `/courses/${course.slug}`;
-  const isExt   = !!course.externalUrl;
-  const Wrapper = isExt
-    ? ({ children }: { children: React.ReactNode }) => (
-        <a href={href} target="_blank" rel="noopener noreferrer" className="block group">{children}</a>
-      )
-    : ({ children }: { children: React.ReactNode }) => (
-        <Link href={href} className="block group">{children}</Link>
-      );
-
+  // کارت همیشه به صفحه‌ی خود دوره می‌ره، حتی وقتی دوره لینک خرید بیرونی داره.
+  // قبلاً externalUrl کاربر رو مستقیم می‌برد اسپات‌پلیر و صفحه‌ی دوره با
+  // سرفصل و توضیحاتش اصلاً دیده نمی‌شد. لینک بیرونی جای خودش، روی دکمه‌ی
+  // خرید داخل همون صفحه‌ست.
   return (
-    <Wrapper>
+    <Link href={`/courses/${course.slug}`} className="block group">
       <motion.div
         whileHover={{ y: -4, scale: 1.01 }}
         whileTap={{ scale: 0.98 }}
@@ -176,6 +170,6 @@ export default function CourseCard({ course }: { course: Course }) {
         </motion.div>
 
       </motion.div>
-    </Wrapper>
+    </Link>
   );
 }
