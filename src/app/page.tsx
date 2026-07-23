@@ -538,7 +538,7 @@ export default function Home() {
                     { label: "۵ پروژه عملی", has: true },
                     { label: "۲۰ ساعت منتورینگ زنده", has: false },
                     { label: "برنامه‌ی هفتگی", has: true },
-                    { label: "پشتیبانی تیکتی ۱۲ ماهه", has: true },
+                    { label: "پشتیبانی تلگرامی ۱۲ ماهه", has: true },
                     { label: "گواهی پایان دوره", has: true },
                   ],
                 },

@@ -56,7 +56,7 @@ export default function FreePage() {
             <span className="w-10 h-10 rounded-xl bg-[#7c5cfc]/10 text-[#7c5cfc] flex items-center justify-center flex-shrink-0"><Play size={18} /></span>
             <div>
               <h2 className="font-body font-bold text-xl text-[#1a1714]">دوره‌های رایگان</h2>
-              <p className="text-[#a09990] text-xs font-body">کامل و قسمت‌بندی‌شده، روی کانال تلگرام. بدون ثبت‌نام</p>
+              <p className="text-[#a09990] text-xs font-body">دوره‌ها و کتابچه‌ی رایگان، روی کانال تلگرام. بدون ثبت‌نام</p>
             </div>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -138,6 +138,8 @@ function ResourceCard({ item }: { item: (typeof freeResources)[0] }) {
   const isFile = item.type === "file";
   // فایل‌های واقعیِ روی سایت با / شروع می‌شن، بقیه لینک تلگرامن
   const isDirect = item.url?.startsWith("/") ?? false;
+  // نوعِ منبع آیکون و متن دکمه رو تعیین می‌کنه، مگر اینکه خود منبع صریح گفته باشه
+  const icon = item.icon ?? (isCourse ? "play" : isVoice ? "mic" : "file");
 
   return (
     <div
@@ -180,7 +182,15 @@ function ResourceCard({ item }: { item: (typeof freeResources)[0] }) {
           className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0"
           style={{ backgroundColor: item.accent + "18", color: item.accent }}
         >
-          {isCourse ? <Play size={18} /> : isVoice ? <Mic size={18} /> : <FileText size={18} />}
+          {icon === "book" ? (
+            <BookOpen size={18} />
+          ) : icon === "mic" ? (
+            <Mic size={18} />
+          ) : icon === "play" ? (
+            <Play size={18} />
+          ) : (
+            <FileText size={18} />
+          )}
         </div>
         <span
           className="text-[10px] font-body px-2.5 py-1 rounded-full mt-1"
@@ -217,7 +227,8 @@ function ResourceCard({ item }: { item: (typeof freeResources)[0] }) {
         ) : (
           <>
             <Send size={12} />
-            {isCourse ? "شروع دوره در تلگرام" : isVoice ? "گوش بده در تلگرام" : "دریافت در تلگرام"}
+            {item.cta ??
+              (isCourse ? "شروع دوره در تلگرام" : isVoice ? "گوش بده در تلگرام" : "دریافت در تلگرام")}
           </>
         )}
       </a>
