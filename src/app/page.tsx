@@ -876,8 +876,6 @@ export default function Home() {
           </div>
         </section>
 
-        <PersonalNote />
-
         {/* ─── Testimonials ─── */}
         <section className="py-24 bg-[#1a1714] dot-bg-dark">
           <div className="max-w-7xl mx-auto px-4 sm:px-6">
@@ -1175,6 +1173,10 @@ export default function Home() {
             </FadeIn>
           </div>
         </section>
+
+        {/* یادداشت شخصی نزدیک انتها می‌شینه: بعد از اینکه کاربر همه‌چیز رو دید،
+            درست قبل از دعوت نهایی، دلیلِ وجودِ مدرسه و معنیِ اسم ملینا رو می‌خونه. */}
+        <PersonalNote />
 
         {/* ─── CTA ─── */}
         <section className="py-28 md:py-32 bg-[#1a1714] relative overflow-hidden">
