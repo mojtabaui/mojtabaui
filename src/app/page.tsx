@@ -399,7 +399,7 @@ export default function Home() {
                     {[
                       "مهندسیِ لوپ و مهندسیِ پرامپت",
                       "استفاده از ایجنت‌ها در فرایندِ طراحی",
-                      "یادگیریِ Claude Code و Figma",
+                      "یادگیریِ Claude Code و Figma AI",
                       "دیپلوی سبک و تستِ خروجی",
                     ].map((li) => (
                       <li key={li} className="flex items-start gap-3 text-white/70 font-body text-sm leading-relaxed">
