@@ -1187,6 +1187,29 @@ export const studentProjects: StudentProject[] = [
     tags: ["UX Research", "Case Study", "E-Commerce", "Fashion"],
     coverImage: "/images/student_work/photo_2026-07-05_13-56-07.jpg",
   },
+  {
+    id: "sp31",
+    studentName: "سحر نژادبهرام",
+    projectTitle: "ZENON — داشبورد چت‌بات هوش مصنوعی",
+    description: "داشبورد یک چت‌بات هوش مصنوعی؛ بیش از ۱۰ صفحه، ۱۰۰+ کامپوننت و ورینت، به‌همراه Prototype کامل. طی ۱۰ هفته در دوره‌ی UI بی‌نهایت طراحی شده.",
+    courseType: "ui",
+    linkType: "figma",
+    url: "https://www.figma.com/community/file/1555243394966561696",
+    tags: ["UI Design", "AI", "Dashboard", "Prototype"],
+    cohort: "بی‌نهایت UI — تیر ۱۴۰۴",
+    coverImage: "/images/student_work/new.jpg",
+  },
+  {
+    id: "sp32",
+    studentName: "سمیرا میرزائی",
+    projectTitle: "MetaMint — مارکت‌پلیس NFT",
+    description: "یک مارکت‌پلیس NFT کامل با همه‌ی صفحات ضروری؛ از خانه و مارکت‌پلیس و جزئیات آیتم تا فلوی خرید، پروفایل کاربر، اتصال کیف پول و صفحه‌ی ۴۰۴. تجربه‌ای حرفه‌ای و آماده‌ی عرضه.",
+    courseType: "ui",
+    linkType: "figma",
+    url: "https://www.figma.com/community/file/1548624750344389338/metamint-nft-marketplace",
+    tags: ["UI Design", "NFT", "Marketplace", "Web3"],
+    coverImage: "/images/student_work/news.png",
+  },
 ];
 
 // پروژه‌های منتخب صفحه‌ی اصلی — سه‌تای اول + نماپلاس، رگال، آیلتس
