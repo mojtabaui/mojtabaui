@@ -380,16 +380,16 @@ export default function Home() {
                 </div>
               </FadeIn>
 
-              {/* عکس — چپ در RTL. جای عکسِ کارگاه که بعداً می‌سازی. */}
+              {/* عکس کارگاه — چپ در RTL. بنر مربعیه، پس قاب هم مربعه. */}
               <FadeIn delay={0.12}>
-                <div className="relative rounded-3xl overflow-hidden border border-white/10 aspect-[4/3] bg-gradient-to-br from-[#1a1714] to-black flex items-center justify-center">
-                  <div className="grain-static absolute inset-0 pointer-events-none mix-blend-overlay" style={{ opacity: 0.16 }} />
-                  <div className="text-center px-6 relative">
-                    <div className="font-display font-black text-white/10 text-6xl md:text-7xl leading-none mb-3 select-none">
-                      P→P
-                    </div>
-                    <div className="font-body text-white/25 text-sm">تصویر کارگاه به‌زودی</div>
-                  </div>
+                <div className="relative rounded-3xl overflow-hidden border border-white/10 aspect-square bg-black">
+                  <Image
+                    src="/images/workshop_banner.png"
+                    alt="کارگاه پرامپت تا پروداکت"
+                    fill
+                    sizes="(max-width: 1024px) 100vw, 50vw"
+                    className="object-cover"
+                  />
                 </div>
               </FadeIn>
 
