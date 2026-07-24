@@ -21,7 +21,7 @@ const content = [
 
 const about = [
   { href: "/#about",                         label: "درباره من", ext: false },
-  { href: "https://myazdanpanah.vercel.app", label: "پرتفولیو",  ext: true  },
+  { href: "https://myazdanpanah.vercel.app", label: "پورتفولیو",  ext: true  },
   { href: "/#contact",                       label: "تماس با من", ext: false },
   // ورود/ثبت‌نام موقتاً مخفی — با حساب کاربری برمی‌گردن:
   // { href: "/auth/login",    label: "ورود به پنل",    ext: false },

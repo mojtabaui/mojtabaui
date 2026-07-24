@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowLeft, Star, ChevronLeft, ExternalLink, Send, Layers, Clock, Calendar, Users, Play, Mic, FileText, Check, Minus, Plus } from "lucide-react";
+import { ArrowLeft, Star, ChevronLeft, ExternalLink, Send, Layers, Clock, Calendar, Users, Play, Mic, FileText, Check, Minus, Plus, Gift, MonitorPlay, MessageCircle } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import CourseCard from "@/components/CourseCard";
@@ -118,8 +118,12 @@ export default function Home() {
 
           <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
 
-            {/* Text — top on mobile, right on desktop */}
-            <div className="flex-shrink-0 max-w-xl 2xl:max-w-2xl pt-8 pb-2 lg:pt-0 lg:pb-20">
+            {/* Text — top on mobile, right on desktop.
+                روی موبایل محتوا ته‌چین نیست و از بالای سکشن شروع می‌شه، پس بدون
+                فاصله‌ی بالا، نوارِ ثابتِ منو (۶۴px) روی نوتِ «+۶٬۵۰۰ نفر» می‌افتاد
+                و مخفیش می‌کرد. pt-24 اون رو از زیر منو می‌کشه بیرون؛ در دسکتاپ که
+                بلوک ته‌چینه lg:pt-0 دست‌نخورده می‌مونه. */}
+            <div className="flex-shrink-0 max-w-xl 2xl:max-w-2xl pt-24 pb-2 lg:pt-0 lg:pb-20">
 
                 {/* Eyebrow */}
                 <div
@@ -639,6 +643,113 @@ export default function Home() {
           </div>
         </section>
 
+        {/* ─── روند دوره‌ها ─── */}
+        {/* دو مسیر واقعی: بی‌نهایت ۱۰ هفته با منتورینگ گروهی، آفلاین ۸ هفته با
+            بررسی منتور. متن‌ها از همون اسلایدهای روند دوره اومدن. */}
+        <section className="py-24 bg-[#1a1714] relative overflow-hidden">
+          <div className="grain-static absolute inset-0 pointer-events-none mix-blend-overlay" style={{ opacity: 0.1 }} />
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 relative">
+            <FadeIn>
+              <div className="max-w-2xl mb-14">
+                <div className="font-display text-[10px] font-bold tracking-[0.22em] uppercase text-[#a78bfa] mb-3">
+                  HOW IT WORKS
+                </div>
+                <h2 className="font-body font-extrabold text-3xl md:text-4xl text-white leading-[1.3] mb-4">
+                  روند دوره‌ها به چه صورته؟
+                </h2>
+                <p className="text-white/50 font-body leading-relaxed">
+                  از لحظه‌ای که ثبت‌نام می‌کنی تا ارائه‌ی پروژه‌ی نهایی. هر نسخه ریتم خودش
+                  رو داره، ولی هیچ‌کدوم تنهات نمی‌ذاره.
+                </p>
+              </div>
+            </FadeIn>
+
+            <div className="grid lg:grid-cols-2 gap-6">
+              {[
+                {
+                  name: "دوره‌های بی‌نهایت",
+                  tag: "۱۰ هفته · منتورینگ گروهی",
+                  steps: [
+                    "دریافت لایسنس ویدیوها، لینک گروه و کانال، و برنامه‌ی هفتگی تماشای ویدیوها",
+                    "جلسه‌ی معارفه‌ی آنلاین، شروع برنامه‌ی ده‌هفته‌ای و معرفی خودت به بقیه‌ی اعضای گروه",
+                    "انجام تسک اول به‌صورت انفرادی، جلسه‌ی منتورینگ و تحلیل تمام تسک‌ها",
+                    "گروه‌بندی و شروع پروژه‌ی اصلی دوره، انتخاب موضوع و تقسیم کارها",
+                    "کار روی پروژه به‌مدت نه هفته، همزمان با تماشای ویدیوها و پشتیبانی آنلاین",
+                  ],
+                  featured: true,
+                },
+                {
+                  name: "دوره‌های آفلاین",
+                  tag: "۸ هفته · بررسی منتور",
+                  steps: [
+                    "دریافت لایسنس ویدیوها، لینک گروه و کانال، و برنامه‌ی هفتگی تماشای ویدیوها",
+                    "معرفی خودت به بقیه‌ی اعضای گروه و شروع برنامه‌ی هشت‌هفته‌ای دوره",
+                    "انجام تسک اول به‌صورت انفرادی و بررسی توسط منتور",
+                    "شروع پروژه‌ی اصلی دوره و انتخاب موضوع",
+                    "کار روی پروژه به‌مدت هفت هفته، همزمان با تماشای ویدیوها",
+                  ],
+                  featured: false,
+                },
+              ].map((track) => (
+                <FadeIn key={track.name} delay={track.featured ? 0 : 0.1}>
+                  <div
+                    className={`h-full rounded-3xl p-8 border ${
+                      track.featured
+                        ? "bg-white/[0.05] border-[#7c5cfc]/30"
+                        : "bg-white/[0.02] border-white/10"
+                    }`}
+                  >
+                    <div className="flex items-center justify-between gap-3 mb-8">
+                      <h3 className="font-body font-black text-xl text-white">{track.name}</h3>
+                      <span className="text-[11px] font-body font-bold px-3 py-1 rounded-full bg-[#7c5cfc]/15 text-[#a78bfa] whitespace-nowrap">
+                        {track.tag}
+                      </span>
+                    </div>
+
+                    <ol className="space-y-5">
+                      {track.steps.map((step, i) => (
+                        <li key={i} className="flex items-start gap-4">
+                          <span
+                            className={`w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0 font-display font-black text-sm ${
+                              track.featured
+                                ? "bg-[#7c5cfc] text-white"
+                                : "bg-white/[0.06] text-white/60"
+                            }`}
+                          >
+                            {"۱۲۳۴۵"[i]}
+                          </span>
+                          <span className="font-body text-sm leading-[1.9] text-white/70 pt-1">
+                            {step}
+                          </span>
+                        </li>
+                      ))}
+                    </ol>
+                  </div>
+                </FadeIn>
+              ))}
+            </div>
+
+            {/* نوارِ نکته‌ها: چیزهایی که فارغ از نسخه، برای همه صادقه */}
+            <FadeIn delay={0.15}>
+              <div className="grid sm:grid-cols-3 gap-4 mt-6">
+                {[
+                  { Icon: Gift, title: "آپدیت‌های دوره رایگانه", desc: "هر بار محتوای دوره به‌روز بشه، بدون هزینه‌ی اضافه در اختیارته." },
+                  { Icon: MonitorPlay, title: "جلسات آنلاین بی‌نهایت", desc: "روی گوگل‌میت یا اسکای‌روم برگزار می‌شن، بسته به شرایط." },
+                  { Icon: MessageCircle, title: "پشتیبانی تلگرامی", desc: "سوالت رو می‌پرسی و توی تلگرام جوابت رو می‌گیری." },
+                ].map(({ Icon, title, desc }) => (
+                  <div key={title} className="rounded-2xl bg-white/[0.03] border border-white/10 p-6">
+                    <span className="w-10 h-10 rounded-xl bg-[#7c5cfc]/15 text-[#a78bfa] flex items-center justify-center mb-4">
+                      <Icon size={18} />
+                    </span>
+                    <div className="font-body font-bold text-white text-sm mb-1.5">{title}</div>
+                    <p className="font-body text-white/45 text-xs leading-relaxed">{desc}</p>
+                  </div>
+                ))}
+              </div>
+            </FadeIn>
+          </div>
+        </section>
+
         {/* ─── Free Resources ─── */}
         <section className="py-24 bg-white border-y border-[#e8e2d9]">
           <div className="max-w-7xl mx-auto px-4 sm:px-6">
@@ -721,7 +832,7 @@ export default function Home() {
                       className="absolute -top-2 left-4 font-display font-black leading-none select-none pointer-events-none"
                       style={{ fontSize: "6rem", color: "white", opacity: 0.04 }}
                     >
-                      "
+                      &ldquo;
                     </div>
                     <div className="relative">
                       <p className="text-white/70 font-body text-sm leading-relaxed mb-6">

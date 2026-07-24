@@ -9,7 +9,7 @@ import { infinityCourses, videoCourses, workshopCourses, courses } from "@/lib/m
 
 export const metadata = {
   title: "دوره‌ها | مدرسه دیزاین ملینا",
-  description: "دوره‌های طراحی رابط و تجربه کاربری، با منتورینگ زنده یا کاملاً خودخوان.",
+  description: "دوره‌های طراحی رابط و تجربه کاربری، از مقدماتی تا حرفه‌ای، همه با منتورینگ.",
 };
 
 const fa = (n: number | string) =>
@@ -49,7 +49,7 @@ export default function CoursesPage() {
                   دوره‌ها
                 </h1>
                 <p className="text-[#6b6560] font-body text-lg leading-relaxed">
-                  از صفر تا حرفه‌ای. با منتورینگ زنده یا کاملاً خودخوان، هر طور که به تو می‌خوره.
+                  از مقدماتی تا حرفه‌ای. همه‌ی دوره‌ها منتورینگ دارن؛ بعضی‌ها هیبریدن و بعضی آفلاین برگزار می‌شن.
                 </p>
               </FadeIn>
 
