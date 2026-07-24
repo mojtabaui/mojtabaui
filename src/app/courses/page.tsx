@@ -5,6 +5,7 @@ import CoursesClient from "@/components/CoursesClient";
 import FadeIn from "@/components/FadeIn";
 import ParallaxY from "@/components/ParallaxY";
 import MarqueeBand from "@/components/MarqueeBand";
+import FormatCompare from "@/components/FormatCompare";
 import { infinityCourses, videoCourses, workshopCourses, courses } from "@/lib/mock-data";
 
 export const metadata = {
@@ -108,6 +109,9 @@ export default function CoursesPage() {
             workshopCourses={workshopCourses}
           />
         </section>
+
+        {/* مقایسه‌ی نسخه‌ها — از صفحه‌ی اصلی به این‌جا منتقل شد */}
+        <FormatCompare />
 
       </main>
       <Footer />

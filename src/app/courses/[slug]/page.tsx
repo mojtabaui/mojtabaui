@@ -35,7 +35,7 @@ const colorMap: Record<string, { bg: string; badge: string; accent: string }> = 
   "ux-infinity": { bg: "#EEF3FF", badge: "#BFDBFE", accent: "#1d4ed8" },
   "ui-offline":  { bg: "#FFF5F5", badge: "#FEE2E2", accent: "#ef4444" },
   "ux-offline":  { bg: "#F0F4FF", badge: "#DBEAFE", accent: "#2563eb" },
-  "claude-for-designers": { bg: "#FBF0EA", badge: "#F3D9C7", accent: "#C2410C" },
+  "prompt-to-product": { bg: "#FBF0EA", badge: "#F3D9C7", accent: "#C2410C" },
 };
 
 // بنرهای عکسی جای خودشون رو به <CourseHeroVisual> دادن (تصویر گرافیکیِ ساخته‌شده).

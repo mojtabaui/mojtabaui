@@ -22,7 +22,7 @@ const colorMap: Record<string, { bg: string; badge: string; tag: string; accent:
   "ux-offline":  { bg: "#F0F4FF", badge: "#DBEAFE",  tag: "#DBEAFE99",  accent: "#2563eb" },
   "portfolio":   { bg: "#F0FDF4", badge: "#BBF7D0",  tag: "#BBF7D099",  accent: "#16a34a" },
   "prototype":   { bg: "#FFF7ED", badge: "#FED7AA",  tag: "#FED7AA99",  accent: "#ea580c" },
-  "claude-for-designers": { bg: "#FBF0EA", badge: "#F3D9C7", tag: "#F3D9C799", accent: "#C2410C" },
+  "prompt-to-product": { bg: "#FBF0EA", badge: "#F3D9C7", tag: "#F3D9C799", accent: "#C2410C" },
 
 };
 

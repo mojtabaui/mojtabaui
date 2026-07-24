@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowLeft, Star, ChevronLeft, ExternalLink, Send, Layers, Clock, Calendar, Users, Play, Mic, FileText, Check, Minus, Plus, Gift, MonitorPlay, MessageCircle } from "lucide-react";
+import { ArrowLeft, Star, ChevronLeft, ExternalLink, Send, Layers, Clock, Calendar, Check, Plus, Gift, MonitorPlay, MessageCircle } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import CourseCard from "@/components/CourseCard";
@@ -15,9 +15,8 @@ import DiscountNotifyForm from "@/components/DiscountNotifyForm";
 import Model3D from "@/components/Model3D";
 import PersonalNote from "@/components/PersonalNote";
 import TestimonialsGrid from "@/components/TestimonialsGrid";
-import { infinityCourses, videoCourses, workshopCourses, stats, formatPrice, articles, freeResources, featuredProjects } from "@/lib/mock-data";
+import { infinityCourses, videoCourses, stats, formatPrice, articles, featuredProjects } from "@/lib/mock-data";
 
-const workshop = workshopCourses[0];
 
 const testimonials = [
   {
@@ -305,6 +304,99 @@ export default function Home() {
         {/* ─── Marquee ─── */}
         <MarqueeBand />
 
+        {/* ─── اعلان کارگاه پرامپت تا پروداکت ───
+            سکشن مستقل و بالای صفحه، جدا از داده‌ی دوره (که هنوز مخفیه). محتوا
+            این‌جا صریح نوشته شده تا بدون باز کردنِ صفحه‌ی کارگاه دیده بشه. CTA
+            چون هنوز ثبت‌نام باز نیست «به زودی» می‌گه و لینک نمی‌ره. عکس رو
+            بعداً می‌ذاریم؛ فعلاً یه پلیس‌هولدرِ تیره سرجاشه. */}
+        <section className="relative overflow-hidden bg-black border-y border-white/10">
+          <div className="grain-static absolute inset-0 pointer-events-none mix-blend-overlay" style={{ opacity: 0.12 }} />
+          <div className="absolute -top-32 left-1/2 -translate-x-1/2 w-[640px] h-[640px] rounded-full pointer-events-none" style={{ background: "radial-gradient(circle, rgba(124,92,252,0.18), transparent 70%)" }} />
+
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-16 md:py-20 relative">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-14 items-center">
+
+              {/* متن — راست در RTL */}
+              <FadeIn>
+                <div>
+                  <div className="inline-flex items-center gap-2 bg-white/[0.06] border border-[#7c5cfc]/30 rounded-full px-3.5 py-1.5 mb-6">
+                    <span className="w-2 h-2 rounded-full bg-[#a78bfa] pulse-dot" />
+                    <span className="font-body text-xs font-semibold text-[#a78bfa]">کارگاه جدید</span>
+                  </div>
+
+                  <div className="font-display text-[10px] font-bold tracking-[0.28em] uppercase text-white/40 mb-3">
+                    PROMPT TO PRODUCT
+                  </div>
+                  <h2 className="font-body font-black text-3xl md:text-[2.6rem] text-white leading-[1.2] mb-5">
+                    کارگاه پرامپت تا پروداکت
+                  </h2>
+                  <p className="text-white/55 font-body leading-[1.9] mb-8 max-w-md">
+                    برای طراحی که نمی‌خواد از موجِ AI عقب بمونه. یه فیچرِ واقعی رو با هم
+                    از پرامپت و ایده، با Figma AI و Claude Code، تا یه محصولِ دیپلوی‌شده
+                    روی Vercel جلو می‌بریم. تمرکز روی طرزِ فکرِ AI-first و قضاوتِ طراحه،
+                    نه یه ابزارِ خاص.
+                  </p>
+
+                  {/* آنچه یاد می‌گیری */}
+                  <ul className="space-y-2.5 mb-8">
+                    {[
+                      "هدایتِ AI به‌جای ترس از جایگزین‌شدن",
+                      "ساختنِ رابط با Figma AI و نقدش با چشمِ طراح",
+                      "تبدیلِ طرح به کدِ زنده با Claude Code، بدون برنامه‌نویسی",
+                      "دیپلویِ محصول روی Vercel با یه لینکِ قابل‌ارائه",
+                    ].map((li) => (
+                      <li key={li} className="flex items-start gap-3 text-white/70 font-body text-sm leading-relaxed">
+                        <span className="w-5 h-5 rounded-md bg-[#7c5cfc]/15 text-[#a78bfa] flex items-center justify-center flex-shrink-0 mt-0.5">
+                          <Check size={12} />
+                        </span>
+                        {li}
+                      </li>
+                    ))}
+                  </ul>
+
+                  {/* متا: زمان، تاریخ، قیمت */}
+                  <div className="flex flex-wrap items-center gap-x-6 gap-y-3 mb-9">
+                    <span className="flex items-center gap-2 text-sm font-body text-white/70">
+                      <Clock size={15} className="text-[#a78bfa]" /> ۳ جلسه‌ی ۳ ساعته
+                    </span>
+                    <span className="flex items-center gap-2 text-sm font-body text-white/70">
+                      <Calendar size={15} className="text-[#a78bfa]" /> اواسط مرداد ۱۴۰۵
+                    </span>
+                    <span className="flex items-center gap-2 text-sm font-body">
+                      <span className="font-body font-black text-white text-lg">۵٬۰۰۰٬۰۰۰</span>
+                      <span className="text-white/40 text-xs">تومان</span>
+                    </span>
+                  </div>
+
+                  {/* CTA — هنوز ثبت‌نام باز نیست */}
+                  <button
+                    type="button"
+                    disabled
+                    className="inline-flex items-center gap-2 bg-white/[0.08] border border-white/15 text-white/90 font-body font-semibold px-7 py-3.5 rounded-2xl cursor-not-allowed"
+                  >
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#a78bfa] pulse-dot" />
+                    به زودی!
+                  </button>
+                </div>
+              </FadeIn>
+
+              {/* عکس — چپ در RTL. جای عکسِ کارگاه که بعداً می‌سازی. */}
+              <FadeIn delay={0.12}>
+                <div className="relative rounded-3xl overflow-hidden border border-white/10 aspect-[4/3] bg-gradient-to-br from-[#1a1714] to-black flex items-center justify-center">
+                  <div className="grain-static absolute inset-0 pointer-events-none mix-blend-overlay" style={{ opacity: 0.16 }} />
+                  <div className="text-center px-6 relative">
+                    <div className="font-display font-black text-white/10 text-6xl md:text-7xl leading-none mb-3 select-none">
+                      P→P
+                    </div>
+                    <div className="font-body text-white/25 text-sm">تصویر کارگاه به‌زودی</div>
+                  </div>
+                </div>
+              </FadeIn>
+
+            </div>
+          </div>
+        </section>
+
         {/* ─── Why Us ─── */}
         <section style={{ backgroundColor: "#E4DAD5" }} className="py-24 border-b border-[#d4c8c2]">
           <div className="max-w-7xl mx-auto px-4 sm:px-6">
@@ -433,83 +525,6 @@ export default function Home() {
           </div>
         </section>
 
-        {/* ─── Workshop Highlight ─── */}
-        {workshop && (
-          <section className="py-24 border-y relative overflow-hidden" style={{ backgroundColor: "#160e08", borderColor: "#3a2416" }}>
-            {/* copper dot pattern */}
-            <div className="absolute inset-0 dot-bg-copper pointer-events-none" />
-            {/* warm glow echoing the banner */}
-            <div
-              className="absolute -top-24 right-0 w-[520px] h-[520px] rounded-full pointer-events-none"
-              style={{ background: "radial-gradient(circle, rgba(226,120,68,0.16), transparent 70%)" }}
-            />
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 relative">
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-
-                {/* Text — DOM first = RIGHT in RTL */}
-                <FadeIn>
-                  <div>
-                    <div className="inline-flex items-center gap-2 bg-white/[0.06] border border-[#E88A5C]/25 rounded-full px-3.5 py-1.5 mb-6">
-                      <span className="w-2 h-2 rounded-full bg-[#E88A5C] pulse-dot" />
-                      <span className="font-body text-xs font-semibold text-[#E88A5C]">تازه اضافه شد</span>
-                    </div>
-                    <div className="font-display text-[10px] font-bold tracking-[0.22em] uppercase text-[#E88A5C]/80 mb-3">
-                      WORKSHOP
-                    </div>
-                    <h2 className="font-body font-black text-3xl md:text-4xl text-white leading-tight mb-5">
-                      {workshop.title}
-                    </h2>
-                    <p className="text-white/55 font-body leading-relaxed mb-8 max-w-md text-base">
-                      {workshop.description}
-                    </p>
-
-                    {/* Meta chips */}
-                    <div className="flex flex-wrap items-center gap-x-6 gap-y-2 mb-9 text-sm font-body text-white/60">
-                      <span className="flex items-center gap-2">
-                        <Clock size={14} className="text-[#E88A5C]" /> {workshop.durationHours} ساعت
-                      </span>
-                      <span className="flex items-center gap-2">
-                        <Calendar size={14} className="text-[#E88A5C]" /> {workshop.sessionDate}
-                      </span>
-                      <span className="flex items-center gap-2">
-                        <Users size={14} className="text-[#E88A5C]" /> ظرفیت {workshop.capacity} نفر
-                      </span>
-                    </div>
-
-                    <Link
-                      href={`/courses/${workshop.slug}`}
-                      className="inline-flex items-center gap-2 text-white font-body font-semibold px-7 py-3.5 rounded-2xl transition-all hover:scale-[1.02] active:scale-[0.98]"
-                      style={{
-                        background: "linear-gradient(180deg, #E0743C, #C2410C)",
-                        boxShadow: "0 8px 30px -8px rgba(226,120,68,0.6)",
-                      }}
-                    >
-                      مشاهده‌ی کارگاه
-                      <ArrowLeft size={16} />
-                    </Link>
-                  </div>
-                </FadeIn>
-
-                {/* Visual — DOM second = LEFT in RTL */}
-                <FadeIn delay={0.12}>
-                  <Link
-                    href={`/courses/${workshop.slug}`}
-                    className="block relative rounded-3xl overflow-hidden shadow-2xl border border-white/10 aspect-[3/2] group"
-                  >
-                    <Image
-                      src="/images/claude-workshop.png"
-                      alt={workshop.title}
-                      fill
-                      sizes="(max-width: 1024px) 100vw, 50vw"
-                      className="object-cover group-hover:scale-[1.03] transition-transform duration-500"
-                    />
-                  </Link>
-                </FadeIn>
-
-              </div>
-            </div>
-          </section>
-        )}
 
         {/* ─── Why Infinity ─── */}
         <section className="py-24">
@@ -562,152 +577,6 @@ export default function Home() {
                     </ParallaxY>
                     <div className="font-body font-bold text-[#1a1714] text-sm mb-1.5">{item.title}</div>
                     <div className="text-[#a09990] text-xs font-body leading-relaxed">{item.desc}</div>
-                  </div>
-                </FadeIn>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* ─── Compare formats ─── */}
-        <section className="py-24 bg-white border-y border-[#e8e2d9]">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6">
-            <FadeIn>
-              <div className="mb-12 max-w-xl">
-                <div className="font-display text-[10px] font-bold tracking-[0.22em] uppercase text-[#a09990] mb-2">
-                  WHICH ONE
-                </div>
-                <h2 className="font-body font-extrabold text-3xl md:text-4xl text-[#1a1714] mb-3">
-                  کدوم نسخه به تو می‌خوره؟
-                </h2>
-                <p className="text-[#6b6560] font-body leading-relaxed">
-                  محتوای ویدیویی هر دو نسخه دقیقاً یکیه. فرق‌شون توی همراهیه.
-                </p>
-              </div>
-            </FadeIn>
-
-            <div className="grid md:grid-cols-2 gap-5 max-w-4xl">
-              {[
-                {
-                  name: "بی‌نهایت",
-                  tag: "ثبت‌نام بسته",
-                  price: infinityCourses[0]?.price,
-                  desc: "برای کسی که می‌خواد کنارش کسی باشه. ثبت‌نامش فعلاً باز نیست.",
-                  featured: false,
-                  rows: [
-                    { label: "۵۵ ساعت ویدیوی کامل", has: true },
-                    { label: "۵ پروژه عملی", has: true },
-                    { label: "۲۰ ساعت منتورینگ زنده", has: true },
-                    { label: "برنامه‌ی هفتگی و گروه هم‌دوره‌ای", has: true },
-                    { label: "فیدبک مستقیم روی کارت", has: true },
-                    { label: "گواهی پایان دوره", has: true },
-                  ],
-                },
-                {
-                  name: "آفلاین",
-                  tag: "الان باز است",
-                  price: videoCourses.find((c) => c.slug === "ui-offline")?.price,
-                  desc: "همون محتوا و همون برنامه‌ی هفتگی، با تمپوی خودت.",
-                  featured: true,
-                  rows: [
-                    { label: "۵۵ ساعت ویدیوی کامل", has: true },
-                    { label: "۵ پروژه عملی", has: true },
-                    { label: "۲۰ ساعت منتورینگ زنده", has: false },
-                    { label: "برنامه‌ی هفتگی", has: true },
-                    { label: "پشتیبانی تلگرامی ۱۲ ماهه", has: true },
-                    { label: "گواهی پایان دوره", has: true },
-                  ],
-                },
-              ].map((plan, i) => (
-                <FadeIn key={plan.name} delay={i * 0.1}>
-                  <div
-                    className={`h-full rounded-3xl p-7 border transition-all ${
-                      plan.featured
-                        ? "bg-[#1a1714] border-[#1a1714] shadow-[0_24px_50px_-28px_rgba(26,23,20,0.7)]"
-                        : "bg-[#FAF6F1] border-[#e8e2d9]"
-                    }`}
-                  >
-                    <div className="flex items-center justify-between gap-3 mb-4">
-                      <h3
-                        className={`font-body font-black text-xl ${
-                          plan.featured ? "text-white" : "text-[#1a1714]"
-                        }`}
-                      >
-                        {plan.name}
-                      </h3>
-                      <span
-                        className={`text-[10px] font-body font-bold px-2.5 py-1 rounded-full ${
-                          plan.featured
-                            ? "bg-[#7c5cfc] text-white"
-                            : "bg-white text-[#6b6560] border border-[#e8e2d9]"
-                        }`}
-                      >
-                        {plan.tag}
-                      </span>
-                    </div>
-
-                    <p
-                      className={`font-body text-sm leading-relaxed mb-5 ${
-                        plan.featured ? "text-white/45" : "text-[#6b6560]"
-                      }`}
-                    >
-                      {plan.desc}
-                    </p>
-
-                    {plan.price && (
-                      <div
-                        className={`font-body font-black text-2xl mb-6 ${
-                          plan.featured ? "text-white" : "text-[#1a1714]"
-                        }`}
-                      >
-                        {formatPrice(plan.price)}
-                      </div>
-                    )}
-
-                    <ul className="space-y-3 mb-7">
-                      {plan.rows.map((row) => (
-                        <li key={row.label} className="flex items-start gap-2.5">
-                          <span
-                            className={`w-4 h-4 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5 ${
-                              row.has
-                                ? plan.featured
-                                  ? "bg-emerald-400/20 text-emerald-400"
-                                  : "bg-emerald-500/10 text-emerald-600"
-                                : plan.featured
-                                  ? "bg-white/[0.06] text-white/25"
-                                  : "bg-[#e8e2d9] text-[#a09990]"
-                            }`}
-                          >
-                            {row.has ? <Check size={10} /> : <Minus size={10} />}
-                          </span>
-                          <span
-                            className={`font-body text-sm leading-relaxed ${
-                              row.has
-                                ? plan.featured
-                                  ? "text-white/80"
-                                  : "text-[#4a4540]"
-                                : plan.featured
-                                  ? "text-white/25 line-through"
-                                  : "text-[#a09990] line-through"
-                            }`}
-                          >
-                            {row.label}
-                          </span>
-                        </li>
-                      ))}
-                    </ul>
-
-                    <Link
-                      href={plan.featured ? "/courses/ui-infinity" : "/courses/ui-offline"}
-                      className={`inline-flex items-center justify-center gap-2 w-full font-body font-bold text-sm px-6 py-3.5 rounded-2xl transition-all hover:scale-[1.01] ${
-                        plan.featured
-                          ? "bg-white text-[#1a1714] hover:bg-white/90"
-                          : "bg-[#1a1714] text-white hover:bg-[#2d2926]"
-                      }`}
-                    >
-                      جزئیات دوره
-                      <ChevronLeft size={15} />
-                    </Link>
                   </div>
                 </FadeIn>
               ))}
@@ -819,60 +688,6 @@ export default function Home() {
                 ))}
               </div>
             </FadeIn>
-          </div>
-        </section>
-
-        {/* ─── Free Resources ─── */}
-        <section className="py-24 bg-white border-y border-[#e8e2d9]">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6">
-            <FadeIn>
-              <div className="flex items-end justify-between mb-12">
-                <div>
-                  <div className="font-display text-[10px] font-bold tracking-[0.22em] uppercase text-emerald-600/60 mb-2">
-                    FREE
-                  </div>
-                  <h2 className="font-body font-extrabold text-3xl text-[#1a1714]">آموزش‌های رایگان</h2>
-                  <p className="text-[#a09990] text-sm font-body mt-1">ویدیو، ویس، فایل — بردار برو</p>
-                </div>
-                <Link
-                  href="/free"
-                  className="hidden md:flex items-center gap-1.5 text-[#6b6560] hover:text-[#1a1714] text-sm font-body transition-colors"
-                >
-                  همه منابع
-                  <ChevronLeft size={14} />
-                </Link>
-              </div>
-            </FadeIn>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {freeResources.slice(0, 3).map((item, i) => (
-                <FadeIn key={item.id} delay={i * 0.08}>
-                  <Link
-                    href="/free"
-                    className="rounded-2xl p-5 flex items-start gap-4 hover:opacity-90 hover:scale-[1.01] transition-all"
-                    style={{ backgroundColor: item.color }}
-                  >
-                    {/* آیکون برداری به‌جای ایموجی — رندر ایموجی روی هر سیستم فرق می‌کنه */}
-                    <div
-                      className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
-                      style={{ backgroundColor: item.accent + "18", color: item.accent }}
-                    >
-                      {item.type === "course" ? (
-                        <Play size={16} />
-                      ) : item.type === "voice" ? (
-                        <Mic size={16} />
-                      ) : (
-                        <FileText size={16} />
-                      )}
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="font-body font-semibold text-[#1a1714] text-sm leading-snug mb-1">{item.title}</div>
-                      <div className="text-[#a09990] text-xs font-body">{item.meta}</div>
-                    </div>
-                  </Link>
-                </FadeIn>
-              ))}
-            </div>
           </div>
         </section>
 
