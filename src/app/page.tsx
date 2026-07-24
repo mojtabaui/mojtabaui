@@ -14,6 +14,7 @@ import ArticleRow from "@/components/ArticleRow";
 import DiscountNotifyForm from "@/components/DiscountNotifyForm";
 import Model3D from "@/components/Model3D";
 import PersonalNote from "@/components/PersonalNote";
+import TestimonialsGrid from "@/components/TestimonialsGrid";
 import { infinityCourses, videoCourses, workshopCourses, stats, formatPrice, articles, freeResources, featuredProjects } from "@/lib/mock-data";
 
 const workshop = workshopCourses[0];
@@ -894,45 +895,7 @@ export default function Home() {
               </div>
             </FadeIn>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {testimonials.map((t, i) => (
-                <FadeIn key={i} delay={i * 0.06}>
-                  <div className="relative bg-white/[0.04] border border-white/8 rounded-2xl p-6 hover:bg-white/[0.07] transition-colors overflow-hidden">
-                    {/* Decorative big quote */}
-                    <div
-                      className="absolute -top-2 left-4 font-display font-black leading-none select-none pointer-events-none"
-                      style={{ fontSize: "6rem", color: "white", opacity: 0.04 }}
-                    >
-                      &ldquo;
-                    </div>
-                    <div className="relative">
-                      <p className="text-white/70 font-body text-sm leading-relaxed mb-6">
-                        {t.text}
-                      </p>
-                      <div className="flex items-center justify-between flex-wrap gap-2">
-                        <div className="flex items-center gap-3">
-                          <div
-                            className="w-9 h-9 rounded-xl flex items-center justify-center text-sm font-body font-bold flex-shrink-0"
-                            style={{ backgroundColor: t.color, color: t.accent }}
-                          >
-                            {t.avatar}
-                          </div>
-                          <div>
-                            <div className="font-body font-semibold text-white text-sm">{t.name}</div>
-                            <div className="text-white/30 text-[10px] font-body">{t.role}</div>
-                          </div>
-                        </div>
-                        <div className="flex items-center gap-0.5">
-                          {[1,2,3,4,5].map(j => (
-                            <Star key={j} size={9} fill={t.accent} style={{ color: t.accent }} />
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </FadeIn>
-              ))}
-            </div>
+            <TestimonialsGrid testimonials={testimonials} />
           </div>
         </section>
 
