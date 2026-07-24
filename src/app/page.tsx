@@ -128,7 +128,7 @@ export default function Home() {
                 >
                   <div className="w-2 h-2 rounded-full bg-emerald-400 pulse-dot" />
                   <span className="font-body text-xs text-[#6b6560]">
-                    تا به حال +۷ هزار نفر در دوره‌ها شرکت کرده‌اند
+                    تا به حال +۶٬۵۰۰ نفر در دوره‌ها شرکت کرده‌اند
                   </span>
                 </div>
 
@@ -189,7 +189,7 @@ export default function Home() {
                         <Star key={i} size={11} className="text-amber-400" fill="#fbbf24" />
                       ))}
                     </div>
-                    <span className="text-[#a09990] text-xs font-body">+۷,۰۰۰ دانشجوی راضی</span>
+                    <span className="text-[#a09990] text-xs font-body">+۶٬۵۰۰ دانشجوی حرفه‌ای</span>
                   </div>
                 </div>
 
@@ -299,7 +299,7 @@ export default function Home() {
                   دوره‌های بی‌نهایت
                 </h2>
                 <p className="text-[#a09990] text-sm font-body mt-1">
-                  ویدیو + منتورینگ + پروژه — همه در یه بسته
+                  ویدیو + منتورینگ + پروژه، همه در یک پکیج
                 </p>
               </div>
               <Link
@@ -516,7 +516,7 @@ export default function Home() {
                   name: "بی‌نهایت",
                   tag: "ثبت‌نام بسته",
                   price: infinityCourses[0]?.price,
-                  desc: "برای کسی که می‌خواد کنارش کسی باشه. ثبت‌نامش فعلاً بازنیست.",
+                  desc: "برای کسی که می‌خواد کنارش کسی باشه. ثبت‌نامش فعلاً باز نیست.",
                   featured: false,
                   rows: [
                     { label: "۵۵ ساعت ویدیوی کامل", has: true },
@@ -707,7 +707,7 @@ export default function Home() {
                   دانشجوها چی می‌گن؟
                 </h2>
                 <p className="text-white/30 font-body text-sm">
-                  +۷,۰۰۰ نفر تا الان یاد گرفتن
+                  +۶٬۵۰۰ نفر تا الان یاد گرفتن
                 </p>
               </div>
             </FadeIn>
@@ -911,7 +911,7 @@ export default function Home() {
                     بیش از ۷ سال در طراحی محصولات enterprise، e-commerce و پلتفرم کار کردم.
                     برام طراحی یعنی تبدیل «ابهام» به ساختاری که کاربر بتونه باهاش کار کنه — نه با حدس، با تحقیق.
                     پروژه‌هام با سوال شروع می‌شن و با خروجی قابل‌اندازه‌گیری تموم می‌شن.
-                    بنیان‌گذار مدرسه دیزاین ملینا هستم و تا امروز با بیش از ۷,۰۰۰ نفر همراه بودم.
+                    بنیان‌گذار مدرسه دیزاین ملینا هستم و تا امروز با بیش از ۶٬۵۰۰ نفر همراه بودم.
                   </p>
 
                   {/* Stats */}
@@ -1073,7 +1073,7 @@ export default function Home() {
               <div className="flex items-stretch justify-center divide-x divide-x-reverse divide-white/10 mb-11">
                 {[
                   { num: "+۸", label: "سال تجربه" },
-                  { num: "+۷٬۰۰۰", label: "دانشجو" },
+                  { num: "+۶٬۵۰۰", label: "دانشجو" },
                   { num: "۴.۹", label: "از ۵ رضایت" },
                 ].map((s) => (
                   <div key={s.label} className="px-6 sm:px-8">

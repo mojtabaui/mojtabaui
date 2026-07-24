@@ -174,7 +174,7 @@ export default function Model3D() {
               <Users size={15} />
             </span>
             <div className="leading-tight">
-              <div className="font-display font-bold text-sm text-[#1a1714]">+۷٬۰۰۰</div>
+              <div className="font-display font-bold text-sm text-[#1a1714]">+۶٬۵۰۰</div>
               <div className="font-body text-[10px] text-[#a09990] -mt-0.5">دانشجو</div>
             </div>
           </motion.div>

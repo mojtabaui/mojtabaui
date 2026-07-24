@@ -550,7 +550,7 @@ export function typeLabel(type: CourseType): string {
 }
 
 export const stats = [
-  { value: "۷,۰۰۰+", label: "دانشجو" },
+  { value: "۶٬۵۰۰+", label: "دانشجو" },
   { value: "۴۰۰+",   label: "پروژه گروهی" },
   { value: "۴۰+",    label: "کد کلاس" },
   { value: "۹۰+",    label: "ساعت محتوا" },
