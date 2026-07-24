@@ -37,7 +37,7 @@ export interface ChecklistTrack {
 
 const UI_COURSE = { label: "رابط کاربری بی‌نهایت", slug: "ui-infinity" };
 const UX_COURSE = { label: "تجربه کاربری بی‌نهایت", slug: "ux-infinity" };
-const PORTFOLIO_COURSE = { label: "دوره پورتفولیو", slug: "portfolio" };
+const PORTFOLIO_COURSE = { label: "دوره پرتفولیو", slug: "portfolio" };
 
 const uiStages: ChecklistStage[] = [
   {
@@ -188,7 +188,7 @@ const uiStages: ChecklistStage[] = [
   {
     id: "ui-delivery",
     num: "۰۸",
-    title: "تحویل و پورتفولیو",
+    title: "تحویل و پرتفولیو",
     subtitle:
       "تا وقتی یک محصول کامل نساختی و نتونستی ازش دفاع کنی، هنوز تمرین کردی نه کار.",
     duration: "حدود ۴ هفته",
@@ -380,7 +380,7 @@ export const tracks: ChecklistTrack[] = [
     label: "رابط کاربری",
     latin: "UI DESIGN",
     tagline:
-      "مسیر ساختن رابط‌هایی که هم درست کار می‌کنن و هم حرفه‌ای به‌نظر می‌رسن. از تسلط به ابزار تا دیزاین سیستم و پورتفولیو.",
+      "مسیر ساختن رابط‌هایی که هم درست کار می‌کنن و هم حرفه‌ای به‌نظر می‌رسن. از تسلط به ابزار تا دیزاین سیستم و پرتفولیو.",
     color: "#FFF0EE",
     accent: "#dc2626",
     weeks: "حدود ۲۰ هفته",

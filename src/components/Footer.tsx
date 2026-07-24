@@ -6,7 +6,7 @@ const courses = [
   { href: "/courses/ui-infinity", label: "UI بی‌نهایت" },
   { href: "/courses/ux-infinity", label: "UX بی‌نهایت" },
   { href: "/courses/ui-offline",  label: "UI آفلاین"   },
-  { href: "/courses/portfolio",   label: "پورتفولیو"    },
+  { href: "/courses/portfolio",   label: "پرتفولیو"    },
   { href: "/courses/prototype",   label: "پروتوتایپ"    },
 ];
 
@@ -21,7 +21,7 @@ const content = [
 
 const about = [
   { href: "/#about",                         label: "درباره من", ext: false },
-  { href: "https://myazdanpanah.vercel.app", label: "پورتفولیو",  ext: true  },
+  { href: "https://myazdanpanah.vercel.app", label: "پرتفولیو",  ext: true  },
   { href: "/#contact",                       label: "تماس با من", ext: false },
   // ورود/ثبت‌نام موقتاً مخفی — با حساب کاربری برمی‌گردن:
   // { href: "/auth/login",    label: "ورود به پنل",    ext: false },

@@ -1,9 +1,9 @@
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowLeft, Star, ChevronLeft, ExternalLink, Send, Layers, Clock, Calendar, Check, Plus, Gift, MonitorPlay, MessageCircle } from "lucide-react";
+import { ArrowLeft, Star, ChevronLeft, ExternalLink, Send, Layers, Clock, Calendar, Users, Check, Plus, Gift, MonitorPlay, MessageCircle } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import CourseCard from "@/components/CourseCard";
+import CoursesClient from "@/components/CoursesClient";
 import MarqueeBand from "@/components/MarqueeBand";
 import FadeIn from "@/components/FadeIn";
 import AnimatedCounter from "@/components/AnimatedCounter";
@@ -304,6 +304,64 @@ export default function Home() {
         {/* ─── Marquee ─── */}
         <MarqueeBand />
 
+        {/* ─── Why Us ─── */}
+        <section style={{ backgroundColor: "#E4DAD5" }} className="py-24 border-b border-[#d4c8c2]">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+
+              {/* GIF — right side in RTL (first in DOM) */}
+              <FadeIn className="flex justify-center">
+                <img
+                  src="/images/why_us.gif"
+                  alt="مدل آموزشی هیبریدی"
+                  loading="lazy"
+                  decoding="async"
+                  className="w-full max-w-[560px]"
+                />
+              </FadeIn>
+
+              {/* Text — left side in RTL (second in DOM) */}
+              <FadeIn delay={0.12}>
+                <div className="font-display text-[10px] font-bold tracking-[0.22em] uppercase text-[#8a7b74] mb-4">
+                  WHY US
+                </div>
+                <h2 className="font-body font-black text-3xl md:text-4xl text-[#1a1714] leading-tight mb-6">
+                  ۸ سال تجربه،
+                  <br />
+                  یه مدل آموزشی که کار می‌کنه
+                </h2>
+                <p className="text-[#6b6560] font-body leading-relaxed mb-10 text-base">
+                  ۸ سال طراحی حرفه‌ای UI/UX و ۵ سال آموزش مستقیم به دانشجوها — این تجربه باعث شد
+                  یه مدل هیبریدی طراحی کنیم که جای هیچ‌جا ندیدیم: ویدیوی ضبط‌شده با کیفیت بالا،
+                  کنار جلسات منتورینگ گروهی هفتگی. نه فقط یاد می‌گیری — پروژه واقعی می‌سازی و
+                  فیدبک مستقیم می‌گیری.
+                </p>
+
+                <div className="space-y-5">
+                  {[
+                    { num: "۸+",   label: "سال تجربه حرفه‌ای طراحی UI/UX" },
+                    { num: "۵+",   label: "سال آموزش مستقیم به دانشجوها" },
+                    { num: "۴۰+",  label: "کد کلاس با منتورینگ واقعی" },
+                    { num: "۴۰۰+", label: "پروژه گروهی تحویل داده شده" },
+                  ].map((item, i) => (
+                    <div key={i} className="flex items-center gap-5">
+                      <div
+                        className="font-display font-black text-2xl flex-shrink-0 w-20 text-right"
+                        style={{ color: "#1a1714" }}
+                      >
+                        {item.num}
+                      </div>
+                      <div className="w-px h-6 bg-[#c4b8b0] flex-shrink-0" />
+                      <div className="font-body text-sm text-[#6b6560]">{item.label}</div>
+                    </div>
+                  ))}
+                </div>
+              </FadeIn>
+
+            </div>
+          </div>
+        </section>
+
         {/* ─── اعلان کارگاه پرامپت تا پروداکت ───
             سکشن مستقل و بالای صفحه، جدا از داده‌ی دوره (که هنوز مخفیه). محتوا
             این‌جا صریح نوشته شده تا بدون باز کردنِ صفحه‌ی کارگاه دیده بشه. CTA
@@ -368,6 +426,12 @@ export default function Home() {
                     </span>
                   </div>
 
+                  {/* ظرفیت محدود، درست بالای دکمه تا حس فوریت بده */}
+                  <div className="flex items-center gap-2 text-sm font-body text-white/70 mb-4">
+                    <Users size={15} className="text-[#a78bfa]" />
+                    ظرفیت: ۲۰ نفر
+                  </div>
+
                   {/* CTA — هنوز ثبت‌نام باز نیست */}
                   <button
                     type="button"
@@ -397,77 +461,21 @@ export default function Home() {
           </div>
         </section>
 
-        {/* ─── Why Us ─── */}
-        <section style={{ backgroundColor: "#E4DAD5" }} className="py-24 border-b border-[#d4c8c2]">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-
-              {/* GIF — right side in RTL (first in DOM) */}
-              <FadeIn className="flex justify-center">
-                <img
-                  src="/images/why_us.gif"
-                  alt="مدل آموزشی هیبریدی"
-                  loading="lazy"
-                  decoding="async"
-                  className="w-full max-w-[560px]"
-                />
-              </FadeIn>
-
-              {/* Text — left side in RTL (second in DOM) */}
-              <FadeIn delay={0.12}>
-                <div className="font-display text-[10px] font-bold tracking-[0.22em] uppercase text-[#8a7b74] mb-4">
-                  WHY US
-                </div>
-                <h2 className="font-body font-black text-3xl md:text-4xl text-[#1a1714] leading-tight mb-6">
-                  ۸ سال تجربه،
-                  <br />
-                  یه مدل آموزشی که کار می‌کنه
-                </h2>
-                <p className="text-[#6b6560] font-body leading-relaxed mb-10 text-base">
-                  ۸ سال طراحی حرفه‌ای UI/UX و ۵ سال آموزش مستقیم به دانشجوها — این تجربه باعث شد
-                  یه مدل هیبریدی طراحی کنیم که جای هیچ‌جا ندیدیم: ویدیوی ضبط‌شده با کیفیت بالا،
-                  کنار جلسات منتورینگ گروهی هفتگی. نه فقط یاد می‌گیری — پروژه واقعی می‌سازی و
-                  فیدبک مستقیم می‌گیری.
-                </p>
-
-                <div className="space-y-5">
-                  {[
-                    { num: "۸+",   label: "سال تجربه حرفه‌ای طراحی UI/UX" },
-                    { num: "۵+",   label: "سال آموزش مستقیم به دانشجوها" },
-                    { num: "۴۰+",  label: "کد کلاس با منتورینگ واقعی" },
-                    { num: "۴۰۰+", label: "پروژه گروهی تحویل داده شده" },
-                  ].map((item, i) => (
-                    <div key={i} className="flex items-center gap-5">
-                      <div
-                        className="font-display font-black text-2xl flex-shrink-0 w-20 text-right"
-                        style={{ color: "#1a1714" }}
-                      >
-                        {item.num}
-                      </div>
-                      <div className="w-px h-6 bg-[#c4b8b0] flex-shrink-0" />
-                      <div className="font-body text-sm text-[#6b6560]">{item.label}</div>
-                    </div>
-                  ))}
-                </div>
-              </FadeIn>
-
-            </div>
-          </div>
-        </section>
-
-        {/* ─── Infinity Courses ─── */}
+        {/* ─── دوره‌ها (تب‌دار) ─── */}
+        {/* دو سکشنِ جدا (بی‌نهایت و ویدیویی) شدن یک سکشنِ تب‌دار تا صفحه کوتاه‌تر
+            بشه. تبِ کارگاه چون workshopCourses خالیه اصلاً نشون داده نمی‌شه. */}
         <section className="py-24 max-w-7xl mx-auto px-4 sm:px-6">
           <FadeIn>
-            <div className="flex items-end justify-between mb-12">
+            <div className="flex items-end justify-between mb-10">
               <div>
                 <div className="font-display text-[10px] font-bold tracking-[0.22em] uppercase text-[#a09990] mb-2">
-                  BESTSELLER
+                  COURSES
                 </div>
                 <h2 className="font-body font-extrabold text-3xl md:text-4xl text-[#1a1714]">
-                  دوره‌های بی‌نهایت
+                  دوره‌ها
                 </h2>
                 <p className="text-[#a09990] text-sm font-body mt-1">
-                  ویدیو + منتورینگ + پروژه، همه در یک پکیج
+                  بی‌نهایت با منتورینگ، یا ویدیویی به تمپوی خودت
                 </p>
               </div>
               <Link
@@ -479,57 +487,13 @@ export default function Home() {
               </Link>
             </div>
           </FadeIn>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-            {infinityCourses.map((course, i) => (
-              <FadeIn key={course.id} delay={i * 0.1}>
-                <CourseCard course={course} />
-              </FadeIn>
-            ))}
-          </div>
+          <CoursesClient infinityCourses={infinityCourses} videoCourses={videoCourses} workshopCourses={[]} />
         </section>
-
-        {/* ─── Video Courses ─── */}
-        <section className="py-24 bg-white border-y border-[#e8e2d9]">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6">
-            <FadeIn>
-              <div className="flex items-end justify-between mb-12">
-                <div>
-                  <div className="font-display text-[10px] font-bold tracking-[0.22em] uppercase text-[#a09990] mb-2">
-                    VIDEO COURSES
-                  </div>
-                  <h2 className="font-body font-extrabold text-3xl md:text-4xl text-[#1a1714]">
-                    دوره‌های ویدیویی
-                  </h2>
-                  <p className="text-[#a09990] text-sm font-body mt-1">
-                    بدون منتورینگ — یاد بگیر به تمپو خودت
-                  </p>
-                </div>
-                <Link
-                  href="/courses"
-                  className="hidden md:flex items-center gap-1.5 text-[#6b6560] hover:text-[#1a1714] text-sm font-body transition-colors"
-                >
-                  همه دوره‌ها
-                  <ChevronLeft size={14} />
-                </Link>
-              </div>
-            </FadeIn>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-              {videoCourses.map((course, i) => (
-                <FadeIn key={course.id} delay={i * 0.08}>
-                  <CourseCard course={course} />
-                </FadeIn>
-              ))}
-            </div>
-          </div>
-        </section>
-
 
         {/* ─── Why Infinity ─── */}
         <section className="py-24">
           <div className="max-w-7xl mx-auto px-4 sm:px-6">
-            <div className="grid lg:grid-cols-2 gap-10 lg:gap-14 items-center mb-16">
+            <div className="max-w-2xl mb-16">
               <FadeIn>
                 <div className="font-display text-[10px] font-bold tracking-[0.22em] uppercase text-[#a09990] mb-3">
                   WHY OUR COURSES
@@ -542,25 +506,13 @@ export default function Home() {
                   دور خودش می‌چرخه و یکی به مقصد می‌رسه.
                 </p>
               </FadeIn>
-
-              <FadeIn delay={0.1}>
-                <div className="relative w-full aspect-[3/2] rounded-3xl overflow-hidden border border-[#d4c8c2] bg-white shadow-[0_28px_60px_-34px_rgba(26,23,20,0.45)]">
-                  <Image
-                    src="/images/why-us.jpg"
-                    alt=""
-                    fill
-                    sizes="(max-width: 1024px) 100vw, 560px"
-                    className="object-cover"
-                  />
-                </div>
-              </FadeIn>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-0">
               {[
                 { num: "۰۱", title: "ویدیوهای ضبط‌شده",      desc: "هر وقت خواستی نگاه می‌کنی، هر چند بار که لازم شد." },
                 { num: "۰۲", title: "منتورینگ زنده",           desc: "توی دوره‌های بی‌نهایت هر هفته یه جلسه‌ی گروهی با مجتبا داری." },
-                { num: "۰۳", title: "پروژه عملی",              desc: "چیزی که می‌سازی رو می‌تونی توی پورتفولیوت بذاری." },
+                { num: "۰۳", title: "پروژه عملی",              desc: "چیزی که می‌سازی رو می‌تونی توی پرتفولیوت بذاری." },
                 { num: "۰۴", title: "برنامه هفتگی",            desc: "هر هفته معلومه چی کار کنی، پس ویدیوها روی هم تلنبار نمی‌شن." },
                 { num: "۰۵", title: "پشتیبانی مدرس",           desc: "سوالت رو خود مجتبا جواب می‌ده. نه ربات، نه فرم." },
                 { num: "۰۶", title: "از صفر بدون پیش‌نیاز",  desc: "اگه اصلاً دیزاین بلد نباشی هم از اول شروع می‌کنیم." },
