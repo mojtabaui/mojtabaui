@@ -389,19 +389,18 @@ export default function Home() {
                     کارگاه پرامپت تا پروداکت
                   </h2>
                   <p className="text-white/55 font-body leading-[1.9] mb-8 max-w-md">
-                    برای طراحی که نمی‌خواد از موجِ AI عقب بمونه. یه فیچرِ واقعی رو با هم
-                    از پرامپت و ایده، با Figma AI و Claude Code، تا یه محصولِ دیپلوی‌شده
-                    روی Vercel جلو می‌بریم. تمرکز روی طرزِ فکرِ AI-first و قضاوتِ طراحه،
-                    نه یه ابزارِ خاص.
+                    موجِ AI اومده و طراحی رو زیر و رو کرده. من کلِ ورک‌فلوی طراحیم رو
+                    هوشمند کردم و توی همین چند ماه سه تا محصول منتشر کردم. توی این کارگاه
+                    دقیقاً می‌گم چطور می‌شه AI رو وارد فرایندِ طراحی کرد.
                   </p>
 
                   {/* آنچه یاد می‌گیری */}
                   <ul className="space-y-2.5 mb-8">
                     {[
-                      "هدایتِ AI به‌جای ترس از جایگزین‌شدن",
-                      "ساختنِ رابط با Figma AI و نقدش با چشمِ طراح",
-                      "تبدیلِ طرح به کدِ زنده با Claude Code، بدون برنامه‌نویسی",
-                      "دیپلویِ محصول روی Vercel با یه لینکِ قابل‌ارائه",
+                      "مهندسیِ لوپ و مهندسیِ پرامپت",
+                      "استفاده از ایجنت‌ها در فرایندِ طراحی",
+                      "یادگیریِ Claude Code و Figma",
+                      "دیپلوی سبک و تستِ خروجی",
                     ].map((li) => (
                       <li key={li} className="flex items-start gap-3 text-white/70 font-body text-sm leading-relaxed">
                         <span className="w-5 h-5 rounded-md bg-[#7c5cfc]/15 text-[#a78bfa] flex items-center justify-center flex-shrink-0 mt-0.5">
@@ -448,7 +447,7 @@ export default function Home() {
               <FadeIn delay={0.12}>
                 <div className="relative rounded-3xl overflow-hidden border border-white/10 aspect-square bg-black">
                   <Image
-                    src="/images/workshop_banner.png"
+                    src="/images/workshop_banner.jpg"
                     alt="کارگاه پرامپت تا پروداکت"
                     fill
                     sizes="(max-width: 1024px) 100vw, 50vw"
