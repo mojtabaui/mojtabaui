@@ -326,6 +326,8 @@ const allCourses: Course[] = [
     afterCompletion: uiAfterCompletion,
     instructor: "مجتبا یزدانپناه",
     isBestseller: true,
+    // ثبت‌نامِ بی‌نهایت فعلاً بازنیست؛ تاریخِ دوره‌ی بعدی هنوز اعلام نشده.
+    comingSoon: true,
     testimonials: uiInfinityTestimonials,
   },
 
@@ -357,6 +359,8 @@ const allCourses: Course[] = [
     afterCompletion: uxAfterCompletion,
     instructor: "مجتبا یزدانپناه",
     isNew: false,
+    // ثبت‌نامِ بی‌نهایت فعلاً بازنیست؛ تاریخِ دوره‌ی بعدی هنوز اعلام نشده.
+    comingSoon: true,
     testimonials: uxInfinityTestimonials,
   },
 

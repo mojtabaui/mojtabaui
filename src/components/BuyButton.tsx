@@ -15,12 +15,17 @@ interface Props {
 export default function BuyButton({ comingSoon }: Props) {
   if (comingSoon) {
     return (
-      <button
-        disabled
-        className="w-full flex items-center justify-center bg-[#e8e2d9] text-[#a09990] font-body font-semibold py-3.5 rounded-2xl text-sm cursor-not-allowed mb-3"
-      >
-        به زودی
-      </button>
+      <div className="mb-3">
+        <button
+          disabled
+          className="w-full flex items-center justify-center bg-[#e8e2d9] text-[#a09990] font-body font-semibold py-3.5 rounded-2xl text-sm cursor-not-allowed"
+        >
+          ثبت‌نام باز نیست
+        </button>
+        <p className="text-center text-[#a09990] text-xs font-body mt-2">
+          تاریخِ برگزاریِ دوره‌ی بعدی به‌زودی اعلام می‌شود
+        </p>
+      </div>
     );
   }
 

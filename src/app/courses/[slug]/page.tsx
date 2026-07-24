@@ -218,9 +218,14 @@ export default async function CourseDetailPage({ params }: Props) {
                     comingSoon={course.comingSoon}
                     externalUrl={course.externalUrl}
                   />
-                  <p className="text-center text-[#a09990] text-xs font-body mb-6">
-                    برای ثبت‌نام و مشاوره، در تلگرام به پشتیبانی پیام بده
-                  </p>
+                  {/* وقتی ثبت‌نام باز نیست، پیامِ «به پشتیبانی پیام بده» گمراه‌کننده‌ست
+                      چون هنوز چیزی برای ثبت‌نام نیست؛ خودِ دکمه تاریخ رو توضیح می‌ده. */}
+                  {!course.comingSoon && (
+                    <p className="text-center text-[#a09990] text-xs font-body mb-6">
+                      برای ثبت‌نام و مشاوره، در تلگرام به پشتیبانی پیام بده
+                    </p>
+                  )}
+                  {course.comingSoon && <div className="mb-6" />}
 
                   <div className="space-y-2.5 pt-5 border-t border-[#f0ebe4]">
                     {course.features.map((item) => (

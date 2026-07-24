@@ -93,6 +93,11 @@ export default function CourseCard({ course }: { course: Course }) {
 
         {/* ── Badges ── */}
         <div className="flex flex-wrap gap-2 mb-4">
+          {course.comingSoon && (
+            <span className="text-[11px] font-body font-semibold px-3 py-1 rounded-full bg-[#1a1714] text-white">
+              ثبت‌نام باز نیست
+            </span>
+          )}
           {course.isBestseller && (
             <span className="text-[11px] font-body font-semibold px-3 py-1 rounded-full"
               style={{ backgroundColor: c.badge, color: c.accent }}>
