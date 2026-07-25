@@ -208,6 +208,18 @@ img, svg, video, canvas {
   html,
   body {
     background: #ffffff !important;
+    height: auto !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  /* گواهی که fixed می‌شه از جریان خارجه؛ ولی این ظرف‌ها با visibility:hidden
+     ارتفاعشون (مثلاً min-h-screenِ main) سرِ جاش می‌مونه و یه صفحه‌ی خالیِ اضافه
+     چاپ می‌کنه. این‌جا ارتفاعشون رو صفر می‌کنیم تا سند دقیقاً یک صفحه بشه. */
+  main {
+    min-height: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
   }
   body * {
     visibility: hidden !important;
@@ -223,6 +235,7 @@ img, svg, video, canvas {
     height: 100vh !important;
     aspect-ratio: auto !important;
     border-radius: 0 !important;
+    overflow: hidden !important;
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
   }
