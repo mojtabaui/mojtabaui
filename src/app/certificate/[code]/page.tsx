@@ -74,7 +74,7 @@ export default async function CertificatePage({ params }: Props) {
               </div>
             </div>
 
-            <PrintButton />
+            <PrintButton fileName={`melina-certificate-${cert.code}`} />
           </div>
 
           {/* سند.
