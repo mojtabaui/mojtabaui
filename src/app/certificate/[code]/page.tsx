@@ -55,8 +55,8 @@ export default async function CertificatePage({ params }: Props) {
         <Navbar />
       </div>
 
-      <main className="flex-1 pt-16 min-h-screen bg-[#FAF6F1]">
-        <section className="max-w-6xl mx-auto px-4 sm:px-6 py-10">
+      <main id="cert-main" className="flex-1 pt-16 min-h-screen bg-[#FAF6F1]">
+        <section id="cert-section" className="max-w-6xl mx-auto px-4 sm:px-6 py-10">
 
           {/* نوار بالا */}
           <div className="no-print flex items-center justify-between gap-4 flex-wrap mb-8">
@@ -85,8 +85,8 @@ export default async function CertificatePage({ params }: Props) {
           <div className="no-print sm:hidden font-body text-[11px] text-[#a09990] mb-2 flex items-center gap-1.5">
             برای دیدن کامل، افقی بکش →
           </div>
-          <div className="overflow-x-auto -mx-4 px-4 sm:mx-0 sm:px-0 pb-2 sm:pb-0">
-            <div className="min-w-[560px] sm:min-w-0 rounded-3xl overflow-hidden border border-[#e8e2d9] shadow-[0_30px_70px_-40px_rgba(26,23,20,0.5)] bg-white">
+          <div id="cert-scroll" className="overflow-x-auto -mx-4 px-4 sm:mx-0 sm:px-0 pb-2 sm:pb-0">
+            <div id="cert-card" className="min-w-[560px] sm:min-w-0 rounded-3xl overflow-hidden border border-[#e8e2d9] shadow-[0_30px_70px_-40px_rgba(26,23,20,0.5)] bg-white">
               <CertificateDocument cert={cert} qrDataUrl={qrDataUrl} />
             </div>
           </div>

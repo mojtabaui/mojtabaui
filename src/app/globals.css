@@ -213,34 +213,42 @@ img, svg, video, canvas {
     margin: 0 !important;
     padding: 0 !important;
   }
-  /* گواهی که fixed می‌شه از جریان خارجه؛ ولی این ظرف‌ها با visibility:hidden
-     ارتفاعشون (مثلاً min-h-screenِ main) سرِ جاش می‌مونه و یه صفحه‌ی خالیِ اضافه
-     چاپ می‌کنه. این‌جا ارتفاعشون رو صفر می‌کنیم تا سند دقیقاً یک صفحه بشه. */
-  main {
-    min-height: 0 !important;
-    padding: 0 !important;
+  .no-print {
+    display: none !important;
+  }
+  /* بدونِ ترفندِ visibility/fixed: کلِ کروم صفحه no-print‌ه و حذف می‌شه، پس تنها
+     چیزِ باقی‌مانده خودِ سنده. فقط ظرف‌های دورش رو صاف می‌کنیم (بی‌قاب/سایه/سقفِ
+     عرض) تا سند تمام‌عرضِ کاغذ بشه؛ با نسبتِ ۱٫۴۱۴:۱ ارتفاعش دقیقاً یک A4 افقی
+     می‌شه. این‌طوری نه صفحه‌ی خالی می‌سازه نه با containmentِ container-type
+     درگیر می‌شه. */
+  #cert-main,
+  #cert-section,
+  #cert-scroll,
+  #cert-card {
+    all: unset !important;
+    display: block !important;
+    width: 100% !important;
+    max-width: none !important;
+    min-width: 0 !important;
     margin: 0 !important;
+    padding: 0 !important;
+    overflow: visible !important;
   }
-  body * {
-    visibility: hidden !important;
-  }
+  /* بلاکِ چاپِ پلنر یک قاعده‌ی سراسری داره که هرچی .planner نیست رو مخفی می‌کنه؛
+     این‌جا صریح سند رو visible نگه می‌داریم تا اون قاعده مخفیش نکنه. */
+  #cert-main,
+  #cert-section,
+  #cert-scroll,
+  #cert-card,
   #certificate,
   #certificate * {
     visibility: visible !important;
   }
   #certificate {
-    position: fixed !important;
-    inset: 0 !important;
-    width: 100vw !important;
-    height: 100vh !important;
-    aspect-ratio: auto !important;
+    width: 100% !important;
     border-radius: 0 !important;
-    overflow: hidden !important;
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
-  }
-  .no-print {
-    display: none !important;
   }
 }
 
