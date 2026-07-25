@@ -302,6 +302,7 @@ const allCourses: Course[] = [
   {
     id: "ui-infinity",
     slug: "ui-infinity",
+    spotplayerId: "618a71979252d004ce2d2423", // اسپات‌پلیر
     type: "infinity",
     title: "طراحی رابط کاربری بی‌نهایت",
     subtitle: "UI DESIGN INFINITY",
@@ -335,6 +336,7 @@ const allCourses: Course[] = [
   {
     id: "ux-infinity",
     slug: "ux-infinity",
+    spotplayerId: "621642f271e6010501a6331b", // اسپات‌پلیر
     type: "infinity",
     title: "طراحی تجربه کاربری بی‌نهایت",
     subtitle: "UX DESIGN INFINITY",
@@ -368,6 +370,7 @@ const allCourses: Course[] = [
   {
     id: "ui-offline",
     slug: "ui-offline",
+    spotplayerId: "68fe3145d8852c4a4b5e9928", // اسپات‌پلیر
     type: "offline",
     title: "طراحی رابط کاربری",
     subtitle: "UI DESIGN",
@@ -399,6 +402,7 @@ const allCourses: Course[] = [
   {
     id: "ux-offline",
     slug: "ux-offline",
+    spotplayerId: "68ff836f8017a1db77232d83", // اسپات‌پلیر
     type: "offline",
     title: "طراحی تجربه کاربری",
     subtitle: "UX DESIGN",
@@ -430,6 +434,7 @@ const allCourses: Course[] = [
   {
     id: "portfolio",
     slug: "portfolio",
+    spotplayerId: "63aae70c68b2746feee711f0", // اسپات‌پلیر
     type: "offline",
     title: "طراحی پرتفولیو",
     subtitle: "PORTFOLIO DESIGN",
@@ -459,6 +464,7 @@ const allCourses: Course[] = [
   {
     id: "prototype",
     slug: "prototype",
+    spotplayerId: "61e06f1991ef9f762b29a93c", // اسپات‌پلیر
     type: "offline",
     title: "طراحی پروتوتایپ",
     subtitle: "PROTOTYPE DESIGN",
