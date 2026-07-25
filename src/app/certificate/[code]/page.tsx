@@ -77,9 +77,18 @@ export default async function CertificatePage({ params }: Props) {
             <PrintButton />
           </div>
 
-          {/* سند */}
-          <div className="rounded-3xl overflow-hidden border border-[#e8e2d9] shadow-[0_30px_70px_-40px_rgba(26,23,20,0.5)] bg-white">
-            <CertificateDocument cert={cert} qrDataUrl={qrDataUrl} />
+          {/* سند.
+              گواهی افقیه (نسبت ۱٫۴۱۴:۱)؛ روی موبایل اگه تمام‌عرض بشه خیلی کوچیک و
+              ناخواناست. این‌جا یه حدِ عرضِ خوانا (۵۶۰px) می‌ذاریم و ظرف رو افقی
+              اسکرول‌پذیر می‌کنیم؛ در دسکتاپ که جا هست، تمام‌عرض می‌شه. چاپ به این
+              دست نمی‌زنه چون #certificate موقع چاپ fixed و تمام‌صفحه می‌شه. */}
+          <div className="no-print sm:hidden font-body text-[11px] text-[#a09990] mb-2 flex items-center gap-1.5">
+            برای دیدن کامل، افقی بکش →
+          </div>
+          <div className="overflow-x-auto -mx-4 px-4 sm:mx-0 sm:px-0 pb-2 sm:pb-0">
+            <div className="min-w-[560px] sm:min-w-0 rounded-3xl overflow-hidden border border-[#e8e2d9] shadow-[0_30px_70px_-40px_rgba(26,23,20,0.5)] bg-white">
+              <CertificateDocument cert={cert} qrDataUrl={qrDataUrl} />
+            </div>
           </div>
 
           <p className="no-print font-body text-xs text-[#a09990] text-center mt-6 leading-relaxed">

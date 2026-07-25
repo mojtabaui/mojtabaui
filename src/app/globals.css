@@ -278,11 +278,15 @@ img, svg, video, canvas {
 }
 
 @media print {
-  @page {
+  /* صفحه‌ی نام‌گذاری‌شده تا فقط برنامه‌ی هفتگی عمودی بشه و صفحه‌ی گواهی
+     (که افقیه و @page پیش‌فرض داره) رو خراب نکنه. قبلاً این @page بدونِ نام
+     بود و به‌صورت سراسری landscapeِ گواهی رو به portrait تغییر می‌داد. */
+  @page planner {
     size: A4 portrait;
     margin: 0;
   }
   .planner .sheet {
+    page: planner;
     box-shadow: none;
     break-after: page;
     page-break-after: always;
