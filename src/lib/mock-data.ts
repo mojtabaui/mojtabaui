@@ -927,18 +927,6 @@ export const studentProjects: StudentProject[] = [
     coverImage: "/images/student_work/photo_2026-07-05_13-36-08.jpg",
   },
   {
-    id: "sp7",
-    studentName: "مهدی اسحاقی، نرگس شاهبازی، ملیحه پورهاشمی",
-    projectTitle: "فرنگار — گالری آنلاین نقاشی",
-    description: "+۹۵ صفحه، +۵۰ کامپوننت، Auto Layout، ورینت‌نویسی، Style Guide — همراه با Case Study کامل.",
-    courseType: "ui",
-    linkType: "figma",
-    url: "https://www.figma.com/community/file/1466024126630025975/art-gallery-application-farnegar",
-    tags: ["UI Design", "Gallery", "Mobile App", "Case Study"],
-    cohort: "بی‌نهایت UI",
-    coverImage: "/images/student_work/f7a88c3d1b0c72d7d006b4fd4b5f26670d7adb62.png",
-  },
-  {
     id: "sp8",
     studentName: "رویا سلطان‌محمدی، زهرا محمدزاده، عاطفه نایبی، غزاله قلاعی، فاطمه سلطانی",
     projectTitle: "نماپلاس — اپلیکیشن استریم فیلم",
