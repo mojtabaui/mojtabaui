@@ -181,13 +181,18 @@ function ProjectCard({ project }: { project: StudentProject }) {
           ))}
         </div>
 
-        <div className="flex items-center justify-between pt-3 border-t border-[#f0ebe4]">
-          <span className="text-[#a09990] text-xs font-body">{project.studentName}</span>
+        {/* اسمِ تیم چندنفره چند خط می‌شه؛ بدون shrink-0 و nowrap، فلکس دکمه رو
+            فشرده می‌کرد و برچسبش دوخطی می‌شد. items-start هم دکمه رو به خطِ
+            اولِ اسم‌ها می‌چسبونه نه به وسطِ بلوکِ چندخطی. */}
+        <div className="flex items-start justify-between gap-3 pt-3 border-t border-[#f0ebe4]">
+          <span className="text-[#a09990] text-xs font-body leading-relaxed min-w-0">
+            {project.studentName}
+          </span>
           <a
             href={project.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 text-xs font-body font-semibold transition-colors"
+            className="inline-flex items-center gap-1.5 shrink-0 whitespace-nowrap text-xs font-body font-semibold transition-colors"
             style={{ color: accent }}
           >
             {isFigma ? "باز کن در Figma" : "دانلود PDF"}

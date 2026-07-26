@@ -856,7 +856,7 @@ export interface StudentProject {
 export const studentProjects: StudentProject[] = [
   {
     id: "sp1",
-    studentName: "محمد طالبی و تیم",
+    studentName: "محمد طالبی، بهار جوادنیا، نیایش اخوان، ریحانه فلاحتی، فریبا محمدی",
     projectTitle: "iLearn — فروشگاه دوره‌های آموزشی",
     description: "۲۵ صفحه، ۱۵۰+ کامپوننت، Auto Layout کامل، Prototype و Style Guide — دوره UI بی‌نهایت تیر ۱۴۰۴.",
     courseType: "ui",
@@ -868,7 +868,7 @@ export const studentProjects: StudentProject[] = [
   },
   {
     id: "sp2",
-    studentName: "محمدرضا قدیانی و تیم",
+    studentName: "محمدرضا قدیانی، عاطفه نادری، انسیه قلی‌پور، الهام حسنی",
     projectTitle: "Lozi — فروشگاه خدمات گرافیکی",
     description: "۴۰+ صفحه، ۴۰+ کامپوننت، Style Guide و Prototype کامل — دوره UI بی‌نهایت دی ۱۴۰۳.",
     courseType: "ui",
@@ -880,7 +880,7 @@ export const studentProjects: StudentProject[] = [
   },
   {
     id: "sp3",
-    studentName: "ملیحه پورهاشمی و تیم",
+    studentName: "ملیحه پورهاشمی، مهلا افخمی",
     projectTitle: "NFT Marketplace",
     description: "۵۰+ صفحه، ۱۰۰+ کامپوننت، فلوی کامل و Style Guide — دوره UI بی‌نهایت مهر ۱۴۰۳.",
     courseType: "ui",
