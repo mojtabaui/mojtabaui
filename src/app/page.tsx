@@ -7,8 +7,7 @@ import CoursesClient from "@/components/CoursesClient";
 import MarqueeBand from "@/components/MarqueeBand";
 import FadeIn from "@/components/FadeIn";
 import AnimatedCounter from "@/components/AnimatedCounter";
-import HeroImage from "@/components/HeroImage";
-import HeroDecor from "@/components/HeroDecor";
+import HeroPerspective from "@/components/HeroPerspective";
 import ParallaxY from "@/components/ParallaxY";
 import ArticleRow from "@/components/ArticleRow";
 import DiscountNotifyForm from "@/components/DiscountNotifyForm";
@@ -180,50 +179,40 @@ export default function Home() {
       <main className="flex-1">
 
         {/* ─── Hero ─── */}
-        {/* ارتفاع با clamp بسته شده. بدون سقف، روی نمایشگر بلند (مثلاً ۱۴۴۰) هیرو
-            بیش از ۱۲۰۰ پیکسل می‌شد و چون محتوا ته‌چینه، بالای صفحه خالی می‌موند. */}
+        {/* متن وسط‌چین، و زیرش بندِ تمام‌عرضِ ویژوال. ارتفاع دیگه با clamp بسته
+            نشده چون محتوا از بالا می‌چینه و بندِ پایین خودش ارتفاع می‌آره. */}
         <section
           className="dot-bg overflow-hidden relative flex flex-col"
-          style={{ backgroundColor: "#FAF6F1", minHeight: "clamp(560px, 86vh, 860px)" }}
+          style={{ backgroundColor: "#ffffff" }}
         >
 
-          <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
+          <div className="flex flex-col flex-1 w-full relative z-10">
 
-            {/* Text — top on mobile, right on desktop.
-                روی موبایل محتوا ته‌چین نیست و از بالای سکشن شروع می‌شه، پس بدون
-                فاصله‌ی بالا، نوارِ ثابتِ منو (۶۴px) روی نوتِ «+۶٬۵۰۰ نفر» می‌افتاد
-                و مخفیش می‌کرد. pt-24 اون رو از زیر منو می‌کشه بیرون؛ در دسکتاپ که
-                بلوک ته‌چینه lg:pt-0 دست‌نخورده می‌مونه. */}
-            <div className="flex-shrink-0 max-w-xl 2xl:max-w-2xl pt-24 pb-2 lg:pt-0 lg:pb-20">
+            {/* متن — وسط‌چین. pt-24 محتوا رو از زیرِ نوارِ ثابتِ منو می‌کشه بیرون. */}
+            <div className="w-full max-w-5xl mx-auto px-4 sm:px-6 pt-32 lg:pt-40 text-center">
 
-                {/* Eyebrow */}
-                <div
-                  className="inline-flex items-center gap-2 bg-white border border-[#e8e2d9] rounded-full px-4 py-1.5 mb-7 fade-in-up"
-                  style={{ animationDelay: "0ms" }}
-                >
-                  <div className="w-2 h-2 rounded-full bg-emerald-400 pulse-dot" />
-                  <span className="font-body text-xs text-[#6b6560]">
-                    تا به حال +۶٬۵۰۰ نفر در دوره‌ها شرکت کرده‌اند
-                  </span>
-                </div>
+                {/* نوتِ «+۶٬۵۰۰ نفر» اینجا بود و با ردیفِ اثباتِ اجتماعیِ پایین
+                    یک حرف را دو بار می‌زد؛ حذف شد تا بالای هیرو تمیز بماند. */}
 
+                {/* روی lg تک‌خطی نگه داشته می‌شه (ظرف max-w-5xl جا داره) تا
+                    ارتفاعِ آزادشده به فریمِ بزرگ‌ترِ پایین برسه. زیرِ lg آزادانه
+                    می‌شکنه، وگرنه روی موبایل سرریز می‌کرد. */}
                 <h1
-                  className="font-body font-extrabold text-[clamp(1.9rem,3.4vw,3rem)] leading-[1.45] text-[#1a1714] mb-6 fade-in-up"
+                  className="font-body font-extrabold text-[clamp(1.8rem,3.5vw,2.7rem)] leading-[1.35] text-[#1a1714] lg:whitespace-nowrap fade-in-up"
                   style={{ animationDelay: "80ms" }}
                 >
                   آموزش اصولی و پروژه‌محورِ طراحی محصول دیجیتال
                 </h1>
 
                 <p
-                  className="text-[#6b6560] font-body text-lg leading-relaxed mb-10 max-w-lg fade-in-up"
+                  className="text-[#6b6560] font-body text-[17px] leading-relaxed mt-5 mb-7 mx-auto lg:whitespace-nowrap fade-in-up"
                   style={{ animationDelay: "160ms" }}
                 >
-                  از صفر شروع می‌کنی، پروژه‌ی واقعی می‌سازی و هر هفته فیدبک می‌گیری.
-                  لازم نیست قبلش چیزی بلد باشی.
+                  از صفر شروع می‌کنی، پروژه‌ی واقعی می‌سازی و هر هفته فیدبک می‌گیری. لازم نیست قبلش چیزی بلد باشی.
                 </p>
 
                 <div
-                  className="flex items-center gap-4 flex-wrap fade-in-up"
+                  className="flex items-center justify-center gap-4 flex-wrap fade-in-up"
                   style={{ animationDelay: "240ms" }}
                 >
                   <Link
@@ -243,47 +232,36 @@ export default function Home() {
                   </Link>
                 </div>
 
-                {/* Social proof */}
+                {/* آواتارها + امتیاز، فشرده در یک ردیف. نسخه‌ی قبلی دو طبقه بود
+                    و همون ارتفاع باعث می‌شد ویژوال زیرِ خطِ تا بیفته. */}
                 <div
-                  className="flex items-center gap-4 mt-10 fade-in-up"
+                  className="flex items-center justify-center gap-3 mt-7 fade-in-up"
                   style={{ animationDelay: "320ms" }}
                 >
                   <div className="flex -space-x-2 space-x-reverse">
                     {["م", "ع", "س", "ف", "ن"].map((c, i) => (
                       <div
                         key={i}
-                        className="w-8 h-8 rounded-full bg-[#e8e2d9] border-2 border-[#f7f4ef] flex items-center justify-center text-[10px] font-body text-[#6b6560]"
+                        className="w-7 h-7 rounded-full bg-[#e8e2d9] border-2 border-[#f7f4ef] flex items-center justify-center text-[10px] font-body text-[#6b6560]"
                       >
                         {c}
                       </div>
                     ))}
                   </div>
-                  <div>
-                    <div className="flex items-center gap-0.5 mb-0.5">
-                      {[1,2,3,4,5].map(i => (
-                        <Star key={i} size={11} className="text-amber-400" fill="#fbbf24" />
-                      ))}
-                    </div>
-                    <span className="text-[#a09990] text-xs font-body">+۶٬۵۰۰ دانشجوی حرفه‌ای</span>
+                  <div className="flex items-center gap-0.5">
+                    {[1,2,3,4,5].map(i => (
+                      <Star key={i} size={11} className="text-amber-400" fill="#fbbf24" />
+                    ))}
                   </div>
+                  <span className="text-[#a09990] text-xs font-body">+۶٬۵۰۰ دانشجوی حرفه‌ای</span>
                 </div>
 
             </div>
 
-            {/* Mobile image — bottom, touches black bar */}
-            <div className="lg:hidden relative flex-1 min-h-[40vh]">
-              <Image
-                src="/images/hero.png"
-                alt="مجتبا یزدان‌پناه"
-                fill
-                className="object-contain object-bottom"
-                style={{ transform: "scaleX(-1)" }}
-                priority
-              />
+            {/* بندِ ویژوال — پنجره‌ی سه‌بعدیِ «وایرفریم / رابط نهایی» */}
+            <div className="mt-6 lg:mt-7 pb-10">
+              <HeroPerspective />
             </div>
-
-            {/* Desktop image */}
-            <HeroImage />
 
           </div>
         </section>
