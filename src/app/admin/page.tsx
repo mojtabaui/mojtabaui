@@ -130,6 +130,24 @@ export default async function AdminPage() {
           ))}
         </div>
 
+        {/* Students of the offline courses */}
+        <Link
+          href="/admin/students"
+          className="group bg-[#111110] hover:bg-[#151413] border border-[#2d2c2a] hover:border-[#8b5cf6]/40 rounded-2xl px-6 py-5 mb-8 flex items-center justify-between gap-4 transition-colors"
+        >
+          <div>
+            <h2 className="font-body font-semibold text-[#fafaf9] text-sm mb-1">
+              دانشجوهای دوره‌های آفلاین
+            </h2>
+            <p className="font-body text-xs text-[#57534e]">
+              موضوع پروژه و پیشرفت تسک‌ها، به تفکیک ماه ثبت‌نام و دوره
+            </p>
+          </div>
+          <span className="font-body text-sm text-[#8b5cf6] group-hover:text-[#a78bfa] transition-colors shrink-0">
+            دیدن ←
+          </span>
+        </Link>
+
         {/* Certificates: create form + recent list */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
           <CertificateForm />
