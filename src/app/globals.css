@@ -26,6 +26,19 @@
   a, button, summary, [role='button'] { cursor: pointer !important; }
 }
 
+/* پنل ادمین نشانگر سفارشی نداره و ابزار کاره، نه صفحه‌ی تبلیغاتی —
+   پس نشانگر سیستم برمی‌گرده. کلاسش از layout پنل میاد. */
+.native-cursor,
+.native-cursor * { cursor: auto !important; }
+.native-cursor a,
+.native-cursor button,
+.native-cursor summary,
+.native-cursor select,
+.native-cursor [role='button'] { cursor: pointer !important; }
+.native-cursor input,
+.native-cursor textarea { cursor: text !important; }
+.native-cursor button:disabled { cursor: not-allowed !important; }
+
 html {
   direction: rtl;
   scroll-behavior: smooth;

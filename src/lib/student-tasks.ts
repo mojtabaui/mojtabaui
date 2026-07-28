@@ -1,48 +1,67 @@
 /**
- * تسک‌های دوره‌های آفلاین — هشت هفته، هر هفته چند تسک.
+ * تسک‌های دوره‌های آفلاین — از همون پلنر هفتگیِ خود سایت خونده می‌شن،
+ * نه از یک فهرست جدا. یعنی اگه پلنر عوض شه، این هم عوض می‌شه و هیچ‌وقت
+ * دو تا نسخهٔ ناهماهنگ نداریم.
  *
  * تیک خوردن هر تسک یعنی **منتور بررسی‌اش کرده**، نه اینکه دانشجو تحویل داده.
- * پس ستون تسک‌ها وضعیتِ کارِ منتور رو نشون می‌ده، نه پیشرفت دانشجو رو.
  *
- * ⚠️ فهرست پایین هنوز موقتیه. وقتی ریز تسک‌های واقعی رسید، فقط همین
- * آرایه رو عوض کن؛ بقیهٔ کد (API، جدول، فیلترها) خودش تطبیق پیدا می‌کنه.
- * فقط حواست باشه id‌ها رو عوض نکنی، چون توی دیتابیس ذخیره شدن.
+ * ⚠️ شناسه‌ها (id) از ترتیب تسک‌ها در پلنر ساخته می‌شن و توی دیتابیس ذخیره
+ * می‌شن. اگه تسکی رو از وسط پلنر حذف کنی، تیک‌های بعدش یکی جابه‌جا می‌شن.
+ * اضافه کردن به آخر هر هفته بی‌خطره.
  */
+import { planners } from "@/lib/planner";
 
 export type Task = {
-  /** شناسهٔ ثابت — توی دیتابیس همین عدد ذخیره می‌شه */
+  /** شناسهٔ ثابت در محدودهٔ همون دوره — توی دیتابیس همین عدد ذخیره می‌شه */
   id: number;
   week: number;
   title: string;
+  desc?: string;
+  /** این تسک یکی از چند گزینهٔ جایگزینه، نه یک تسک مستقل */
+  alternative: boolean;
 };
 
-export const WEEK_COUNT = 8;
+export type Track = "UI" | "UX";
 
-export const TASKS: Task[] = [
-  { id: 1, week: 1, title: "تسک ۱" },
-  { id: 2, week: 1, title: "تسک ۲" },
-  { id: 3, week: 2, title: "تسک ۳" },
-  { id: 4, week: 2, title: "تسک ۴" },
-  { id: 5, week: 3, title: "تسک ۵" },
-  { id: 6, week: 3, title: "تسک ۶" },
-  { id: 7, week: 4, title: "تسک ۷" },
-  { id: 8, week: 4, title: "تسک ۸" },
-  { id: 9, week: 5, title: "تسک ۹" },
-  { id: 10, week: 5, title: "تسک ۱۰" },
-  { id: 11, week: 6, title: "تسک ۱۱" },
-  { id: 12, week: 6, title: "تسک ۱۲" },
-  { id: 13, week: 7, title: "تسک ۱۳" },
-  { id: 14, week: 7, title: "تسک ۱۴" },
-  { id: 15, week: 8, title: "تسک ۱۵" },
-  { id: 16, week: 8, title: "تسک ۱۶" },
-];
+function build(track: Track): Task[] {
+  const planner = planners[track.toLowerCase() as "ui" | "ux"];
+  const out: Task[] = [];
+  let id = 0;
 
-export const TASK_COUNT = TASKS.length;
+  planner.weeks.forEach((w, weekIndex) => {
+    w.tasks.forEach((t, taskIndex) => {
+      id += 1;
+      out.push({
+        id,
+        week: weekIndex + 1,
+        title: t.title,
+        desc: t.desc,
+        // وقتی هفته حالت «یکی رو انتخاب کن» داره، گزینه‌های بعد از اولی جایگزین‌ان
+        alternative: Boolean(w.either) && taskIndex > 0,
+      });
+    });
+  });
 
-/** تسک‌ها را هفته‌به‌هفته گروه می‌کند */
-export function tasksByWeek(): { week: number; tasks: Task[] }[] {
+  return out;
+}
+
+const CACHE: Record<Track, Task[]> = { UI: build("UI"), UX: build("UX") };
+
+export function tasksFor(track: Track): Task[] {
+  return CACHE[track];
+}
+
+export function taskCount(track: Track): number {
+  return CACHE[track].length;
+}
+
+/** بیشترین تعداد تسک بین دو دوره — برای اعتبارسنجی سمت سرور */
+export const MAX_TASK_ID = Math.max(CACHE.UI.length, CACHE.UX.length);
+
+/** تسک‌های یک دوره را هفته‌به‌هفته گروه می‌کند */
+export function tasksByWeek(track: Track): { week: number; tasks: Task[] }[] {
   const map = new Map<number, Task[]>();
-  for (const t of TASKS) {
+  for (const t of CACHE[track]) {
     if (!map.has(t.week)) map.set(t.week, []);
     map.get(t.week)!.push(t);
   }

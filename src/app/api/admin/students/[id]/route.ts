@@ -4,7 +4,7 @@ import { Prisma, type StudentGoal } from "@prisma/client";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 
-import { TASK_COUNT } from "@/lib/student-tasks";
+import { taskCount } from "@/lib/student-tasks";
 
 const GOALS: StudentGoal[] = ["UNKNOWN", "LEARNING", "EMPLOYMENT", "FREELANCE", "BOTH"];
 
@@ -53,9 +53,18 @@ export async function PATCH(
     if (!Array.isArray(body.reviewedTasks)) {
       return NextResponse.json({ error: "فهرست تسک‌ها نامعتبر است" }, { status: 400 });
     }
+    // دو دوره تعداد تسک متفاوتی دارن، پس سقف رو از دورهٔ همین ردیف می‌گیریم
+    const row = await prisma.studentProject.findUnique({
+      where: { id },
+      select: { track: true },
+    });
+    if (!row) {
+      return NextResponse.json({ error: "این دانشجو پیدا نشد" }, { status: 404 });
+    }
+    const max = taskCount(row.track);
     const raw: number[] = (body.reviewedTasks as unknown[]).map((v) => Number(v));
     const tasks = [...new Set(raw)]
-      .filter((n) => Number.isInteger(n) && n >= 1 && n <= TASK_COUNT)
+      .filter((n) => Number.isInteger(n) && n >= 1 && n <= max)
       .sort((a, b) => a - b);
     data.reviewedTasks = tasks;
   }

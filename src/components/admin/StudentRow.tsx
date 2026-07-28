@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Check, ChevronDown, Trash2, X } from "lucide-react";
 import { intakeLabel, toPersianDigits } from "@/lib/persian-months";
-import { GOAL_LABEL, GOAL_VALUES, TASK_COUNT, tasksByWeek } from "@/lib/student-tasks";
+import { GOAL_LABEL, GOAL_VALUES, taskCount, tasksByWeek } from "@/lib/student-tasks";
 
 type Student = {
   id: string;
@@ -84,7 +84,10 @@ export default function StudentRow({ student }: { student: Student }) {
   const cellInput =
     "w-full bg-transparent border border-transparent hover:border-[#2d2c2a] focus:border-[#8b5cf6]/50 focus:bg-[#0a0908] rounded-lg px-2.5 py-1.5 font-body text-sm text-[#fafaf9] placeholder:text-[#57534e] focus:outline-none transition-colors";
 
-  const done = reviewed.length;
+  // هر دوره تسک‌های خودش رو داره، پس شمارش و فهرست بر اساس دورهٔ همین ردیفه
+  const total = taskCount(student.track);
+  const weeks = tasksByWeek(student.track);
+  const done = reviewed.filter((id) => id >= 1 && id <= total).length;
 
   return (
     <>
@@ -159,7 +162,7 @@ export default function StudentRow({ student }: { student: Student }) {
           <span
             className={`font-body text-xs ${done === 0 ? "text-[#57534e]" : "text-emerald-400"}`}
           >
-            {toPersianDigits(done)} از {toPersianDigits(TASK_COUNT)}
+            {toPersianDigits(done)} از {toPersianDigits(total)}
           </span>
         </td>
 
@@ -211,13 +214,13 @@ export default function StudentRow({ student }: { student: Student }) {
                   تیک یعنی <span className="text-[#a8a29e]">منتور بررسی کرده</span>، نه اینکه
                   دانشجو تحویل داده
                 </p>
-                <div className="flex flex-wrap gap-x-5 gap-y-3">
-                  {tasksByWeek().map(({ week, tasks }) => (
-                    <div key={week}>
+                <div className="grid gap-x-6 gap-y-3 sm:grid-cols-2 xl:grid-cols-4">
+                  {weeks.map(({ week, tasks }) => (
+                    <div key={week} className="min-w-0">
                       <p className="font-body text-[10px] text-[#57534e] mb-1.5">
                         هفتهٔ {toPersianDigits(week)}
                       </p>
-                      <div className="flex gap-1.5">
+                      <div className="space-y-1">
                         {tasks.map((t) => {
                           const on = reviewed.includes(t.id);
                           return (
@@ -226,14 +229,28 @@ export default function StudentRow({ student }: { student: Student }) {
                               type="button"
                               onClick={() => toggleTask(t.id)}
                               disabled={saving}
-                              title={t.title}
-                              className={`w-8 h-8 rounded-lg border font-mono text-xs transition-colors disabled:opacity-50 ${
+                              title={t.desc || t.title}
+                              className={`w-full flex items-start gap-2 text-right rounded-lg border px-2 py-1.5 font-body text-[11px] leading-5 transition-colors disabled:opacity-50 ${
                                 on
-                                  ? "bg-emerald-400/15 border-emerald-400/50 text-emerald-300"
-                                  : "bg-[#0a0908] border-[#2d2c2a] text-[#57534e] hover:border-[#8b5cf6]/40"
-                              }`}
+                                  ? "bg-emerald-400/10 border-emerald-400/40 text-emerald-300"
+                                  : "bg-[#0a0908] border-[#2d2c2a] text-[#a8a29e] hover:border-[#8b5cf6]/40"
+                              } ${t.alternative ? "opacity-80" : ""}`}
                             >
-                              {on ? <Check size={13} className="mx-auto" /> : t.id}
+                              <span
+                                className={`shrink-0 mt-0.5 w-3.5 h-3.5 rounded border grid place-items-center ${
+                                  on
+                                    ? "border-emerald-400/60 bg-emerald-400/20"
+                                    : "border-[#3a3937]"
+                                }`}
+                              >
+                                {on && <Check size={9} />}
+                              </span>
+                              <span className="min-w-0">
+                                {t.alternative && (
+                                  <span className="text-[#57534e]">یا </span>
+                                )}
+                                {t.title}
+                              </span>
                             </button>
                           );
                         })}
