@@ -168,12 +168,16 @@ export default async function AdminPage() {
                         {cert.year ? ` — سال ${cert.year}` : ""}
                       </p>
                     </div>
-                    <code
+                    <a
+                      href={`/certificate/${cert.code}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      title="دیدن گواهی"
                       dir="ltr"
-                      className="font-mono text-xs text-[#8b5cf6] bg-[#0a0908] border border-[#2d2c2a] rounded-lg px-2.5 py-1 tracking-widest shrink-0"
+                      className="font-mono text-xs text-[#8b5cf6] hover:text-[#a78bfa] bg-[#0a0908] border border-[#2d2c2a] hover:border-[#8b5cf6]/50 rounded-lg px-2.5 py-1 tracking-widest shrink-0 transition-colors"
                     >
                       {cert.code}
-                    </code>
+                    </a>
                   </div>
                 ))}
               </div>
