@@ -119,19 +119,33 @@ model StudentProject {
   intakeMonth  String
   /// موضوع پروژه — تا وقتی دانشجو انتخاب نکرده خالیه
   topic        String       @default("")
-  /// تا تسک چندم جلو رفته
-  taskProgress Int          @default(0)
+  /// شمارهٔ تسک‌هایی که منتور **بررسی‌شون کرده**.
+  /// تیک یعنی بررسی شد، نه اینکه دانشجو تحویل داده.
+  reviewedTasks Int[]       @default([])
+  /// سابقه و آشنایی قبلی — از معرفی خودش توی گروه
+  background   String?
+  /// هدفش از دوره، برای اینکه منتور بدونه چه جور پروژه‌ای بهش بده
+  goal         StudentGoal  @default(UNKNOWN)
   note         String?
   createdAt    DateTime     @default(now())
   updatedAt    DateTime     @updatedAt
 
   @@index([intakeMonth])
   @@index([track])
+  @@index([goal])
 }
 
 enum ProjectTrack {
   UI
   UX
+}
+
+enum StudentGoal {
+  UNKNOWN // هنوز نگفته
+  LEARNING // یادگیری و ارتقای سطح
+  EMPLOYMENT // استخدام
+  FREELANCE // کار فریلنسری
+  BOTH // هم استخدام هم فریلنس
 }
 
 enum CertTrack {

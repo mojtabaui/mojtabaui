@@ -175,22 +175,26 @@ export default async function StudentsPage({ searchParams }: Props) {
               <table className="w-full min-w-[760px]">
                 <thead>
                   <tr className="border-b border-[#1e1d1c]">
-                    <th className="px-4 py-3 text-right font-body text-xs text-[#57534e] font-normal">
+                    <th className="w-8" />
+                    <th className="px-3 py-3 text-right font-body text-xs text-[#57534e] font-normal">
                       نام
                     </th>
-                    <th className="px-4 py-3 text-right font-body text-xs text-[#57534e] font-normal">
+                    <th className="px-3 py-3 text-right font-body text-xs text-[#57534e] font-normal">
                       دوره
                     </th>
-                    <th className="px-4 py-3 text-right font-body text-xs text-[#57534e] font-normal">
-                      ماه ثبت‌نام
+                    <th className="px-3 py-3 text-right font-body text-xs text-[#57534e] font-normal">
+                      ماه
                     </th>
-                    <th className="px-4 py-3 text-right font-body text-xs text-[#57534e] font-normal">
+                    <th className="px-3 py-3 text-right font-body text-xs text-[#57534e] font-normal">
                       موضوع پروژه
                     </th>
-                    <th className="px-4 py-3 text-center font-body text-xs text-[#57534e] font-normal">
-                      تسک
+                    <th className="px-3 py-3 text-right font-body text-xs text-[#57534e] font-normal">
+                      هدف
                     </th>
-                    <th className="px-4 py-3" />
+                    <th className="px-3 py-3 text-right font-body text-xs text-[#57534e] font-normal">
+                      بررسی‌شده
+                    </th>
+                    <th className="px-3 py-3" />
                   </tr>
                 </thead>
                 <tbody>
@@ -203,7 +207,10 @@ export default async function StudentsPage({ searchParams }: Props) {
                         track: s.track,
                         intakeMonth: s.intakeMonth,
                         topic: s.topic,
-                        taskProgress: s.taskProgress,
+                        reviewedTasks: s.reviewedTasks,
+                        background: s.background,
+                        goal: s.goal,
+                        note: s.note,
                       }}
                     />
                   ))}

@@ -1,8 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
-import { Prisma } from "@prisma/client";
+import { Prisma, type StudentGoal } from "@prisma/client";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+
+import { TASK_COUNT } from "@/lib/student-tasks";
+
+const GOALS: StudentGoal[] = ["UNKNOWN", "LEARNING", "EMPLOYMENT", "FREELANCE", "BOTH"];
 
 async function requireAdmin() {
   const session = await getServerSession(authOptions);
@@ -33,15 +37,27 @@ export async function PATCH(
     const note = String(body.note).trim().slice(0, 500);
     data.note = note || null;
   }
-  if (body.taskProgress !== undefined) {
-    const n = Number(body.taskProgress);
-    if (!Number.isInteger(n) || n < 0 || n > 99) {
-      return NextResponse.json(
-        { error: "شمارهٔ تسک باید عددی بین ۰ تا ۹۹ باشه" },
-        { status: 400 }
-      );
+  if (body.background !== undefined) {
+    const bg = String(body.background).trim().slice(0, 600);
+    data.background = bg || null;
+  }
+  if (body.goal !== undefined) {
+    const goal = String(body.goal);
+    if (!GOALS.includes(goal as StudentGoal)) {
+      return NextResponse.json({ error: "هدف نامعتبر است" }, { status: 400 });
     }
-    data.taskProgress = n;
+    data.goal = goal as StudentGoal;
+  }
+  // تیکِ بررسی — کل آرایه دوباره فرستاده می‌شه، نه یک تغییر جزئی
+  if (body.reviewedTasks !== undefined) {
+    if (!Array.isArray(body.reviewedTasks)) {
+      return NextResponse.json({ error: "فهرست تسک‌ها نامعتبر است" }, { status: 400 });
+    }
+    const raw: number[] = (body.reviewedTasks as unknown[]).map((v) => Number(v));
+    const tasks = [...new Set(raw)]
+      .filter((n) => Number.isInteger(n) && n >= 1 && n <= TASK_COUNT)
+      .sort((a, b) => a - b);
+    data.reviewedTasks = tasks;
   }
 
   if (Object.keys(data).length === 0) {

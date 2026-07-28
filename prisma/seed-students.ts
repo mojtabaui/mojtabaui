@@ -18,7 +18,16 @@ import { PrismaPg } from "@prisma/adapter-pg";
 
 const INTAKE = "1405-04"; // تیر ۱۴۰۵
 
-type Row = { name: string; ui: boolean; ux: boolean; note?: string };
+type Goal = "UNKNOWN" | "LEARNING" | "EMPLOYMENT" | "FREELANCE" | "BOTH";
+type Row = {
+  name: string;
+  ui: boolean;
+  ux: boolean;
+  note?: string;
+  /** از معرفی خودش توی گروه تلگرام */
+  background?: string;
+  goal?: Goal;
+};
 
 const ROWS: Row[] = [
   { name: "هاله جمعه‌پور", ui: true, ux: true },
@@ -29,10 +38,10 @@ const ROWS: Row[] = [
   { name: "عطیه احتشام", ui: true, ux: false },
   { name: "مهدی الکن", ui: true, ux: false, note: "اقساطی ۱ مانده" },
   { name: "مهدی حسینی", ui: true, ux: false },
-  { name: "مارال جوادپور", ui: true, ux: true },
+  { name: "مارال جوادپور", ui: true, ux: true, goal: "LEARNING", background: "۲۲ ساله. شش ماه آشنایی. دوره‌های رایگان، بدون سابقهٔ کاری" },
   { name: "مهسا هدایتی زنگنه", ui: true, ux: false },
-  { name: "فائزه محمدی", ui: true, ux: true },
-  { name: "نسترن پورمهدی", ui: true, ux: true },
+  { name: "فائزه محمدی", ui: true, ux: true, goal: "FREELANCE", background: "۲۶ ساله. یک سال پروداکت دیزاینر. دوره‌های مدرسه دیزاین ویچ و مستر اینتراکشن، به‌علاوهٔ منتورینگ" },
+  { name: "نسترن پورمهدی", ui: true, ux: true, goal: "EMPLOYMENT", background: "۲۳ ساله. دوره‌های رایگان. سه ماه عضو یک تیم و سه تمپلیت طراحی کرده. آشنا با فیگما" },
   { name: "زهرا فرشچیان", ui: true, ux: true, note: "اقساطی ۲۶۰۰" },
   { name: "زهرا امامی", ui: false, ux: true },
   { name: "مهرشاد روحی", ui: true, ux: false },
@@ -41,18 +50,18 @@ const ROWS: Row[] = [
   { name: "شمیم فرامرزی", ui: true, ux: false },
   { name: "محمد باقری", ui: true, ux: false },
   { name: "معصومه علما", ui: false, ux: true },
-  { name: "محیا عاطف‌بخت", ui: true, ux: true },
-  { name: "مبینا حاجی احمد", ui: true, ux: true },
+  { name: "محیا عاطف‌بخت", ui: true, ux: true, goal: "LEARNING", background: "۳۲ ساله. دانشجوی دکتری روان‌شناسی شناختی. خودآموز، بدون سابقهٔ حرفه‌ای" },
+  { name: "مبینا حاجی احمد", ui: true, ux: true, goal: "EMPLOYMENT", background: "۲۲ ساله. چند دورهٔ فیگما در ۵ تا ۶ ماه اخیر. آشنا با فیگما و ایلاستریتور" },
   { name: "مبینا جربان", ui: true, ux: true },
-  { name: "مرضیه دهقانی", ui: true, ux: true, note: "اقساطی ۲۶۰۰ مانده" },
+  { name: "مرضیه دهقانی", ui: true, ux: true, note: "اقساطی ۲۶۰۰ مانده", goal: "EMPLOYMENT", background: "۲۳ ساله. پنج ماه آشنایی. دوره‌های رایگان یوتیوب. تا حدی فیگما. دنبال کار تیمی" },
   { name: "محمود سجادی", ui: true, ux: true, note: "۲۶۰۰ مانده" },
   { name: "مهنوش عزتی", ui: false, ux: true, note: "اقساطی ۱۵۰۰ مانده" },
-  { name: "زهرا علیجانتبار", ui: true, ux: true },
+  { name: "زهرا علیجانتبار", ui: true, ux: true, goal: "BOTH", background: "۲۹ ساله. دورهٔ رایگان UI/UX در یک سال اخیر، هنوز پروژه‌ای انجام نداده" },
   { name: "مطهره مسلمی", ui: true, ux: false },
   { name: "نیلوفر پروندی", ui: true, ux: true, note: "اقساطی ۲۶۰۰ مانده" },
   { name: "نگین شایسته نیا", ui: true, ux: true, note: "اقساطی ۲۶۰۰ مانده" },
-  { name: "راضیه حسینی", ui: true, ux: true, note: "۳۴۶۰ مانده" },
-  { name: "فاطمه رنجبر", ui: true, ux: true },
+  { name: "راضیه حسینی", ui: true, ux: true, note: "۳۴۶۰ مانده", goal: "FREELANCE", background: "دورهٔ رایگان UI/UX. مسلط به فیگما، فتوشاپ، المنتور و وردپرس. سایت razfolio.ir" },
+  { name: "فاطمه رنجبر", ui: true, ux: true, goal: "LEARNING", background: "۲۲ ساله. سه ماه آشنایی با حوزه. دوره‌های رایگان. کمی فیگما، بدون سابقهٔ نرم‌افزاری" },
   { name: "مهدیس معمار منتظرین", ui: true, ux: true },
   { name: "نسرین محمودی", ui: true, ux: true },
   { name: "سینا عبدالله زاده", ui: true, ux: true },
@@ -64,17 +73,32 @@ const ROWS: Row[] = [
   { name: "شادی وحدتی", ui: false, ux: true },
   { name: "زهرا امانی نژاد", ui: false, ux: true },
   { name: "نوید الهی", ui: true, ux: false },
+  // توی خروجی ثبت‌نام نبود، از معرفی گروه اضافه شد. دوره‌ش هنوز تأیید نشده.
+  { name: "مریم فرهنگی", ui: true, ux: true, note: "دوره تأیید نشده", goal: "BOTH", background: "۲۹ ساله. رشتهٔ معماری، در حال تغییر مسیر. دورهٔ UX گوگل. نرم‌افزارهای معماری، فتوشاپ، ایلاستریتور و کمی فیگما" },
 ];
 
 const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL });
 const prisma = new PrismaClient({ adapter });
 
 async function main() {
-  const rows: { studentName: string; track: "UI" | "UX"; intakeMonth: string; note: string | null }[] = [];
+  const rows: {
+    studentName: string;
+    track: "UI" | "UX";
+    intakeMonth: string;
+    note: string | null;
+    background: string | null;
+    goal: Goal;
+  }[] = [];
 
   for (const r of ROWS) {
-    if (r.ui) rows.push({ studentName: r.name, track: "UI", intakeMonth: INTAKE, note: r.note ?? null });
-    if (r.ux) rows.push({ studentName: r.name, track: "UX", intakeMonth: INTAKE, note: r.note ?? null });
+    const base = {
+      intakeMonth: INTAKE,
+      note: r.note ?? null,
+      background: r.background ?? null,
+      goal: r.goal ?? ("UNKNOWN" as const),
+    };
+    if (r.ui) rows.push({ studentName: r.name, track: "UI", ...base });
+    if (r.ux) rows.push({ studentName: r.name, track: "UX", ...base });
   }
 
   // آنچه از قبل هست رو دوباره وارد نمی‌کنیم تا اجرای دوبارهٔ اسکریپت چیزی خراب نکنه
