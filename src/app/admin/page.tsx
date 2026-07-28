@@ -139,9 +139,12 @@ export default async function AdminPage() {
               <h2 className="font-body font-semibold text-[#fafaf9] text-sm">
                 گواهی‌های اخیر
               </h2>
-              <span className="font-display text-xs text-[#57534e] tracking-wider uppercase">
-                Recent
-              </span>
+              <Link
+                href="/admin/certificates"
+                className="font-body text-xs text-[#8b5cf6] hover:text-[#a78bfa] transition-colors"
+              >
+                دیدن همه ({certCount}) ←
+              </Link>
             </div>
 
             {recentCerts.length === 0 ? (
