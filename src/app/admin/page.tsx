@@ -4,6 +4,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import CertificateForm from "@/components/admin/CertificateForm";
+import DeleteCertificateButton from "@/components/admin/DeleteCertificateButton";
 import {
   BookOpen,
   Users,
@@ -168,16 +169,19 @@ export default async function AdminPage() {
                         {cert.year ? ` — سال ${cert.year}` : ""}
                       </p>
                     </div>
-                    <a
-                      href={`/certificate/${cert.code}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      title="دیدن گواهی"
-                      dir="ltr"
-                      className="font-mono text-xs text-[#8b5cf6] hover:text-[#a78bfa] bg-[#0a0908] border border-[#2d2c2a] hover:border-[#8b5cf6]/50 rounded-lg px-2.5 py-1 tracking-widest shrink-0 transition-colors"
-                    >
-                      {cert.code}
-                    </a>
+                    <div className="flex items-center gap-1.5 shrink-0">
+                      <a
+                        href={`/certificate/${cert.code}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        title="دیدن گواهی"
+                        dir="ltr"
+                        className="font-mono text-xs text-[#8b5cf6] hover:text-[#a78bfa] bg-[#0a0908] border border-[#2d2c2a] hover:border-[#8b5cf6]/50 rounded-lg px-2.5 py-1 tracking-widest transition-colors"
+                      >
+                        {cert.code}
+                      </a>
+                      <DeleteCertificateButton id={cert.id} name={cert.studentName} />
+                    </div>
                   </div>
                 ))}
               </div>
