@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Check, ChevronDown, Trash2, X } from "lucide-react";
+import { Check, ChevronDown, ExternalLink, Trash2, X } from "lucide-react";
 import { intakeLabel, toPersianDigits } from "@/lib/persian-months";
 import { GOAL_LABEL, GOAL_VALUES, taskCount, tasksByWeek } from "@/lib/student-tasks";
 
@@ -12,6 +12,7 @@ type Student = {
   track: "UI" | "UX";
   intakeMonth: string;
   topic: string;
+  fileLink: string;
   reviewedTasks: number[];
   background: string | null;
   goal: string;
@@ -27,6 +28,7 @@ export default function StudentRow({ student }: { student: Student }) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [topic, setTopic] = useState(student.topic);
+  const [fileLink, setFileLink] = useState(student.fileLink);
   const [background, setBackground] = useState(student.background ?? "");
   const [reviewed, setReviewed] = useState<number[]>(student.reviewedTasks);
   const [saving, setSaving] = useState(false);
@@ -132,15 +134,28 @@ export default function StudentRow({ student }: { student: Student }) {
         </td>
 
         <td className="px-1 py-1.5 min-w-[200px]">
-          <input
-            type="text"
-            value={topic}
-            onChange={(e) => setTopic(e.target.value)}
-            onBlur={() => topic.trim() !== student.topic && patch({ topic })}
-            disabled={saving}
-            placeholder="هنوز وارد نشده"
-            className={cellInput}
-          />
+          <div className="flex items-center gap-1">
+            <input
+              type="text"
+              value={topic}
+              onChange={(e) => setTopic(e.target.value)}
+              onBlur={() => topic.trim() !== student.topic && patch({ topic })}
+              disabled={saving}
+              placeholder="هنوز وارد نشده"
+              className={cellInput}
+            />
+            {student.fileLink && (
+              <a
+                href={student.fileLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                title={student.fileLink}
+                className="shrink-0 text-[#8b5cf6] hover:text-[#a78bfa] p-1.5 rounded-lg transition-colors"
+              >
+                <ExternalLink size={13} />
+              </a>
+            )}
+          </div>
         </td>
 
         <td className="px-1 py-1.5 w-40">
@@ -258,6 +273,23 @@ export default function StudentRow({ student }: { student: Student }) {
                     </div>
                   ))}
                 </div>
+              </div>
+
+              {/* ── لینک فایل ── */}
+              <div>
+                <label className="block font-body text-xs text-[#57534e] mb-1.5">
+                  لینک فایل کار
+                </label>
+                <input
+                  type="url"
+                  dir="ltr"
+                  value={fileLink}
+                  onChange={(e) => setFileLink(e.target.value)}
+                  onBlur={() => fileLink.trim() !== student.fileLink && patch({ fileLink })}
+                  disabled={saving}
+                  placeholder="https://figma.com/file/..."
+                  className="w-full text-left bg-[#0a0908] border border-[#2d2c2a] focus:border-[#8b5cf6]/50 rounded-xl px-3 py-2 font-body text-sm text-[#fafaf9] placeholder:text-[#57534e] focus:outline-none transition-colors"
+                />
               </div>
 
               {/* ── سابقه ── */}

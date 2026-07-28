@@ -33,6 +33,16 @@ export async function PATCH(
   if (body.topic !== undefined) {
     data.topic = String(body.topic).trim().slice(0, 300);
   }
+  if (body.fileLink !== undefined) {
+    const link = String(body.fileLink).trim().slice(0, 500);
+    if (link && !/^https?:\/\//i.test(link)) {
+      return NextResponse.json(
+        { error: "لینک باید با http یا https شروع بشه" },
+        { status: 400 }
+      );
+    }
+    data.fileLink = link;
+  }
   if (body.note !== undefined) {
     const note = String(body.note).trim().slice(0, 500);
     data.note = note || null;

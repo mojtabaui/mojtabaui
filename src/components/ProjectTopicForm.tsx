@@ -9,7 +9,8 @@ import { useState } from "react";
  * نشون داده نمی‌شه — لینک قراره توی کانال بره و اسم بقیه نباید لو بره.
  */
 
-type Course = { id: string; track: "UI" | "UX"; topic: string };
+type Course = { id: string; track: "UI" | "UX"; topic: string; fileLink: string };
+type Entry = { topic: string; fileLink: string };
 
 const TRACK_LABEL: Record<string, string> = {
   UI: "طراحی رابط کاربری",
@@ -24,7 +25,7 @@ export default function ProjectTopicForm() {
   const [code, setCode] = useState("");
   const [courses, setCourses] = useState<Course[] | null>(null);
   const [matchedName, setMatchedName] = useState("");
-  const [topics, setTopics] = useState<Record<string, string>>({});
+  const [entries, setEntries] = useState<Record<string, Entry>>({});
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const [done, setDone] = useState(false);
@@ -58,18 +59,26 @@ export default function ProjectTopicForm() {
     if (!data) return;
     setCourses(data.courses);
     setMatchedName(data.name);
-    const seed: Record<string, string> = {};
-    for (const c of data.courses as Course[]) seed[c.id] = c.topic;
-    setTopics(seed);
+    const seed: Record<string, Entry> = {};
+    for (const c of data.courses as Course[]) {
+      seed[c.id] = { topic: c.topic, fileLink: c.fileLink };
+    }
+    setEntries(seed);
   }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    const payload = Object.entries(topics)
-      .map(([id, topic]) => ({ id, topic: topic.trim() }))
-      .filter((t) => t.topic);
+    const payload = Object.entries(entries)
+      .map(([id, v]) => ({ id, topic: v.topic.trim(), fileLink: v.fileLink.trim() }))
+      .filter((t) => t.topic || t.fileLink);
+
     if (payload.length === 0) {
-      setError("موضوع رو بنویس بعد ثبت بزن");
+      setError("موضوع و لینک فایلت رو بنویس بعد ثبت بزن");
+      return;
+    }
+    const bad = payload.find((t) => t.fileLink && !/^https?:\/\//i.test(t.fileLink));
+    if (bad) {
+      setError("لینک باید کامل باشه و با https:// شروع بشه");
       return;
     }
     const data = await send("submit", { topics: payload });
@@ -106,21 +115,53 @@ export default function ProjectTopicForm() {
           سلام <span className="text-[#fafaf9]">{matchedName}</span> 👋
         </p>
 
-        {courses.map((c) => (
-          <div key={c.id}>
-            <label className="block font-body text-xs text-[#57534e] mb-2">
-              {TRACK_LABEL[c.track]}
-            </label>
-            <textarea
-              value={topics[c.id] ?? ""}
-              onChange={(e) => setTopics({ ...topics, [c.id]: e.target.value })}
-              rows={3}
-              maxLength={300}
-              placeholder="مثلاً: اپلیکیشن سفارش قهوه برای کافه‌های محلی"
-              className={`${field} resize-y leading-7`}
-            />
-          </div>
-        ))}
+        {courses.map((c) => {
+          const v = entries[c.id] ?? { topic: "", fileLink: "" };
+          const set = (patch: Partial<Entry>) =>
+            setEntries({ ...entries, [c.id]: { ...v, ...patch } });
+
+          return (
+            <div
+              key={c.id}
+              className="rounded-2xl border border-[#2d2c2a] p-4 space-y-4"
+            >
+              <p className="font-body text-xs text-[#8b5cf6]">{TRACK_LABEL[c.track]}</p>
+
+              <div>
+                <label className="block font-body text-xs text-[#57534e] mb-2">
+                  موضوع پروژه
+                </label>
+                <textarea
+                  value={v.topic}
+                  onChange={(e) => set({ topic: e.target.value })}
+                  rows={3}
+                  maxLength={300}
+                  placeholder="مثلاً: اپلیکیشن سفارش قهوه برای کافه‌های محلی"
+                  className={`${field} resize-y leading-7`}
+                />
+              </div>
+
+              <div>
+                <label className="block font-body text-xs text-[#57534e] mb-2">
+                  لینک فایل کارت
+                </label>
+                <input
+                  type="url"
+                  dir="ltr"
+                  value={v.fileLink}
+                  onChange={(e) => set({ fileLink: e.target.value })}
+                  maxLength={500}
+                  placeholder="https://figma.com/file/..."
+                  className={`${field} text-left`}
+                />
+                <p className="font-body text-[11px] text-[#57534e] leading-6 mt-1.5">
+                  لینک فیگمای پروژه‌ات. یادت باشه دسترسی رو روی «هر کسی که لینک
+                  داره» بذاری، وگرنه ما بازش نمی‌تونیم بکنیم.
+                </p>
+              </div>
+            </div>
+          );
+        })}
 
         {error && <p className="font-body text-sm text-rose-400">{error}</p>}
 

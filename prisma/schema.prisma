@@ -119,6 +119,8 @@ model StudentProject {
   intakeMonth  String
   /// موضوع پروژه — تا وقتی دانشجو انتخاب نکرده خالیه
   topic        String       @default("")
+  /// لینک فایل کار، معمولاً فیگما. خودِ دانشجو توی فرم عمومی می‌ذارتش
+  fileLink     String       @default("")
   /// شمارهٔ تسک‌هایی که منتور **بررسی‌شون کرده**.
   /// تیک یعنی بررسی شد، نه اینکه دانشجو تحویل داده.
   reviewedTasks Int[]       @default([])

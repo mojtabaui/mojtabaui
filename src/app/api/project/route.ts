@@ -21,6 +21,16 @@ function normalize(name: string): string {
     .toLowerCase();
 }
 
+/** فقط http و https — جلوی javascript: و امثالش رو می‌گیره */
+function isSafeLink(url: string): boolean {
+  try {
+    const p = new URL(url).protocol;
+    return p === "http:" || p === "https:";
+  } catch {
+    return false;
+  }
+}
+
 function codeOk(input: string): boolean {
   const expected = process.env.PROJECT_FORM_CODE;
   if (!expected) return false;
@@ -35,7 +45,14 @@ async function findRows(name: string) {
   // اسم‌ها فارسی‌ان و املاشون کمی فرق می‌کنه، پس همه رو می‌گیریم و
   // نرمال‌شده مقایسه می‌کنیم. تعداد ردیف‌ها کمه و این کار سبکه.
   const all = await prisma.studentProject.findMany({
-    select: { id: true, studentName: true, track: true, topic: true, intakeMonth: true },
+    select: {
+      id: true,
+      studentName: true,
+      track: true,
+      topic: true,
+      fileLink: true,
+      intakeMonth: true,
+    },
   });
 
   return all.filter((r) => normalize(r.studentName) === target);
@@ -67,11 +84,16 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({
       ok: true,
       name: rows[0].studentName,
-      courses: rows.map((r) => ({ id: r.id, track: r.track, topic: r.topic })),
+      courses: rows.map((r) => ({
+        id: r.id,
+        track: r.track,
+        topic: r.topic,
+        fileLink: r.fileLink,
+      })),
     });
   }
 
-  // مرحلهٔ دوم: ثبت موضوع
+  // مرحلهٔ دوم: ثبت موضوع و لینک فایل
   if (action === "submit") {
     const updates = Array.isArray(body.topics) ? body.topics : [];
     const allowed = new Set(rows.map((r) => r.id));
@@ -79,14 +101,29 @@ export async function POST(req: NextRequest) {
 
     for (const u of updates) {
       const id = String(u?.id ?? "");
+      if (!allowed.has(id)) continue;
+
       const topic = String(u?.topic ?? "").trim().slice(0, 300);
-      if (!allowed.has(id) || !topic) continue;
-      await prisma.studentProject.update({ where: { id }, data: { topic } });
+      const link = String(u?.fileLink ?? "").trim().slice(0, 500);
+
+      if (link && !isSafeLink(link)) {
+        return NextResponse.json(
+          { error: "لینک باید با http یا https شروع بشه" },
+          { status: 400 }
+        );
+      }
+
+      const data: { topic?: string; fileLink?: string } = {};
+      if (topic) data.topic = topic;
+      if (link) data.fileLink = link;
+      if (Object.keys(data).length === 0) continue;
+
+      await prisma.studentProject.update({ where: { id }, data });
       saved += 1;
     }
 
     if (saved === 0) {
-      return NextResponse.json({ error: "موضوعی برای ثبت نبود" }, { status: 400 });
+      return NextResponse.json({ error: "چیزی برای ثبت نبود" }, { status: 400 });
     }
     return NextResponse.json({ ok: true, saved });
   }

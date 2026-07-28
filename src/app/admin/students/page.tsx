@@ -51,6 +51,7 @@ export default async function StudentsPage({ searchParams }: Props) {
 
   const isFiltered = Boolean(q || track || month);
   const withTopic = students.filter((s) => s.topic.trim()).length;
+  const withLink = students.filter((s) => s.fileLink.trim()).length;
 
   const inputCls =
     "w-full bg-[#0a0908] border border-[#2d2c2a] rounded-xl px-4 py-2.5 font-body text-sm text-[#fafaf9] placeholder:text-[#57534e] focus:outline-none focus:border-[#8b5cf6]/50 transition-colors";
@@ -102,6 +103,12 @@ export default async function StudentsPage({ searchParams }: Props) {
             <p className="font-body text-xs text-[#57534e]">هنوز موضوع ندارند</p>
             <p className="font-body text-lg text-amber-400 mt-0.5">
               {toPersianDigits(students.length - withTopic)}
+            </p>
+          </div>
+          <div className="bg-[#111110] border border-[#2d2c2a] rounded-xl px-4 py-3">
+            <p className="font-body text-xs text-[#57534e]">لینک فایل داده‌اند</p>
+            <p className="font-body text-lg text-[#8b5cf6] mt-0.5">
+              {toPersianDigits(withLink)}
             </p>
           </div>
         </div>
@@ -207,6 +214,7 @@ export default async function StudentsPage({ searchParams }: Props) {
                         track: s.track,
                         intakeMonth: s.intakeMonth,
                         topic: s.topic,
+                        fileLink: s.fileLink,
                         reviewedTasks: s.reviewedTasks,
                         background: s.background,
                         goal: s.goal,
