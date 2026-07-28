@@ -40,6 +40,13 @@ const prisma = new PrismaClient({
   });
   console.log(`یادداشت پاک‌شده: ${cleared.count}`);
 
+  // دادهٔ تستی که موقع بررسی فرم عمومی روی ردیف مریم فرهنگی [UI] نشست
+  const test = await prisma.studentProject.updateMany({
+    where: { topic: "تست اتصال فرم" },
+    data: { topic: "", fileLink: "" },
+  });
+  console.log(`ردیف تستی پاک‌شده: ${test.count}`);
+
   const left = await prisma.studentProject.count({ where: { NOT: { note: null } } });
   const total = await prisma.studentProject.count();
   const certs = await prisma.certificate.count();
