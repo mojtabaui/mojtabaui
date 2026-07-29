@@ -111,6 +111,30 @@ model DiscountSubscriber {
 /// دانشجوهای دوره‌های آفلاین و پروژه‌ای که برداشتن.
 /// فعلاً بدون حساب کاربری ثبت می‌شن (ایمیل‌ها هنوز نیست)؛ بعداً با
 /// افزودن userId به User وصل می‌شن و خود دانشجو موضوعش رو وارد می‌کنه.
+/// فهرست موضوع‌های پیشنهادی که هنرجو توی فرم از بینشون انتخاب می‌کنه.
+/// از شیت «موضوعات پیشنهادی» ورودی تیر ۱۴۰۵ وارد شده.
+model ProjectTopic {
+  id          String       @id @default(cuid())
+  track       ProjectTrack
+  title       String
+  /// دسته مثل «فروشگاهی» یا «سلامت و تندرستی» — برای گروه‌بندی در فهرست
+  category    String       @default("")
+  /// فقط دورهٔ رابط: وبسایت یا اپلیکیشن
+  platform    String       @default("")
+  /// ساده، متوسط، سخت
+  difficulty  String       @default("")
+  /// چیزی که باید تحویل بده، یا خلاصهٔ ایده
+  detail      String       @default("")
+  /// ستارهٔ «پیشنهادی» در شیت
+  recommended Boolean      @default(false)
+  /// خاموش کردن بدون حذف، تا موضوعِ انتخاب‌شده‌ی کسی بی‌معنی نشه
+  active      Boolean      @default(true)
+  createdAt   DateTime     @default(now())
+
+  @@index([track, active])
+  @@index([category])
+}
+
 model StudentProject {
   id           String       @id @default(cuid())
   studentName  String

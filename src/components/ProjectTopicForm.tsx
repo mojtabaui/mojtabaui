@@ -1,8 +1,19 @@
 "use client";
 
 import { useState } from "react";
-import { ArrowRight, Check, CircleAlert, Info, KeyRound, Link2, User } from "lucide-react";
+import {
+  ArrowRight,
+  Check,
+  CircleAlert,
+  Info,
+  KeyRound,
+  Link2,
+  ListChecks,
+  PencilLine,
+  User,
+} from "lucide-react";
 import { toPersianDigits } from "@/lib/persian-months";
+import TopicPicker, { type PickableTopic } from "@/components/TopicPicker";
 
 /**
  * فرم عمومیِ ثبت موضوع پروژه.
@@ -10,10 +21,14 @@ import { toPersianDigits } from "@/lib/persian-months";
  * دو مرحله‌ست: اول اسم و رمز دوره، بعد موضوع و لینک فایل. عمداً هیچ فهرستی
  * از اسم‌ها نشون داده نمی‌شه — لینک قراره توی کانال بره و اسم بقیه نباید
  * لو بره. به همین دلیل تطبیق اسم دستِ سروره و ما فقط راهنماییش می‌کنیم.
+ *
+ * هر دوره رمز خودش رو داره، پس رمز تعیین می‌کنه فرم برای کدوم دوره باز
+ * بشه. کسی که هر دو دوره رو داره دو بار پر می‌کنه، یک بار با هر رمز.
  */
 
 type Course = { id: string; track: "UI" | "UX"; topic: string; fileLink: string };
-type Entry = { topic: string; fileLink: string };
+/** custom یعنی موضوع دلخواه نوشته، نه انتخاب از فهرست */
+type Entry = { topic: string; fileLink: string; custom: boolean };
 
 const TRACK_LABEL: Record<string, string> = {
   UI: "طراحی رابط کاربری",
@@ -69,6 +84,9 @@ export default function ProjectTopicForm() {
   const [courses, setCourses] = useState<Course[] | null>(null);
   const [matchedName, setMatchedName] = useState("");
   const [entries, setEntries] = useState<Record<string, Entry>>({});
+  const [topics, setTopics] = useState<PickableTopic[]>([]);
+  /** شناسهٔ دوره‌ای که مودالش بازه */
+  const [picking, setPicking] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const [done, setDone] = useState(false);
@@ -102,9 +120,18 @@ export default function ProjectTopicForm() {
     if (!data) return;
     setCourses(data.courses);
     setMatchedName(data.name);
+    const list: PickableTopic[] = data.topics ?? [];
+    setTopics(list);
+
+    const known = new Set(list.map((t) => t.title));
     const seed: Record<string, Entry> = {};
     for (const c of data.courses as Course[]) {
-      seed[c.id] = { topic: c.topic, fileLink: c.fileLink };
+      seed[c.id] = {
+        topic: c.topic,
+        fileLink: c.fileLink,
+        // اگه موضوع قبلی‌اش توی فهرست نیست، یعنی دلخواه نوشته بوده
+        custom: Boolean(c.topic) && !known.has(c.topic),
+      };
     }
     setEntries(seed);
   }
@@ -140,18 +167,21 @@ export default function ProjectTopicForm() {
           موضوعت رسید دستمون و توی جلسهٔ بعد دربارهٔ همین حرف می‌زنیم. اگه نظرت عوض
           شد، هر وقت خواستی برگرد و دوباره پرش کن.
         </p>
+        <p className="mt-3 font-body text-xs text-[var(--ink-4)] leading-7">
+          دورهٔ دیگه‌ای هم برداشتی؟ رمزش فرق داره. دوباره از اینجا شروع کن و رمز
+          اون یکی رو بزن.
+        </p>
         <button
           type="button"
           onClick={() => {
             setDone(false);
             setCourses(null);
-            setName("");
             setCode("");
             setError("");
           }}
           className="mt-5 font-body text-xs text-[var(--ink-3)] hover:text-[var(--ink)] underline underline-offset-4 transition-colors"
         >
-          ثبت برای یک نفر دیگر
+          ثبت دورهٔ دیگر یا نفر دیگر
         </button>
       </div>
     );
@@ -171,15 +201,18 @@ export default function ProjectTopicForm() {
             <div className="min-w-0">
               <p className="font-body text-sm text-[var(--ink)] truncate">{matchedName}</p>
               <p className="font-body text-xs text-[var(--ink-4)] mt-0.5">
-                پیدات کردیم. اگه این تو نیستی برگرد و اسمت رو اصلاح کن.
+                دورهٔ {TRACK_LABEL[courses[0]?.track ?? "UI"]}. اگه این تو نیستی برگرد و
+                اسمت رو اصلاح کن.
               </p>
             </div>
           </div>
 
           {courses.map((c) => {
-            const v = entries[c.id] ?? { topic: "", fileLink: "" };
+            const v = entries[c.id] ?? { topic: "", fileLink: "", custom: false };
             const set = (patch: Partial<Entry>) =>
               setEntries({ ...entries, [c.id]: { ...v, ...patch } });
+
+            const chosen = topics.find((t) => t.title === v.topic);
 
             return (
               <div key={c.id} className={`${card} p-5 space-y-5`}>
@@ -194,19 +227,89 @@ export default function ProjectTopicForm() {
                   <label className="block font-body text-xs text-[var(--ink-3)] mb-2">
                     موضوع پروژه
                   </label>
-                  <textarea
-                    value={v.topic}
-                    onChange={(e) => set({ topic: e.target.value })}
-                    rows={2}
-                    maxLength={300}
-                    placeholder="مثلاً: اپلیکیشن سفارش قهوه برای کافه‌های محلی"
-                    className={`${field} resize-y leading-7`}
-                  />
-                  {v.topic.length > 0 && (
-                    <p className="mt-1.5 font-body text-[11px] text-[var(--ink-4)]">
-                      {toPersianDigits(300 - v.topic.length)} کاراکتر باقی مونده
-                    </p>
+
+                  {/* از فهرست انتخاب کن، یا تیک پایین رو بزن و خودت بنویس */}
+                  {!v.custom ? (
+                    <>
+                      <button
+                        type="button"
+                        onClick={() => setPicking(c.id)}
+                        className={`w-full text-right rounded-xl border px-4 py-3 transition-colors ${
+                          v.topic
+                            ? "border-[var(--violet)]/50 bg-[var(--violet)]/[0.07]"
+                            : "border-[var(--line-strong)] hover:border-[var(--violet)]"
+                        }`}
+                      >
+                        <span className="flex items-start gap-2.5">
+                          <ListChecks
+                            size={15}
+                            className="mt-0.5 shrink-0 text-[var(--violet)]"
+                          />
+                          <span className="min-w-0 flex-1">
+                            <span className="block font-body text-sm text-[var(--ink)] leading-6">
+                              {v.topic || "از فهرست موضوع‌ها انتخاب کن"}
+                            </span>
+                            {chosen?.detail && (
+                              <span className="block font-body text-[11px] text-[var(--ink-4)] leading-5 mt-1">
+                                {chosen.detail}
+                              </span>
+                            )}
+                            {!v.topic && (
+                              <span className="block font-body text-[11px] text-[var(--ink-4)] mt-1">
+                                {toPersianDigits(topics.length)} موضوع آماده، با جستجو
+                              </span>
+                            )}
+                          </span>
+                          {chosen?.difficulty && (
+                            <span className="shrink-0 font-body text-[10px] text-[var(--ink-4)] border border-[var(--line-strong)]/40 rounded-md px-1.5 py-0.5">
+                              {chosen.difficulty}
+                            </span>
+                          )}
+                        </span>
+                      </button>
+                      {v.topic && (
+                        <button
+                          type="button"
+                          onClick={() => setPicking(c.id)}
+                          className="mt-2 font-body text-[11px] text-[var(--violet)] hover:underline underline-offset-4"
+                        >
+                          عوضش کن
+                        </button>
+                      )}
+                    </>
+                  ) : (
+                    <>
+                      <textarea
+                        value={v.topic}
+                        onChange={(e) => set({ topic: e.target.value })}
+                        rows={2}
+                        maxLength={300}
+                        placeholder="مثلاً: اپلیکیشن سفارش قهوه برای کافه‌های محلی"
+                        className={`${field} resize-y leading-7`}
+                      />
+                      {v.topic.length > 0 && (
+                        <p className="mt-1.5 font-body text-[11px] text-[var(--ink-4)]">
+                          {toPersianDigits(300 - v.topic.length)} کاراکتر باقی مونده
+                        </p>
+                      )}
+                    </>
                   )}
+
+                  <label className="mt-3 flex items-start gap-2 font-body text-xs text-[var(--ink-3)] leading-6">
+                    <input
+                      type="checkbox"
+                      checked={v.custom}
+                      onChange={(e) => set({ custom: e.target.checked, topic: "" })}
+                      className="mt-1 h-3.5 w-3.5 shrink-0 accent-[var(--violet-deep)]"
+                    />
+                    <span>
+                      <PencilLine size={12} className="inline-block ml-1 align-[-1px]" />
+                      موضوع دلخواه خودم رو می‌نویسم
+                      <span className="block text-[var(--ink-4)] text-[11px]">
+                        قبلش با منتور هماهنگ کن که برای این دوره مناسب باشه.
+                      </span>
+                    </span>
+                  </label>
                 </div>
 
                 <div>
@@ -263,6 +366,19 @@ export default function ProjectTopicForm() {
             </button>
           </div>
         </form>
+
+        {picking && (
+          <TopicPicker
+            topics={topics}
+            value={entries[picking]?.topic ?? ""}
+            onPick={(t) => {
+              const cur = entries[picking] ?? { topic: "", fileLink: "", custom: false };
+              setEntries({ ...entries, [picking]: { ...cur, topic: t.title } });
+              setPicking(null);
+            }}
+            onClose={() => setPicking(null)}
+          />
+        )}
       </div>
     );
   }

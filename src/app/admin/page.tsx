@@ -18,6 +18,7 @@ import {
   Phone,
   BellRing,
   GraduationCap,
+  Lightbulb,
   Link2,
 } from "lucide-react";
 
@@ -34,6 +35,7 @@ export default async function AdminPage() {
     subscriberCount,
     studentCount,
     studentsWithTopic,
+    topicCount,
     unreadCount,
     messages,
     recentCerts,
@@ -45,6 +47,7 @@ export default async function AdminPage() {
     prisma.discountSubscriber.count(),
     prisma.studentProject.count(),
     prisma.studentProject.count({ where: { NOT: { topic: "" } } }),
+    prisma.projectTopic.count({ where: { active: true } }),
     prisma.contactMessage.count({ where: { isRead: false } }),
     prisma.contactMessage.findMany({ orderBy: { createdAt: "desc" }, take: 50 }),
     prisma.certificate.findMany({ orderBy: { createdAt: "desc" }, take: 10 }),
@@ -146,6 +149,27 @@ export default async function AdminPage() {
               </p>
             </div>
             <span className="font-body text-sm text-[var(--violet)] shrink-0 mt-0.5">←</span>
+          </Link>
+
+          <Link
+            href="/admin/topics"
+            className="group bg-[var(--card)] hover:bg-[var(--card-raised)] border border-[var(--line)] hover:border-[var(--violet)]/45 rounded-2xl px-5 py-5 flex items-start gap-4 transition-colors"
+          >
+            <div className="w-9 h-9 rounded-xl bg-[var(--warn)]/15 text-[var(--warn)] flex items-center justify-center shrink-0">
+              <Lightbulb size={17} />
+            </div>
+            <div className="min-w-0 flex-1">
+              <h2 className="font-body font-semibold text-[var(--ink)] text-sm mb-1">
+                موضوع‌های پیشنهادی
+              </h2>
+              <p className="font-body text-xs text-[var(--ink-4)] leading-6">
+                فهرستی که هنرجو توی فرم از بینش انتخاب می‌کنه
+              </p>
+              <p className="font-body text-xs text-[var(--ink-3)] mt-2">
+                <span className="text-[var(--ink)]">{fa(topicCount)}</span> موضوع فعال
+              </p>
+            </div>
+            <span className="font-body text-sm text-[var(--warn)] shrink-0 mt-0.5">←</span>
           </Link>
 
           <Link
