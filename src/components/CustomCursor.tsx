@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
+import { usePathname } from "next/navigation";
 import { motion, useMotionValue, useSpring, useReducedMotion } from "framer-motion";
 import {
   STACHE_LEFT,
@@ -84,7 +85,11 @@ export default function CustomCursor() {
   const ringY = useSpring(mouseY, { stiffness: 170, damping: 26 });
 
   const finePointer = useFinePointer();
-  const enabled = finePointer && !reduce;
+  // صفحه‌های ابزاری نشانگر سیستم رو می‌خوان. اگه اینجا هم رندر بشه، هم
+  // حباب شناور می‌مونه هم نشانگر سیستم، و دو تا نشانگر همزمان دیده می‌شه.
+  const pathname = usePathname();
+  const toolPage = pathname?.startsWith("/admin") || pathname?.startsWith("/project");
+  const enabled = finePointer && !reduce && !toolPage;
 
   useEffect(() => {
     if (!enabled) return;

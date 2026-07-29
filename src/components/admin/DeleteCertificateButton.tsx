@@ -55,7 +55,7 @@ export default function DeleteCertificateButton({
         onClick={() => setConfirming(true)}
         title={`حذف گواهی ${name}`}
         aria-label={`حذف گواهی ${name}`}
-        className="text-[#57534e] hover:text-rose-400 p-1.5 rounded-lg transition-colors shrink-0"
+        className="text-[var(--ink-4)] hover:text-rose-400 p-1.5 rounded-lg transition-colors shrink-0"
       >
         <Trash2 size={14} />
       </button>
@@ -80,7 +80,7 @@ export default function DeleteCertificateButton({
         disabled={loading}
         title="بی‌خیال"
         aria-label="انصراف"
-        className="text-[#a8a29e] hover:text-[#fafaf9] disabled:opacity-50 p-1.5 rounded-lg border border-[#2d2c2a] transition-colors"
+        className="text-[var(--ink-3)] hover:text-[var(--ink)] disabled:opacity-50 p-1.5 rounded-lg border border-[var(--line)] transition-colors"
       >
         <X size={14} />
       </button>

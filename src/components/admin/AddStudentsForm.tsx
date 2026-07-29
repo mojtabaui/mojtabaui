@@ -68,7 +68,7 @@ export default function AddStudentsForm({
   }
 
   const inputCls =
-    "w-full bg-[#0a0908] border border-[#2d2c2a] rounded-xl px-4 py-2.5 font-body text-sm text-[#fafaf9] placeholder:text-[#57534e] focus:outline-none focus:border-[#8b5cf6]/50 transition-colors";
+    "w-full bg-[var(--page)] border border-[var(--line)] rounded-xl px-4 py-2.5 font-body text-sm text-[var(--ink)] placeholder:text-[var(--ink-4)] focus:outline-none focus:border-[#8b5cf6]/50 transition-colors";
 
   if (!open) {
     return (
@@ -86,10 +86,10 @@ export default function AddStudentsForm({
   return (
     <form
       onSubmit={handleSubmit}
-      className="bg-[#111110] border border-[#2d2c2a] rounded-2xl p-5 space-y-4 w-full"
+      className="bg-[var(--card)] border border-[var(--line)] rounded-2xl p-5 space-y-4 w-full"
     >
       <div className="flex items-center justify-between">
-        <h3 className="font-body font-semibold text-[#fafaf9] text-sm">افزودن دانشجو</h3>
+        <h3 className="font-body font-semibold text-[var(--ink)] text-sm">افزودن دانشجو</h3>
         <button
           type="button"
           onClick={() => {
@@ -97,7 +97,7 @@ export default function AddStudentsForm({
             setResult(null);
             setError("");
           }}
-          className="font-body text-xs text-[#57534e] hover:text-[#a8a29e] transition-colors"
+          className="font-body text-xs text-[var(--ink-4)] hover:text-[var(--ink-3)] transition-colors"
         >
           بستن
         </button>
@@ -108,7 +108,7 @@ export default function AddStudentsForm({
           <p className="font-body text-emerald-300 text-sm">
             {result.added} نفر اضافه شد
             {result.skipped.length > 0 && (
-              <span className="text-[#a8a29e]">
+              <span className="text-[var(--ink-3)]">
                 {" "}
                 · {result.skipped.length} نفر از قبل توی همین ماه و دوره بودن
               </span>
@@ -118,8 +118,8 @@ export default function AddStudentsForm({
       )}
 
       <div>
-        <label className="block font-body text-sm text-[#a8a29e] mb-1.5">
-          اسم‌ها <span className="text-[#57534e]">(هر نفر یک خط)</span>
+        <label className="block font-body text-sm text-[var(--ink-3)] mb-1.5">
+          اسم‌ها <span className="text-[var(--ink-4)]">(هر نفر یک خط)</span>
         </label>
         <textarea
           value={namesRaw}
@@ -128,14 +128,14 @@ export default function AddStudentsForm({
           placeholder={"زهرا اویسی\nعلی رضایی\nمریم کریمی"}
           className={`${inputCls} resize-y leading-7`}
         />
-        <p className="mt-1.5 font-body text-xs text-[#57534e]">
+        <p className="mt-1.5 font-body text-xs text-[var(--ink-4)]">
           از اکسل هم می‌تونی مستقیم کپی کنی — ستون اول برداشته می‌شه.
         </p>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
         <div>
-          <label className="block font-body text-sm text-[#a8a29e] mb-1.5">دوره</label>
+          <label className="block font-body text-sm text-[var(--ink-3)] mb-1.5">دوره</label>
           <select
             value={track}
             onChange={(e) => setTrack(e.target.value as "UI" | "UX")}
@@ -146,7 +146,7 @@ export default function AddStudentsForm({
           </select>
         </div>
         <div>
-          <label className="block font-body text-sm text-[#a8a29e] mb-1.5">ماه ثبت‌نام</label>
+          <label className="block font-body text-sm text-[var(--ink-3)] mb-1.5">ماه ثبت‌نام</label>
           <select value={month} onChange={(e) => setMonth(e.target.value)} className={inputCls}>
             {PERSIAN_MONTHS.map((m, i) => (
               <option key={m} value={String(i + 1).padStart(2, "0")}>
@@ -156,7 +156,7 @@ export default function AddStudentsForm({
           </select>
         </div>
         <div>
-          <label className="block font-body text-sm text-[#a8a29e] mb-1.5">سال</label>
+          <label className="block font-body text-sm text-[var(--ink-3)] mb-1.5">سال</label>
           <input
             type="text"
             inputMode="numeric"
@@ -170,7 +170,7 @@ export default function AddStudentsForm({
       </div>
 
       <div className="flex items-center justify-between gap-4 flex-wrap">
-        <span className="font-body text-xs text-[#57534e]">
+        <span className="font-body text-xs text-[var(--ink-4)]">
           {parsed.length > 0 ? `${parsed.length} نفر` : "فهرست خالیه"}
         </span>
         <button

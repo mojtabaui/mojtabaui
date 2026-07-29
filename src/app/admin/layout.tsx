@@ -3,5 +3,5 @@
  * اینجا کنار می‌ره و نشانگر سیستم برمی‌گرده. قاعده‌هاش در globals.css.
  */
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
-  return <div className="native-cursor">{children}</div>;
+  return <div className="native-cursor panel">{children}</div>;
 }

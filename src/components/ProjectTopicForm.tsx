@@ -1,12 +1,15 @@
 "use client";
 
 import { useState } from "react";
+import { ArrowRight, Check, CircleAlert, Info, KeyRound, Link2, User } from "lucide-react";
+import { toPersianDigits } from "@/lib/persian-months";
 
 /**
  * فرم عمومیِ ثبت موضوع پروژه.
  *
- * دو مرحله‌ست: اول اسم و رمز دوره، بعد موضوع. عمداً هیچ فهرستی از اسم‌ها
- * نشون داده نمی‌شه — لینک قراره توی کانال بره و اسم بقیه نباید لو بره.
+ * دو مرحله‌ست: اول اسم و رمز دوره، بعد موضوع و لینک فایل. عمداً هیچ فهرستی
+ * از اسم‌ها نشون داده نمی‌شه — لینک قراره توی کانال بره و اسم بقیه نباید
+ * لو بره. به همین دلیل تطبیق اسم دستِ سروره و ما فقط راهنماییش می‌کنیم.
  */
 
 type Course = { id: string; track: "UI" | "UX"; topic: string; fileLink: string };
@@ -18,7 +21,47 @@ const TRACK_LABEL: Record<string, string> = {
 };
 
 const field =
-  "w-full bg-[#111110] border border-[#2d2c2a] focus:border-[#8b5cf6]/60 rounded-xl px-4 py-3 font-body text-sm text-[#fafaf9] placeholder:text-[#57534e] focus:outline-none transition-colors";
+  "w-full bg-[var(--page)] border border-[var(--line-strong)] rounded-xl px-4 py-3 font-body text-sm text-[var(--ink)] placeholder:text-[var(--ink-4)] focus:outline-none focus:border-[var(--violet)] focus:ring-2 focus:ring-[var(--violet)]/25 transition-colors";
+
+const card = "bg-[var(--card)] border border-[var(--line)] rounded-2xl";
+
+/** نوار مرحله، تا معلوم باشه کجای کاریم */
+function Steps({ step }: { step: 1 | 2 }) {
+  const items = ["شناسایی", "موضوع و فایل"];
+  return (
+    <ol className="flex items-center gap-3 mb-6">
+      {items.map((label, i) => {
+        const n = (i + 1) as 1 | 2;
+        const state = n < step ? "done" : n === step ? "now" : "next";
+        return (
+          <li key={label} className="flex items-center gap-3">
+            <div className="flex items-center gap-2">
+              <span
+                className={`grid h-6 w-6 place-items-center rounded-full font-body text-[11px] transition-colors ${
+                  state === "done"
+                    ? "bg-[var(--violet)] text-white"
+                    : state === "now"
+                      ? "bg-[var(--violet)]/15 text-[var(--violet)] ring-1 ring-[var(--violet)]/50"
+                      : "bg-[var(--card)] text-[var(--ink-4)] ring-1 ring-[var(--line-strong)]/50"
+                }`}
+              >
+                {state === "done" ? <Check size={12} /> : n === 1 ? "۱" : "۲"}
+              </span>
+              <span
+                className={`font-body text-xs ${
+                  state === "next" ? "text-[var(--ink-4)]" : "text-[var(--ink-2)]"
+                }`}
+              >
+                {label}
+              </span>
+            </div>
+            {i === 0 && <span className="h-px w-6 bg-[var(--line-strong)]/50" />}
+          </li>
+        );
+      })}
+    </ol>
+  );
+}
 
 export default function ProjectTopicForm() {
   const [name, setName] = useState("");
@@ -85,11 +128,17 @@ export default function ProjectTopicForm() {
     if (data) setDone(true);
   }
 
+  // ── تمام ──
   if (done) {
     return (
-      <div className="rounded-2xl border border-emerald-400/30 bg-emerald-400/5 p-6">
-        <p className="font-body text-sm text-emerald-300 leading-7">
-          ثبت شد. موضوعت رسید دستمون و توی جلسهٔ بعد دربارهٔ همین حرف می‌زنیم.
+      <div className={`${card} p-7 text-center`}>
+        <div className="mx-auto mb-4 grid h-12 w-12 place-items-center rounded-full bg-emerald-400/15 text-emerald-300">
+          <Check size={22} />
+        </div>
+        <h2 className="font-display text-xl text-[var(--ink)] mb-2">ثبت شد</h2>
+        <p className="font-body text-sm text-[var(--ink-3)] leading-8">
+          موضوعت رسید دستمون و توی جلسهٔ بعد دربارهٔ همین حرف می‌زنیم. اگه نظرت عوض
+          شد، هر وقت خواستی برگرد و دوباره پرش کن.
         </p>
         <button
           type="button"
@@ -98,8 +147,9 @@ export default function ProjectTopicForm() {
             setCourses(null);
             setName("");
             setCode("");
+            setError("");
           }}
-          className="mt-4 font-body text-xs text-[#a8a29e] hover:text-[#fafaf9] underline underline-offset-4 transition-colors"
+          className="mt-5 font-body text-xs text-[var(--ink-3)] hover:text-[var(--ink)] underline underline-offset-4 transition-colors"
         >
           ثبت برای یک نفر دیگر
         </button>
@@ -107,122 +157,200 @@ export default function ProjectTopicForm() {
     );
   }
 
-  // ── مرحلهٔ دوم: نوشتن موضوع ──
+  // ── مرحلهٔ دوم: موضوع و لینک ──
   if (courses) {
     return (
-      <form onSubmit={handleSubmit} className="space-y-5">
-        <p className="font-body text-sm text-[#a8a29e]">
-          سلام <span className="text-[#fafaf9]">{matchedName}</span> 👋
-        </p>
+      <div>
+        <Steps step={2} />
 
-        {courses.map((c) => {
-          const v = entries[c.id] ?? { topic: "", fileLink: "" };
-          const set = (patch: Partial<Entry>) =>
-            setEntries({ ...entries, [c.id]: { ...v, ...patch } });
-
-          return (
-            <div
-              key={c.id}
-              className="rounded-2xl border border-[#2d2c2a] p-4 space-y-4"
-            >
-              <p className="font-body text-xs text-[#8b5cf6]">{TRACK_LABEL[c.track]}</p>
-
-              <div>
-                <label className="block font-body text-xs text-[#57534e] mb-2">
-                  موضوع پروژه
-                </label>
-                <textarea
-                  value={v.topic}
-                  onChange={(e) => set({ topic: e.target.value })}
-                  rows={3}
-                  maxLength={300}
-                  placeholder="مثلاً: اپلیکیشن سفارش قهوه برای کافه‌های محلی"
-                  className={`${field} resize-y leading-7`}
-                />
-              </div>
-
-              <div>
-                <label className="block font-body text-xs text-[#57534e] mb-2">
-                  لینک فایل کارت
-                </label>
-                <input
-                  type="url"
-                  dir="ltr"
-                  value={v.fileLink}
-                  onChange={(e) => set({ fileLink: e.target.value })}
-                  maxLength={500}
-                  placeholder="https://figma.com/file/..."
-                  className={`${field} text-left`}
-                />
-                <p className="font-body text-[11px] text-[#57534e] leading-6 mt-1.5">
-                  لینک فیگمای پروژه‌ات. یادت باشه دسترسی رو روی «هر کسی که لینک
-                  داره» بذاری، وگرنه ما بازش نمی‌تونیم بکنیم.
-                </p>
-              </div>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div className={`${card} px-5 py-4 flex items-center gap-3`}>
+            <div className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-[var(--violet)]/15 text-[var(--violet)]">
+              <User size={16} />
             </div>
-          );
-        })}
+            <div className="min-w-0">
+              <p className="font-body text-sm text-[var(--ink)] truncate">{matchedName}</p>
+              <p className="font-body text-xs text-[var(--ink-4)] mt-0.5">
+                پیدات کردیم. اگه این تو نیستی برگرد و اسمت رو اصلاح کن.
+              </p>
+            </div>
+          </div>
 
-        {error && <p className="font-body text-sm text-rose-400">{error}</p>}
+          {courses.map((c) => {
+            const v = entries[c.id] ?? { topic: "", fileLink: "" };
+            const set = (patch: Partial<Entry>) =>
+              setEntries({ ...entries, [c.id]: { ...v, ...patch } });
 
-        <div className="flex items-center gap-3">
-          <button
-            type="submit"
-            disabled={busy}
-            className="rounded-xl bg-[#8b5cf6] hover:bg-[#7c4df1] disabled:opacity-50 px-6 py-3 font-body text-sm text-white transition-colors"
-          >
-            {busy ? "در حال ثبت..." : "ثبت موضوع"}
-          </button>
-          <button
-            type="button"
-            onClick={() => setCourses(null)}
-            className="font-body text-xs text-[#57534e] hover:text-[#a8a29e] transition-colors"
-          >
-            برگرد
-          </button>
-        </div>
-      </form>
+            return (
+              <div key={c.id} className={`${card} p-5 space-y-5`}>
+                <div className="flex items-center gap-2">
+                  <span className="h-1.5 w-1.5 rounded-full bg-[var(--violet)]" />
+                  <p className="font-body text-xs text-[var(--violet)]">
+                    {TRACK_LABEL[c.track]}
+                  </p>
+                </div>
+
+                <div>
+                  <label className="block font-body text-xs text-[var(--ink-3)] mb-2">
+                    موضوع پروژه
+                  </label>
+                  <textarea
+                    value={v.topic}
+                    onChange={(e) => set({ topic: e.target.value })}
+                    rows={2}
+                    maxLength={300}
+                    placeholder="مثلاً: اپلیکیشن سفارش قهوه برای کافه‌های محلی"
+                    className={`${field} resize-y leading-7`}
+                  />
+                  {v.topic.length > 0 && (
+                    <p className="mt-1.5 font-body text-[11px] text-[var(--ink-4)]">
+                      {toPersianDigits(300 - v.topic.length)} کاراکتر باقی مونده
+                    </p>
+                  )}
+                </div>
+
+                <div>
+                  <label className="flex items-center gap-1.5 font-body text-xs text-[var(--ink-3)] mb-2">
+                    <Link2 size={13} />
+                    لینک فایل کارت
+                  </label>
+                  <input
+                    type="url"
+                    dir="ltr"
+                    value={v.fileLink}
+                    onChange={(e) => set({ fileLink: e.target.value })}
+                    maxLength={500}
+                    placeholder="https://figma.com/file/..."
+                    className={`${field} text-left`}
+                  />
+                  <p className="mt-2 font-body text-xs text-[var(--ink-4)] leading-6">
+                    لینک فیگمای پروژه‌ات. اول توی فیگما دکمهٔ{" "}
+                    <span dir="ltr" className="text-[var(--ink-3)]">
+                      Share
+                    </span>{" "}
+                    رو بزن و دسترسی رو روی «هر کسی که لینک داره» بذار، وگرنه ما
+                    بازش نمی‌تونیم بکنیم.
+                  </p>
+                </div>
+              </div>
+            );
+          })}
+
+          {error && (
+            <div className="flex items-start gap-2.5 rounded-xl border border-rose-400/30 bg-rose-400/10 px-4 py-3">
+              <CircleAlert size={15} className="mt-0.5 shrink-0 text-rose-300" />
+              <p className="font-body text-sm text-rose-200 leading-7">{error}</p>
+            </div>
+          )}
+
+          <div className="flex items-center gap-3 pt-1">
+            <button
+              type="submit"
+              disabled={busy}
+              className="rounded-xl bg-[var(--violet-deep)] hover:bg-[#7c4df1] disabled:opacity-50 px-6 py-3 font-body text-sm text-white transition-colors"
+            >
+              {busy ? "در حال ثبت..." : "ثبت موضوع"}
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setCourses(null);
+                setError("");
+              }}
+              className="font-body text-xs text-[var(--ink-4)] hover:text-[var(--ink-2)] transition-colors"
+            >
+              برگرد
+            </button>
+          </div>
+        </form>
+      </div>
     );
   }
 
   // ── مرحلهٔ اول: شناسایی ──
   return (
-    <form onSubmit={handleLookup} className="space-y-5">
-      <div>
-        <label className="block font-body text-xs text-[#57534e] mb-2">
-          اسم و فامیلت
-        </label>
-        <input
-          type="text"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          required
-          placeholder="همون‌طور که موقع ثبت‌نام نوشتی"
-          className={field}
-        />
-      </div>
+    <div>
+      <Steps step={1} />
 
-      <div>
-        <label className="block font-body text-xs text-[#57534e] mb-2">رمز دوره</label>
-        <input
-          type="text"
-          value={code}
-          onChange={(e) => setCode(e.target.value)}
-          required
-          placeholder="توی کانال گذاشتیمش"
-          className={field}
-        />
-      </div>
+      <form onSubmit={handleLookup} className={`${card} p-5 sm:p-6 space-y-5`}>
+        <div>
+          <label
+            htmlFor="student-name"
+            className="flex items-center gap-1.5 font-body text-xs text-[var(--ink-3)] mb-2"
+          >
+            <User size={13} />
+            اسم و فامیلت
+          </label>
+          <input
+            id="student-name"
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
+            autoComplete="name"
+            placeholder="مثلاً: زهرا محمدی"
+            className={field}
+          />
 
-      {error && <p className="font-body text-sm text-rose-400 leading-7">{error}</p>}
+          {/* راهنمای اسم — چون فهرستی نشون نمی‌دیم، تطبیق باید راهنمایی بشه */}
+          <div className="mt-3 rounded-xl border border-[var(--violet)]/25 bg-[var(--violet)]/[0.06] px-4 py-3.5">
+            <p className="flex items-center gap-2 font-body text-xs text-[var(--ink-2)] mb-2.5">
+              <Info size={13} className="text-[var(--violet)] shrink-0" />
+              اسمت رو چطور بنویسم؟
+            </p>
+            <ul className="space-y-2 font-body text-xs text-[var(--ink-3)] leading-6">
+              {[
+                "همون اسمی که موقع ثبت‌نام دوره دادی، نه اسم مستعار یا آیدی تلگرام.",
+                "اسم کوچیک و فامیل، با یک فاصله بینشون. لقب و پیشوند لازم نیست.",
+                "کم و زیادِ فاصله‌ها و «ي» و «ك» عربی مشکلی نداره، خودمون درستش می‌کنیم.",
+                "اگه پیدا نشدی، احتمالاً املای فامیلیت فرق داره. یک بار دیگه امتحان کن.",
+              ].map((tip) => (
+                <li key={tip} className="flex gap-2">
+                  <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-[var(--violet)]/70" />
+                  <span>{tip}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
 
-      <button
-        type="submit"
-        disabled={busy}
-        className="rounded-xl bg-[#8b5cf6] hover:bg-[#7c4df1] disabled:opacity-50 px-6 py-3 font-body text-sm text-white transition-colors"
-      >
-        {busy ? "یک لحظه..." : "ادامه"}
-      </button>
-    </form>
+        <div>
+          <label
+            htmlFor="course-code"
+            className="flex items-center gap-1.5 font-body text-xs text-[var(--ink-3)] mb-2"
+          >
+            <KeyRound size={13} />
+            رمز دوره
+          </label>
+          <input
+            id="course-code"
+            type="text"
+            dir="ltr"
+            value={code}
+            onChange={(e) => setCode(e.target.value)}
+            required
+            autoComplete="off"
+            placeholder="همونی که توی کانال گذاشتیم"
+            className={`${field} text-left`}
+          />
+        </div>
+
+        {error && (
+          <div className="flex items-start gap-2.5 rounded-xl border border-rose-400/30 bg-rose-400/10 px-4 py-3">
+            <CircleAlert size={15} className="mt-0.5 shrink-0 text-rose-300" />
+            <p className="font-body text-sm text-rose-200 leading-7">{error}</p>
+          </div>
+        )}
+
+        <button
+          type="submit"
+          disabled={busy}
+          className="flex w-full items-center justify-center gap-2 rounded-xl bg-[var(--violet-deep)] hover:bg-[#7c4df1] disabled:opacity-50 px-6 py-3 font-body text-sm text-white transition-colors"
+        >
+          {busy ? "یک لحظه..." : "ادامه"}
+          {!busy && <ArrowRight size={15} />}
+        </button>
+      </form>
+    </div>
   );
 }

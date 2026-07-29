@@ -77,34 +77,34 @@ export default async function CertificatesPage({ searchParams }: Props) {
   }
 
   const inputCls =
-    "w-full bg-[#0a0908] border border-[#2d2c2a] rounded-xl px-4 py-2.5 font-body text-sm text-[#fafaf9] placeholder:text-[#57534e] focus:outline-none focus:border-[#8b5cf6]/50 transition-colors";
+    "w-full bg-[var(--page)] border border-[var(--line)] rounded-xl px-4 py-2.5 font-body text-sm text-[var(--ink)] placeholder:text-[var(--ink-4)] focus:outline-none focus:border-[#8b5cf6]/50 transition-colors";
 
   return (
-    <div className="min-h-screen bg-[#0a0908] py-10 px-4 sm:px-6">
+    <div className="min-h-screen bg-[var(--page)] py-10 px-4 sm:px-6">
       <div className="max-w-5xl mx-auto">
         {/* ── Header ── */}
         <div className="flex items-center justify-between gap-4 mb-6 flex-wrap">
           <div>
             <Link
               href="/admin"
-              className="inline-flex items-center gap-1.5 font-body text-xs text-[#57534e] hover:text-[#a8a29e] transition-colors mb-2"
+              className="inline-flex items-center gap-1.5 font-body text-xs text-[var(--ink-4)] hover:text-[var(--ink-3)] transition-colors mb-2"
             >
               <ArrowRight size={13} />
               برگشت به پنل
             </Link>
-            <h1 className="font-body font-semibold text-[#fafaf9] text-xl flex items-center gap-2">
+            <h1 className="font-body font-semibold text-[var(--ink)] text-xl flex items-center gap-2">
               <Award size={18} className="text-emerald-400" />
               همهٔ گواهی‌ها
             </h1>
           </div>
-          <div className="font-body text-sm text-[#57534e]">
+          <div className="font-body text-sm text-[var(--ink-4)]">
             {isFiltered ? (
               <>
-                <span className="text-[#fafaf9]">{total}</span> نتیجه از {allCount}
+                <span className="text-[var(--ink)]">{total}</span> نتیجه از {allCount}
               </>
             ) : (
               <>
-                مجموع <span className="text-[#fafaf9]">{allCount}</span> گواهی
+                مجموع <span className="text-[var(--ink)]">{allCount}</span> گواهی
               </>
             )}
           </div>
@@ -114,12 +114,12 @@ export default async function CertificatesPage({ searchParams }: Props) {
         <form
           method="GET"
           action="/admin/certificates"
-          className="bg-[#111110] border border-[#2d2c2a] rounded-2xl p-4 mb-6 grid grid-cols-1 sm:grid-cols-[1fr_auto_auto_auto] gap-3"
+          className="bg-[var(--card)] border border-[var(--line)] rounded-2xl p-4 mb-6 grid grid-cols-1 sm:grid-cols-[1fr_auto_auto_auto] gap-3"
         >
           <div className="relative">
             <Search
               size={15}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-[#57534e] pointer-events-none"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--ink-4)] pointer-events-none"
             />
             <input
               type="text"
@@ -157,7 +157,7 @@ export default async function CertificatesPage({ searchParams }: Props) {
             {isFiltered && (
               <Link
                 href="/admin/certificates"
-                className="font-body text-sm text-[#a8a29e] hover:text-[#fafaf9] px-3 py-2.5 transition-colors"
+                className="font-body text-sm text-[var(--ink-3)] hover:text-[var(--ink)] px-3 py-2.5 transition-colors"
               >
                 پاک کردن
               </Link>
@@ -166,26 +166,26 @@ export default async function CertificatesPage({ searchParams }: Props) {
         </form>
 
         {/* ── List ── */}
-        <div className="bg-[#111110] border border-[#2d2c2a] rounded-2xl overflow-hidden">
+        <div className="bg-[var(--card)] border border-[var(--line)] rounded-2xl overflow-hidden">
           {certs.length === 0 ? (
             <div className="px-6 py-20 text-center">
-              <Award size={24} className="text-[#2d2c2a] mx-auto mb-3" />
-              <p className="font-body text-[#57534e] text-sm">
+              <Award size={24} className="text-[var(--ink-faint)] mx-auto mb-3" />
+              <p className="font-body text-[var(--ink-4)] text-sm">
                 {isFiltered ? "چیزی با این فیلترها پیدا نشد" : "هنوز گواهی‌ای صادر نشده"}
               </p>
             </div>
           ) : (
-            <div className="divide-y divide-[#1e1d1c]">
+            <div className="divide-y divide-[var(--line)]">
               {certs.map((cert) => (
                 <div
                   key={cert.id}
                   className="px-5 py-3.5 flex items-center justify-between gap-3"
                 >
                   <div className="min-w-0">
-                    <p className="font-body text-[#fafaf9] text-sm truncate">
+                    <p className="font-body text-[var(--ink)] text-sm truncate">
                       {cert.studentName}
                     </p>
-                    <p className="font-body text-[#57534e] text-xs mt-0.5">
+                    <p className="font-body text-[var(--ink-4)] text-xs mt-0.5">
                       {TRACK_LABEL[cert.track]}
                       {cert.year ? ` — سال ${cert.year}` : ""}
                       {cert.startDate ? ` — شروع ${cert.startDate}` : ""}
@@ -199,7 +199,7 @@ export default async function CertificatesPage({ searchParams }: Props) {
                       rel="noopener noreferrer"
                       title="دیدن گواهی"
                       dir="ltr"
-                      className="font-mono text-xs text-[#8b5cf6] hover:text-[#a78bfa] bg-[#0a0908] border border-[#2d2c2a] hover:border-[#8b5cf6]/50 rounded-lg px-2.5 py-1 tracking-widest transition-colors"
+                      className="font-mono text-xs text-[var(--violet)] hover:text-[#a78bfa] bg-[var(--page)] border border-[var(--line)] hover:border-[#8b5cf6]/50 rounded-lg px-2.5 py-1 tracking-widest transition-colors"
                     >
                       {cert.code}
                     </a>
@@ -217,7 +217,7 @@ export default async function CertificatesPage({ searchParams }: Props) {
             {page > 1 ? (
               <Link
                 href={pageHref(page - 1)}
-                className="text-[#a8a29e] hover:text-[#fafaf9] border border-[#2d2c2a] rounded-xl px-4 py-2 transition-colors"
+                className="text-[var(--ink-3)] hover:text-[var(--ink)] border border-[var(--line)] rounded-xl px-4 py-2 transition-colors"
               >
                 قبلی
               </Link>
@@ -225,14 +225,14 @@ export default async function CertificatesPage({ searchParams }: Props) {
               <span />
             )}
 
-            <span className="text-[#57534e]">
-              صفحهٔ <span className="text-[#fafaf9]">{page}</span> از {pages}
+            <span className="text-[var(--ink-4)]">
+              صفحهٔ <span className="text-[var(--ink)]">{page}</span> از {pages}
             </span>
 
             {page < pages ? (
               <Link
                 href={pageHref(page + 1)}
-                className="text-[#a8a29e] hover:text-[#fafaf9] border border-[#2d2c2a] rounded-xl px-4 py-2 transition-colors"
+                className="text-[var(--ink-3)] hover:text-[var(--ink)] border border-[var(--line)] rounded-xl px-4 py-2 transition-colors"
               >
                 بعدی
               </Link>

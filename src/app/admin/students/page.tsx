@@ -53,61 +53,64 @@ export default async function StudentsPage({ searchParams }: Props) {
   const withTopic = students.filter((s) => s.topic.trim()).length;
   const withLink = students.filter((s) => s.fileLink.trim()).length;
 
+  // مرز ورودی‌ها باید ۳:۱ باشه چون تنها نشانهٔ کنترل بودنشونه
   const inputCls =
-    "w-full bg-[#0a0908] border border-[#2d2c2a] rounded-xl px-4 py-2.5 font-body text-sm text-[#fafaf9] placeholder:text-[#57534e] focus:outline-none focus:border-[#8b5cf6]/50 transition-colors";
+    "w-full bg-[var(--page)] border border-[var(--line-strong)] rounded-xl px-4 py-2.5 font-body text-sm text-[var(--ink)] placeholder:text-[var(--ink-4)] focus:outline-none focus:border-[var(--violet)] focus:ring-1 focus:ring-[var(--violet)]/40 transition-colors";
 
   return (
-    <div className="min-h-screen bg-[#0a0908] py-10 px-4 sm:px-6">
+    <div className="min-h-screen bg-[var(--page)] py-10 px-4 sm:px-6">
       <div className="max-w-6xl mx-auto">
         {/* ── Header ── */}
         <div className="flex items-start justify-between gap-4 mb-6 flex-wrap">
           <div>
             <Link
               href="/admin"
-              className="inline-flex items-center gap-1.5 font-body text-xs text-[#57534e] hover:text-[#a8a29e] transition-colors mb-2"
+              className="inline-flex items-center gap-1.5 font-body text-xs text-[var(--ink-4)] hover:text-[var(--ink-3)] transition-colors mb-2"
             >
               <ArrowRight size={13} />
               برگشت به پنل
             </Link>
-            <h1 className="font-body font-semibold text-[#fafaf9] text-xl flex items-center gap-2">
-              <GraduationCap size={19} className="text-[#8b5cf6]" />
+            <h1 className="font-body font-semibold text-[var(--ink)] text-xl flex items-center gap-2">
+              <GraduationCap size={19} className="text-[var(--violet)]" />
               دانشجوهای دوره‌های آفلاین
             </h1>
-            <p className="font-body text-xs text-[#57534e] mt-1.5">
-              موضوع پروژه و شمارهٔ تسک همون‌جا توی جدول قابل ویرایشه — کلیک کن، بنویس، برو بیرون.
+            <p className="font-body text-xs text-[var(--ink-4)] mt-1.5 leading-6">
+              موضوع و هدف همون‌جا توی جدول قابل ویرایشه. کلیک کن، بنویس، برو بیرون.
+              <br />
+              فلش کنار هر ردیف رو بزن تا تسک‌ها، لینک فایل و سابقه‌اش باز شه.
             </p>
           </div>
           <AddStudentsForm defaultYear={DEFAULT_YEAR} defaultMonth={DEFAULT_MONTH} />
         </div>
 
         {/* ── Stats ── */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-5">
-          <div className="bg-[#111110] border border-[#2d2c2a] rounded-xl px-4 py-3">
-            <p className="font-body text-xs text-[#57534e]">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-5">
+          <div className="bg-[var(--card)] border border-[var(--line)] rounded-xl px-4 py-3">
+            <p className="font-body text-xs text-[var(--ink-4)]">
               {isFiltered ? "در این فیلتر" : "کل دانشجوها"}
             </p>
-            <p className="font-body text-lg text-[#fafaf9] mt-0.5">
+            <p className="font-body text-lg text-[var(--ink)] mt-0.5">
               {toPersianDigits(students.length)}
               {isFiltered && (
-                <span className="text-[#57534e] text-sm"> از {toPersianDigits(total)}</span>
+                <span className="text-[var(--ink-4)] text-sm"> از {toPersianDigits(total)}</span>
               )}
             </p>
           </div>
-          <div className="bg-[#111110] border border-[#2d2c2a] rounded-xl px-4 py-3">
-            <p className="font-body text-xs text-[#57534e]">موضوع وارد کرده‌اند</p>
+          <div className="bg-[var(--card)] border border-[var(--line)] rounded-xl px-4 py-3">
+            <p className="font-body text-xs text-[var(--ink-4)]">موضوع وارد کرده‌اند</p>
             <p className="font-body text-lg text-emerald-400 mt-0.5">
               {toPersianDigits(withTopic)}
             </p>
           </div>
-          <div className="bg-[#111110] border border-[#2d2c2a] rounded-xl px-4 py-3">
-            <p className="font-body text-xs text-[#57534e]">هنوز موضوع ندارند</p>
+          <div className="bg-[var(--card)] border border-[var(--line)] rounded-xl px-4 py-3">
+            <p className="font-body text-xs text-[var(--ink-4)]">هنوز موضوع ندارند</p>
             <p className="font-body text-lg text-amber-400 mt-0.5">
               {toPersianDigits(students.length - withTopic)}
             </p>
           </div>
-          <div className="bg-[#111110] border border-[#2d2c2a] rounded-xl px-4 py-3">
-            <p className="font-body text-xs text-[#57534e]">لینک فایل داده‌اند</p>
-            <p className="font-body text-lg text-[#8b5cf6] mt-0.5">
+          <div className="bg-[var(--card)] border border-[var(--line)] rounded-xl px-4 py-3">
+            <p className="font-body text-xs text-[var(--ink-4)]">لینک فایل داده‌اند</p>
+            <p className="font-body text-lg text-[var(--violet)] mt-0.5">
               {toPersianDigits(withLink)}
             </p>
           </div>
@@ -117,12 +120,12 @@ export default async function StudentsPage({ searchParams }: Props) {
         <form
           method="GET"
           action="/admin/students"
-          className="bg-[#111110] border border-[#2d2c2a] rounded-2xl p-4 mb-5 grid grid-cols-1 sm:grid-cols-[1fr_auto_auto_auto] gap-3"
+          className="bg-[var(--card)] border border-[var(--line)] rounded-2xl p-4 mb-5 grid grid-cols-1 sm:grid-cols-[1fr_auto_auto_auto] gap-3"
         >
           <div className="relative">
             <Search
               size={15}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-[#57534e] pointer-events-none"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--ink-4)] pointer-events-none"
             />
             <input
               type="text"
@@ -158,7 +161,7 @@ export default async function StudentsPage({ searchParams }: Props) {
             {isFiltered && (
               <Link
                 href="/admin/students"
-                className="font-body text-sm text-[#a8a29e] hover:text-[#fafaf9] px-3 py-2.5 transition-colors"
+                className="font-body text-sm text-[var(--ink-3)] hover:text-[var(--ink)] px-3 py-2.5 transition-colors"
               >
                 پاک کردن
               </Link>
@@ -167,11 +170,11 @@ export default async function StudentsPage({ searchParams }: Props) {
         </form>
 
         {/* ── Table ── */}
-        <div className="bg-[#111110] border border-[#2d2c2a] rounded-2xl overflow-hidden">
+        <div className="bg-[var(--card)] border border-[var(--line)] rounded-2xl overflow-hidden">
           {students.length === 0 ? (
             <div className="px-6 py-20 text-center">
-              <GraduationCap size={26} className="text-[#2d2c2a] mx-auto mb-3" />
-              <p className="font-body text-[#57534e] text-sm">
+              <GraduationCap size={26} className="text-[var(--ink-faint)] mx-auto mb-3" />
+              <p className="font-body text-[var(--ink-4)] text-sm">
                 {isFiltered
                   ? "کسی با این فیلترها پیدا نشد"
                   : "هنوز دانشجویی ثبت نشده — از دکمهٔ بالا اضافه کن"}
@@ -181,24 +184,24 @@ export default async function StudentsPage({ searchParams }: Props) {
             <div className="overflow-x-auto">
               <table className="w-full min-w-[760px]">
                 <thead>
-                  <tr className="border-b border-[#1e1d1c]">
+                  <tr className="border-b border-[var(--line)]">
                     <th className="w-8" />
-                    <th className="px-3 py-3 text-right font-body text-xs text-[#57534e] font-normal">
+                    <th className="px-3 py-3 text-right font-body text-xs text-[var(--ink-4)] font-normal">
                       نام
                     </th>
-                    <th className="px-3 py-3 text-right font-body text-xs text-[#57534e] font-normal">
+                    <th className="px-3 py-3 text-right font-body text-xs text-[var(--ink-4)] font-normal">
                       دوره
                     </th>
-                    <th className="px-3 py-3 text-right font-body text-xs text-[#57534e] font-normal">
+                    <th className="px-3 py-3 text-right font-body text-xs text-[var(--ink-4)] font-normal">
                       ماه
                     </th>
-                    <th className="px-3 py-3 text-right font-body text-xs text-[#57534e] font-normal">
+                    <th className="px-3 py-3 text-right font-body text-xs text-[var(--ink-4)] font-normal">
                       موضوع پروژه
                     </th>
-                    <th className="px-3 py-3 text-right font-body text-xs text-[#57534e] font-normal">
+                    <th className="px-3 py-3 text-right font-body text-xs text-[var(--ink-4)] font-normal">
                       هدف
                     </th>
-                    <th className="px-3 py-3 text-right font-body text-xs text-[#57534e] font-normal">
+                    <th className="px-3 py-3 text-right font-body text-xs text-[var(--ink-4)] font-normal">
                       بررسی‌شده
                     </th>
                     <th className="px-3 py-3" />
@@ -228,7 +231,7 @@ export default async function StudentsPage({ searchParams }: Props) {
           )}
         </div>
 
-        <p className="font-body text-xs text-[#57534e] mt-4 leading-relaxed">
+        <p className="font-body text-xs text-[var(--ink-4)] mt-4 leading-relaxed">
           فعلاً دانشجوها حساب کاربری ندارن و همه‌چیز از همین‌جا وارد می‌شه. وقتی ایمیل‌هاشون
           جمع شد، فرم ورود موضوع می‌ره توی حساب خودشون و این جدول فقط برای دیدن و بررسی می‌مونه.
         </p>

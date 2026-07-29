@@ -5,6 +5,8 @@ import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import CertificateForm from "@/components/admin/CertificateForm";
 import DeleteCertificateButton from "@/components/admin/DeleteCertificateButton";
+import { Section, Empty, ScrollArea } from "@/components/admin/Section";
+import { toPersianDigits } from "@/lib/persian-months";
 import {
   BookOpen,
   Users,
@@ -14,6 +16,8 @@ import {
   ArrowLeft,
   Phone,
   BellRing,
+  GraduationCap,
+  Link2,
 } from "lucide-react";
 
 export const dynamic = "force-dynamic";
@@ -27,6 +31,9 @@ export default async function AdminPage() {
     courseCount,
     certCount,
     subscriberCount,
+    studentCount,
+    studentsWithTopic,
+    unreadCount,
     messages,
     recentCerts,
     subscribers,
@@ -35,62 +42,39 @@ export default async function AdminPage() {
     prisma.course.count(),
     prisma.certificate.count(),
     prisma.discountSubscriber.count(),
-    prisma.contactMessage.findMany({
-      orderBy: { createdAt: "desc" },
-      take: 50,
-    }),
-    prisma.certificate.findMany({
-      orderBy: { createdAt: "desc" },
-      take: 10,
-    }),
-    prisma.discountSubscriber.findMany({
-      orderBy: { createdAt: "desc" },
-      take: 100,
-    }),
+    prisma.studentProject.count(),
+    prisma.studentProject.count({ where: { NOT: { topic: "" } } }),
+    prisma.contactMessage.count({ where: { isRead: false } }),
+    prisma.contactMessage.findMany({ orderBy: { createdAt: "desc" }, take: 50 }),
+    prisma.certificate.findMany({ orderBy: { createdAt: "desc" }, take: 10 }),
+    prisma.discountSubscriber.findMany({ orderBy: { createdAt: "desc" }, take: 100 }),
   ]);
 
+  const fa = (n: number) => toPersianDigits(String(n));
+
   const stats = [
-    {
-      label: "کاربران",
-      value: userCount.toLocaleString("fa-IR"),
-      icon: Users,
-      color: "text-blue-400 bg-blue-400/10",
-    },
-    {
-      label: "دوره‌ها",
-      value: courseCount.toLocaleString("fa-IR"),
-      icon: BookOpen,
-      color: "text-violet-400 bg-violet-400/10",
-    },
-    {
-      label: "گواهینامه‌ها",
-      value: certCount.toLocaleString("fa-IR"),
-      icon: Award,
-      color: "text-emerald-400 bg-emerald-400/10",
-    },
-    {
-      label: "مشترکین تخفیف",
-      value: subscriberCount.toLocaleString("fa-IR"),
-      icon: BellRing,
-      color: "text-amber-400 bg-amber-400/10",
-    },
+    { label: "کاربران", value: userCount, icon: Users, tone: "#7dd3fc" },
+    { label: "دوره‌ها", value: courseCount, icon: BookOpen, tone: "#a78bfa" },
+    { label: "گواهینامه‌ها", value: certCount, icon: Award, tone: "#6ee7b7" },
+    { label: "مشترکین تخفیف", value: subscriberCount, icon: BellRing, tone: "#fcd34d" },
   ];
 
+  const trackLabel = (t: string) =>
+    t === "UI" ? "رابط کاربری" : t === "UX" ? "تجربه کاربری" : "کوادکمپ";
+
   return (
-    <div className="min-h-screen bg-[#0a0908]">
-      {/* Admin Topbar */}
-      <header className="border-b border-[#1e1d1c] bg-[#0a0908]/80 backdrop-blur-md sticky top-0 z-50">
+    <div className="min-h-screen bg-[var(--page)]">
+      <header className="border-b border-[var(--line)] bg-[var(--page)]/85 backdrop-blur-md sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-7 h-7 rounded-lg bg-[#8b5cf6] flex items-center justify-center">
+            <div className="w-7 h-7 rounded-lg bg-[var(--violet-deep)] flex items-center justify-center">
               <Settings size={14} className="text-white" />
             </div>
-            <span className="font-body font-bold text-[#fafaf9] text-sm">پنل مدیریت</span>
-            <span className="font-display text-[10px] text-[#57534e] tracking-wider uppercase">/ Admin</span>
+            <span className="font-body font-bold text-[var(--ink)] text-sm">پنل مدیریت</span>
           </div>
           <Link
             href="/"
-            className="flex items-center gap-1.5 text-[#57534e] hover:text-[#a8a29e] text-xs font-body transition-colors"
+            className="flex items-center gap-1.5 text-[var(--ink-3)] hover:text-[var(--ink)] text-xs font-body transition-colors"
           >
             <span>بازگشت به سایت</span>
             <ArrowLeft size={12} />
@@ -98,96 +82,116 @@ export default async function AdminPage() {
         </div>
       </header>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
-        {/* Page header */}
-        <div className="mb-8">
-          <div className="flex items-center gap-3 mb-1">
-            <div className="h-px w-6 bg-[#8b5cf6]/60" />
-            <span className="font-display text-xs tracking-[0.2em] uppercase text-[#8b5cf6]">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8 space-y-8">
+        {/* ── تیتر صفحه ── */}
+        <div>
+          <div className="flex items-center gap-3 mb-1.5">
+            <div className="h-px w-6 bg-[var(--violet)]/70" />
+            <span className="font-display text-[11px] tracking-[0.2em] uppercase text-[var(--violet)]">
               Overview
             </span>
           </div>
-          <h1 className="font-body font-bold text-2xl text-[#fafaf9]">داشبورد مدیریت</h1>
+          <h1 className="font-body font-bold text-2xl text-[var(--ink)]">داشبورد مدیریت</h1>
         </div>
 
-        {/* Stats */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-          {stats.map((stat) => (
+        {/* ── آمار ── */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+          {stats.map((s) => (
             <div
-              key={stat.label}
-              className="bg-[#111110] border border-[#2d2c2a] rounded-2xl p-5"
+              key={s.label}
+              className="bg-[var(--card)] border border-[var(--line)] rounded-2xl p-5"
             >
               <div
-                className={`w-10 h-10 rounded-xl ${stat.color} flex items-center justify-center mb-3`}
+                className="w-9 h-9 rounded-xl flex items-center justify-center mb-3"
+                style={{ color: s.tone, backgroundColor: `${s.tone}1f` }}
               >
-                <stat.icon size={18} />
+                <s.icon size={17} />
               </div>
-              <div className="font-display font-bold text-2xl text-[#fafaf9] mb-0.5">
-                {stat.value}
+              <div className="font-display font-bold text-2xl text-[var(--ink)] mb-1">
+                {fa(s.value)}
               </div>
-              <div className="font-body text-[#57534e] text-xs">{stat.label}</div>
+              <div className="font-body text-[var(--ink-4)] text-xs">{s.label}</div>
             </div>
           ))}
         </div>
 
-        {/* Students of the offline courses */}
-        <Link
-          href="/admin/students"
-          className="group bg-[#111110] hover:bg-[#151413] border border-[#2d2c2a] hover:border-[#8b5cf6]/40 rounded-2xl px-6 py-5 mb-8 flex items-center justify-between gap-4 transition-colors"
-        >
-          <div>
-            <h2 className="font-body font-semibold text-[#fafaf9] text-sm mb-1">
-              دانشجوهای دوره‌های آفلاین
-            </h2>
-            <p className="font-body text-xs text-[#57534e]">
-              موضوع پروژه و پیشرفت تسک‌ها، به تفکیک ماه ثبت‌نام و دوره
-            </p>
-          </div>
-          <span className="font-body text-sm text-[#8b5cf6] group-hover:text-[#a78bfa] transition-colors shrink-0">
-            دیدن ←
-          </span>
-        </Link>
+        {/* ── میان‌برها ── */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
+          <Link
+            href="/admin/students"
+            className="group bg-[var(--card)] hover:bg-[var(--card-raised)] border border-[var(--line)] hover:border-[var(--violet)]/45 rounded-2xl px-5 py-5 flex items-start gap-4 transition-colors"
+          >
+            <div className="w-9 h-9 rounded-xl bg-[var(--violet)]/15 text-[var(--violet)] flex items-center justify-center shrink-0">
+              <GraduationCap size={17} />
+            </div>
+            <div className="min-w-0 flex-1">
+              <h2 className="font-body font-semibold text-[var(--ink)] text-sm mb-1">
+                دانشجوهای دوره‌های آفلاین
+              </h2>
+              <p className="font-body text-xs text-[var(--ink-4)] leading-6">
+                موضوع پروژه، لینک فایل و تسک‌های بررسی‌شده
+              </p>
+              <p className="font-body text-xs text-[var(--ink-3)] mt-2">
+                <span className="text-[var(--ink)]">{fa(studentsWithTopic)}</span> از{" "}
+                {fa(studentCount)} موضوعشون رو ثبت کرده‌اند
+              </p>
+            </div>
+            <span className="font-body text-sm text-[var(--violet)] shrink-0 mt-0.5">←</span>
+          </Link>
 
-        {/* Certificates: create form + recent list */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+          <Link
+            href="/project"
+            target="_blank"
+            className="group bg-[var(--card)] hover:bg-[var(--card-raised)] border border-[var(--line)] hover:border-[var(--violet)]/45 rounded-2xl px-5 py-5 flex items-start gap-4 transition-colors"
+          >
+            <div className="w-9 h-9 rounded-xl bg-[#6ee7b7]/15 text-[#6ee7b7] flex items-center justify-center shrink-0">
+              <Link2 size={17} />
+            </div>
+            <div className="min-w-0 flex-1">
+              <h2 className="font-body font-semibold text-[var(--ink)] text-sm mb-1">
+                فرم ثبت موضوع
+              </h2>
+              <p className="font-body text-xs text-[var(--ink-4)] leading-6">
+                لینکی که توی کانال می‌ذاری تا خودشون موضوع و فایلشون رو بفرستن
+              </p>
+              <p
+                dir="ltr"
+                className="font-mono text-[11px] text-[var(--ink-3)] mt-2 text-left"
+              >
+                mojtabaui.ir/project
+              </p>
+            </div>
+            <span className="font-body text-sm text-[#6ee7b7] shrink-0 mt-0.5">←</span>
+          </Link>
+        </div>
+
+        {/* ── گواهی‌ها ── */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 items-start">
           <CertificateForm />
 
-          <div className="bg-[#111110] border border-[#2d2c2a] rounded-2xl overflow-hidden">
-            <div className="px-6 py-4 border-b border-[#1e1d1c] flex items-center justify-between">
-              <h2 className="font-body font-semibold text-[#fafaf9] text-sm">
-                گواهی‌های اخیر
-              </h2>
-              <Link
-                href="/admin/certificates"
-                className="font-body text-xs text-[#8b5cf6] hover:text-[#a78bfa] transition-colors"
-              >
-                دیدن همه ({certCount}) ←
-              </Link>
-            </div>
-
+          <Section
+            title="گواهی‌های اخیر"
+            icon={Award}
+            accent="#6ee7b7"
+            href="/admin/certificates"
+            hrefLabel={`دیدن همه (${fa(certCount)})`}
+          >
             {recentCerts.length === 0 ? (
-              <div className="px-6 py-16 text-center">
-                <Award size={24} className="text-[#2d2c2a] mx-auto mb-3" />
-                <p className="font-body text-[#57534e] text-sm">هنوز گواهی‌ای صادر نشده</p>
-              </div>
+              <Empty icon={Award}>هنوز گواهی‌ای صادر نشده</Empty>
             ) : (
-              <div className="divide-y divide-[#1e1d1c]">
+              <div className="divide-y divide-[var(--line)]">
                 {recentCerts.map((cert) => (
                   <div
                     key={cert.id}
-                    className="px-6 py-4 flex items-center justify-between gap-3"
+                    className="px-5 sm:px-6 py-3.5 flex items-center justify-between gap-3"
                   >
                     <div className="min-w-0">
-                      <p className="font-body text-[#fafaf9] text-sm truncate">
+                      <p className="font-body text-[var(--ink)] text-sm truncate">
                         {cert.studentName}
                       </p>
-                      <p className="font-body text-[#57534e] text-xs mt-0.5">
-                        {cert.track === "UI"
-                          ? "رابط کاربری"
-                          : cert.track === "UX"
-                            ? "تجربه کاربری"
-                            : "کوادکمپ"}
-                        {cert.year ? ` — سال ${cert.year}` : ""}
+                      <p className="font-body text-[var(--ink-4)] text-xs mt-0.5">
+                        {trackLabel(cert.track)}
+                        {cert.year ? ` · سال ${toPersianDigits(String(cert.year))}` : ""}
                       </p>
                     </div>
                     <div className="flex items-center gap-1.5 shrink-0">
@@ -197,7 +201,7 @@ export default async function AdminPage() {
                         rel="noopener noreferrer"
                         title="دیدن گواهی"
                         dir="ltr"
-                        className="font-mono text-xs text-[#8b5cf6] hover:text-[#a78bfa] bg-[#0a0908] border border-[#2d2c2a] hover:border-[#8b5cf6]/50 rounded-lg px-2.5 py-1 tracking-widest transition-colors"
+                        className="font-mono text-xs text-[var(--violet)] hover:text-[#c4b5fd] bg-[var(--page)] border border-[var(--line-strong)]/50 hover:border-[var(--violet)]/60 rounded-lg px-2.5 py-1 tracking-widest transition-colors"
                       >
                         {cert.code}
                       </a>
@@ -207,122 +211,117 @@ export default async function AdminPage() {
                 ))}
               </div>
             )}
-          </div>
+          </Section>
         </div>
 
-        {/* Discount subscribers */}
-        <div className="bg-[#111110] border border-[#2d2c2a] rounded-2xl overflow-hidden mb-8">
-          <div className="px-6 py-4 border-b border-[#1e1d1c] flex items-center justify-between">
-            <h2 className="font-body font-semibold text-[#fafaf9] text-sm flex items-center gap-2">
-              <BellRing size={15} className="text-amber-400" />
-              مشترکین اطلاع‌رسانی تخفیف
-            </h2>
-            <span className="font-display text-xs text-[#57534e] tracking-wider uppercase">
-              {subscribers.length.toLocaleString("fa-IR")} شماره
-            </span>
-          </div>
-
+        {/* ── مشترکین تخفیف ── */}
+        <Section
+          title="مشترکین اطلاع‌رسانی تخفیف"
+          icon={BellRing}
+          accent="#fcd34d"
+          meta={`${fa(subscribers.length)} شماره`}
+        >
           {subscribers.length === 0 ? (
-            <div className="px-6 py-16 text-center">
-              <BellRing size={24} className="text-[#2d2c2a] mx-auto mb-3" />
-              <p className="font-body text-[#57534e] text-sm">هنوز کسی ثبت‌نام نکرده</p>
-            </div>
+            <Empty icon={BellRing}>هنوز کسی ثبت‌نام نکرده</Empty>
           ) : (
-            <div className="divide-y divide-[#1e1d1c]">
-              {subscribers.map((sub) => (
-                <div
-                  key={sub.id}
-                  className="px-6 py-3.5 flex items-center justify-between gap-3"
-                >
-                  <div className="flex items-center gap-3 min-w-0">
-                    <a
-                      href={`tel:${sub.phone}`}
-                      dir="ltr"
-                      className="flex items-center gap-1.5 font-body text-[#fafaf9] hover:text-amber-400 text-sm transition-colors"
-                    >
-                      <Phone size={12} className="text-[#57534e]" />
-                      {sub.phone}
-                    </a>
-                    {sub.name && (
-                      <span className="font-body text-[#a8a29e] text-xs truncate">
-                        {sub.name}
-                      </span>
-                    )}
-                  </div>
-                  <span className="font-body text-[#57534e] text-xs flex-shrink-0">
-                    {sub.createdAt.toLocaleDateString("fa-IR")}
-                  </span>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-
-        {/* Contact messages */}
-        <div className="bg-[#111110] border border-[#2d2c2a] rounded-2xl overflow-hidden">
-          <div className="px-6 py-4 border-b border-[#1e1d1c] flex items-center justify-between">
-            <h2 className="font-body font-semibold text-[#fafaf9] text-sm">
-              پیام‌های تماس
-            </h2>
-            <span className="font-display text-xs text-[#57534e] tracking-wider uppercase">
-              Contact Messages
-            </span>
-          </div>
-
-          {messages.length === 0 ? (
-            <div className="px-6 py-16 text-center">
-              <Mail size={24} className="text-[#2d2c2a] mx-auto mb-3" />
-              <p className="font-body text-[#57534e] text-sm">هنوز پیامی نیومده</p>
-            </div>
-          ) : (
-            <div className="divide-y divide-[#1e1d1c]">
-              {messages.map((msg) => (
-                <div key={msg.id} className="px-6 py-5">
-                  <div className="flex items-start justify-between gap-4 mb-2 flex-wrap">
-                    <div className="flex items-center gap-2.5 flex-wrap">
-                      <span className="font-body font-semibold text-[#fafaf9] text-sm">
-                        {msg.name}
-                      </span>
-                      {!msg.isRead && (
-                        <span className="text-[10px] font-body px-2 py-0.5 rounded-full bg-amber-400/10 text-amber-400">
-                          جدید
+            <ScrollArea>
+              <div className="divide-y divide-[var(--line)]">
+                {subscribers.map((sub) => (
+                  <div
+                    key={sub.id}
+                    className="px-5 sm:px-6 py-3 flex items-center justify-between gap-3"
+                  >
+                    <div className="flex items-center gap-3 min-w-0">
+                      <a
+                        href={`tel:${sub.phone}`}
+                        dir="ltr"
+                        className="flex items-center gap-1.5 font-body text-[var(--ink-2)] hover:text-[#fcd34d] text-sm transition-colors"
+                      >
+                        <Phone size={12} className="text-[var(--ink-faint)]" />
+                        {sub.phone}
+                      </a>
+                      {sub.name && (
+                        <span className="font-body text-[var(--ink-4)] text-xs truncate">
+                          {sub.name}
                         </span>
                       )}
                     </div>
-                    <span className="font-body text-[#57534e] text-xs">
-                      {msg.createdAt.toLocaleDateString("fa-IR")}
+                    <span className="font-body text-[var(--ink-4)] text-xs shrink-0">
+                      {sub.createdAt.toLocaleDateString("fa-IR")}
                     </span>
                   </div>
-
-                  <div className="flex items-center gap-4 mb-3 flex-wrap">
-                    <a
-                      href={`mailto:${msg.email}`}
-                      dir="ltr"
-                      className="flex items-center gap-1.5 font-body text-[#a8a29e] hover:text-[#fafaf9] text-xs transition-colors"
-                    >
-                      <Mail size={11} />
-                      {msg.email}
-                    </a>
-                    {msg.phone && (
-                      <a
-                        href={`tel:${msg.phone}`}
-                        dir="ltr"
-                        className="flex items-center gap-1.5 font-body text-[#a8a29e] hover:text-[#fafaf9] text-xs transition-colors"
-                      >
-                        <Phone size={11} />
-                        {msg.phone}
-                      </a>
-                    )}
-                  </div>
-
-                  <p className="font-body text-[#a8a29e] text-sm leading-relaxed whitespace-pre-wrap">
-                    {msg.message}
-                  </p>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            </ScrollArea>
           )}
-        </div>
+        </Section>
+
+        {/* ── پیام‌های تماس ── */}
+        <Section
+          title="پیام‌های تماس"
+          icon={Mail}
+          accent="#7dd3fc"
+          meta={
+            unreadCount > 0 ? (
+              <span className="text-[#fcd34d]">{fa(unreadCount)} خوانده‌نشده</span>
+            ) : (
+              `${fa(messages.length)} پیام`
+            )
+          }
+        >
+          {messages.length === 0 ? (
+            <Empty icon={Mail}>هنوز پیامی نیومده</Empty>
+          ) : (
+            <ScrollArea max="34rem">
+              <div className="divide-y divide-[var(--line)]">
+                {messages.map((msg) => (
+                  <article key={msg.id} className="px-5 sm:px-6 py-5">
+                    <div className="flex items-start justify-between gap-4 mb-2 flex-wrap">
+                      <div className="flex items-center gap-2.5 flex-wrap">
+                        <span className="font-body font-semibold text-[var(--ink)] text-sm">
+                          {msg.name}
+                        </span>
+                        {!msg.isRead && (
+                          <span className="text-[10px] font-body px-2 py-0.5 rounded-full bg-[#fcd34d]/15 text-[#fcd34d]">
+                            جدید
+                          </span>
+                        )}
+                      </div>
+                      <span className="font-body text-[var(--ink-4)] text-xs">
+                        {msg.createdAt.toLocaleDateString("fa-IR")}
+                      </span>
+                    </div>
+
+                    <div className="flex items-center gap-4 mb-3 flex-wrap">
+                      <a
+                        href={`mailto:${msg.email}`}
+                        dir="ltr"
+                        className="flex items-center gap-1.5 font-body text-[var(--ink-3)] hover:text-[var(--ink)] text-xs transition-colors"
+                      >
+                        <Mail size={11} />
+                        {msg.email}
+                      </a>
+                      {msg.phone && (
+                        <a
+                          href={`tel:${msg.phone}`}
+                          dir="ltr"
+                          className="flex items-center gap-1.5 font-body text-[var(--ink-3)] hover:text-[var(--ink)] text-xs transition-colors"
+                        >
+                          <Phone size={11} />
+                          {msg.phone}
+                        </a>
+                      )}
+                    </div>
+
+                    <p className="font-body text-[var(--ink-2)] text-sm leading-7 whitespace-pre-wrap">
+                      {msg.message}
+                    </p>
+                  </article>
+                ))}
+              </div>
+            </ScrollArea>
+          )}
+        </Section>
       </div>
     </div>
   );

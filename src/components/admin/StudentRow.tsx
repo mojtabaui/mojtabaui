@@ -84,7 +84,7 @@ export default function StudentRow({ student }: { student: Student }) {
   }
 
   const cellInput =
-    "w-full bg-transparent border border-transparent hover:border-[#2d2c2a] focus:border-[#8b5cf6]/50 focus:bg-[#0a0908] rounded-lg px-2.5 py-1.5 font-body text-sm text-[#fafaf9] placeholder:text-[#57534e] focus:outline-none transition-colors";
+    "w-full bg-transparent border border-transparent hover:border-[var(--line-strong)]/60 focus:border-[var(--violet)] focus:bg-[var(--page)] rounded-lg px-2.5 py-1.5 font-body text-sm text-[var(--ink)] placeholder:text-[var(--ink-4)] focus:outline-none transition-colors";
 
   // هر دوره تسک‌های خودش رو داره، پس شمارش و فهرست بر اساس دورهٔ همین ردیفه
   const total = taskCount(student.track);
@@ -93,13 +93,13 @@ export default function StudentRow({ student }: { student: Student }) {
 
   return (
     <>
-      <tr className="border-b border-[#1e1d1c] hover:bg-[#0f0e0d]/60 transition-colors">
+      <tr className="border-b border-[var(--line)] hover:bg-[var(--card-raised)]/60 transition-colors">
         <td className="px-3 py-2.5 w-8">
           <button
             type="button"
             onClick={() => setOpen(!open)}
             title={open ? "بستن" : "تسک‌ها و سابقه"}
-            className="text-[#57534e] hover:text-[#a8a29e] p-1 rounded-md transition-colors"
+            className="text-[var(--ink-4)] hover:text-[var(--ink-3)] p-1 rounded-md transition-colors"
           >
             <ChevronDown
               size={14}
@@ -108,7 +108,7 @@ export default function StudentRow({ student }: { student: Student }) {
           </button>
         </td>
 
-        <td className="px-3 py-2.5 font-body text-sm text-[#fafaf9] whitespace-nowrap">
+        <td className="px-3 py-2.5 font-body text-sm text-[var(--ink)] whitespace-nowrap">
           {student.studentName}
           {student.note && (
             <span className="block font-body text-[10px] text-amber-400/70 mt-0.5">
@@ -121,7 +121,7 @@ export default function StudentRow({ student }: { student: Student }) {
           <span
             className={`font-body text-xs px-2 py-0.5 rounded-md border whitespace-nowrap ${
               student.track === "UI"
-                ? "text-[#8b5cf6] border-[#8b5cf6]/30 bg-[#8b5cf6]/10"
+                ? "text-[var(--violet)] border-[#8b5cf6]/30 bg-[#8b5cf6]/10"
                 : "text-emerald-400 border-emerald-400/30 bg-emerald-400/10"
             }`}
           >
@@ -129,12 +129,12 @@ export default function StudentRow({ student }: { student: Student }) {
           </span>
         </td>
 
-        <td className="px-3 py-2.5 font-body text-xs text-[#a8a29e] whitespace-nowrap">
+        <td className="px-3 py-2.5 font-body text-xs text-[var(--ink-3)] whitespace-nowrap">
           {intakeLabel(student.intakeMonth)}
         </td>
 
-        <td className="px-1 py-1.5 min-w-[200px]">
-          <div className="flex items-center gap-1">
+        <td className="px-1 py-1.5 min-w-[240px]">
+          <div className="flex items-center gap-1.5">
             <input
               type="text"
               value={topic}
@@ -144,16 +144,25 @@ export default function StudentRow({ student }: { student: Student }) {
               placeholder="هنوز وارد نشده"
               className={cellInput}
             />
-            {student.fileLink && (
+            {/* وضعیت فایل همیشه دیده می‌شه، چون همون چیزیه که دنبالش می‌گردی */}
+            {student.fileLink ? (
               <a
                 href={student.fileLink}
                 target="_blank"
                 rel="noopener noreferrer"
                 title={student.fileLink}
-                className="shrink-0 text-[#8b5cf6] hover:text-[#a78bfa] p-1.5 rounded-lg transition-colors"
+                className="shrink-0 flex items-center gap-1 rounded-lg border border-[var(--violet)]/40 bg-[var(--violet)]/10 px-2 py-1 font-body text-[11px] text-[var(--violet)] hover:bg-[var(--violet)]/20 transition-colors"
               >
-                <ExternalLink size={13} />
+                <ExternalLink size={11} />
+                فایل
               </a>
+            ) : (
+              <span
+                title="هنوز لینک فایلی نداده"
+                className="shrink-0 rounded-lg border border-dashed border-[var(--line-strong)]/60 px-2 py-1 font-body text-[11px] text-[var(--ink-4)]"
+              >
+                بی‌فایل
+              </span>
             )}
           </div>
         </td>
@@ -175,7 +184,7 @@ export default function StudentRow({ student }: { student: Student }) {
 
         <td className="px-3 py-2.5 w-24 whitespace-nowrap">
           <span
-            className={`font-body text-xs ${done === 0 ? "text-[#57534e]" : "text-emerald-400"}`}
+            className={`font-body text-xs ${done === 0 ? "text-[var(--ink-4)]" : "text-emerald-400"}`}
           >
             {toPersianDigits(done)} از {toPersianDigits(total)}
           </span>
@@ -200,7 +209,7 @@ export default function StudentRow({ student }: { student: Student }) {
                 onClick={() => setConfirming(false)}
                 disabled={saving}
                 title="بی‌خیال"
-                className="text-[#a8a29e] hover:text-[#fafaf9] disabled:opacity-50 p-1.5 rounded-lg border border-[#2d2c2a] transition-colors"
+                className="text-[var(--ink-3)] hover:text-[var(--ink)] disabled:opacity-50 p-1.5 rounded-lg border border-[var(--line)] transition-colors"
               >
                 <X size={13} />
               </button>
@@ -210,7 +219,7 @@ export default function StudentRow({ student }: { student: Student }) {
               type="button"
               onClick={() => setConfirming(true)}
               title={`حذف ${student.studentName}`}
-              className="text-[#57534e] hover:text-rose-400 p-1.5 rounded-lg transition-colors float-left"
+              className="text-[var(--ink-4)] hover:text-rose-400 p-1.5 rounded-lg transition-colors float-left"
             >
               <Trash2 size={13} />
             </button>
@@ -219,20 +228,20 @@ export default function StudentRow({ student }: { student: Student }) {
       </tr>
 
       {open && (
-        <tr className="border-b border-[#1e1d1c] bg-[#0c0b0a]">
+        <tr className="border-b border-[var(--line)] bg-[var(--card-raised)]">
           <td />
           <td colSpan={6} className="px-3 py-4">
             <div className="space-y-4">
               {/* ── تیک بررسی تسک‌ها ── */}
               <div>
-                <p className="font-body text-xs text-[#57534e] mb-2">
-                  تیک یعنی <span className="text-[#a8a29e]">منتور بررسی کرده</span>، نه اینکه
+                <p className="font-body text-xs text-[var(--ink-4)] mb-2">
+                  تیک یعنی <span className="text-[var(--ink-3)]">منتور بررسی کرده</span>، نه اینکه
                   دانشجو تحویل داده
                 </p>
                 <div className="grid gap-x-6 gap-y-3 sm:grid-cols-2 xl:grid-cols-4">
                   {weeks.map(({ week, tasks }) => (
                     <div key={week} className="min-w-0">
-                      <p className="font-body text-[10px] text-[#57534e] mb-1.5">
+                      <p className="font-body text-[10px] text-[var(--ink-4)] mb-1.5">
                         هفتهٔ {toPersianDigits(week)}
                       </p>
                       <div className="space-y-1">
@@ -248,7 +257,7 @@ export default function StudentRow({ student }: { student: Student }) {
                               className={`w-full flex items-start gap-2 text-right rounded-lg border px-2 py-1.5 font-body text-[11px] leading-5 transition-colors disabled:opacity-50 ${
                                 on
                                   ? "bg-emerald-400/10 border-emerald-400/40 text-emerald-300"
-                                  : "bg-[#0a0908] border-[#2d2c2a] text-[#a8a29e] hover:border-[#8b5cf6]/40"
+                                  : "bg-[var(--page)] border-[var(--line)] text-[var(--ink-3)] hover:border-[#8b5cf6]/40"
                               } ${t.alternative ? "opacity-80" : ""}`}
                             >
                               <span
@@ -262,7 +271,7 @@ export default function StudentRow({ student }: { student: Student }) {
                               </span>
                               <span className="min-w-0">
                                 {t.alternative && (
-                                  <span className="text-[#57534e]">یا </span>
+                                  <span className="text-[var(--ink-4)]">یا </span>
                                 )}
                                 {t.title}
                               </span>
@@ -277,7 +286,7 @@ export default function StudentRow({ student }: { student: Student }) {
 
               {/* ── لینک فایل ── */}
               <div>
-                <label className="block font-body text-xs text-[#57534e] mb-1.5">
+                <label className="block font-body text-xs text-[var(--ink-4)] mb-1.5">
                   لینک فایل کار
                 </label>
                 <input
@@ -288,13 +297,13 @@ export default function StudentRow({ student }: { student: Student }) {
                   onBlur={() => fileLink.trim() !== student.fileLink && patch({ fileLink })}
                   disabled={saving}
                   placeholder="https://figma.com/file/..."
-                  className="w-full text-left bg-[#0a0908] border border-[#2d2c2a] focus:border-[#8b5cf6]/50 rounded-xl px-3 py-2 font-body text-sm text-[#fafaf9] placeholder:text-[#57534e] focus:outline-none transition-colors"
+                  className="w-full text-left bg-[var(--page)] border border-[var(--line)] focus:border-[#8b5cf6]/50 rounded-xl px-3 py-2 font-body text-sm text-[var(--ink)] placeholder:text-[var(--ink-4)] focus:outline-none transition-colors"
                 />
               </div>
 
               {/* ── سابقه ── */}
               <div>
-                <label className="block font-body text-xs text-[#57534e] mb-1.5">
+                <label className="block font-body text-xs text-[var(--ink-4)] mb-1.5">
                   سابقه و آشنایی قبلی
                 </label>
                 <textarea
@@ -306,7 +315,7 @@ export default function StudentRow({ student }: { student: Student }) {
                   disabled={saving}
                   rows={2}
                   placeholder="از معرفی خودش توی گروه"
-                  className="w-full bg-[#0a0908] border border-[#2d2c2a] focus:border-[#8b5cf6]/50 rounded-xl px-3 py-2 font-body text-sm text-[#fafaf9] placeholder:text-[#57534e] focus:outline-none transition-colors resize-y leading-6"
+                  className="w-full bg-[var(--page)] border border-[var(--line)] focus:border-[#8b5cf6]/50 rounded-xl px-3 py-2 font-body text-sm text-[var(--ink)] placeholder:text-[var(--ink-4)] focus:outline-none transition-colors resize-y leading-6"
                 />
               </div>
             </div>

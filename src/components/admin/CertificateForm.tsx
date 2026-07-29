@@ -148,20 +148,20 @@ export default function CertificateForm() {
   }
 
   const inputCls =
-    "w-full bg-[#0a0908] border border-[#2d2c2a] rounded-xl px-4 py-3 font-body text-sm text-[#fafaf9] placeholder:text-[#57534e] focus:outline-none focus:border-[#8b5cf6]/50 transition-colors";
+    "w-full bg-[var(--page)] border border-[var(--line)] rounded-xl px-4 py-3 font-body text-sm text-[var(--ink)] placeholder:text-[var(--ink-4)] focus:outline-none focus:border-[#8b5cf6]/50 transition-colors";
 
   const tabCls = (active: boolean) =>
     `flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-body text-xs transition-colors ${
       active
         ? "bg-[#8b5cf6] text-white"
-        : "text-[#a8a29e] hover:text-[#fafaf9] border border-[#2d2c2a]"
+        : "text-[var(--ink-3)] hover:text-[var(--ink)] border border-[var(--line)]"
     }`;
 
   /** فیلدهای دوره و سال و تاریخ — بین دو حالت مشترکه */
   const sharedFields = (
     <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
       <div>
-        <label className="block font-body text-sm text-[#a8a29e] mb-1.5">دوره</label>
+        <label className="block font-body text-sm text-[var(--ink-3)] mb-1.5">دوره</label>
         <select
           value={track}
           onChange={(e) => setTrack(e.target.value as Track)}
@@ -174,7 +174,7 @@ export default function CertificateForm() {
       </div>
       {!isQC && (
         <div>
-          <label className="block font-body text-sm text-[#a8a29e] mb-1.5">سال</label>
+          <label className="block font-body text-sm text-[var(--ink-3)] mb-1.5">سال</label>
           <input
             type="text"
             inputMode="numeric"
@@ -187,8 +187,8 @@ export default function CertificateForm() {
         </div>
       )}
       <div>
-        <label className="block font-body text-sm text-[#a8a29e] mb-1.5">
-          تاریخ شروع <span className="text-[#57534e]">(اختیاری)</span>
+        <label className="block font-body text-sm text-[var(--ink-3)] mb-1.5">
+          تاریخ شروع <span className="text-[var(--ink-4)]">(اختیاری)</span>
         </label>
         <input
           type="text"
@@ -203,9 +203,9 @@ export default function CertificateForm() {
   );
 
   return (
-    <div className="bg-[#111110] border border-[#2d2c2a] rounded-2xl overflow-hidden">
-      <div className="px-6 py-4 border-b border-[#1e1d1c] flex items-center justify-between gap-4">
-        <h2 className="font-body font-semibold text-[#fafaf9] text-sm flex items-center gap-2">
+    <div className="bg-[var(--card)] border border-[var(--line)] rounded-2xl overflow-hidden">
+      <div className="px-6 py-4 border-b border-[var(--line)] flex items-center justify-between gap-4">
+        <h2 className="font-body font-semibold text-[var(--ink)] text-sm flex items-center gap-2">
           <Award size={15} className="text-emerald-400" />
           صدور گواهینامه
         </h2>
@@ -231,7 +231,7 @@ export default function CertificateForm() {
             <div className="flex items-center gap-2 flex-wrap">
               <code
                 dir="ltr"
-                className="font-mono text-lg text-[#fafaf9] bg-[#0a0908] border border-[#2d2c2a] rounded-lg px-3 py-1.5 tracking-widest"
+                className="font-mono text-lg text-[var(--ink)] bg-[var(--page)] border border-[var(--line)] rounded-lg px-3 py-1.5 tracking-widest"
               >
                 {created.code}
               </code>
@@ -241,7 +241,7 @@ export default function CertificateForm() {
                   navigator.clipboard.writeText(created.code);
                   setCopied(true);
                 }}
-                className="flex items-center gap-1.5 text-xs font-body text-[#a8a29e] hover:text-[#fafaf9] border border-[#2d2c2a] rounded-lg px-3 py-2 transition-colors"
+                className="flex items-center gap-1.5 text-xs font-body text-[var(--ink-3)] hover:text-[var(--ink)] border border-[var(--line)] rounded-lg px-3 py-2 transition-colors"
               >
                 {copied ? <Check size={13} /> : <Copy size={13} />}
                 {copied ? "کپی شد" : "کپی کد"}
@@ -266,7 +266,7 @@ export default function CertificateForm() {
               <p className="font-body text-emerald-300 text-sm">
                 {result.created.length} گواهی صادر شد
                 {result.skipped.length > 0 && (
-                  <span className="text-[#a8a29e]">
+                  <span className="text-[var(--ink-3)]">
                     {" "}
                     · {result.skipped.length} نفر قبلاً گواهی داشتن
                   </span>
@@ -275,7 +275,7 @@ export default function CertificateForm() {
               <button
                 type="button"
                 onClick={copyAll}
-                className="flex items-center gap-1.5 text-xs font-body text-[#a8a29e] hover:text-[#fafaf9] border border-[#2d2c2a] rounded-lg px-3 py-2 transition-colors"
+                className="flex items-center gap-1.5 text-xs font-body text-[var(--ink-3)] hover:text-[var(--ink)] border border-[var(--line)] rounded-lg px-3 py-2 transition-colors"
               >
                 {copiedAll ? <Check size={13} /> : <Copy size={13} />}
                 {copiedAll ? "کپی شد" : "کپی همه (نام و کد)"}
@@ -289,14 +289,14 @@ export default function CertificateForm() {
               </p>
             )}
 
-            <div className="border border-[#2d2c2a] rounded-xl overflow-hidden max-h-72 overflow-y-auto">
+            <div className="border border-[var(--line)] rounded-xl overflow-hidden max-h-72 overflow-y-auto">
               <table className="w-full font-body text-sm">
                 <tbody>
                   {result.created.map((r) => (
-                    <tr key={r.code} className="border-b border-[#1e1d1c] last:border-0">
-                      <td className="px-4 py-2.5 text-[#fafaf9]">{r.name}</td>
+                    <tr key={r.code} className="border-b border-[var(--line)] last:border-0">
+                      <td className="px-4 py-2.5 text-[var(--ink)]">{r.name}</td>
                       <td className="px-4 py-2.5">
-                        <code dir="ltr" className="font-mono text-xs text-[#8b5cf6] tracking-widest">
+                        <code dir="ltr" className="font-mono text-xs text-[var(--violet)] tracking-widest">
                           {r.code}
                         </code>
                       </td>
@@ -305,7 +305,7 @@ export default function CertificateForm() {
                           href={`/certificate/${r.code}`}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="text-xs text-[#a8a29e] hover:text-[#fafaf9] transition-colors"
+                          className="text-xs text-[var(--ink-3)] hover:text-[var(--ink)] transition-colors"
                         >
                           دیدن
                         </a>
@@ -313,14 +313,14 @@ export default function CertificateForm() {
                     </tr>
                   ))}
                   {result.skipped.map((r) => (
-                    <tr key={r.code} className="border-b border-[#1e1d1c] last:border-0 opacity-60">
-                      <td className="px-4 py-2.5 text-[#a8a29e]">{r.name}</td>
+                    <tr key={r.code} className="border-b border-[var(--line)] last:border-0 opacity-60">
+                      <td className="px-4 py-2.5 text-[var(--ink-3)]">{r.name}</td>
                       <td className="px-4 py-2.5">
-                        <code dir="ltr" className="font-mono text-xs text-[#57534e] tracking-widest">
+                        <code dir="ltr" className="font-mono text-xs text-[var(--ink-4)] tracking-widest">
                           {r.code}
                         </code>
                       </td>
-                      <td className="px-4 py-2.5 text-left text-xs text-[#57534e]">قبلاً صادر شده</td>
+                      <td className="px-4 py-2.5 text-left text-xs text-[var(--ink-4)]">قبلاً صادر شده</td>
                     </tr>
                   ))}
                 </tbody>
@@ -333,7 +333,7 @@ export default function CertificateForm() {
         {mode === "single" && (
           <form onSubmit={handleSingle} className="space-y-4">
             <div>
-              <label className="block font-body text-sm text-[#a8a29e] mb-1.5">نام دانشجو</label>
+              <label className="block font-body text-sm text-[var(--ink-3)] mb-1.5">نام دانشجو</label>
               <input
                 type="text"
                 value={studentName}
@@ -346,14 +346,14 @@ export default function CertificateForm() {
             {sharedFields}
 
             <div className="flex items-center justify-between gap-4 pt-1">
-              <div className="font-body text-xs text-[#57534e]">
+              <div className="font-body text-xs text-[var(--ink-4)]">
                 کد بعدی:{" "}
                 {nextCode ? (
-                  <code dir="ltr" className="font-mono text-[#8b5cf6] tracking-widest">
+                  <code dir="ltr" className="font-mono text-[var(--violet)] tracking-widest">
                     {nextCode}
                   </code>
                 ) : (
-                  <span className="text-[#57534e]">—</span>
+                  <span className="text-[var(--ink-4)]">—</span>
                 )}
               </div>
               <button
@@ -373,8 +373,8 @@ export default function CertificateForm() {
         {mode === "bulk" && (
           <form onSubmit={handleBulk} className="space-y-4">
             <div>
-              <label className="block font-body text-sm text-[#a8a29e] mb-1.5">
-                فهرست اسم‌ها <span className="text-[#57534e]">(هر نفر یک خط)</span>
+              <label className="block font-body text-sm text-[var(--ink-3)] mb-1.5">
+                فهرست اسم‌ها <span className="text-[var(--ink-4)]">(هر نفر یک خط)</span>
               </label>
               <textarea
                 value={namesRaw}
@@ -383,7 +383,7 @@ export default function CertificateForm() {
                 placeholder={"زهرا اویسی\nعلی رضایی\nمریم کریمی"}
                 className={`${inputCls} resize-y leading-7`}
               />
-              <p className="mt-1.5 font-body text-xs text-[#57534e]">
+              <p className="mt-1.5 font-body text-xs text-[var(--ink-4)]">
                 مستقیم از اکسل هم می‌تونی کپی کنی — ستون اول برداشته می‌شه و شمارهٔ ردیف حذف.
               </p>
             </div>
@@ -391,15 +391,15 @@ export default function CertificateForm() {
             {sharedFields}
 
             <div className="flex items-center justify-between gap-4 pt-1 flex-wrap">
-              <div className="font-body text-xs text-[#57534e]">
+              <div className="font-body text-xs text-[var(--ink-4)]">
                 {parsed.length > 0 ? (
                   <>
-                    <span className="text-[#a8a29e]">{parsed.length} نفر</span>
+                    <span className="text-[var(--ink-3)]">{parsed.length} نفر</span>
                     {nextCode && (
                       <>
                         {" "}
                         · شروع از{" "}
-                        <code dir="ltr" className="font-mono text-[#8b5cf6] tracking-widest">
+                        <code dir="ltr" className="font-mono text-[var(--violet)] tracking-widest">
                           {nextCode}
                         </code>
                       </>
