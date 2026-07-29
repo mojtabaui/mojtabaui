@@ -113,13 +113,22 @@ export default function TopicRow({ topic }: { topic: Topic }) {
       </td>
 
       <td className="px-1 py-1.5 w-28">
+        {/* مقدار ناشناخته را به فهرست اضافه می‌کنیم تا select بی‌صدا نندازتش
+            روی گزینهٔ اول و خرابیِ داده پنهان نمونه */}
         <select
           value={topic.difficulty}
           onChange={(e) => patch({ difficulty: e.target.value })}
           disabled={saving}
-          className={`${cell} cursor-pointer`}
+          className={`${cell} cursor-pointer ${
+            DIFFICULTIES.includes(topic.difficulty)
+              ? ""
+              : "border-[var(--danger)]/60 text-[var(--danger)]"
+          }`}
         >
-          {DIFFICULTIES.map((d) => (
+          {(DIFFICULTIES.includes(topic.difficulty)
+            ? DIFFICULTIES
+            : [topic.difficulty, ...DIFFICULTIES]
+          ).map((d) => (
             <option key={d} value={d}>
               {d || "—"}
             </option>
