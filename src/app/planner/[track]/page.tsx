@@ -3,7 +3,15 @@ import type { Metadata } from "next";
 import { Play, CheckSquare } from "lucide-react";
 import BrandMark, { BrandGlyph } from "@/components/BrandMark";
 import PrintButton from "@/components/PrintButton";
+import CourseHeroVisual from "@/components/CourseHeroVisual";
 import { planners, START_NOTES } from "@/lib/planner";
+import { courses } from "@/lib/mock-data";
+
+/** همون رنگ‌هایی که صفحه‌ی خود دوره به پوستر می‌ده */
+const COURSE_COLOR: Record<string, { bg: string; badge: string; accent: string }> = {
+  "ui-offline": { bg: "#FFF5F5", badge: "#FEE2E2", accent: "#ef4444" },
+  "ux-offline": { bg: "#F0F4FF", badge: "#DBEAFE", accent: "#2563eb" },
+};
 
 interface Props {
   params: Promise<{ track: string }>;
@@ -31,6 +39,11 @@ export default async function PlannerPage({ params }: Props) {
   const { track } = await params;
   const p = planners[track as "ui" | "ux"];
   if (!p) notFound();
+
+  // پوستر جلد همونیه که توی صفحه‌ی خود دوره‌ست، تا جزوه و صفحه یکی دیده بشن
+  const slug = `${track}-offline`;
+  const course = courses.find((c) => c.slug === slug);
+  const color = COURSE_COLOR[slug];
 
   return (
     <main className="min-h-screen bg-[#e8e2d9] py-10 print:bg-white print:py-0">
@@ -77,7 +90,7 @@ export default async function PlannerPage({ params }: Props) {
             <div className="relative flex-1 flex flex-col justify-center">
               <div
                 dir="ltr"
-                className="font-display text-[8pt] font-bold tracking-[0.3em] uppercase mb-[6mm]"
+                className="font-display text-[8pt] font-bold tracking-[0.3em] uppercase mb-[6mm] text-right"
                 style={{ color: p.accent }}
               >
                 {p.latin}
@@ -93,6 +106,19 @@ export default async function PlannerPage({ params }: Props) {
               >
                 {p.title}
               </div>
+
+              {/* پوستر دوره — همونی که توی صفحه‌ی تکیِ دوره هست */}
+              {course && color && (
+                <div className="mt-[10mm] self-start w-[92mm]">
+                  <CourseHeroVisual
+                    mark={track.toUpperCase()}
+                    subtitle={course.subtitle}
+                    color={color}
+                    videoHours={course.videoHours}
+                    tags={course.tags}
+                  />
+                </div>
+              )}
             </div>
 
             <div className="relative font-body text-[8pt] text-[#a09990]">
@@ -152,19 +178,20 @@ export default async function PlannerPage({ params }: Props) {
 
               {/* فصل‌ها */}
               <div className="space-y-[3mm] mb-[12mm]">
+                {/* آیکن اول میاد تا در RTL سمت راست بشینه و متن از راست شروع شه */}
                 {w.chapters.map((c) => (
-                  <div key={c.title} className="flex items-center gap-[3.5mm] justify-end">
-                    <span className="font-body text-[11pt] text-[#1a1714]" dir="rtl">
-                      فصل {c.n}:{" "}
-                      <span dir="ltr" className="font-display">
-                        {c.title}
-                      </span>
-                    </span>
+                  <div key={c.title} className="flex items-center gap-[3.5mm]">
                     <span
                       className="w-[5mm] h-[5mm] rounded-[1.2mm] flex items-center justify-center flex-shrink-0 text-white"
                       style={{ backgroundColor: p.accent }}
                     >
                       <Play size={9} fill="currentColor" />
+                    </span>
+                    <span className="font-body text-[11pt] text-[#1a1714]" dir="rtl">
+                      فصل {c.n}:{" "}
+                      <span dir="ltr" className="font-display inline-block">
+                        {c.title}
+                      </span>
                     </span>
                   </div>
                 ))}
@@ -173,26 +200,27 @@ export default async function PlannerPage({ params }: Props) {
               {/* تسک‌ها */}
               <div className="mt-auto">
                 {w.either && (
-                  <p className="font-body text-[9pt] text-[#6b6560] text-left mb-[4mm]">
+                  <p className="font-body text-[9pt] text-[#6b6560] mb-[4mm]">
                     یکی از این دو را انجام دهید:
                   </p>
                 )}
                 <div className="space-y-[7mm]">
                   {w.tasks.map((t) => (
                     <div key={t.title}>
-                      <div className="flex items-center gap-[3.5mm] justify-end">
-                        <span className="font-body font-black text-[13pt] text-[#1a1714]">
-                          {t.title}
-                        </span>
+                      <div className="flex items-center gap-[3.5mm]">
                         <span
                           className="w-[5.5mm] h-[5.5mm] rounded-[1.2mm] flex items-center justify-center flex-shrink-0 text-white"
                           style={{ backgroundColor: p.accent }}
                         >
                           <CheckSquare size={10} />
                         </span>
+                        <span className="font-body font-black text-[13pt] text-[#1a1714]">
+                          {t.title}
+                        </span>
                       </div>
                       {t.desc && (
-                        <p className="font-body text-[9.5pt] text-[#6b6560] leading-[1.9] mt-[1.5mm] pl-[9mm]">
+                        // ps یعنی سمت شروع، که در RTL می‌شه راست — تا زیر عنوان تسک بیفته
+                        <p className="font-body text-[9.5pt] text-[#6b6560] leading-[1.9] mt-[1.5mm] ps-[9mm]">
                           {t.desc}
                         </p>
                       )}
@@ -218,14 +246,15 @@ export default async function PlannerPage({ params }: Props) {
 
 function Head({ accent, latin }: { accent: string; latin: string }) {
   return (
+    // برچسب اول میاد تا در RTL سمت راست بشینه و خط به سمت چپ کشیده شه
     <div className="flex items-center gap-[4mm] mb-[10mm]">
-      <span className="h-[1.2mm] flex-1 rounded-full" style={{ backgroundColor: accent }} />
       <span
         dir="ltr"
         className="font-display text-[7pt] tracking-[0.24em] uppercase text-[#6b6560]"
       >
         {latin}
       </span>
+      <span className="h-[1.2mm] flex-1 rounded-full" style={{ backgroundColor: accent }} />
     </div>
   );
 }
