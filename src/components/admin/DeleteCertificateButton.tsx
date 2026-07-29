@@ -42,7 +42,7 @@ export default function DeleteCertificateButton({
 
   if (error) {
     return (
-      <span className="font-body text-xs text-rose-400 shrink-0" title={error}>
+      <span className="font-body text-xs text-[var(--danger)] shrink-0" title={error}>
         {error}
       </span>
     );
@@ -55,7 +55,7 @@ export default function DeleteCertificateButton({
         onClick={() => setConfirming(true)}
         title={`حذف گواهی ${name}`}
         aria-label={`حذف گواهی ${name}`}
-        className="text-[var(--ink-4)] hover:text-rose-400 p-1.5 rounded-lg transition-colors shrink-0"
+        className="text-[var(--ink-4)] hover:text-[var(--danger)] p-1.5 rounded-lg transition-colors shrink-0"
       >
         <Trash2 size={14} />
       </button>
@@ -70,7 +70,7 @@ export default function DeleteCertificateButton({
         disabled={loading}
         title="بله، حذف کن"
         aria-label="تأیید حذف"
-        className="text-rose-400 hover:text-rose-300 disabled:opacity-50 p-1.5 rounded-lg border border-rose-400/30 transition-colors"
+        className="text-[var(--danger)] hover:text-[var(--danger)] disabled:opacity-50 p-1.5 rounded-lg border border-[var(--danger)]/30 transition-colors"
       >
         <Check size={14} />
       </button>

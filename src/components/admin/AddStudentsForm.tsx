@@ -68,14 +68,14 @@ export default function AddStudentsForm({
   }
 
   const inputCls =
-    "w-full bg-[var(--page)] border border-[var(--line)] rounded-xl px-4 py-2.5 font-body text-sm text-[var(--ink)] placeholder:text-[var(--ink-4)] focus:outline-none focus:border-[#8b5cf6]/50 transition-colors";
+    "w-full bg-[var(--page)] border border-[var(--line)] rounded-xl px-4 py-2.5 font-body text-sm text-[var(--ink)] placeholder:text-[var(--ink-4)] focus:outline-none focus:border-[var(--violet-deep)]/50 transition-colors";
 
   if (!open) {
     return (
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="flex items-center gap-1.5 bg-[#8b5cf6] hover:bg-[#7c4ff0] text-white font-body font-semibold text-sm px-4 py-2.5 rounded-xl transition-colors"
+        className="flex items-center gap-1.5 bg-[var(--violet-deep)] hover:bg-[#7c4ff0] text-white font-body font-semibold text-sm px-4 py-2.5 rounded-xl transition-colors"
       >
         <UserPlus size={15} />
         افزودن دانشجو
@@ -104,8 +104,8 @@ export default function AddStudentsForm({
       </div>
 
       {result && (
-        <div className="bg-emerald-400/10 border border-emerald-400/20 rounded-xl px-4 py-3">
-          <p className="font-body text-emerald-300 text-sm">
+        <div className="bg-[var(--ok)]/10 border border-[var(--ok)]/20 rounded-xl px-4 py-3">
+          <p className="font-body text-[var(--ok)] text-sm">
             {result.added} نفر اضافه شد
             {result.skipped.length > 0 && (
               <span className="text-[var(--ink-3)]">
@@ -176,13 +176,13 @@ export default function AddStudentsForm({
         <button
           type="submit"
           disabled={loading || parsed.length === 0}
-          className="bg-[#8b5cf6] hover:bg-[#7c4ff0] disabled:opacity-60 disabled:cursor-not-allowed text-white font-body font-semibold text-sm px-6 py-2.5 rounded-xl transition-colors"
+          className="bg-[var(--violet-deep)] hover:bg-[#7c4ff0] disabled:opacity-60 disabled:cursor-not-allowed text-white font-body font-semibold text-sm px-6 py-2.5 rounded-xl transition-colors"
         >
           {loading ? "در حال افزودن..." : `افزودن ${parsed.length || ""}`}
         </button>
       </div>
 
-      {error && <p className="text-rose-400 text-xs font-body">{error}</p>}
+      {error && <p className="text-[var(--danger)] text-xs font-body">{error}</p>}
     </form>
   );
 }

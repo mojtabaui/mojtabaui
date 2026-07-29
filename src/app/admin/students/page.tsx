@@ -7,6 +7,7 @@ import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import StudentRow from "@/components/admin/StudentRow";
 import AddStudentsForm from "@/components/admin/AddStudentsForm";
+import PanelThemeToggle from "@/components/admin/PanelThemeToggle";
 import { intakeLabel, toLatinDigits, toPersianDigits } from "@/lib/persian-months";
 
 /** ورودیِ جاری — دانشجوهای تیر ۱۴۰۵ */
@@ -80,7 +81,10 @@ export default async function StudentsPage({ searchParams }: Props) {
               فلش کنار هر ردیف رو بزن تا تسک‌ها، لینک فایل و سابقه‌اش باز شه.
             </p>
           </div>
-          <AddStudentsForm defaultYear={DEFAULT_YEAR} defaultMonth={DEFAULT_MONTH} />
+          <div className="flex items-center gap-2">
+            <PanelThemeToggle />
+            <AddStudentsForm defaultYear={DEFAULT_YEAR} defaultMonth={DEFAULT_MONTH} />
+          </div>
         </div>
 
         {/* ── Stats ── */}
@@ -98,13 +102,13 @@ export default async function StudentsPage({ searchParams }: Props) {
           </div>
           <div className="bg-[var(--card)] border border-[var(--line)] rounded-xl px-4 py-3">
             <p className="font-body text-xs text-[var(--ink-4)]">موضوع وارد کرده‌اند</p>
-            <p className="font-body text-lg text-emerald-400 mt-0.5">
+            <p className="font-body text-lg text-[var(--ok)] mt-0.5">
               {toPersianDigits(withTopic)}
             </p>
           </div>
           <div className="bg-[var(--card)] border border-[var(--line)] rounded-xl px-4 py-3">
             <p className="font-body text-xs text-[var(--ink-4)]">هنوز موضوع ندارند</p>
-            <p className="font-body text-lg text-amber-400 mt-0.5">
+            <p className="font-body text-lg text-[var(--warn)] mt-0.5">
               {toPersianDigits(students.length - withTopic)}
             </p>
           </div>
@@ -154,7 +158,7 @@ export default async function StudentsPage({ searchParams }: Props) {
           <div className="flex items-center gap-2">
             <button
               type="submit"
-              className="bg-[#8b5cf6] hover:bg-[#7c4ff0] text-white font-body font-semibold text-sm px-5 py-2.5 rounded-xl transition-colors"
+              className="bg-[var(--violet-deep)] hover:bg-[#7c4ff0] text-white font-body font-semibold text-sm px-5 py-2.5 rounded-xl transition-colors"
             >
               فیلتر
             </button>

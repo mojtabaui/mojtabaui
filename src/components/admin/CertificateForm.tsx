@@ -148,12 +148,12 @@ export default function CertificateForm() {
   }
 
   const inputCls =
-    "w-full bg-[var(--page)] border border-[var(--line)] rounded-xl px-4 py-3 font-body text-sm text-[var(--ink)] placeholder:text-[var(--ink-4)] focus:outline-none focus:border-[#8b5cf6]/50 transition-colors";
+    "w-full bg-[var(--page)] border border-[var(--line)] rounded-xl px-4 py-3 font-body text-sm text-[var(--ink)] placeholder:text-[var(--ink-4)] focus:outline-none focus:border-[var(--violet-deep)]/50 transition-colors";
 
   const tabCls = (active: boolean) =>
     `flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-body text-xs transition-colors ${
       active
-        ? "bg-[#8b5cf6] text-white"
+        ? "bg-[var(--violet-deep)] text-white"
         : "text-[var(--ink-3)] hover:text-[var(--ink)] border border-[var(--line)]"
     }`;
 
@@ -206,7 +206,7 @@ export default function CertificateForm() {
     <div className="bg-[var(--card)] border border-[var(--line)] rounded-2xl overflow-hidden">
       <div className="px-6 py-4 border-b border-[var(--line)] flex items-center justify-between gap-4">
         <h2 className="font-body font-semibold text-[var(--ink)] text-sm flex items-center gap-2">
-          <Award size={15} className="text-emerald-400" />
+          <Award size={15} className="text-[var(--ok)]" />
           صدور گواهینامه
         </h2>
         <div className="flex items-center gap-2">
@@ -224,8 +224,8 @@ export default function CertificateForm() {
       <div className="p-6">
         {/* ── نتیجهٔ حالت تکی ── */}
         {mode === "single" && created && (
-          <div className="mb-5 bg-emerald-400/10 border border-emerald-400/20 rounded-xl px-4 py-4">
-            <p className="font-body text-emerald-300 text-sm mb-2">
+          <div className="mb-5 bg-[var(--ok)]/10 border border-[var(--ok)]/20 rounded-xl px-4 py-4">
+            <p className="font-body text-[var(--ok)] text-sm mb-2">
               گواهی «{created.name}» صادر شد ✓
             </p>
             <div className="flex items-center gap-2 flex-wrap">
@@ -250,7 +250,7 @@ export default function CertificateForm() {
                 href={`/certificate/${created.code}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-1.5 text-xs font-body font-semibold text-white bg-[#8b5cf6] hover:bg-[#7c4ff0] rounded-lg px-3 py-2 transition-colors"
+                className="flex items-center gap-1.5 text-xs font-body font-semibold text-white bg-[var(--violet-deep)] hover:bg-[#7c4ff0] rounded-lg px-3 py-2 transition-colors"
               >
                 <FileText size={13} />
                 دیدن و دانلود گواهی
@@ -262,8 +262,8 @@ export default function CertificateForm() {
         {/* ── نتیجهٔ حالت گروهی ── */}
         {mode === "bulk" && result && (
           <div className="mb-5 space-y-3">
-            <div className="bg-emerald-400/10 border border-emerald-400/20 rounded-xl px-4 py-3 flex items-center justify-between gap-4 flex-wrap">
-              <p className="font-body text-emerald-300 text-sm">
+            <div className="bg-[var(--ok)]/10 border border-[var(--ok)]/20 rounded-xl px-4 py-3 flex items-center justify-between gap-4 flex-wrap">
+              <p className="font-body text-[var(--ok)] text-sm">
                 {result.created.length} گواهی صادر شد
                 {result.skipped.length > 0 && (
                   <span className="text-[var(--ink-3)]">
@@ -283,7 +283,7 @@ export default function CertificateForm() {
             </div>
 
             {result.duplicatesInList.length > 0 && (
-              <p className="font-body text-xs text-amber-300/90 bg-amber-400/10 border border-amber-400/20 rounded-xl px-4 py-2.5">
+              <p className="font-body text-xs text-amber-300/90 bg-[var(--warn)]/10 border border-[var(--warn)]/20 rounded-xl px-4 py-2.5">
                 این اسم‌ها توی فهرست تکراری بودن و یک بار حساب شدن:{" "}
                 {result.duplicatesInList.join("، ")}
               </p>
@@ -359,13 +359,13 @@ export default function CertificateForm() {
               <button
                 type="submit"
                 disabled={loading}
-                className="bg-[#8b5cf6] hover:bg-[#7c4ff0] disabled:opacity-60 disabled:cursor-not-allowed text-white font-body font-semibold text-sm px-6 py-2.5 rounded-xl transition-colors"
+                className="bg-[var(--violet-deep)] hover:bg-[#7c4ff0] disabled:opacity-60 disabled:cursor-not-allowed text-white font-body font-semibold text-sm px-6 py-2.5 rounded-xl transition-colors"
               >
                 {loading ? "در حال صدور..." : "صدور گواهی"}
               </button>
             </div>
 
-            {error && <p className="text-rose-400 text-xs font-body">{error}</p>}
+            {error && <p className="text-[var(--danger)] text-xs font-body">{error}</p>}
           </form>
         )}
 
@@ -412,13 +412,13 @@ export default function CertificateForm() {
               <button
                 type="submit"
                 disabled={loading || parsed.length === 0}
-                className="bg-[#8b5cf6] hover:bg-[#7c4ff0] disabled:opacity-60 disabled:cursor-not-allowed text-white font-body font-semibold text-sm px-6 py-2.5 rounded-xl transition-colors"
+                className="bg-[var(--violet-deep)] hover:bg-[#7c4ff0] disabled:opacity-60 disabled:cursor-not-allowed text-white font-body font-semibold text-sm px-6 py-2.5 rounded-xl transition-colors"
               >
                 {loading ? "در حال صدور..." : `صدور ${parsed.length || ""} گواهی`}
               </button>
             </div>
 
-            {error && <p className="text-rose-400 text-xs font-body">{error}</p>}
+            {error && <p className="text-[var(--danger)] text-xs font-body">{error}</p>}
           </form>
         )}
       </div>

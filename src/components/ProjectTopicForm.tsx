@@ -132,7 +132,7 @@ export default function ProjectTopicForm() {
   if (done) {
     return (
       <div className={`${card} p-7 text-center`}>
-        <div className="mx-auto mb-4 grid h-12 w-12 place-items-center rounded-full bg-emerald-400/15 text-emerald-300">
+        <div className="mx-auto mb-4 grid h-12 w-12 place-items-center rounded-full bg-[var(--ok)]/15 text-[var(--ok)]">
           <Check size={22} />
         </div>
         <h2 className="font-display text-xl text-[var(--ink)] mb-2">ثبت شد</h2>
@@ -237,9 +237,9 @@ export default function ProjectTopicForm() {
           })}
 
           {error && (
-            <div className="flex items-start gap-2.5 rounded-xl border border-rose-400/30 bg-rose-400/10 px-4 py-3">
-              <CircleAlert size={15} className="mt-0.5 shrink-0 text-rose-300" />
-              <p className="font-body text-sm text-rose-200 leading-7">{error}</p>
+            <div className="flex items-start gap-2.5 rounded-xl border border-[var(--danger)]/30 bg-[var(--danger)]/10 px-4 py-3">
+              <CircleAlert size={15} className="mt-0.5 shrink-0 text-[var(--danger)]" />
+              <p className="font-body text-sm text-[var(--danger)] leading-7">{error}</p>
             </div>
           )}
 
@@ -336,9 +336,9 @@ export default function ProjectTopicForm() {
         </div>
 
         {error && (
-          <div className="flex items-start gap-2.5 rounded-xl border border-rose-400/30 bg-rose-400/10 px-4 py-3">
-            <CircleAlert size={15} className="mt-0.5 shrink-0 text-rose-300" />
-            <p className="font-body text-sm text-rose-200 leading-7">{error}</p>
+          <div className="flex items-start gap-2.5 rounded-xl border border-[var(--danger)]/30 bg-[var(--danger)]/10 px-4 py-3">
+            <CircleAlert size={15} className="mt-0.5 shrink-0 text-[var(--danger)]" />
+            <p className="font-body text-sm text-[var(--danger)] leading-7">{error}</p>
           </div>
         )}
 

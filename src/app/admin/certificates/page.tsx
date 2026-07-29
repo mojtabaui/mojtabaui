@@ -6,6 +6,8 @@ import { ArrowRight, Award, Search } from "lucide-react";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import DeleteCertificateButton from "@/components/admin/DeleteCertificateButton";
+import PanelThemeToggle from "@/components/admin/PanelThemeToggle";
+import { toPersianDigits } from "@/lib/persian-months";
 
 const PER_PAGE = 50;
 
@@ -77,7 +79,7 @@ export default async function CertificatesPage({ searchParams }: Props) {
   }
 
   const inputCls =
-    "w-full bg-[var(--page)] border border-[var(--line)] rounded-xl px-4 py-2.5 font-body text-sm text-[var(--ink)] placeholder:text-[var(--ink-4)] focus:outline-none focus:border-[#8b5cf6]/50 transition-colors";
+    "w-full bg-[var(--page)] border border-[var(--line)] rounded-xl px-4 py-2.5 font-body text-sm text-[var(--ink)] placeholder:text-[var(--ink-4)] focus:outline-none focus:border-[var(--violet-deep)]/50 transition-colors";
 
   return (
     <div className="min-h-screen bg-[var(--page)] py-10 px-4 sm:px-6">
@@ -93,20 +95,25 @@ export default async function CertificatesPage({ searchParams }: Props) {
               برگشت به پنل
             </Link>
             <h1 className="font-body font-semibold text-[var(--ink)] text-xl flex items-center gap-2">
-              <Award size={18} className="text-emerald-400" />
+              <Award size={18} className="text-[var(--ok)]" />
               همهٔ گواهی‌ها
             </h1>
           </div>
-          <div className="font-body text-sm text-[var(--ink-4)]">
-            {isFiltered ? (
-              <>
-                <span className="text-[var(--ink)]">{total}</span> نتیجه از {allCount}
-              </>
-            ) : (
-              <>
-                مجموع <span className="text-[var(--ink)]">{allCount}</span> گواهی
-              </>
-            )}
+          <div className="flex items-center gap-3">
+            <div className="font-body text-sm text-[var(--ink-4)]">
+              {isFiltered ? (
+                <>
+                  <span className="text-[var(--ink)]">{toPersianDigits(total)}</span> نتیجه از{" "}
+                  {toPersianDigits(allCount)}
+                </>
+              ) : (
+                <>
+                  مجموع <span className="text-[var(--ink)]">{toPersianDigits(allCount)}</span>{" "}
+                  گواهی
+                </>
+              )}
+            </div>
+            <PanelThemeToggle />
           </div>
         </div>
 
@@ -150,7 +157,7 @@ export default async function CertificatesPage({ searchParams }: Props) {
           <div className="flex items-center gap-2">
             <button
               type="submit"
-              className="bg-[#8b5cf6] hover:bg-[#7c4ff0] text-white font-body font-semibold text-sm px-5 py-2.5 rounded-xl transition-colors"
+              className="bg-[var(--violet-deep)] hover:bg-[#7c4ff0] text-white font-body font-semibold text-sm px-5 py-2.5 rounded-xl transition-colors"
             >
               جست‌وجو
             </button>
@@ -199,7 +206,7 @@ export default async function CertificatesPage({ searchParams }: Props) {
                       rel="noopener noreferrer"
                       title="دیدن گواهی"
                       dir="ltr"
-                      className="font-mono text-xs text-[var(--violet)] hover:text-[#a78bfa] bg-[var(--page)] border border-[var(--line)] hover:border-[#8b5cf6]/50 rounded-lg px-2.5 py-1 tracking-widest transition-colors"
+                      className="font-mono text-xs text-[var(--violet)] hover:text-[var(--violet)] bg-[var(--page)] border border-[var(--line)] hover:border-[var(--violet-deep)]/50 rounded-lg px-2.5 py-1 tracking-widest transition-colors"
                     >
                       {cert.code}
                     </a>

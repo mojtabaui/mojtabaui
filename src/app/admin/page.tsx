@@ -6,6 +6,7 @@ import { prisma } from "@/lib/prisma";
 import CertificateForm from "@/components/admin/CertificateForm";
 import DeleteCertificateButton from "@/components/admin/DeleteCertificateButton";
 import { Section, Empty, ScrollArea } from "@/components/admin/Section";
+import PanelThemeToggle from "@/components/admin/PanelThemeToggle";
 import { toPersianDigits } from "@/lib/persian-months";
 import {
   BookOpen,
@@ -53,10 +54,10 @@ export default async function AdminPage() {
   const fa = (n: number) => toPersianDigits(String(n));
 
   const stats = [
-    { label: "کاربران", value: userCount, icon: Users, tone: "#7dd3fc" },
-    { label: "دوره‌ها", value: courseCount, icon: BookOpen, tone: "#a78bfa" },
-    { label: "گواهینامه‌ها", value: certCount, icon: Award, tone: "#6ee7b7" },
-    { label: "مشترکین تخفیف", value: subscriberCount, icon: BellRing, tone: "#fcd34d" },
+    { label: "کاربران", value: userCount, icon: Users, tone: "var(--info)" },
+    { label: "دوره‌ها", value: courseCount, icon: BookOpen, tone: "var(--violet)" },
+    { label: "گواهینامه‌ها", value: certCount, icon: Award, tone: "var(--ok)" },
+    { label: "مشترکین تخفیف", value: subscriberCount, icon: BellRing, tone: "var(--warn)" },
   ];
 
   const trackLabel = (t: string) =>
@@ -72,13 +73,16 @@ export default async function AdminPage() {
             </div>
             <span className="font-body font-bold text-[var(--ink)] text-sm">پنل مدیریت</span>
           </div>
-          <Link
-            href="/"
-            className="flex items-center gap-1.5 text-[var(--ink-3)] hover:text-[var(--ink)] text-xs font-body transition-colors"
-          >
-            <span>بازگشت به سایت</span>
-            <ArrowLeft size={12} />
-          </Link>
+          <div className="flex items-center gap-3">
+            <PanelThemeToggle />
+            <Link
+              href="/"
+              className="flex items-center gap-1.5 text-[var(--ink-3)] hover:text-[var(--ink)] text-xs font-body transition-colors"
+            >
+              <span>بازگشت به سایت</span>
+              <ArrowLeft size={12} />
+            </Link>
+          </div>
         </div>
       </header>
 
@@ -103,7 +107,12 @@ export default async function AdminPage() {
             >
               <div
                 className="w-9 h-9 rounded-xl flex items-center justify-center mb-3"
-                style={{ color: s.tone, backgroundColor: `${s.tone}1f` }}
+                // رنگ از توکن میاد، پس شفافیت باید با color-mix ساخته بشه
+                // نه با چسبوندن آلفا به رشته
+                style={{
+                  color: s.tone,
+                  backgroundColor: `color-mix(in srgb, ${s.tone} 14%, transparent)`,
+                }}
               >
                 <s.icon size={17} />
               </div>
@@ -144,7 +153,7 @@ export default async function AdminPage() {
             target="_blank"
             className="group bg-[var(--card)] hover:bg-[var(--card-raised)] border border-[var(--line)] hover:border-[var(--violet)]/45 rounded-2xl px-5 py-5 flex items-start gap-4 transition-colors"
           >
-            <div className="w-9 h-9 rounded-xl bg-[#6ee7b7]/15 text-[#6ee7b7] flex items-center justify-center shrink-0">
+            <div className="w-9 h-9 rounded-xl bg-[var(--ok)]/15 text-[var(--ok)] flex items-center justify-center shrink-0">
               <Link2 size={17} />
             </div>
             <div className="min-w-0 flex-1">
@@ -161,7 +170,7 @@ export default async function AdminPage() {
                 mojtabaui.ir/project
               </p>
             </div>
-            <span className="font-body text-sm text-[#6ee7b7] shrink-0 mt-0.5">←</span>
+            <span className="font-body text-sm text-[var(--ok)] shrink-0 mt-0.5">←</span>
           </Link>
         </div>
 
@@ -172,7 +181,7 @@ export default async function AdminPage() {
           <Section
             title="گواهی‌های اخیر"
             icon={Award}
-            accent="#6ee7b7"
+            accent="var(--ok)"
             href="/admin/certificates"
             hrefLabel={`دیدن همه (${fa(certCount)})`}
           >
@@ -218,7 +227,7 @@ export default async function AdminPage() {
         <Section
           title="مشترکین اطلاع‌رسانی تخفیف"
           icon={BellRing}
-          accent="#fcd34d"
+          accent="var(--warn)"
           meta={`${fa(subscribers.length)} شماره`}
         >
           {subscribers.length === 0 ? (
@@ -235,7 +244,7 @@ export default async function AdminPage() {
                       <a
                         href={`tel:${sub.phone}`}
                         dir="ltr"
-                        className="flex items-center gap-1.5 font-body text-[var(--ink-2)] hover:text-[#fcd34d] text-sm transition-colors"
+                        className="flex items-center gap-1.5 font-body text-[var(--ink-2)] hover:text-[var(--warn)] text-sm transition-colors"
                       >
                         <Phone size={12} className="text-[var(--ink-faint)]" />
                         {sub.phone}
@@ -260,10 +269,10 @@ export default async function AdminPage() {
         <Section
           title="پیام‌های تماس"
           icon={Mail}
-          accent="#7dd3fc"
+          accent="var(--info)"
           meta={
             unreadCount > 0 ? (
-              <span className="text-[#fcd34d]">{fa(unreadCount)} خوانده‌نشده</span>
+              <span className="text-[var(--warn)]">{fa(unreadCount)} خوانده‌نشده</span>
             ) : (
               `${fa(messages.length)} پیام`
             )
@@ -282,7 +291,7 @@ export default async function AdminPage() {
                           {msg.name}
                         </span>
                         {!msg.isRead && (
-                          <span className="text-[10px] font-body px-2 py-0.5 rounded-full bg-[#fcd34d]/15 text-[#fcd34d]">
+                          <span className="text-[10px] font-body px-2 py-0.5 rounded-full bg-[var(--warn)]/15 text-[var(--warn)]">
                             جدید
                           </span>
                         )}

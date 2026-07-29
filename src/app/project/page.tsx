@@ -14,9 +14,10 @@ export default function ProjectPage() {
       <div
         aria-hidden
         className="pointer-events-none absolute inset-x-0 -top-40 h-96 opacity-70"
+        // رنگ از توکن میاد تا در حالت روشن هم به جای کدر شدن، لهجه بمونه
         style={{
           background:
-            "radial-gradient(60% 100% at 50% 0%, rgba(139,92,246,0.20), transparent 70%)",
+            "radial-gradient(60% 100% at 50% 0%, color-mix(in srgb, var(--violet) 22%, transparent), transparent 70%)",
         }}
       />
 

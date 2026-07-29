@@ -111,7 +111,7 @@ export default function StudentRow({ student }: { student: Student }) {
         <td className="px-3 py-2.5 font-body text-sm text-[var(--ink)] whitespace-nowrap">
           {student.studentName}
           {student.note && (
-            <span className="block font-body text-[10px] text-amber-400/70 mt-0.5">
+            <span className="block font-body text-[10px] text-[var(--warn)]/70 mt-0.5">
               {student.note}
             </span>
           )}
@@ -121,8 +121,8 @@ export default function StudentRow({ student }: { student: Student }) {
           <span
             className={`font-body text-xs px-2 py-0.5 rounded-md border whitespace-nowrap ${
               student.track === "UI"
-                ? "text-[var(--violet)] border-[#8b5cf6]/30 bg-[#8b5cf6]/10"
-                : "text-emerald-400 border-emerald-400/30 bg-emerald-400/10"
+                ? "text-[var(--violet)] border-[var(--violet-deep)]/30 bg-[var(--violet-deep)]/10"
+                : "text-[var(--ok)] border-[var(--ok)]/30 bg-[var(--ok)]/10"
             }`}
           >
             {student.track === "UI" ? "رابط" : "تجربه"}
@@ -184,7 +184,7 @@ export default function StudentRow({ student }: { student: Student }) {
 
         <td className="px-3 py-2.5 w-24 whitespace-nowrap">
           <span
-            className={`font-body text-xs ${done === 0 ? "text-[var(--ink-4)]" : "text-emerald-400"}`}
+            className={`font-body text-xs ${done === 0 ? "text-[var(--ink-4)]" : "text-[var(--ok)]"}`}
           >
             {toPersianDigits(done)} از {toPersianDigits(total)}
           </span>
@@ -192,7 +192,7 @@ export default function StudentRow({ student }: { student: Student }) {
 
         <td className="px-3 py-2.5 w-20 text-left">
           {error ? (
-            <span className="font-body text-xs text-rose-400">{error}</span>
+            <span className="font-body text-xs text-[var(--danger)]">{error}</span>
           ) : confirming ? (
             <div className="flex items-center gap-1 justify-end">
               <button
@@ -200,7 +200,7 @@ export default function StudentRow({ student }: { student: Student }) {
                 onClick={handleDelete}
                 disabled={saving}
                 title="بله، حذف کن"
-                className="text-rose-400 hover:text-rose-300 disabled:opacity-50 p-1.5 rounded-lg border border-rose-400/30 transition-colors"
+                className="text-[var(--danger)] hover:text-[var(--danger)] disabled:opacity-50 p-1.5 rounded-lg border border-[var(--danger)]/30 transition-colors"
               >
                 <Check size={13} />
               </button>
@@ -219,7 +219,7 @@ export default function StudentRow({ student }: { student: Student }) {
               type="button"
               onClick={() => setConfirming(true)}
               title={`حذف ${student.studentName}`}
-              className="text-[var(--ink-4)] hover:text-rose-400 p-1.5 rounded-lg transition-colors float-left"
+              className="text-[var(--ink-4)] hover:text-[var(--danger)] p-1.5 rounded-lg transition-colors float-left"
             >
               <Trash2 size={13} />
             </button>
@@ -256,14 +256,14 @@ export default function StudentRow({ student }: { student: Student }) {
                               title={t.desc || t.title}
                               className={`w-full flex items-start gap-2 text-right rounded-lg border px-2 py-1.5 font-body text-[11px] leading-5 transition-colors disabled:opacity-50 ${
                                 on
-                                  ? "bg-emerald-400/10 border-emerald-400/40 text-emerald-300"
-                                  : "bg-[var(--page)] border-[var(--line)] text-[var(--ink-3)] hover:border-[#8b5cf6]/40"
+                                  ? "bg-[var(--ok)]/10 border-[var(--ok)]/40 text-[var(--ok)]"
+                                  : "bg-[var(--page)] border-[var(--line)] text-[var(--ink-3)] hover:border-[var(--violet-deep)]/40"
                               } ${t.alternative ? "opacity-80" : ""}`}
                             >
                               <span
                                 className={`shrink-0 mt-0.5 w-3.5 h-3.5 rounded border grid place-items-center ${
                                   on
-                                    ? "border-emerald-400/60 bg-emerald-400/20"
+                                    ? "border-[var(--ok)]/60 bg-[var(--ok)]/20"
                                     : "border-[#3a3937]"
                                 }`}
                               >
@@ -297,7 +297,7 @@ export default function StudentRow({ student }: { student: Student }) {
                   onBlur={() => fileLink.trim() !== student.fileLink && patch({ fileLink })}
                   disabled={saving}
                   placeholder="https://figma.com/file/..."
-                  className="w-full text-left bg-[var(--page)] border border-[var(--line)] focus:border-[#8b5cf6]/50 rounded-xl px-3 py-2 font-body text-sm text-[var(--ink)] placeholder:text-[var(--ink-4)] focus:outline-none transition-colors"
+                  className="w-full text-left bg-[var(--page)] border border-[var(--line)] focus:border-[var(--violet-deep)]/50 rounded-xl px-3 py-2 font-body text-sm text-[var(--ink)] placeholder:text-[var(--ink-4)] focus:outline-none transition-colors"
                 />
               </div>
 
@@ -315,7 +315,7 @@ export default function StudentRow({ student }: { student: Student }) {
                   disabled={saving}
                   rows={2}
                   placeholder="از معرفی خودش توی گروه"
-                  className="w-full bg-[var(--page)] border border-[var(--line)] focus:border-[#8b5cf6]/50 rounded-xl px-3 py-2 font-body text-sm text-[var(--ink)] placeholder:text-[var(--ink-4)] focus:outline-none transition-colors resize-y leading-6"
+                  className="w-full bg-[var(--page)] border border-[var(--line)] focus:border-[var(--violet-deep)]/50 rounded-xl px-3 py-2 font-body text-sm text-[var(--ink)] placeholder:text-[var(--ink-4)] focus:outline-none transition-colors resize-y leading-6"
                 />
               </div>
             </div>
