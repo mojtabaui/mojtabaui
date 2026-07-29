@@ -224,6 +224,40 @@ export default async function PlannerPage({ params }: Props) {
                           {t.desc}
                         </p>
                       )}
+
+                      {t.links && (
+                        <div className="ps-[9mm] mt-[2.5mm] space-y-[1.5mm]">
+                          {t.links.map((l) => (
+                            <div key={l.href} className="flex items-baseline gap-[2mm]">
+                              <span
+                                className="w-[1.4mm] h-[1.4mm] rounded-full flex-shrink-0 translate-y-[-0.4mm]"
+                                style={{ backgroundColor: p.accent }}
+                              />
+                              <span className="font-body text-[9pt] leading-[1.8]">
+                                <a
+                                  href={l.href}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="font-bold underline underline-offset-2"
+                                  style={{ color: p.accent }}
+                                >
+                                  {l.label}
+                                </a>
+                                {l.hint && (
+                                  <span className="text-[#a09990]"> — {l.hint}</span>
+                                )}
+                                {/* روی کاغذ لینک کلیک نمی‌شه، پس آدرس باید دیده بشه */}
+                                <span
+                                  dir="ltr"
+                                  className="hidden print:block font-display text-[7.5pt] text-[#a09990] mt-[0.8mm]"
+                                >
+                                  {l.href}
+                                </span>
+                              </span>
+                            </div>
+                          ))}
+                        </div>
+                      )}
                     </div>
                   ))}
                 </div>
