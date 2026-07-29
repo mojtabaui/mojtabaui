@@ -262,8 +262,44 @@ export default async function PlannerPage({ params }: Props) {
                   ))}
                 </div>
 
+                {/* ── منابع کمکی همین هفته ── */}
+                {w.resources && (
+                  <div className="mt-[7mm] pt-[4mm] border-t border-[#e8e2d9]">
+                    <p
+                      className="font-body font-bold text-[9pt] mb-[2.5mm]"
+                      style={{ color: p.accent }}
+                    >
+                      منابع کمکی
+                    </p>
+                    <div className="grid grid-cols-2 gap-x-[6mm] gap-y-[1.5mm]">
+                      {w.resources.map((r) => (
+                        <div key={r.href} className="font-body text-[8.5pt] leading-[1.7]">
+                          <a
+                            href={r.href}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            dir="auto"
+                            className="font-bold text-[#1a1714] underline underline-offset-2 decoration-[#c8c2ba]"
+                          >
+                            {r.label}
+                          </a>
+                          {r.hint && (
+                            <span className="text-[#a09990]"> · {r.hint}</span>
+                          )}
+                          <span
+                            dir="ltr"
+                            className="hidden print:block font-display text-[7pt] text-[#c8c2ba]"
+                          >
+                            {r.href.replace(/^https?:\/\/(www\.)?/, "")}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
                 {w.note && (
-                  <p className="font-body text-[8.5pt] text-[#a09990] leading-[1.8] mt-[7mm] pt-[4mm] border-t border-[#e8e2d9]">
+                  <p className="font-body text-[8.5pt] text-[#a09990] leading-[1.8] mt-[5mm]">
                     {w.note}
                   </p>
                 )}

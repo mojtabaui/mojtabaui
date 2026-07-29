@@ -29,6 +29,11 @@ export interface PlannerWeek {
   note?: string;
   /** وقتی باید یکی از تسک‌ها انتخاب بشه نه همه */
   either?: boolean;
+  /**
+   * منابع کمکیِ همین هفته، انتخاب‌شده برای تسکِ همین هفته نه کل دوره.
+   * همه‌ی آدرس‌ها قبل از اضافه شدن تست شدن که باز می‌شن.
+   */
+  resources?: PlannerLink[];
 }
 
 export interface Planner {
@@ -89,6 +94,19 @@ const ui: Planner = {
           ],
         },
       ],
+      resources: [
+        {
+          label: "Figma · Learn Design",
+          href: "https://www.figma.com/resources/learn-design/",
+          hint: "آموزش رسمی خود فیگما، از صفر",
+        },
+        {
+          label: "Dribbble",
+          href: "https://dribbble.com/",
+          hint: "برای پیدا کردن طرحی که ازش کپی کنید",
+        },
+        { label: "راهنمای فیگما", href: "https://help.figma.com/" },
+      ],
     },
     {
       n: "۲",
@@ -112,6 +130,24 @@ const ui: Planner = {
           ],
         },
       ],
+      resources: [
+        {
+          label: "Laws of UX",
+          href: "https://lawsofux.com/",
+          hint: "قانون‌های چیدمان و ادراک، کوتاه و با مثال",
+        },
+        {
+          label: "Type Scale",
+          href: "https://typescale.com/",
+          hint: "ساخت مقیاس تایپوگرافی",
+        },
+        { label: "Coolors", href: "https://coolors.co/", hint: "ساخت پالت رنگ" },
+        {
+          label: "WebAIM Contrast Checker",
+          href: "https://webaim.org/resources/contrastchecker/",
+          hint: "چک کنید متن روی رنگ زمینه خوانا باشد",
+        },
+      ],
     },
     {
       n: "۳",
@@ -128,6 +164,28 @@ const ui: Planner = {
           desc: "رنگ بندی، تایپوگرافی، سیستم فاصله، سیستم گرید، آیکن گرافی، دکمه‌ها و اینپوت‌ها و...",
         },
       ],
+      resources: [
+        {
+          label: "Material Design · Styles",
+          href: "https://m3.material.io/styles",
+          hint: "ببینید یک استایل گاید واقعی چه چیزهایی دارد",
+        },
+        {
+          label: "Lucide Icons",
+          href: "https://lucide.dev/",
+          hint: "ست آیکن یکدست و رایگان",
+        },
+        {
+          label: "فونت وزیرمتن",
+          href: "https://github.com/rastikerdar/vazirmatn",
+          hint: "فونت فارسی با وزن‌های کامل",
+        },
+        {
+          label: "Untitled UI",
+          href: "https://untitledui.com/",
+          hint: "نمونهٔ یک استایل گاید حرفه‌ای",
+        },
+      ],
     },
     {
       n: "۴",
@@ -142,6 +200,22 @@ const ui: Planner = {
         { title: "اگر موضوعتون اپلیکیشنه", desc: "طراحی صفحه خانه" },
       ],
       note: "بخش هیرو: اولین سکشن سایت در لندینگ پیج‌ها، مثل ردلینک و زرین‌پال.",
+      resources: [
+        {
+          label: "Atomic Design",
+          href: "https://atomicdesign.bradfrost.com/",
+          hint: "کتاب کامل و رایگان، همان مفهوم فصل شانزده",
+        },
+        {
+          label: "Figma · کامپوننت و لایبرری",
+          href: "https://www.figma.com/best-practices/components-styles-and-shared-libraries/",
+        },
+        {
+          label: "Land-book",
+          href: "https://land-book.com/",
+          hint: "هزاران نمونهٔ لندینگ برای دیدن هیرو",
+        },
+      ],
     },
     {
       n: "۵",
@@ -151,6 +225,23 @@ const ui: Planner = {
       ],
       tasks: [
         { title: "تسک شش: طراحی صفحه خانه پروژه", desc: "کل صفحه خانه پروژه را طراحی کنید." },
+      ],
+      resources: [
+        {
+          label: "Mobbin",
+          href: "https://mobbin.com/",
+          hint: "اسکرین‌شات صفحهٔ واقعی اپ‌ها و سایت‌ها",
+        },
+        {
+          label: "Godly",
+          href: "https://godly.website/",
+          hint: "سایت‌هایی که طراحی‌شان سر و گردن بالاتر است",
+        },
+        {
+          label: "Material Design · Components",
+          href: "https://m3.material.io/components",
+          hint: "دایرةالمعارف کامپوننت، مکمل فصل هجده",
+        },
       ],
     },
     {
@@ -164,12 +255,41 @@ const ui: Planner = {
         { title: "اگر موضوعتون فروشگاهیه", desc: "طراحی ریسپانسیو گوشی" },
         { title: "اگر موضوعتون اپلیکیشنه", desc: "طراحی صفحات دیگه" },
       ],
+      resources: [
+        {
+          label: "Material Design · Foundations",
+          href: "https://m3.material.io/foundations",
+          hint: "چیدمان در اندازه‌های مختلف صفحه",
+        },
+        {
+          label: "Apple Human Interface Guidelines",
+          href: "https://developer.apple.com/design/human-interface-guidelines",
+          hint: "مرجع طراحی اپ موبایل",
+        },
+        {
+          label: "Refactoring UI",
+          href: "https://www.refactoringui.com/",
+          hint: "نکته‌های ریزی که کار آماتور را حرفه‌ای می‌کند",
+        },
+      ],
     },
     {
       n: "۷",
       chapters: [{ n: "بیست و پنج", title: "Instaplus dashboard" }],
       tasks: [
         { title: "تسک هشت: طراحی صفحات دیگر پروژه", desc: "برای طراحی صفحات دیگر وقت بگذارید." },
+      ],
+      resources: [
+        {
+          label: "UI Patterns",
+          href: "https://ui-patterns.com/",
+          hint: "الگوهای آماده برای صفحه‌هایی که نمی‌دانید چطور بچینید",
+        },
+        {
+          label: "Mobbin",
+          href: "https://mobbin.com/",
+          hint: "این بار دنبال صفحه‌های داشبورد و تنظیمات بگردید",
+        },
       ],
     },
     {
@@ -182,6 +302,23 @@ const ui: Planner = {
         {
           title: "تسک نهایی: ارائه کار",
           desc: "آماده‌سازی کار برای اشتراک در کامیونیتی فیگما، اینستا و...",
+        },
+      ],
+      resources: [
+        {
+          label: "Figma Community",
+          href: "https://www.figma.com/community",
+          hint: "هم فایل موکاپ آماده دارد، هم جایی که کارتان را منتشر می‌کنید",
+        },
+        {
+          label: "Behance",
+          href: "https://www.behance.net/",
+          hint: "ببینید بقیه پروژه‌شان را چطور ارائه می‌کنند",
+        },
+        {
+          label: "UX Collective",
+          href: "https://uxdesign.cc/",
+          hint: "برای یاد گرفتن نوشتن کیس استادی",
         },
       ],
     },
@@ -208,6 +345,20 @@ const ux: Planner = {
       tasks: [
         { title: "تسک یک: ساخت حساب در فیگجم یا میرو", desc: "مطابق ویدیوها، حساب بسازید." },
       ],
+      resources: [
+        { label: "FigJam", href: "https://www.figma.com/figjam/" },
+        { label: "Miro", href: "https://miro.com/" },
+        {
+          label: "IDEO Design Thinking",
+          href: "https://designthinking.ideo.com/",
+          hint: "از خودِ جایی که این روش را ساخت",
+        },
+        {
+          label: "Interaction Design Foundation",
+          href: "https://www.interaction-design.org/",
+          hint: "مقاله‌های پایه‌ای تجربه کاربری",
+        },
+      ],
     },
     {
       n: "۲",
@@ -229,6 +380,18 @@ const ux: Planner = {
           ],
         },
       ],
+      resources: [
+        {
+          label: "کدام روش تحقیق، کِی؟",
+          href: "https://www.nngroup.com/articles/which-ux-research-methods/",
+          hint: "نیلسن نورمن، انتخاب بین روش‌های کمی و کیفی",
+        },
+        {
+          label: "UX Research Cheat Sheet",
+          href: "https://www.nngroup.com/articles/ux-research-cheat-sheet/",
+          hint: "یک صفحه، همهٔ روش‌ها کنار هم",
+        },
+      ],
     },
     {
       n: "۳",
@@ -246,6 +409,19 @@ const ux: Planner = {
           title: "تسک سه: نوشتن سوالات پرسشنامه",
           desc: "سوالات پرسشنامه کاربر را بصورت گروهی یا انفرادی بنویسید.",
         },
+      ],
+      resources: [
+        {
+          label: "Interviewing Users",
+          href: "https://www.nngroup.com/articles/interviewing-users/",
+          hint: "چطور سؤال بپرسید که جواب واقعی بگیرید، نه جواب مؤدبانه",
+        },
+        {
+          label: "پرس‌لاین",
+          href: "https://porsline.ir/",
+          hint: "ساخت پرسشنامهٔ فارسی",
+        },
+        { label: "Google Forms", href: "https://docs.google.com/forms/" },
       ],
     },
     {
@@ -265,6 +441,18 @@ const ux: Planner = {
           desc: "داده‌های جمع‌آوری شده را آنالیز و تحلیل کنید.",
         },
       ],
+      resources: [
+        {
+          label: "Personas",
+          href: "https://www.nngroup.com/articles/persona/",
+          hint: "پرسونا چیست و چطور از داده ساخته می‌شود",
+        },
+        {
+          label: "Customer Journey Mapping",
+          href: "https://www.nngroup.com/articles/customer-journey-mapping/",
+          hint: "مکمل فصل چهارده",
+        },
+      ],
     },
     {
       n: "۵",
@@ -276,6 +464,18 @@ const ux: Planner = {
         },
         { title: "تسک هفت: نمودار همبستگی", desc: "برای پروژه خود یک نمودار همبستگی رسم کنید." },
       ],
+      resources: [
+        {
+          label: "Affinity Diagramming",
+          href: "https://www.nngroup.com/articles/affinity-diagram/",
+          hint: "دقیقاً همان نمودار همبستگیِ تسک هفت",
+        },
+        {
+          label: "Ideation in Practice",
+          href: "https://www.nngroup.com/articles/ideation-in-practice/",
+          hint: "متدهای ایده‌پردازی و اینکه کدام کِی جواب می‌دهد",
+        },
+      ],
     },
     {
       n: "۶",
@@ -283,6 +483,18 @@ const ux: Planner = {
       tasks: [
         { title: "تسک هشت: نوشتن پرسونا", desc: "هر فرد حداقل ۳ پرسونا بسازد." },
         { title: "تسک نه: ساخت سناریوی کاربر", desc: "برای پرسوناها سناریو بنویسید." },
+      ],
+      resources: [
+        {
+          label: "همه‌چیز دربارهٔ پرسونا",
+          href: "https://www.nngroup.com/topic/personas/",
+          hint: "مجموعه مقاله‌ها، از ساخت تا استفادهٔ درست",
+        },
+        {
+          label: "Information Architecture",
+          href: "https://www.nngroup.com/topic/information-architecture/",
+          hint: "شروع فصل شانزده",
+        },
       ],
     },
     {
@@ -295,6 +507,23 @@ const ux: Planner = {
         { title: "تسک ده: ساخت تسک فلو", desc: "حداقل ۵ تسک فلو برای پروژه خود بسازید." },
         { title: "تسک یازده: ساخت سایت مپ", desc: "سایت مپ پروژه خود را بنویسید." },
       ],
+      resources: [
+        {
+          label: "Wireflows",
+          href: "https://www.nngroup.com/articles/wireflows/",
+          hint: "ترکیب فلو و وایرفریم، دقیقاً چیزی که تسک ده می‌خواهد",
+        },
+        {
+          label: "FlowMapp",
+          href: "https://www.flowmapp.com/",
+          hint: "ابزار آنلاین ساخت یوزرفلو و سایت‌مپ",
+        },
+        {
+          label: "GlooMaps",
+          href: "https://www.gloomaps.com/",
+          hint: "سایت‌مپ سریع و بدون ثبت‌نام",
+        },
+      ],
     },
     {
       n: "۸",
@@ -306,6 +535,24 @@ const ux: Planner = {
       tasks: [
         { title: "تسک دوازده: نوشتن وایرفریم", desc: "وایرفریم صفحات موجود در سایت مپ را بنویسید." },
         { title: "تسک نهایی: کیس استادی", desc: "ساخت کیس استادی مربوط به پروژه." },
+      ],
+      resources: [
+        {
+          label: "Card Sorting",
+          href: "https://www.nngroup.com/articles/card-sorting-definition/",
+          hint: "مکمل فصل نوزده",
+        },
+        {
+          label: "Optimal Workshop",
+          href: "https://www.optimalworkshop.com/",
+          hint: "ابزار کارت سورتینگ و تری تستینگ",
+        },
+        { label: "Maze", href: "https://maze.co/", hint: "تست پروتوتایپ با کاربر واقعی" },
+        {
+          label: "UX Collective",
+          href: "https://uxdesign.cc/",
+          hint: "نمونه و راهنمای نوشتن کیس استادی",
+        },
       ],
     },
   ],
