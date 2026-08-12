@@ -10,6 +10,7 @@ import PanelThemeToggle from "@/components/admin/PanelThemeToggle";
 import { toPersianDigits } from "@/lib/persian-months";
 import {
   BookOpen,
+  Briefcase,
   Users,
   Mail,
   Award,
@@ -37,6 +38,8 @@ export default async function AdminPage() {
     studentsWithTopic,
     topicCount,
     unreadCount,
+    quadcampCount,
+    quadcampNew,
     messages,
     recentCerts,
     subscribers,
@@ -49,6 +52,8 @@ export default async function AdminPage() {
     prisma.studentProject.count({ where: { NOT: { topic: "" } } }),
     prisma.projectTopic.count({ where: { active: true } }),
     prisma.contactMessage.count({ where: { isRead: false } }),
+    prisma.quadcampApplication.count(),
+    prisma.quadcampApplication.count({ where: { isRead: false } }),
     prisma.contactMessage.findMany({ orderBy: { createdAt: "desc" }, take: 50 }),
     prisma.certificate.findMany({ orderBy: { createdAt: "desc" }, take: 10 }),
     prisma.discountSubscriber.findMany({ orderBy: { createdAt: "desc" }, take: 100 }),
@@ -170,6 +175,30 @@ export default async function AdminPage() {
               </p>
             </div>
             <span className="font-body text-sm text-[var(--warn)] shrink-0 mt-0.5">←</span>
+          </Link>
+
+          <Link
+            href="/admin/quadcamp"
+            className="group bg-[var(--card)] hover:bg-[var(--card-raised)] border border-[var(--line)] hover:border-[var(--violet)]/45 rounded-2xl px-5 py-5 flex items-start gap-4 transition-colors"
+          >
+            <div className="w-9 h-9 rounded-xl bg-[var(--info)]/15 text-[var(--info)] flex items-center justify-center shrink-0">
+              <Briefcase size={17} />
+            </div>
+            <div className="min-w-0 flex-1">
+              <h2 className="font-body font-semibold text-[var(--ink)] text-sm mb-1">
+                ثبت‌نام‌های کوادکمپ
+              </h2>
+              <p className="font-body text-xs text-[var(--ink-4)] leading-6">
+                پرتفولیو و رزومه‌ای که از فرم mojtabaui.ir/quadcamp اومده
+              </p>
+              <p className="font-body text-xs text-[var(--ink-3)] mt-2">
+                <span className="text-[var(--ink)]">{fa(quadcampCount)}</span> نفر
+                {quadcampNew > 0 && (
+                  <span className="text-[var(--warn)]"> · {fa(quadcampNew)} تازه</span>
+                )}
+              </p>
+            </div>
+            <span className="font-body text-sm text-[var(--info)] shrink-0 mt-0.5">←</span>
           </Link>
 
           <Link

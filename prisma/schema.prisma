@@ -97,6 +97,30 @@ model ContactMessage {
   @@index([createdAt])
 }
 
+/// فرم‌های پرشدهٔ کوادکمپ — اسم، لینک پرتفولیو و رزومه.
+///
+/// رزومه دو راه داره و دقیقاً یکیش لازمه: یا فایلش رو آپلود می‌کنه که همین‌جا
+/// توی دیتابیس می‌مونه، یا لینک گوگل درایوش رو می‌ده. آپلود سقف ۳ مگابایت
+/// داره چون بدنهٔ درخواست روی ورسل از ۴٫۵ مگابایت بیشتر رد نمی‌شه.
+model QuadcampApplication {
+  id           String @id @default(cuid())
+  fullName     String
+  portfolioUrl String
+
+  /// لینک رزومه روی گوگل درایو — اگه فایل آپلود کرده باشه خالیه
+  resumeUrl String @default("")
+  /// خودِ فایل رزومه. با select صریح خونده می‌شه تا توی فهرست پنل بار نشه.
+  resumeData Bytes?
+  resumeName String @default("")
+  resumeMime String @default("")
+  resumeSize Int    @default(0)
+
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([createdAt])
+}
+
 /// شماره‌هایی که برای اطلاع از تخفیف‌ها ثبت شدن
 model DiscountSubscriber {
   id        String   @id @default(cuid())
