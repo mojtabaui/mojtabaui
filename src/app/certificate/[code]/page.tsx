@@ -55,7 +55,7 @@ export default async function CertificatePage({ params }: Props) {
         <Navbar />
       </div>
 
-      <main id="cert-main" className="flex-1 pt-16 min-h-screen bg-[#FAF6F1]">
+      <main id="cert-main" className="flex-1 pt-[var(--nav-h)] min-h-screen bg-[#FAF6F1]">
         <section id="cert-section" className="max-w-6xl mx-auto px-4 sm:px-6 py-10">
 
           {/* نوار بالا */}

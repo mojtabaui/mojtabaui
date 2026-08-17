@@ -20,7 +20,7 @@ export default function ArticlesPage() {
   return (
     <>
       <Navbar />
-      <main className="flex-1 pt-16 min-h-screen bg-[#FAF6F1]">
+      <main className="flex-1 pt-[var(--nav-h)] min-h-screen bg-[#FAF6F1]">
 
         {/* Header */}
         <section className="dot-bg pt-16 pb-12 relative overflow-hidden">

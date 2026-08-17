@@ -76,7 +76,7 @@ export default async function CourseDetailPage({ params }: Props) {
   return (
     <>
       <Navbar />
-      <main className="flex-1 pt-16">
+      <main className="flex-1 pt-[var(--nav-h)]">
 
         {/* ── Hero ── */}
         <section style={{ backgroundColor: color.bg }} className="dot-bg py-20 relative overflow-hidden">

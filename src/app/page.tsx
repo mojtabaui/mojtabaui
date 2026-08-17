@@ -42,19 +42,21 @@ export default async function Home() {
         {/* ─── Hero ─── */}
         {/* ارتفاع با clamp بسته شده. بدون سقف، روی نمایشگر بلند (مثلاً ۱۴۴۰) هیرو
             بیش از ۱۲۰۰ پیکسل می‌شد و چون محتوا ته‌چینه، بالای صفحه خالی می‌موند. */}
+        {/* نوار بالا ثابته و روی صفحه شناوره، پس هیرو باید به اندازه‌ی ارتفاعش
+            از بالا فاصله بگیره. قبلاً این فاصله فقط روی موبایل بود و روی
+            نمایشگرِ کوتاه، بلوکِ ته‌چینِ دسکتاپ از بالا می‌زد بیرون و
+            نوتِ «+۶٬۵۰۰ نفر» می‌رفت زیر منو. */}
         <section
-          className="dot-bg overflow-hidden relative flex flex-col"
+          className="dot-bg overflow-hidden relative flex flex-col pt-[var(--nav-h)]"
           style={{ backgroundColor: "#FAF6F1", minHeight: "clamp(560px, 86vh, 860px)" }}
         >
 
           <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
 
             {/* Text — top on mobile, right on desktop.
-                روی موبایل محتوا ته‌چین نیست و از بالای سکشن شروع می‌شه، پس بدون
-                فاصله‌ی بالا، نوارِ ثابتِ منو (۶۴px) روی نوتِ «+۶٬۵۰۰ نفر» می‌افتاد
-                و مخفیش می‌کرد. pt-24 اون رو از زیر منو می‌کشه بیرون؛ در دسکتاپ که
-                بلوک ته‌چینه lg:pt-0 دست‌نخورده می‌مونه. */}
-            <div className="flex-shrink-0 max-w-xl 2xl:max-w-2xl pt-24 pb-2 lg:pt-0 lg:pb-20">
+                فاصله‌ی زیرِ منو رو حالا خودِ سکشن می‌ده، پس این‌جا فقط یک
+                نفَسِ کوچیک لازمه نه جبرانِ ارتفاع نوار. */}
+            <div className="flex-shrink-0 max-w-xl 2xl:max-w-2xl pt-10 pb-2 lg:pt-0 lg:pb-20">
 
                 {/* Eyebrow */}
                 <div

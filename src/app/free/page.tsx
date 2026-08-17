@@ -7,16 +7,29 @@ import FadeIn from "@/components/FadeIn";
 import ParallaxY from "@/components/ParallaxY";
 import MarqueeBand from "@/components/MarqueeBand";
 import { freeResources } from "@/lib/mock-data";
+import { getLang } from "@/lib/i18n/server";
+import { PAGES } from "@/lib/i18n/dict/pages";
+import { localizeFreeResources } from "@/lib/i18n/content/free";
+import type { Lang } from "@/lib/i18n";
 
-const courses  = freeResources.filter((r) => r.type === "course");
-const voices   = freeResources.filter((r) => r.type === "voice");
-const files    = freeResources.filter((r) => r.type === "file");
+export async function generateMetadata() {
+  const t = PAGES[await getLang()].free;
+  return { title: t.metaTitle, description: t.metaDescription };
+}
 
-export default function FreePage() {
+export default async function FreePage() {
+  const lang = await getLang();
+  const t = PAGES[lang].free;
+  const resources = localizeFreeResources(freeResources, lang);
+
+  const courses = resources.filter((r) => r.type === "course");
+  const voices  = resources.filter((r) => r.type === "voice");
+  const files   = resources.filter((r) => r.type === "file");
+
   return (
     <>
       <Navbar />
-      <main className="flex-1 pt-16 min-h-screen bg-[#FAF6F1]">
+      <main className="flex-1 pt-[var(--nav-h)] min-h-screen bg-[#FAF6F1]">
 
         {/* Hero */}
         <section className="dot-bg-dark bg-[#1a1714] py-20 relative overflow-hidden">
@@ -37,14 +50,16 @@ export default function FreePage() {
                   FREE
                 </div>
                 <h1 className="font-body font-black text-4xl md:text-5xl text-white leading-[1.25] mb-4">
-                  آموزش‌های رایگان
+                  {t.title}
                 </h1>
                 <p className="text-white/50 font-body text-lg leading-relaxed">
-                  ویدیو، ویس و فایل آماده. بدون ثبت‌نام، بردار و استفاده کن.
+                  {t.body}
                 </p>
               </div>
               <div className="font-display font-black text-white/[0.07] text-7xl leading-none select-none">
-                {String(freeResources.length).replace(/\d/g, (d) => "۰۱۲۳۴۵۶۷۸۹"[+d])}
+                {lang === "fa"
+                  ? String(resources.length).replace(/\d/g, (d) => "۰۱۲۳۴۵۶۷۸۹"[+d])
+                  : resources.length}
               </div>
             </div>
           </div>
@@ -55,8 +70,8 @@ export default function FreePage() {
           <div className="flex items-center gap-3 mb-8">
             <span className="w-10 h-10 rounded-xl bg-[#7c5cfc]/10 text-[#7c5cfc] flex items-center justify-center flex-shrink-0"><Play size={18} /></span>
             <div>
-              <h2 className="font-body font-bold text-xl text-[#1a1714]">دوره‌های رایگان</h2>
-              <p className="text-[#a09990] text-xs font-body">دوره‌ها و کتابچه‌ی رایگان، روی کانال تلگرام. بدون ثبت‌نام</p>
+              <h2 className="font-body font-bold text-xl text-[#1a1714]">{t.sections.courses.title}</h2>
+              <p className="text-[#a09990] text-xs font-body">{t.sections.courses.desc}</p>
             </div>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -74,8 +89,8 @@ export default function FreePage() {
             <div className="flex items-center gap-3 mb-8">
               <span className="w-10 h-10 rounded-xl bg-[#7c5cfc]/10 text-[#7c5cfc] flex items-center justify-center flex-shrink-0"><Mic size={18} /></span>
               <div>
-                <h2 className="font-body font-bold text-xl text-[#1a1714]">ویس‌های رایگان</h2>
-                <p className="text-[#a09990] text-xs font-body">پادکست‌های کوتاه برای شنیدن در مسیر</p>
+                <h2 className="font-body font-bold text-xl text-[#1a1714]">{t.sections.voices.title}</h2>
+                <p className="text-[#a09990] text-xs font-body">{t.sections.voices.desc}</p>
               </div>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -93,8 +108,8 @@ export default function FreePage() {
           <div className="flex items-center gap-3 mb-8">
             <span className="w-10 h-10 rounded-xl bg-[#7c5cfc]/10 text-[#7c5cfc] flex items-center justify-center flex-shrink-0"><FileText size={18} /></span>
             <div>
-              <h2 className="font-body font-bold text-xl text-[#1a1714]">فایل‌های رایگان</h2>
-              <p className="text-[#a09990] text-xs font-body">تمپلیت، کیت و چک‌لیست آماده</p>
+              <h2 className="font-body font-bold text-xl text-[#1a1714]">{t.sections.files.title}</h2>
+              <p className="text-[#a09990] text-xs font-body">{t.sections.files.desc}</p>
             </div>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">

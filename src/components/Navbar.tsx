@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { Menu, X, ArrowLeft, ArrowRight, User } from "lucide-react";
+import { Menu, X, ArrowLeft, ArrowRight } from "lucide-react";
 import BrandMark from "@/components/BrandMark";
 import LangSwitch from "@/components/LangSwitch";
 import { useLang } from "@/components/Providers";
@@ -30,7 +30,7 @@ export default function Navbar() {
 
   return (
     <header className="fixed top-0 inset-x-0 z-50 bg-[#f7f4ef]/90 backdrop-blur-sm border-b border-[#e8e2d9]">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between relative">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 h-[var(--nav-h)] flex items-center justify-between relative">
 
         {/* نشان و نام برند — ابتدای خط */}
         <Link href="/" className="flex items-center gap-2.5 flex-shrink-0">
@@ -55,12 +55,10 @@ export default function Navbar() {
           ))}
         </nav>
 
-        {/* دکمه‌ی اقدام و حساب کاربری — انتهای خط.
-            اولین عنصرِ DOM ابتدای خط می‌شینه، پس CTA اول میاد تا
-            آیکن حساب بعد از دکمه بیفته. */}
+        {/* دکمه‌ی اقدام و تعویض زبان — انتهای خط.
+            آیکن حساب کاربری موقتاً برداشته شده چون هنوز کاری نمی‌کنه؛
+            تعویض زبان جای اون نشسته، بعد از CTA. */}
         <div className="hidden md:flex items-center gap-3 flex-shrink-0">
-          <LangSwitch />
-
           <Link
             href="/courses"
             className="inline-flex items-center gap-2 bg-[#1a1714] hover:bg-[#2d2926] text-white font-body font-semibold text-sm px-5 py-2.5 rounded-xl transition-all hover:scale-[1.02] active:scale-[0.98]"
@@ -69,25 +67,7 @@ export default function Navbar() {
             <Forward size={15} />
           </Link>
 
-          {/* حساب کاربری هنوز فعال نیست، پس button غیرفعاله نه لینک.
-              راهنمای «به زودی» با hover و focus هر دو باز می‌شه تا کاربر
-              کیبورد هم ببیندش. */}
-          <div className="relative group">
-            <button
-              type="button"
-              disabled
-              aria-label={t.account.label}
-              className="w-10 h-10 rounded-xl bg-white border border-[#e8e2d9] flex items-center justify-center text-[#a09990] cursor-not-allowed transition-colors group-hover:border-[#1a1714]/20 group-hover:text-[#6b6560]"
-            >
-              <User size={16} />
-            </button>
-            <span
-              role="tooltip"
-              className="pointer-events-none absolute top-full left-1/2 -translate-x-1/2 mt-2 whitespace-nowrap rounded-lg bg-[#1a1714] px-2.5 py-1.5 font-body text-[11px] text-white opacity-0 transition-opacity group-hover:opacity-100 group-focus-within:opacity-100"
-            >
-              {t.account.soon}
-            </span>
-          </div>
+          <LangSwitch />
         </div>
 
         <div className="flex items-center gap-2 md:hidden">

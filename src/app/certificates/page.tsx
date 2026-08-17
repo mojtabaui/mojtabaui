@@ -34,7 +34,7 @@ export default function CertificatesPage() {
   return (
     <>
       <Navbar />
-      <main className="flex-1 pt-16 min-h-screen bg-[#FAF6F1]">
+      <main className="flex-1 pt-[var(--nav-h)] min-h-screen bg-[#FAF6F1]">
 
         {/* Header */}
         <section className="dot-bg pt-16 pb-10 relative overflow-hidden">

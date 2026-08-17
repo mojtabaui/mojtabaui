@@ -68,7 +68,7 @@ export default async function DashboardPage({ searchParams }: Props) {
   return (
     <>
       <Navbar />
-      <main className="flex-1 pt-16 min-h-screen bg-[#FAF6F1]">
+      <main className="flex-1 pt-[var(--nav-h)] min-h-screen bg-[#FAF6F1]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10">
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
 

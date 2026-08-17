@@ -23,7 +23,7 @@ export default async function ArticleDetailPage({ params }: Props) {
   return (
     <>
       <Navbar />
-      <main className="flex-1 pt-16 min-h-screen bg-[#FAF6F1]">
+      <main className="flex-1 pt-[var(--nav-h)] min-h-screen bg-[#FAF6F1]">
 
         {/* Hero */}
         <section

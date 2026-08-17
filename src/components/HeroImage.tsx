@@ -2,8 +2,11 @@
 
 import Image from "next/image";
 import { motion, useScroll, useTransform } from "framer-motion";
+import { useLang } from "@/components/Providers";
+import { HOME } from "@/lib/i18n/dict/home";
 
 export default function HeroImage() {
+  const lang = useLang();
   const { scrollY } = useScroll();
   const scale   = useTransform(scrollY, [0,   800], [1,    1.18]);
   const opacity = useTransform(scrollY, [300, 750], [1,    0   ]);
@@ -20,13 +23,18 @@ export default function HeroImage() {
           style={{ scale, opacity }}
           className="will-change-transform origin-bottom"
         >
+          {/* متن و عکس با زبان جا عوض می‌کنن، پس نگاهِ عکس هم باید برگرده.
+              بدون این، توی نسخه‌ی انگلیسی رو به بیرونِ صفحه می‌ایسته. */}
           <Image
             src="/images/hero.png"
-            alt="مجتبا یزدان‌پناه"
+            alt={HOME[lang].hero.portraitAlt}
             width={520}
             height={650}
             className="w-full h-auto block"
-            style={{ transform: "scaleX(-1)", objectFit: "contain" }}
+            style={{
+              transform: lang === "fa" ? "scaleX(-1)" : "none",
+              objectFit: "contain",
+            }}
             priority
           />
         </motion.div>
