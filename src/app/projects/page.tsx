@@ -2,23 +2,33 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { useState } from "react";
-import { ExternalLink, Send, Layers, ArrowLeft, Monitor, ClipboardList } from "lucide-react";
+import { useMemo, useState } from "react";
+import { ExternalLink, Send, Layers, ArrowLeft, ArrowRight, Monitor, ClipboardList } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import FadeIn from "@/components/FadeIn";
 import ParallaxY from "@/components/ParallaxY";
 import { studentProjects, type StudentProject } from "@/lib/mock-data";
+import { useLang } from "@/components/Providers";
+import { PAGES } from "@/lib/i18n/dict/pages";
+import { localizeProjects } from "@/lib/i18n/content/projects";
+import type { Lang } from "@/lib/i18n";
 
 type Filter = "all" | "ui" | "ux";
 
 export default function ProjectsPage() {
+  const lang = useLang();
+  const t = PAGES[lang].projects;
+  const Forward = lang === "fa" ? ArrowLeft : ArrowRight;
   const [filter, setFilter] = useState<Filter>("all");
 
+  // ترجمه یک بار انجام می‌شه نه هر بار که فیلتر عوض می‌شه
+  const projects = useMemo(() => localizeProjects(studentProjects, lang), [lang]);
+
   const shown =
-    filter === "ui" ? studentProjects.filter((p) => p.courseType === "ui") :
-    filter === "ux" ? studentProjects.filter((p) => p.courseType === "ux") :
-    studentProjects;
+    filter === "ui" ? projects.filter((p) => p.courseType === "ui") :
+    filter === "ux" ? projects.filter((p) => p.courseType === "ux") :
+    projects;
 
   return (
     <>
@@ -44,15 +54,16 @@ export default function ProjectsPage() {
                   STUDENT WORK
                 </div>
                 <h1 className="font-body font-black text-4xl md:text-5xl text-[#1a1714] leading-[1.25] mb-4">
-                  نمونه کارها
+                  {t.title}
                 </h1>
                 <p className="text-[#6b6560] font-body text-lg leading-relaxed">
-                  پروژه‌های واقعی دانشجوهای دوره‌های رابط و تجربه کاربری، روی فیگما یا به
-                  شکل کیس استادی.
+                  {t.body}
                 </p>
               </FadeIn>
               <div className="font-display font-black text-[#1a1714]/[0.07] text-7xl leading-none select-none">
-                {String(studentProjects.length).replace(/\d/g, (d) => "۰۱۲۳۴۵۶۷۸۹"[+d])}
+                {lang === "fa"
+                  ? String(projects.length).replace(/\d/g, (d) => "۰۱۲۳۴۵۶۷۸۹"[+d])
+                  : projects.length}
               </div>
             </div>
           </div>
@@ -62,9 +73,9 @@ export default function ProjectsPage() {
         <section className="max-w-7xl mx-auto px-4 sm:px-6 mb-10">
           <div className="inline-flex items-center bg-white border border-[#e8e2d9] rounded-2xl p-1.5 gap-1">
             {([
-              { key: "all", label: "همه" },
-              { key: "ui",  label: "رابط کاربری" },
-              { key: "ux",  label: "تجربه کاربری" },
+              { key: "all", label: t.filters.all },
+              { key: "ui",  label: t.filters.ui  },
+              { key: "ux",  label: t.filters.ux  },
             ] as { key: Filter; label: string }[]).map((tab) => (
               <button
                 key={tab.key}
@@ -85,13 +96,13 @@ export default function ProjectsPage() {
         <section className="pb-24 max-w-7xl mx-auto px-4 sm:px-6">
           {shown.length === 0 ? (
             <div className="text-center py-20 text-[#a09990] font-body text-sm">
-              به‌زودی پروژه‌ها اضافه می‌شن...
+              {t.empty}
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
               {shown.map((project, i) => (
                 <FadeIn key={project.id} delay={(i % 3) * 0.08}>
-                  <ProjectCard project={project} />
+                  <ProjectCard project={project} lang={lang} />
                 </FadeIn>
               ))}
             </div>
@@ -102,17 +113,17 @@ export default function ProjectsPage() {
         <section className="py-16 bg-[#1a1714]">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 text-center">
             <h2 className="font-body font-bold text-xl text-white mb-2">
-              می‌خوای پروژه‌ات اینجا باشه؟
+              {t.outro.title}
             </h2>
             <p className="text-white/40 font-body text-sm mb-6">
-              دوره بی‌نهایت رو بخر، پروژه بزن، اینجا نمایش بده.
+              {t.outro.body}
             </p>
             <Link
               href="/courses"
               className="inline-flex items-center gap-2 bg-white hover:bg-white/90 text-[#1a1714] font-body font-semibold px-6 py-3 rounded-2xl transition-all text-sm"
             >
-              مشاهده دوره‌ها
-              <ArrowLeft size={14} />
+              {t.outro.button}
+              <Forward size={14} />
             </Link>
           </div>
         </section>
@@ -122,7 +133,8 @@ export default function ProjectsPage() {
   );
 }
 
-function ProjectCard({ project }: { project: StudentProject }) {
+function ProjectCard({ project, lang }: { project: StudentProject; lang: Lang }) {
+  const t       = PAGES[lang].projects;
   const isUI    = project.courseType === "ui";
   const isFigma = project.linkType === "figma";
   const color   = isUI ? "#FFF0EE" : "#EEF3FF";
@@ -151,7 +163,7 @@ function ProjectCard({ project }: { project: StudentProject }) {
           </div>
         )}
         {/* Badge overlay */}
-        <div className="absolute top-3 right-3 flex gap-1.5">
+        <div className="absolute top-3 end-3 flex gap-1.5">
           <span
             className="text-[10px] font-body font-semibold px-2.5 py-1 rounded-full backdrop-blur-sm"
             style={{ backgroundColor: color + "ee", color: accent }}
@@ -195,7 +207,7 @@ function ProjectCard({ project }: { project: StudentProject }) {
             className="inline-flex items-center gap-1.5 shrink-0 whitespace-nowrap text-xs font-body font-semibold transition-colors"
             style={{ color: accent }}
           >
-            {isFigma ? "باز کن در Figma" : "دانلود PDF"}
+            {isFigma ? t.openFigma : t.downloadPdf}
             <ExternalLink size={11} />
           </a>
         </div>

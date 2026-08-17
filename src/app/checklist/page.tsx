@@ -1,7 +1,6 @@
-import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
-import { Send, ArrowLeft } from "lucide-react";
+import { Send, ArrowLeft, ArrowRight } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import FadeIn from "@/components/FadeIn";
@@ -9,17 +8,23 @@ import ParallaxY from "@/components/ParallaxY";
 import MarqueeBand from "@/components/MarqueeBand";
 import ChecklistTracks from "@/components/ChecklistTracks";
 import { tracks, totalItemsOf } from "@/lib/checklist";
+import { getLang } from "@/lib/i18n/server";
+import { PAGES } from "@/lib/i18n/dict/pages";
 
-export const metadata: Metadata = {
-  title: "چک‌لیست یادگیری طراحی محصول | مدرسه دیزاین ملینا",
-  description:
-    "مسیر کامل یادگیری طراحی رابط کاربری و تجربه کاربری از صفر، به ترتیب و بدون حدس زدن. دو مسیر مجزا با آیتم‌های مشخص.",
-};
+export async function generateMetadata() {
+  const t = PAGES[await getLang()].checklist;
+  return { title: t.metaTitle, description: t.metaDescription };
+}
 
 const fa = (n: number | string) =>
   String(n).replace(/\d/g, (d) => "۰۱۲۳۴۵۶۷۸۹"[+d]);
 
-export default function ChecklistPage() {
+export default async function ChecklistPage() {
+  const lang = await getLang();
+  const t = PAGES[lang].checklist;
+  const num = (n: number | string) => (lang === "fa" ? fa(n) : String(n));
+  const Forward = lang === "fa" ? ArrowLeft : ArrowRight;
+
   const totalStages = tracks.reduce((sum, t) => sum + t.stages.length, 0);
   const totalItems = tracks.reduce((sum, t) => sum + totalItemsOf(t), 0);
 
@@ -48,12 +53,10 @@ export default function ChecklistPage() {
                   LEARNING PATH
                 </div>
                 <h1 className="font-body font-black text-4xl md:text-5xl text-[#1a1714] leading-[1.25] mb-4">
-                  چک‌لیست یادگیری از صفر
+                  {t.title}
                 </h1>
                 <p className="text-[#6b6560] font-body text-lg leading-relaxed">
-                  بیشتر آدم‌ها به‌خاطر نداشتن منبع شکست نمی‌خورن، به‌خاطر نداشتن ترتیب
-                  شکست می‌خورن. این همون ترتیبیه که توی دوره‌ها طی می‌کنیم، برای هر دو
-                  مسیر رابط کاربری و تجربه کاربری.
+                  {t.body}
                 </p>
               </FadeIn>
 
@@ -75,13 +78,13 @@ export default function ChecklistPage() {
             <FadeIn delay={0.12}>
               <div className="grid grid-cols-3 max-w-md bg-white border border-[#e8e2d9] rounded-3xl overflow-hidden mt-10">
                 {[
-                  { num: fa(tracks.length), label: "مسیر" },
-                  { num: fa(totalStages), label: "مرحله" },
-                  { num: fa(totalItems), label: "آیتم" },
+                  { num: num(tracks.length), label: t.stats.tracks },
+                  { num: num(totalStages), label: t.stats.stages },
+                  { num: num(totalItems), label: t.stats.items },
                 ].map((s, i) => (
                   <div
                     key={s.label}
-                    className={`px-5 py-5 text-center ${i < 2 ? "border-l border-[#f0ebe4]" : ""}`}
+                    className={`px-5 py-5 text-center ${i < 2 ? "border-e border-[#f0ebe4]" : ""}`}
                   >
                     <div className="font-display font-black text-2xl text-[#1a1714]">{s.num}</div>
                     <div className="font-body text-[#a09990] text-xs mt-1">{s.label}</div>
@@ -113,19 +116,18 @@ export default function ChecklistPage() {
           <div className="max-w-3xl mx-auto px-4 sm:px-6 text-center relative">
             <FadeIn>
               <h2 className="font-body font-black text-3xl md:text-4xl text-white leading-[1.3] mb-4">
-                این مسیر رو تنها نرو
+                {t.outro.title}
               </h2>
               <p className="font-body text-white/45 leading-relaxed mb-9 max-w-lg mx-auto">
-                همه‌ی این چک‌لیست رو می‌شه خودت جلو بری. فقط معمولاً وسط راه گیر می‌کنی و
-                کسی نیست بگه کجا رو اشتباه رفتی. کار ما دقیقاً همینه.
+                {t.outro.body}
               </p>
               <div className="flex items-center justify-center gap-3 flex-wrap">
                 <Link
                   href="/courses"
                   className="inline-flex items-center gap-2 bg-white hover:bg-white/90 text-[#1a1714] font-body font-bold px-8 py-4 rounded-2xl transition-all hover:scale-[1.02]"
                 >
-                  دیدن دوره‌ها
-                  <ArrowLeft size={16} />
+                  {t.outro.courses}
+                  <Forward size={16} />
                 </Link>
                 <a
                   href="https://t.me/melina_support"
@@ -134,7 +136,7 @@ export default function ChecklistPage() {
                   className="inline-flex items-center gap-2 border border-white/20 hover:border-white/40 text-white/70 hover:text-white font-body font-semibold px-7 py-4 rounded-2xl transition-all text-sm"
                 >
                   <Send size={15} />
-                  مشاوره‌ی رایگان
+                  {t.outro.consult}
                 </a>
               </div>
             </FadeIn>

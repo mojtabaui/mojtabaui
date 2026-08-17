@@ -1,49 +1,58 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import Link from "next/link";
-import { Check, ChevronLeft, Clock } from "lucide-react";
+import { Check, ChevronLeft, ChevronRight, Clock } from "lucide-react";
 import FadeIn from "@/components/FadeIn";
 import ParallaxY from "@/components/ParallaxY";
 import { tracks, totalItemsOf } from "@/lib/checklist";
+import { useLang } from "@/components/Providers";
+import { PAGES } from "@/lib/i18n/dict/pages";
+import { localizeTracks } from "@/lib/i18n/content/checklist";
 
 const fa = (n: number | string) =>
   String(n).replace(/\d/g, (d) => "۰۱۲۳۴۵۶۷۸۹"[+d]);
 
 export default function ChecklistTracks() {
+  const lang = useLang();
+  const t = PAGES[lang].checklist;
+  const num = (n: number | string) => (lang === "fa" ? fa(n) : String(n));
+  const Next = lang === "fa" ? ChevronLeft : ChevronRight;
+
   const [active, setActive] = useState<"ui" | "ux">("ui");
-  const track = tracks.find((t) => t.key === active)!;
+  const localized = useMemo(() => localizeTracks(tracks, lang), [lang]);
+  const track = localized.find((t) => t.key === active)!;
 
   return (
     <>
       {/* انتخاب مسیر */}
       <section className="max-w-4xl mx-auto px-4 sm:px-6 pt-12">
         <div className="grid sm:grid-cols-2 gap-4">
-          {tracks.map((t) => {
-            const on = t.key === active;
+          {localized.map((tr) => {
+            const on = tr.key === active;
             return (
               <button
-                key={t.key}
-                onClick={() => setActive(t.key)}
+                key={tr.key}
+                onClick={() => setActive(tr.key)}
                 aria-pressed={on}
-                className="text-right rounded-3xl p-6 border transition-all hover:-translate-y-0.5"
+                className="text-start rounded-3xl p-6 border transition-all hover:-translate-y-0.5"
                 style={{
-                  backgroundColor: on ? t.color : "#ffffff",
-                  borderColor: on ? t.accent : "#e8e2d9",
-                  boxShadow: on ? `0 20px 44px -26px ${t.accent}` : undefined,
+                  backgroundColor: on ? tr.color : "#ffffff",
+                  borderColor: on ? tr.accent : "#e8e2d9",
+                  boxShadow: on ? `0 20px 44px -26px ${tr.accent}` : undefined,
                 }}
               >
                 <div className="flex items-center justify-between gap-3 mb-2">
                   <span
                     className="font-display text-[10px] font-bold tracking-[0.2em] uppercase"
-                    style={{ color: on ? t.accent : "#a09990" }}
+                    style={{ color: on ? tr.accent : "#a09990" }}
                   >
-                    {t.latin}
+                    {tr.latin}
                   </span>
                   <span
                     className="w-5 h-5 rounded-full flex items-center justify-center transition-colors"
                     style={{
-                      backgroundColor: on ? t.accent : "#f0ebe4",
+                      backgroundColor: on ? tr.accent : "#f0ebe4",
                       color: on ? "#fff" : "transparent",
                     }}
                   >
@@ -51,17 +60,17 @@ export default function ChecklistTracks() {
                   </span>
                 </div>
 
-                <h2 className="font-body font-black text-xl text-[#1a1714] mb-2">{t.label}</h2>
+                <h2 className="font-body font-black text-xl text-[#1a1714] mb-2">{tr.label}</h2>
                 <p className="font-body text-sm text-[#6b6560] leading-relaxed mb-4">
-                  {t.tagline}
+                  {tr.tagline}
                 </p>
 
                 <div className="flex items-center gap-4 font-body text-xs text-[#a09990]">
-                  <span>{fa(t.stages.length)} مرحله</span>
+                  <span>{num(tr.stages.length)} {t.trackStages}</span>
                   <span className="w-1 h-1 rounded-full bg-[#d4cdc5]" />
-                  <span>{fa(totalItemsOf(t))} آیتم</span>
+                  <span>{num(totalItemsOf(tr))} {t.trackItems}</span>
                   <span className="w-1 h-1 rounded-full bg-[#d4cdc5]" />
-                  <span>{t.weeks}</span>
+                  <span>{tr.weeks}</span>
                 </div>
               </button>
             );
@@ -73,7 +82,7 @@ export default function ChecklistTracks() {
       <section className="max-w-4xl mx-auto px-4 sm:px-6 pt-10">
         <div className="bg-white border border-[#e8e2d9] rounded-3xl p-6">
           <div className="font-display text-[10px] font-bold tracking-[0.2em] uppercase text-[#a09990] mb-4">
-            فهرست مسیر {track.label}
+            {t.index} {track.label}
           </div>
           <ol className="grid sm:grid-cols-2 gap-x-6 gap-y-2.5">
             {track.stages.map((stage) => (
@@ -88,8 +97,8 @@ export default function ChecklistTracks() {
                   <span className="font-body text-sm text-[#4a4540] group-hover:text-[#1a1714] transition-colors">
                     {stage.title}
                   </span>
-                  <span className="font-body text-[11px] text-[#c8c2ba] mr-auto flex-shrink-0">
-                    {fa(stage.items.length)} آیتم
+                  <span className="font-body text-[11px] text-[#c8c2ba] ms-auto flex-shrink-0">
+                    {num(stage.items.length)} {t.trackItems}
                   </span>
                 </a>
               </li>
@@ -165,19 +174,19 @@ export default function ChecklistTracks() {
                   style={{ backgroundColor: stage.color, borderColor: `${stage.accent}26` }}
                 >
                   <p className="font-body text-sm text-[#4a4540] leading-relaxed">
-                    این مرحله رو قدم به قدم توی{" "}
+                    {t.courseNoteBefore}{" "}
                     <span className="font-bold" style={{ color: stage.accent }}>
                       {stage.course.label}
                     </span>{" "}
-                    با پروژه و فیدبک کار می‌کنیم.
+                    {t.courseNoteAfter}
                   </p>
                   <Link
                     href={`/courses/${stage.course.slug}`}
                     className="inline-flex items-center gap-2 text-white font-body font-bold text-sm px-5 py-2.5 rounded-xl transition-transform hover:scale-[1.02] flex-shrink-0"
                     style={{ backgroundColor: stage.accent }}
                   >
-                    ثبت‌نام در دوره
-                    <ChevronLeft size={14} />
+                    {t.courseCta}
+                    <Next size={14} />
                   </Link>
                 </div>
               </FadeIn>

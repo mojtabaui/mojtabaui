@@ -1,12 +1,12 @@
 import Link from "next/link";
 import Image from "next/image";
-import { Play, ArrowLeft, Mic, FileText, Send, Download, BookOpen } from "lucide-react";
+import { Play, ArrowLeft, ArrowRight, Mic, FileText, Send, Download, BookOpen } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import FadeIn from "@/components/FadeIn";
 import ParallaxY from "@/components/ParallaxY";
 import MarqueeBand from "@/components/MarqueeBand";
-import { freeResources } from "@/lib/mock-data";
+import { freeResources, type FreeResource } from "@/lib/mock-data";
 import { getLang } from "@/lib/i18n/server";
 import { PAGES } from "@/lib/i18n/dict/pages";
 import { localizeFreeResources } from "@/lib/i18n/content/free";
@@ -21,6 +21,7 @@ export default async function FreePage() {
   const lang = await getLang();
   const t = PAGES[lang].free;
   const resources = localizeFreeResources(freeResources, lang);
+  const Forward = lang === "fa" ? ArrowLeft : ArrowRight;
 
   const courses = resources.filter((r) => r.type === "course");
   const voices  = resources.filter((r) => r.type === "voice");
@@ -77,7 +78,7 @@ export default async function FreePage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {courses.map((item, i) => (
               <FadeIn key={item.id} delay={i * 0.08} className="h-full">
-                <ResourceCard item={item} />
+                <ResourceCard item={item} lang={lang} />
               </FadeIn>
             ))}
           </div>
@@ -96,7 +97,7 @@ export default async function FreePage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {voices.map((item, i) => (
                 <FadeIn key={item.id} delay={i * 0.08} className="h-full">
-                  <ResourceCard item={item} />
+                  <ResourceCard item={item} lang={lang} />
                 </FadeIn>
               ))}
             </div>
@@ -115,7 +116,7 @@ export default async function FreePage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {files.map((item, i) => (
               <FadeIn key={item.id} delay={i * 0.08} className="h-full">
-                <ResourceCard item={item} />
+                <ResourceCard item={item} lang={lang} />
               </FadeIn>
             ))}
           </div>
@@ -127,17 +128,17 @@ export default async function FreePage() {
         <section className="py-16 bg-[#f7f4ef] border-t border-[#e8e2d9]">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 text-center">
             <h2 className="font-body font-bold text-2xl text-[#1a1714] mb-3">
-              می‌خوای عمیق‌تر یاد بگیری؟
+              {t.outro.title}
             </h2>
             <p className="text-[#a09990] font-body text-sm mb-6 max-w-md mx-auto">
-              دوره‌های بی‌نهایت شامل ویدیو کامل، منتورینگ ۱۰ هفته‌ای و پروژه واقعیه.
+              {t.outro.body}
             </p>
             <Link
               href="/courses"
               className="inline-flex items-center gap-2 bg-[#1a1714] hover:bg-[#2d2926] text-white font-body font-semibold px-7 py-3.5 rounded-2xl transition-all"
             >
-              مشاهده دوره‌ها
-              <ArrowLeft size={16} />
+              {t.outro.button}
+              <Forward size={16} />
             </Link>
           </div>
         </section>
@@ -147,7 +148,8 @@ export default async function FreePage() {
   );
 }
 
-function ResourceCard({ item }: { item: (typeof freeResources)[0] }) {
+function ResourceCard({ item, lang }: { item: FreeResource; lang: Lang }) {
+  const t = PAGES[lang].free;
   const isVoice = item.type === "voice";
   const isCourse = item.type === "course";
   const isFile = item.type === "file";
@@ -237,13 +239,13 @@ function ResourceCard({ item }: { item: (typeof freeResources)[0] }) {
         {isDirect ? (
           <>
             <Download size={12} />
-            دانلود رایگان
+            {t.download}
           </>
         ) : (
           <>
             <Send size={12} />
             {item.cta ??
-              (isCourse ? "شروع دوره در تلگرام" : isVoice ? "گوش بده در تلگرام" : "دریافت در تلگرام")}
+              (isCourse ? t.cta.courseCta : isVoice ? t.cta.voiceCta : t.cta.fileCta)}
           </>
         )}
       </a>
