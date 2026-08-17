@@ -3,8 +3,39 @@
 import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { Clock, Users, Layers, ArrowLeft, Calendar, User } from "lucide-react";
+import { Clock, Users, Layers, ArrowLeft, ArrowRight, Calendar, User } from "lucide-react";
 import { Course, formatPrice, formatStudents, typeLabel } from "@/lib/mock-data";
+import { useLang } from "@/components/Providers";
+
+/** برچسب‌های خود کارت. دادهٔ دوره جداگانه از i18n/content/courses ترجمه می‌شه. */
+const CARD = {
+  fa: {
+    students: "دانشجو",
+    closed: "ثبت‌نام باز نیست",
+    bestseller: "پرفروش",
+    isNew: "جدید",
+    hours: (n?: number) => `${n} ساعت`,
+    seats: (n?: number) => `ظرفیت ${n} نفر`,
+    videoHours: (n: number) => `${n} ساعت ویدیو`,
+    mentoringHours: (n: number) => `${n} ساعت منتورینگ`,
+    support: (n: number) => `پشتیبانی ${n} ماهه`,
+    projects: (n: number) => `${n} پروژه`,
+    cta: "مشاهده دوره",
+  },
+  en: {
+    students: "students",
+    closed: "Enrolment closed",
+    bestseller: "Bestseller",
+    isNew: "New",
+    hours: (n?: number) => `${n} hours`,
+    seats: (n?: number) => `${n} seats`,
+    videoHours: (n: number) => `${n}h of video`,
+    mentoringHours: (n: number) => `${n}h of mentoring`,
+    support: (n: number) => `${n} months of support`,
+    projects: (n: number) => `${n} projects`,
+    cta: "See the course",
+  },
+} as const;
 
 const imageMap: Record<string, string> = {
   "ui-infinity": "/images/ui_infinity.png",
@@ -27,6 +58,9 @@ const colorMap: Record<string, { bg: string; badge: string; tag: string; accent:
 };
 
 export default function CourseCard({ course }: { course: Course }) {
+  const lang = useLang();
+  const tc = CARD[lang];
+  const Forward = lang === "fa" ? ArrowLeft : ArrowRight;
   const c   = colorMap[course.slug] ?? colorMap["ui-infinity"];
   const img = imageMap[course.slug];
 
@@ -52,7 +86,7 @@ export default function CourseCard({ course }: { course: Course }) {
               style={{ backgroundColor: c.badge, color: c.accent }}
             >
               <User size={11} />
-              {formatStudents(course.students)} دانشجو
+              {formatStudents(course.students, lang)} {tc.students}
             </span>
           </div>
         )}
@@ -95,35 +129,35 @@ export default function CourseCard({ course }: { course: Course }) {
         <div className="flex flex-wrap gap-2 mb-4">
           {course.comingSoon && (
             <span className="text-[11px] font-body font-semibold px-3 py-1 rounded-full bg-[#1a1714] text-white">
-              ثبت‌نام باز نیست
+              {tc.closed}
             </span>
           )}
           {course.isBestseller && (
             <span className="text-[11px] font-body font-semibold px-3 py-1 rounded-full"
               style={{ backgroundColor: c.badge, color: c.accent }}>
-              پرفروش
+              {tc.bestseller}
             </span>
           )}
           {course.isNew && (
             <span className="text-[11px] font-body font-semibold px-3 py-1 rounded-full"
               style={{ backgroundColor: c.badge, color: c.accent }}>
-              جدید
+              {tc.isNew}
             </span>
           )}
           <span className="text-[11px] font-body font-semibold px-3 py-1 rounded-full"
             style={{ backgroundColor: c.badge, color: c.accent }}>
-            {typeLabel(course.type)}
+            {typeLabel(course.type, lang)}
           </span>
         </div>
 
         {/* ── Price ── */}
         <div className="flex items-baseline gap-3 mb-4">
           <span className="font-body font-bold text-xl text-[#1a1714]">
-            {formatPrice(course.price)}
+            {formatPrice(course.price, lang)}
           </span>
           {course.originalPrice && (
             <span className="font-body text-sm text-[#a09990] line-through">
-              {formatPrice(course.originalPrice)}
+              {formatPrice(course.originalPrice, lang)}
             </span>
           )}
         </div>
@@ -138,31 +172,31 @@ export default function CourseCard({ course }: { course: Course }) {
           {course.type === "workshop" ? (
             <>
               <span className="flex items-center gap-1.5">
-                <Clock size={12} /> {course.durationHours} ساعت
+                <Clock size={12} /> {tc.hours(course.durationHours)}
               </span>
               <span className="flex items-center gap-1.5">
                 <Calendar size={12} /> {course.sessionDate}
               </span>
               <span className="flex items-center gap-1.5">
-                <Users size={12} /> ظرفیت {course.capacity} نفر
+                <Users size={12} /> {tc.seats(course.capacity)}
               </span>
             </>
           ) : (
             <>
               <span className="flex items-center gap-1.5">
-                <Clock size={12} /> {course.videoHours} ساعت ویدیو
+                <Clock size={12} /> {tc.videoHours(course.videoHours)}
               </span>
               {course.type === "infinity" ? (
                 <span className="flex items-center gap-1.5">
-                  <Users size={12} /> {course.mentoringHours} ساعت منتورینگ
+                  <Users size={12} /> {tc.mentoringHours(course.mentoringHours)}
                 </span>
               ) : (
                 <span className="flex items-center gap-1.5">
-                  <Calendar size={12} /> پشتیبانی {course.supportMonths} ماهه
+                  <Calendar size={12} /> {tc.support(course.supportMonths)}
                 </span>
               )}
               <span className="flex items-center gap-1.5">
-                <Layers size={12} /> {course.projects} پروژه
+                <Layers size={12} /> {tc.projects(course.projects)}
               </span>
             </>
           )}
@@ -184,8 +218,8 @@ export default function CourseCard({ course }: { course: Course }) {
           whileHover={{ gap: "10px" }}
           transition={{ type: "spring", stiffness: 400 }}
         >
-          مشاهده دوره
-          <ArrowLeft size={14} />
+          {tc.cta}
+          <Forward size={14} />
         </motion.div>
 
       </motion.div>

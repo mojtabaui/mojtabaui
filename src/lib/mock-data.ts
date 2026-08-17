@@ -1,4 +1,11 @@
-export type Level = "مقدماتی" | "متوسط" | "پیشرفته";
+/** برچسب سطح دوره. نسخهٔ انگلیسی از i18n/content/courses روی داده سوار می‌شه. */
+export type Level =
+  | "مقدماتی"
+  | "متوسط"
+  | "پیشرفته"
+  | "Beginner"
+  | "Intermediate"
+  | "Advanced";
 export type CourseType = "infinity" | "offline" | "workshop";
 
 export interface CourseTestimonial {
@@ -561,7 +568,10 @@ export const offlineCourses  = courses.filter((c) => c.type === "offline" && !c.
 export const videoCourses    = courses.filter((c) => c.type === "offline");
 export const workshopCourses = courses.filter((c) => c.type === "workshop");
 
-export function typeLabel(type: CourseType): string {
+export function typeLabel(type: CourseType, lang: "fa" | "en" = "fa"): string {
+  if (lang === "en") {
+    return type === "infinity" ? "Infinity" : type === "workshop" ? "Workshop" : "Offline";
+  }
   return type === "infinity" ? "بی‌نهایت" : type === "workshop" ? "کارگاه" : "آفلاین";
 }
 
@@ -572,13 +582,20 @@ export const stats = [
   { value: "۹۰+",    label: "ساعت محتوا" },
 ];
 
-/** تعداد دانشجو با ارقام فارسی و جداکننده‌ی هزارگان */
-export function formatStudents(n: number): string {
-  return n.toLocaleString("fa-IR");
+/**
+ * تعداد دانشجو با جداکننده‌ی هزارگان.
+ *
+ * ارقام فارسی وسط متن انگلیسی خونده نمی‌شن، پس شکل عدد هم با زبان عوض می‌شه.
+ */
+export function formatStudents(n: number, lang: "fa" | "en" = "fa"): string {
+  return n.toLocaleString(lang === "fa" ? "fa-IR" : "en-US");
 }
 
-export function formatPrice(price: number): string {
-  return price.toLocaleString("fa-IR") + " تومان";
+/** قیمت با واحدش. واحد همون تومنه، فقط شکلش عوض می‌شه. */
+export function formatPrice(price: number, lang: "fa" | "en" = "fa"): string {
+  return lang === "fa"
+    ? price.toLocaleString("fa-IR") + " تومان"
+    : price.toLocaleString("en-US") + " Toman";
 }
 
 // ─── Articles ────────────────────────────────────────────────

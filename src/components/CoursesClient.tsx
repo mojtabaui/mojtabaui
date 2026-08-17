@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import CourseCard from "./CourseCard";
 import { Course } from "@/lib/mock-data";
 import { Sparkles, Video, Presentation } from "lucide-react";
+import { useLang } from "@/components/Providers";
 
 type TabKey = "infinity" | "video" | "workshop";
 
@@ -14,18 +15,33 @@ interface Props {
   workshopCourses: Course[];
 }
 
-const allTabs: { key: TabKey; label: string; icon: React.ReactNode; desc: string }[] = [
-  { key: "infinity", label: "بی‌نهایت", icon: <Sparkles     size={14} />, desc: "ویدیو + منتورینگ + پروژه" },
-  { key: "video",    label: "ویدیویی",  icon: <Video        size={14} />, desc: "بدون منتورینگ، به تمپو خودت" },
-  { key: "workshop", label: "کارگاه‌ها", icon: <Presentation size={14} />, desc: "کارگاه‌های زنده و فشرده" },
-];
+const TAB_COPY = {
+  fa: {
+    infinity: { label: "بی‌نهایت", desc: "ویدیو + منتورینگ + پروژه" },
+    video: { label: "ویدیویی", desc: "بدون منتورینگ، به تمپو خودت" },
+    workshop: { label: "کارگاه‌ها", desc: "کارگاه‌های زنده و فشرده" },
+  },
+  en: {
+    infinity: { label: "Infinity", desc: "video + mentoring + a project" },
+    video: { label: "Video only", desc: "no mentoring, at your own tempo" },
+    workshop: { label: "Workshops", desc: "live and intensive" },
+  },
+} as const;
+
+const TAB_ICON: Record<TabKey, React.ReactNode> = {
+  infinity: <Sparkles size={14} />,
+  video: <Video size={14} />,
+  workshop: <Presentation size={14} />,
+};
 
 export default function CoursesClient({ infinityCourses, videoCourses, workshopCourses }: Props) {
+  const lang = useLang();
+  const copy = TAB_COPY[lang];
   const [active, setActive] = useState<TabKey>("infinity");
   // تب‌های خالی نمایش داده نمی‌شن (مثلاً وقتی کارگاهی فعال نیست)
-  const tabs = allTabs.filter((tab) =>
-    tab.key === "workshop" ? workshopCourses.length > 0 : true
-  );
+  const tabs = (Object.keys(copy) as TabKey[])
+    .filter((key) => (key === "workshop" ? workshopCourses.length > 0 : true))
+    .map((key) => ({ key, icon: TAB_ICON[key], ...copy[key] }));
   const list =
     active === "infinity" ? infinityCourses : active === "workshop" ? workshopCourses : videoCourses;
 

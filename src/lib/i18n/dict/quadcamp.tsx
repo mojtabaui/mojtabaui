@@ -1,25 +1,14 @@
 import { toPersianDigits } from "@/lib/persian-months";
+import type { Lang } from "@/lib/i18n";
+
+export type { Lang };
 
 /**
- * متن‌های فرم اپلای کوادکمپ، فارسی و انگلیسی.
- *
- * فقط همین یک مسیر دو زبانه‌ست — پنل و بقیهٔ سایت فارسی می‌مونن. دلیلش
- * اینه که اپلای تنها جاییه که ممکنه کسی از بیرون بازش کنه، پس هزینهٔ
- * ترجمه فقط اینجا می‌ارزه.
+ * متن‌های فرم اپلای کوادکمپ.
  *
  * قدم‌های راهنمای درایو JSX هستن نه رشته، چون توی متن فارسی اسم دکمه‌های
  * انگلیسی باید dir خودشون رو داشته باشن وگرنه پرانتز و نقطه جابه‌جا می‌شه.
  */
-
-export type Lang = "fa" | "en";
-
-export const LANGS: Lang[] = ["fa", "en"];
-
-/** اسم هر زبان به خط خودش، برای دکمهٔ تعویض */
-export const LANG_LABEL: Record<Lang, string> = {
-  fa: "فارسی",
-  en: "English",
-};
 
 /** حجم فایل با واحد و رقمِ همون زبان */
 export function humanSize(bytes: number, lang: Lang): string {
