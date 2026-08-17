@@ -8,6 +8,8 @@ import CertificateDocument from "@/components/CertificateDocument";
 import PrintButton from "@/components/PrintButton";
 import { prisma } from "@/lib/prisma";
 import QRCode from "qrcode";
+import { getLang } from "@/lib/i18n/server";
+import { PAGES } from "@/lib/i18n/dict/pages";
 
 export const dynamic = "force-dynamic";
 
@@ -27,16 +29,18 @@ function normalize(raw: string) {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { code } = await params;
+  const t = PAGES[await getLang()].certificate;
   const cert = await prisma.certificate.findUnique({ where: { code: normalize(code) } });
-  if (!cert) return { title: "گواهی یافت نشد | مدرسه دیزاین ملینا" };
+  if (!cert) return { title: t.notFoundTitle };
   return {
-    title: `گواهی ${cert.studentName} | مدرسه دیزاین ملینا`,
-    description: `گواهی پایان دوره‌ی ${cert.studentName} با کد ${cert.code}`,
+    title: t.titleFor(cert.studentName),
+    description: t.descriptionFor(cert.studentName, cert.code),
   };
 }
 
 export default async function CertificatePage({ params }: Props) {
   const { code } = await params;
+  const t = PAGES[await getLang()].certificate;
   const cert = await prisma.certificate.findUnique({
     where: { code: normalize(code) },
   });
@@ -65,12 +69,12 @@ export default async function CertificatePage({ params }: Props) {
                 href="/certificates"
                 className="inline-flex items-center gap-1.5 text-[#6b6560] hover:text-[#1a1714] text-sm font-body mb-4 transition-colors"
               >
-                <ChevronLeft size={14} className="rotate-180" />
-                استعلام گواهی دیگر
+                <ChevronLeft size={14} className="rtl:rotate-180" />
+                {t.back}
               </Link>
               <div className="flex items-center gap-2 text-emerald-600">
                 <ShieldCheck size={17} />
-                <span className="font-body font-bold text-sm">این گواهی معتبر است</span>
+                <span className="font-body font-bold text-sm">{t.valid}</span>
               </div>
             </div>
 
@@ -83,7 +87,7 @@ export default async function CertificatePage({ params }: Props) {
               اسکرول‌پذیر می‌کنیم؛ در دسکتاپ که جا هست، تمام‌عرض می‌شه. چاپ به این
               دست نمی‌زنه چون #certificate موقع چاپ fixed و تمام‌صفحه می‌شه. */}
           <div className="no-print sm:hidden font-body text-[11px] text-[#a09990] mb-2 flex items-center gap-1.5">
-            برای دیدن کامل، افقی بکش →
+            {t.dragHint}
           </div>
           <div id="cert-scroll" className="overflow-x-auto -mx-4 px-4 sm:mx-0 sm:px-0 pb-2 sm:pb-0">
             <div id="cert-card" className="min-w-[560px] sm:min-w-0 rounded-3xl overflow-hidden border border-[#e8e2d9] shadow-[0_30px_70px_-40px_rgba(26,23,20,0.5)] bg-white">
@@ -92,8 +96,7 @@ export default async function CertificatePage({ params }: Props) {
           </div>
 
           <p className="no-print font-body text-xs text-[#a09990] text-center mt-6 leading-relaxed">
-            برای ذخیره به صورت PDF، دکمه‌ی بالا را بزنید و در پنجره‌ی چاپ مقصد را روی
-            «Save as PDF» بگذارید. اندازه‌ی کاغذ روی A4 افقی تنظیم شده است.
+            {t.printNote}
           </p>
         </section>
       </main>

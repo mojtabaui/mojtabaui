@@ -2,8 +2,11 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { useLang } from "@/components/Providers";
+import { FORMS } from "@/lib/i18n/dict/forms";
 
 export default function RegisterPage() {
+  const t = FORMS[useLang()].register;
   const router = useRouter();
   const [form, setForm] = useState({ name: "", email: "", phone: "", password: "" });
   const [agreed, setAgreed] = useState(false);
@@ -16,8 +19,8 @@ export default function RegisterPage() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!agreed) { setError("پذیرش قوانین الزامی است"); return; }
-    if (form.password.length < 8) { setError("رمز عبور باید حداقل ۸ کاراکتر باشد"); return; }
+    if (!agreed) { setError(t.needTerms); return; }
+    if (form.password.length < 8) { setError(t.shortPassword); return; }
     setError("");
     setLoading(true);
 
@@ -30,7 +33,7 @@ export default function RegisterPage() {
     setLoading(false);
 
     if (!res.ok) {
-      setError(data.error || "خطایی رخ داد");
+      setError(data.error || t.error);
       return;
     }
 
@@ -48,17 +51,17 @@ export default function RegisterPage() {
             </div>
             <span className="font-body font-bold text-[#1a1714]">mojtabaui</span>
           </Link>
-          <h1 className="font-body font-bold text-2xl text-[#1a1714] mb-1">بیا شروع کنیم</h1>
-          <p className="text-[#a09990] font-body text-sm">حساب رایگان بساز و یاد بگیر</p>
+          <h1 className="font-body font-bold text-2xl text-[#1a1714] mb-1">{t.title}</h1>
+          <p className="text-[#a09990] font-body text-sm">{t.subtitle}</p>
         </div>
 
         <div className="bg-white border border-[#e8e2d9] rounded-3xl p-7 shadow-sm">
           <form className="space-y-4" onSubmit={handleSubmit}>
             <div>
-              <label className="block font-body text-sm text-[#6b6560] mb-1.5">نام و نام‌خانوادگی</label>
+              <label className="block font-body text-sm text-[#6b6560] mb-1.5">{t.name}</label>
               <input
                 type="text"
-                placeholder="مثلاً علی احمدی"
+                placeholder={t.namePlaceholder}
                 value={form.name}
                 onChange={(e) => update("name", e.target.value)}
                 required
@@ -66,7 +69,7 @@ export default function RegisterPage() {
               />
             </div>
             <div>
-              <label className="block font-body text-sm text-[#6b6560] mb-1.5">ایمیل</label>
+              <label className="block font-body text-sm text-[#6b6560] mb-1.5">{t.email}</label>
               <input
                 type="email"
                 placeholder="example@email.com"
@@ -78,7 +81,7 @@ export default function RegisterPage() {
               />
             </div>
             <div>
-              <label className="block font-body text-sm text-[#6b6560] mb-1.5">شماره موبایل</label>
+              <label className="block font-body text-sm text-[#6b6560] mb-1.5">{t.phone}</label>
               <input
                 type="tel"
                 placeholder="09xxxxxxxxx"
@@ -89,10 +92,10 @@ export default function RegisterPage() {
               />
             </div>
             <div>
-              <label className="block font-body text-sm text-[#6b6560] mb-1.5">رمز عبور</label>
+              <label className="block font-body text-sm text-[#6b6560] mb-1.5">{t.password}</label>
               <input
                 type="password"
-                placeholder="حداقل ۸ کاراکتر"
+                placeholder={t.passwordPlaceholder}
                 dir="ltr"
                 value={form.password}
                 onChange={(e) => update("password", e.target.value)}
@@ -108,9 +111,9 @@ export default function RegisterPage() {
                 onChange={(e) => setAgreed(e.target.checked)}
               />
               <span>
-                با{" "}
-                <a href="#" className="text-[#7c5cfc] hover:text-[#5b3fd4] transition-colors">قوانین و مقررات</a>
-                {" "}سایت موافقم
+                {t.termsBefore}{" "}
+                <a href="#" className="text-[#7c5cfc] hover:text-[#5b3fd4] transition-colors">{t.terms}</a>
+                {" "}{t.termsAfter}
               </span>
             </label>
 
@@ -123,15 +126,15 @@ export default function RegisterPage() {
               disabled={loading}
               className="w-full bg-[#1a1714] hover:bg-[#2d2926] disabled:opacity-60 disabled:cursor-not-allowed text-white font-body font-semibold py-3.5 rounded-2xl transition-all mt-1"
             >
-              {loading ? "در حال ثبت‌نام..." : "ثبت‌نام"}
+              {loading ? t.submitting : t.submit}
             </button>
           </form>
         </div>
 
         <p className="text-center text-[#a09990] font-body text-sm mt-6">
-          قبلاً ثبت‌نام کردی؟{" "}
+          {t.haveAccount}{" "}
           <Link href="/auth/login" className="text-[#1a1714] font-semibold hover:text-[#7c5cfc] transition-colors">
-            وارد شو
+            {t.login}
           </Link>
         </p>
       </div>

@@ -1,4 +1,3 @@
-import type { Metadata } from "next";
 import { ShieldCheck, ScanLine, BadgeCheck, Send } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -6,31 +5,21 @@ import Image from "next/image";
 import CertificateLookup from "@/components/CertificateLookup";
 import FadeIn from "@/components/FadeIn";
 import ParallaxY from "@/components/ParallaxY";
+import { getLang } from "@/lib/i18n/server";
+import { PAGES } from "@/lib/i18n/dict/pages";
 
-export const metadata: Metadata = {
-  title: "استعلام گواهی | مدرسه دیزاین ملینا",
-  description: "اعتبار گواهی دوره‌های مدرسه دیزاین ملینا را با کد گواهی بررسی کنید.",
-};
+export async function generateMetadata() {
+  const t = PAGES[await getLang()].certificates;
+  return { title: t.metaTitle, description: t.metaDescription };
+}
 
-const steps = [
-  {
-    Icon: ScanLine,
-    title: "کد رو از روی گواهی بردار",
-    desc: "روی هر گواهی یک کد یکتا چاپ شده. همون رو کپی کن.",
-  },
-  {
-    Icon: BadgeCheck,
-    title: "توی کادر واردش کن",
-    desc: "اعداد فارسی، حروف کوچک و خط تیره هم قبوله. خودمون مرتبش می‌کنیم.",
-  },
-  {
-    Icon: ShieldCheck,
-    title: "نتیجه رو ببین",
-    desc: "اگر گواهی معتبر باشه، نام دانشجو و دوره‌ش رو نشون می‌دیم.",
-  },
-];
+/** آیکن هر قدم به ترتیبِ خودِ قدم‌ها توی دیکشنری */
+const STEP_ICONS = [ScanLine, BadgeCheck, ShieldCheck];
 
-export default function CertificatesPage() {
+export default async function CertificatesPage() {
+  const t = PAGES[await getLang()].certificates;
+  const steps = t.steps.map((step, i) => ({ ...step, Icon: STEP_ICONS[i] }));
+
   return (
     <>
       <Navbar />
@@ -53,10 +42,10 @@ export default function CertificatesPage() {
               CERTIFICATE
             </div>
             <h1 className="font-body font-black text-4xl md:text-5xl text-[#1a1714] leading-[1.25] mb-4">
-              استعلام گواهی
+              {t.title}
             </h1>
             <p className="text-[#6b6560] font-body text-lg max-w-lg mx-auto leading-relaxed">
-              هر گواهی ملینا یک کد یکتا داره. کد رو وارد کن تا اعتبارش رو همین‌جا ببینی.
+              {t.body}
             </p>
           </div>
         </section>
@@ -79,7 +68,7 @@ export default function CertificatesPage() {
                     <div>
                       <div className="flex items-center gap-2 mb-1">
                         <span className="font-display font-black text-xs text-[#c8c2ba]">
-                          {["۰۱", "۰۲", "۰۳"][i]}
+                          {t.stepNums[i]}
                         </span>
                         <h2 className="font-body font-bold text-sm text-[#1a1714]">{title}</h2>
                       </div>
@@ -95,7 +84,7 @@ export default function CertificatesPage() {
                 <div className="relative w-full aspect-[4/3] rounded-3xl overflow-hidden border border-[#e8e2d9] shadow-[0_24px_50px_-30px_rgba(26,23,20,0.45)] bg-white">
                   <Image
                     src="/images/certificate-sample.jpg"
-                    alt="نمونه گواهی مدرسه دیزاین ملینا"
+                    alt={t.sampleAlt}
                     fill
                     sizes="(max-width: 1024px) 100vw, 560px"
                     className="object-cover"
@@ -114,10 +103,10 @@ export default function CertificatesPage() {
                 </span>
                 <div>
                   <h3 className="font-body font-bold text-sm text-[#1a1714] mb-1">
-                    کدت جواب نداد؟
+                    {t.help.title}
                   </h3>
                   <p className="font-body text-sm text-[#6b6560] leading-relaxed mb-3">
-                    اگر مطمئنی کد درسته ولی پیدا نشد، یک پیام بده تا دستی بررسیش کنم.
+                    {t.help.body}
                   </p>
                   <a
                     href="https://t.me/melina_support"
@@ -125,7 +114,7 @@ export default function CertificatesPage() {
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-1.5 font-body font-semibold text-xs text-[#7c5cfc] hover:text-[#5b3fd4] transition-colors"
                   >
-                    پیام در تلگرام
+                    {t.help.link}
                   </a>
                 </div>
               </div>

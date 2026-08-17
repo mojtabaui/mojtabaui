@@ -3,6 +3,8 @@ import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { useLang } from "@/components/Providers";
+import { FORMS } from "@/lib/i18n/dict/forms";
 
 interface Props {
   callbackUrl: string;
@@ -10,6 +12,7 @@ interface Props {
 }
 
 export default function LoginForm({ callbackUrl, registered }: Props) {
+  const t = FORMS[useLang()].login;
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -31,7 +34,7 @@ export default function LoginForm({ callbackUrl, registered }: Props) {
     setLoading(false);
 
     if (res?.error) {
-      setError("ایمیل یا رمز عبور اشتباه است");
+      setError(t.wrong);
       return;
     }
 
@@ -50,20 +53,20 @@ export default function LoginForm({ callbackUrl, registered }: Props) {
             </div>
             <span className="font-body font-bold text-[#1a1714]">mojtabaui</span>
           </Link>
-          <h1 className="font-body font-bold text-2xl text-[#1a1714] mb-1">خوش برگشتی</h1>
-          <p className="text-[#a09990] font-body text-sm">وارد حسابت شو و دوره‌هاتو ببین</p>
+          <h1 className="font-body font-bold text-2xl text-[#1a1714] mb-1">{t.title}</h1>
+          <p className="text-[#a09990] font-body text-sm">{t.subtitle}</p>
         </div>
 
         {registered && (
           <div className="bg-emerald-50 border border-emerald-200 text-emerald-700 rounded-xl px-4 py-3 text-sm font-body mb-4 text-center">
-            ثبت‌نام موفق بود — الان وارد شو
+            {t.registered}
           </div>
         )}
 
         <div className="bg-white border border-[#e8e2d9] rounded-3xl p-7 shadow-sm">
           <form className="space-y-4" onSubmit={handleSubmit}>
             <div>
-              <label className="block font-body text-sm text-[#6b6560] mb-1.5">ایمیل</label>
+              <label className="block font-body text-sm text-[#6b6560] mb-1.5">{t.email}</label>
               <input
                 type="email"
                 placeholder="example@email.com"
@@ -76,8 +79,8 @@ export default function LoginForm({ callbackUrl, registered }: Props) {
             </div>
             <div>
               <div className="flex justify-between items-center mb-1.5">
-                <label className="font-body text-sm text-[#6b6560]">رمز عبور</label>
-                <a href="#" className="text-[#7c5cfc] hover:text-[#5b3fd4] font-body text-xs transition-colors">فراموشی رمز</a>
+                <label className="font-body text-sm text-[#6b6560]">{t.password}</label>
+                <a href="#" className="text-[#7c5cfc] hover:text-[#5b3fd4] font-body text-xs transition-colors">{t.forgot}</a>
               </div>
               <input
                 type="password"
@@ -96,7 +99,7 @@ export default function LoginForm({ callbackUrl, registered }: Props) {
                 checked={remember}
                 onChange={(e) => setRemember(e.target.checked)}
               />
-              مرا به خاطر بسپار
+              {t.remember}
             </label>
 
             {error && (
@@ -108,15 +111,15 @@ export default function LoginForm({ callbackUrl, registered }: Props) {
               disabled={loading}
               className="w-full bg-[#1a1714] hover:bg-[#2d2926] disabled:opacity-60 disabled:cursor-not-allowed text-white font-body font-semibold py-3.5 rounded-2xl transition-all mt-1"
             >
-              {loading ? "در حال ورود..." : "ورود"}
+              {loading ? t.submitting : t.submit}
             </button>
           </form>
         </div>
 
         <p className="text-center text-[#a09990] font-body text-sm mt-6">
-          حساب نداری؟{" "}
+          {t.noAccount}{" "}
           <Link href="/auth/register" className="text-[#1a1714] font-semibold hover:text-[#7c5cfc] transition-colors">
-            ثبت‌نام کن
+            {t.register}
           </Link>
         </p>
       </div>
