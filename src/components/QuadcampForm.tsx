@@ -13,7 +13,7 @@ import {
   Trash2,
   User,
 } from "lucide-react";
-import { toPersianDigits } from "@/lib/persian-months";
+import { COPY, SERVER_ERRORS, humanSize, num, type Lang } from "@/lib/quadcamp-copy";
 
 /**
  * فرم ثبت‌نام کوادکمپ.
@@ -24,6 +24,9 @@ import { toPersianDigits } from "@/lib/persian-months";
  * ممکنه بزرگ باشه یا اینترنت وسط کار قطع بشه. پس راه دوم لینک گوگل درایوه
  * و راهنماش همین‌جا باز می‌شه، نه توی یک صفحهٔ دیگه. هر آپلودی که شکست
  * بخوره خودش کاربر رو می‌بره سراغ همین راه دوم.
+ *
+ * متن‌ها از quadcamp-copy میان تا فارسی و انگلیسی کنار هم بمونن و یکی
+ * بدون اون یکی عوض نشه.
  */
 
 /** باید با MAX_RESUME_BYTES توی api/quadcamp یکی باشه */
@@ -37,34 +40,9 @@ const field =
 
 const card = "bg-[var(--card)] border border-[var(--line)] rounded-2xl";
 
-/** حجم رو با یک رقم اعشار و عدد فارسی نشون می‌ده */
-function humanSize(bytes: number): string {
-  const mb = bytes / (1024 * 1024);
-  if (mb >= 1) return `${toPersianDigits(mb.toFixed(1))} مگابایت`;
-  return `${toPersianDigits(Math.max(1, Math.round(bytes / 1024)))} کیلوبایت`;
-}
+export default function QuadcampForm({ lang }: { lang: Lang }) {
+  const t = COPY[lang];
 
-const DRIVE_STEPS = [
-  <>
-    برو به <span dir="ltr">drive.google.com</span> و با اکانت گوگلت وارد شو.
-  </>,
-  <>فایل رزومه‌ات رو بکش و توی صفحه رها کن تا آپلود بشه.</>,
-  <>
-    وقتی آپلود تموم شد، روی فایل راست‌کلیک کن و <span dir="ltr">Share</span> رو
-    بزن.
-  </>,
-  <>
-    پایین پنجره، زیر <span dir="ltr">General access</span>، گزینه رو از{" "}
-    <span dir="ltr">Restricted</span> بذار روی{" "}
-    <span dir="ltr">Anyone with the link</span>.
-  </>,
-  <>
-    <span dir="ltr">Copy link</span> رو بزن و لینک رو همین‌جا توی کادر بالا پیست
-    کن.
-  </>,
-];
-
-export default function QuadcampForm() {
   const [fullName, setFullName] = useState("");
   const [portfolioUrl, setPortfolioUrl] = useState("");
 
@@ -97,16 +75,14 @@ export default function QuadcampForm() {
 
     const ext = picked.name.split(".").pop()?.toLowerCase() ?? "";
     if (!ALLOWED_EXT.includes(ext)) {
-      setError("فقط PDF، Word یا عکس (JPG و PNG) قبول می‌شه.");
+      setError(t.errExt);
       if (fileInput.current) fileInput.current.value = "";
       return;
     }
 
     // جلوی آپلودِ بی‌فایده رو همین‌جا می‌گیریم؛ سرور هم دوباره چک می‌کنه
     if (picked.size > MAX_RESUME_BYTES) {
-      switchToDrive(
-        `این فایل ${humanSize(picked.size)}ه و سقف ما ۳ مگابایته. بذارش روی گوگل درایو و لینکش رو بده.`
-      );
+      switchToDrive(t.errTooBig(humanSize(picked.size, lang)));
       return;
     }
 
@@ -119,19 +95,19 @@ export default function QuadcampForm() {
     e.preventDefault();
 
     if (!fullName.trim().includes(" ")) {
-      setError("اسم و فامیلت رو کامل بنویس، مثل «زهرا محمدی»");
+      setError(t.errName);
       return;
     }
     if (!/^https?:\/\//i.test(portfolioUrl.trim())) {
-      setError("لینک پرتفولیو باید کامل باشه و با https:// شروع بشه");
+      setError(t.errPortfolio);
       return;
     }
     if (mode === "upload" && !file) {
-      setError("فایل رزومه‌ات رو انتخاب کن، یا از تب کناری لینک درایو بده");
+      setError(t.errFileMissing);
       return;
     }
     if (mode === "link" && !/^https?:\/\//i.test(resumeUrl.trim())) {
-      setError("لینک رزومه باید کامل باشه و با https:// شروع بشه");
+      setError(t.errLinkMissing);
       return;
     }
 
@@ -149,23 +125,21 @@ export default function QuadcampForm() {
       const data = await res.json().catch(() => ({}));
 
       if (!res.ok) {
+        // سرور فارسی جواب می‌ده؛ کدش رو به زبان فعلی ترجمه می‌کنیم. متن خامِ
+        // سرور فقط توی حالت فارسی به درد می‌خوره، وگرنه وصلهٔ فارسی می‌شه.
+        const message =
+          SERVER_ERRORS[lang][data.code as string] ||
+          (lang === "fa" ? data.error : "") ||
+          (mode === "upload" ? t.errUploadRejected : t.errGeneric);
         // آپلودی که سرور پسش زده هم باید همون مسیر نجات رو ببینه
-        if (mode === "upload") {
-          switchToDrive(data.error || "فایل فرستاده نشد. لینک درایوش رو بده.");
-        } else {
-          setError(data.error || "یک جای کار ایراد داشت");
-        }
+        if (mode === "upload") switchToDrive(message);
+        else setError(message);
         return;
       }
       setDone(true);
     } catch {
-      if (mode === "upload") {
-        switchToDrive(
-          "فایل تا آخر نرفت — احتمالاً اینترنت وسط کار قطع شد. راه مطمئن‌تر اینه که بذاریش روی گوگل درایو."
-        );
-      } else {
-        setError("به سرور وصل نشدیم. اینترنتت رو چک کن و دوباره بزن.");
-      }
+      if (mode === "upload") switchToDrive(t.errUploadDropped);
+      else setError(t.errOffline);
     } finally {
       setBusy(false);
     }
@@ -178,15 +152,9 @@ export default function QuadcampForm() {
         <div className="mx-auto mb-4 grid h-12 w-12 place-items-center rounded-full bg-[var(--ok)]/15 text-[var(--ok)]">
           <Check size={22} />
         </div>
-        <h2 className="font-display text-xl text-[var(--ink)] mb-2">ثبت شد</h2>
-        <p className="font-body text-sm text-[var(--ink-3)] leading-8">
-          پرتفولیو و رزومه‌ات رسید دستمون. یکی‌یکی نگاهشون می‌کنیم و نتیجه رو
-          بهت خبر می‌دیم.
-        </p>
-        <p className="mt-3 font-body text-xs text-[var(--ink-4)] leading-7">
-          اگه لینک درایو دادی، تا اون موقع دسترسی فایل رو روی «هر کسی که لینک
-          داره» نگه دار.
-        </p>
+        <h2 className="font-display text-xl text-[var(--ink)] mb-2">{t.doneTitle}</h2>
+        <p className="font-body text-sm text-[var(--ink-3)] leading-8">{t.doneBody}</p>
+        <p className="mt-3 font-body text-xs text-[var(--ink-4)] leading-7">{t.doneNote}</p>
         <button
           type="button"
           onClick={() => {
@@ -201,7 +169,7 @@ export default function QuadcampForm() {
           }}
           className="mt-5 font-body text-xs text-[var(--ink-3)] hover:text-[var(--ink)] underline underline-offset-4 transition-colors"
         >
-          ثبت نفر بعدی
+          {t.doneAgain}
         </button>
       </div>
     );
@@ -217,7 +185,7 @@ export default function QuadcampForm() {
             className="flex items-center gap-1.5 font-body text-xs text-[var(--ink-3)] mb-2"
           >
             <User size={13} />
-            اسم و فامیلت
+            {t.nameLabel}
           </label>
           <input
             id="qc-name"
@@ -227,7 +195,7 @@ export default function QuadcampForm() {
             required
             autoComplete="name"
             maxLength={80}
-            placeholder="مثلاً: زهرا محمدی"
+            placeholder={t.namePlaceholder}
             className={field}
           />
         </div>
@@ -239,7 +207,7 @@ export default function QuadcampForm() {
             className="flex items-center gap-1.5 font-body text-xs text-[var(--ink-3)] mb-2"
           >
             <Link2 size={13} />
-            لینک پرتفولیوت
+            {t.portfolioLabel}
           </label>
           <input
             id="qc-portfolio"
@@ -253,22 +221,21 @@ export default function QuadcampForm() {
             className={`${field} text-left`}
           />
           <p className="mt-2 font-body text-xs text-[var(--ink-4)] leading-6">
-            بی‌هنس، دریبل، سایت شخصی یا حتی یک فایل فیگما — هرجایی که کارهات رو
-            گذاشتی. فقط حواست باشه بدون لاگین باز بشه.
+            {t.portfolioHint}
           </p>
         </div>
       </div>
 
       {/* ── رزومه ── */}
       <div className={`${card} p-5 sm:p-6`}>
-        <p className="font-body text-xs text-[var(--ink-3)] mb-3">رزومه‌ات</p>
+        <p className="font-body text-xs text-[var(--ink-3)] mb-3">{t.resumeTitle}</p>
 
         {/* دو راه، یکیش کافیه */}
         <div className="grid grid-cols-2 gap-2 mb-5">
           {(
             [
-              { key: "upload", label: "آپلود فایل", icon: CloudUpload },
-              { key: "link", label: "لینک گوگل درایو", icon: Link2 },
+              { key: "upload", label: t.tabUpload, icon: CloudUpload },
+              { key: "link", label: t.tabLink, icon: Link2 },
             ] as const
           ).map((tab) => (
             <button
@@ -307,7 +274,7 @@ export default function QuadcampForm() {
                 <div className="min-w-0 flex-1">
                   <p className="font-body text-sm text-[var(--ink)] truncate">{file.name}</p>
                   <p className="font-body text-[11px] text-[var(--ink-4)] mt-0.5">
-                    {humanSize(file.size)}
+                    {humanSize(file.size, lang)}
                   </p>
                 </div>
                 <button
@@ -316,7 +283,7 @@ export default function QuadcampForm() {
                     setFile(null);
                     if (fileInput.current) fileInput.current.value = "";
                   }}
-                  title="حذف فایل"
+                  title={t.removeFile}
                   className="shrink-0 rounded-lg p-1.5 text-[var(--ink-4)] hover:text-[var(--danger)] transition-colors"
                 >
                   <Trash2 size={14} />
@@ -328,12 +295,8 @@ export default function QuadcampForm() {
                 className="flex cursor-pointer flex-col items-center gap-2 rounded-xl border border-dashed border-[var(--line-strong)] px-4 py-8 text-center hover:border-[var(--violet)] transition-colors"
               >
                 <CloudUpload size={20} className="text-[var(--violet)]" />
-                <span className="font-body text-sm text-[var(--ink-2)]">
-                  فایل رزومه‌ات رو انتخاب کن
-                </span>
-                <span className="font-body text-[11px] text-[var(--ink-4)]">
-                  PDF، Word یا عکس — تا ۳ مگابایت
-                </span>
+                <span className="font-body text-sm text-[var(--ink-2)]">{t.dropTitle}</span>
+                <span className="font-body text-[11px] text-[var(--ink-4)]">{t.dropHint}</span>
               </label>
             )}
 
@@ -346,7 +309,7 @@ export default function QuadcampForm() {
               }}
               className="mt-3 font-body text-[11px] text-[var(--violet)] hover:underline underline-offset-4"
             >
-              آپلود جواب نمی‌ده؟ از گوگل درایو لینک بده
+              {t.fallbackToDrive}
             </button>
           </div>
         ) : (
@@ -377,7 +340,7 @@ export default function QuadcampForm() {
               >
                 <span className="flex items-center gap-2">
                   <Info size={13} className="shrink-0 text-[var(--violet)]" />
-                  چطور رزومه‌ام رو روی گوگل درایو بذارم؟
+                  {t.guideToggle}
                 </span>
                 <span className="text-[var(--ink-4)]">{guideOpen ? "−" : "+"}</span>
               </button>
@@ -385,10 +348,10 @@ export default function QuadcampForm() {
               {guideOpen && (
                 <>
                   <ol className="mt-3 space-y-2.5 font-body text-xs text-[var(--ink-3)] leading-6">
-                    {DRIVE_STEPS.map((step, i) => (
+                    {t.steps.map((step, i) => (
                       <li key={i} className="flex gap-2.5">
                         <span className="mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full bg-[var(--violet)]/15 text-[10px] text-[var(--violet)]">
-                          {toPersianDigits(i + 1)}
+                          {num(i + 1, lang)}
                         </span>
                         <span>{step}</span>
                       </li>
@@ -396,9 +359,7 @@ export default function QuadcampForm() {
                   </ol>
 
                   <p className="mt-3 font-body text-[11px] text-[var(--ink-4)] leading-6">
-                    اگه دسترسی روی <span dir="ltr">Restricted</span> بمونه، لینک
-                    برای ما باز نمی‌شه و رزومه‌ات بررسی‌نشده می‌مونه. بعد از کپی،
-                    یک بار توی پنجرهٔ ناشناس بازش کن و مطمئن شو.
+                    {t.guideWarning}
                   </p>
 
                   <a
@@ -407,7 +368,7 @@ export default function QuadcampForm() {
                     rel="noopener noreferrer"
                     className="mt-3 inline-flex items-center gap-1.5 font-body text-[11px] text-[var(--violet)] hover:underline underline-offset-4"
                   >
-                    باز کردن گوگل درایو
+                    {t.openDrive}
                     <ExternalLink size={11} />
                   </a>
                 </>
@@ -415,8 +376,7 @@ export default function QuadcampForm() {
             </div>
 
             <p className="mt-2.5 font-body text-[11px] text-[var(--ink-4)] leading-6">
-              درایو در دسترست نیست؟ هر لینک عمومی دیگه‌ای هم قبوله — دراپ‌باکس،
-              وان‌درایو یا حتی فایل رزومه توی پرتفولیوی خودت.
+              {t.altHosts}
             </p>
           </div>
         )}
@@ -434,7 +394,7 @@ export default function QuadcampForm() {
         disabled={busy}
         className="flex w-full items-center justify-center gap-2 rounded-xl bg-[var(--violet-deep)] hover:bg-[#7c4df1] disabled:opacity-50 px-6 py-3.5 font-body text-sm text-white transition-colors"
       >
-        {busy ? (mode === "upload" ? "در حال آپلود..." : "در حال ثبت...") : "ثبت‌نام"}
+        {busy ? (mode === "upload" ? t.submittingUpload : t.submittingLink) : t.submit}
         {!busy && <ArrowRight size={15} />}
       </button>
     </form>

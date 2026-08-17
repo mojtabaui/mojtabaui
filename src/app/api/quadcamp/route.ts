@@ -51,8 +51,14 @@ function isSafeLink(url: string): boolean {
   }
 }
 
-function bad(message: string, status = 400) {
-  return NextResponse.json({ error: message }, { status });
+/**
+ * خطا با کد و متن.
+ *
+ * متن فارسیه و کد برای فرمِ انگلیسیه — سمت کلاینت کد رو به ترجمه‌اش
+ * می‌رسونه و اگه کدی نشناخت، همین متن فارسی رو نشون می‌ده.
+ */
+function bad(code: string, message: string, status = 400) {
+  return NextResponse.json({ code, error: message }, { status });
 }
 
 export async function POST(req: NextRequest) {
@@ -61,7 +67,7 @@ export async function POST(req: NextRequest) {
     form = await req.formData();
   } catch {
     // معمولاً یعنی فایل از سقف بدنهٔ سرور رد شده و اصلاً به اینجا نرسیده
-    return bad("فایل خیلی بزرگ بود یا درست فرستاده نشد. کوچیک‌ترش کن یا لینکش رو بده.");
+    return bad("body_too_large", "فایل خیلی بزرگ بود یا درست فرستاده نشد. کوچیک‌ترش کن یا لینکش رو بده.");
   }
 
   const fullName = cleanName(String(form.get("fullName") ?? ""));
@@ -71,23 +77,23 @@ export async function POST(req: NextRequest) {
 
   // اسم تک‌کلمه‌ای رو رد می‌کنیم؛ «اسم و فامیل» خواستیم و بعداً باید بشناسیمش
   if (fullName.length < 3 || !fullName.includes(" ")) {
-    return bad("اسم و فامیلت رو کامل بنویس، مثل «زهرا محمدی»");
+    return bad("name", "اسم و فامیلت رو کامل بنویس، مثل «زهرا محمدی»");
   }
 
   if (!portfolioUrl) {
-    return bad("لینک پرتفولیوت رو بذار");
+    return bad("portfolio_missing", "لینک پرتفولیوت رو بذار");
   }
   if (!isSafeLink(portfolioUrl)) {
-    return bad("لینک پرتفولیو باید کامل باشه و با https:// شروع بشه");
+    return bad("portfolio_invalid", "لینک پرتفولیو باید کامل باشه و با https:// شروع بشه");
   }
 
   const hasFile = file instanceof File && file.size > 0;
 
   if (!hasFile && !resumeUrl) {
-    return bad("رزومه‌ات رو آپلود کن، یا لینک گوگل درایوش رو بذار");
+    return bad("resume_missing", "رزومه‌ات رو آپلود کن، یا لینک گوگل درایوش رو بذار");
   }
   if (resumeUrl && !isSafeLink(resumeUrl)) {
-    return bad("لینک رزومه باید کامل باشه و با https:// شروع بشه");
+    return bad("resume_link_invalid", "لینک رزومه باید کامل باشه و با https:// شروع بشه");
   }
 
   // پریزما ۷ برای Bytes همون Uint8Array رو می‌خواد، نه Buffer
@@ -100,18 +106,18 @@ export async function POST(req: NextRequest) {
     const f = file as File;
 
     if (f.size > MAX_RESUME_BYTES) {
-      return bad("فایل رزومه باید کمتر از ۳ مگابایت باشه. PDF بگیر ازش یا لینکش رو بده.");
+      return bad("file_too_big", "فایل رزومه باید کمتر از ۳ مگابایت باشه. PDF بگیر ازش یا لینکش رو بده.");
     }
 
     const ext = f.name.split(".").pop()?.toLowerCase() ?? "";
     const allowedMimes = ALLOWED_RESUME[ext];
     if (!allowedMimes) {
-      return bad("فرمت فایل قبول نیست. PDF، Word یا عکس بفرست.");
+      return bad("file_type", "فرمت فایل قبول نیست. PDF، Word یا عکس بفرست.");
     }
     // پسوند به‌تنهایی کافی نیست — فایلی که اسمش .pdf شده ولی چیز دیگه‌ایه
     // نباید با mime نادرست ذخیره بشه و بعداً توی مرورگر باز نشه
     if (f.type && !allowedMimes.includes(f.type)) {
-      return bad("فایل با پسوندش نمی‌خونه. دوباره از رزومهٔ اصلی خروجی بگیر.");
+      return bad("file_mime", "فایل با پسوندش نمی‌خونه. دوباره از رزومهٔ اصلی خروجی بگیر.");
     }
 
     resumeData = new Uint8Array(await f.arrayBuffer());

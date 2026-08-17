@@ -125,6 +125,12 @@ body {
 .font-display { font-family: var(--font-meem), 'Space Grotesk', sans-serif; }
 .font-body    { font-family: var(--font-meem), var(--font-body), sans-serif; }
 
+/* بخش‌هایی که انگلیسی می‌شن — مِم برای فارسی طراحی شده و لاتینش لنگ می‌زنه */
+[data-lang="en"] .font-display,
+[data-lang="en"] .font-body {
+  font-family: var(--font-space-grotesk), 'Space Grotesk', sans-serif;
+}
+
 /* ── Dot backgrounds ── */
 .dot-bg {
   background-image: radial-gradient(circle, rgba(160,153,144,0.22) 1px, transparent 1px);
