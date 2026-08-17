@@ -1,37 +1,19 @@
-"use client";
-
-import { useState } from "react";
-import { Languages } from "lucide-react";
 import QuadcampForm from "@/components/QuadcampForm";
-import { COPY, LANGS, LANG_LABEL, type Lang } from "@/lib/quadcamp-copy";
+import LangSwitch from "@/components/LangSwitch";
+import { COPY } from "@/lib/i18n/dict/quadcamp";
+import type { Lang } from "@/lib/i18n";
 
 /**
- * پوستهٔ دوزبانهٔ صفحهٔ اپلای.
+ * پوستهٔ صفحهٔ اپلای.
  *
- * زبان state ساده‌ایه، نه مسیر جدا — چون فرم نصفه‌کاره نباید با عوض کردن
- * زبان بپره. در عوض آدرس با replaceState به‌روز می‌شه تا لینک ?lang=en رو
- * بشه مستقیم برای کسی فرستاد.
+ * دکمهٔ تعویض زبان اینجا نیست — همون سوییچ سراسری نوار بالا این صفحه رو
+ * هم عوض می‌کنه، و دو تا کلید برای یک کار گیج‌کننده بود.
  */
-export default function QuadcampApply({ initialLang }: { initialLang: Lang }) {
-  const [lang, setLang] = useState<Lang>(initialLang);
+export default function QuadcampApply({ lang }: { lang: Lang }) {
   const t = COPY[lang];
 
-  function pick(next: Lang) {
-    setLang(next);
-    // بدون ناوبری — فقط آدرس رو با چیزی که کاربر می‌بینه یکی می‌کنه
-    const url = new URL(window.location.href);
-    if (next === "fa") url.searchParams.delete("lang");
-    else url.searchParams.set("lang", next);
-    window.history.replaceState(null, "", url);
-  }
-
   return (
-    <main
-      lang={lang}
-      dir={t.dir}
-      data-lang={lang}
-      className="panel native-cursor relative min-h-screen bg-[var(--page)] overflow-hidden"
-    >
+    <main className="panel native-cursor relative min-h-screen bg-[var(--page)] overflow-hidden">
       {/* هالهٔ بنفش پشت سربرگ، همون لهجه‌ی رنگی خود سایت */}
       <div
         aria-hidden
@@ -43,27 +25,9 @@ export default function QuadcampApply({ initialLang }: { initialLang: Lang }) {
       />
 
       <div className="relative mx-auto w-full max-w-xl px-5 py-14 sm:py-20">
-        {/* ── تعویض زبان ── */}
+        {/* این صفحه نوار بالای سایت رو نداره، پس سوییچ زبان خودش رو لازم داره */}
         <div className="mb-8 flex justify-end">
-          <div className="inline-flex items-center gap-1 rounded-full border border-[var(--line-strong)] bg-[var(--card)] p-1">
-            <Languages size={13} className="mx-1.5 text-[var(--ink-4)]" />
-            {LANGS.map((code) => (
-              <button
-                key={code}
-                type="button"
-                onClick={() => pick(code)}
-                lang={code}
-                aria-pressed={lang === code}
-                className={`rounded-full px-3 py-1 font-body text-xs transition-colors ${
-                  lang === code
-                    ? "bg-[var(--violet)]/15 text-[var(--violet)]"
-                    : "text-[var(--ink-4)] hover:text-[var(--ink-2)]"
-                }`}
-              >
-                {LANG_LABEL[code]}
-              </button>
-            ))}
-          </div>
+          <LangSwitch tone="panel" />
         </div>
 
         <header className="mb-9">

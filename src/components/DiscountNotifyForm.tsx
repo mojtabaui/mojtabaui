@@ -2,8 +2,11 @@
 
 import { useState } from "react";
 import { BellRing, Check } from "lucide-react";
+import { useLang } from "@/components/Providers";
+import { FORMS } from "@/lib/i18n/dict/forms";
 
 export default function DiscountNotifyForm() {
+  const t = FORMS[useLang()].notify;
   const [phone, setPhone] = useState("");
   const [name, setName] = useState("");
   const [loading, setLoading] = useState(false);
@@ -13,7 +16,7 @@ export default function DiscountNotifyForm() {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!phone.trim()) {
-      setError("شماره موبایلت رو وارد کن");
+      setError(t.needPhone);
       return;
     }
     setLoading(true);
@@ -26,12 +29,12 @@ export default function DiscountNotifyForm() {
       });
       const data = await res.json();
       if (!res.ok) {
-        setError(data.error || "خطایی رخ داد");
+        setError(data.error || t.error);
       } else {
         setDone(true);
       }
     } catch {
-      setError("خطا در ارسال — دوباره تلاش کن");
+      setError(t.failed);
     }
     setLoading(false);
   }
@@ -42,10 +45,8 @@ export default function DiscountNotifyForm() {
         <div className="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center mx-auto mb-4">
           <Check size={22} />
         </div>
-        <p className="font-body font-bold text-[#1a1714] mb-1">ثبت شد ✓</p>
-        <p className="font-body text-sm text-[#6b6560] leading-relaxed">
-          زمان تخفیف‌ها و ثبت‌نام‌های ویژه رو برات پیامک می‌کنیم.
-        </p>
+        <p className="font-body font-bold text-[#1a1714] mb-1">{t.doneTitle}</p>
+        <p className="font-body text-sm text-[#6b6560] leading-relaxed">{t.doneBody}</p>
       </div>
     );
   }
@@ -57,15 +58,15 @@ export default function DiscountNotifyForm() {
           <BellRing size={18} />
         </span>
         <div>
-          <div className="font-body font-bold text-[#1a1714] text-sm">اطلاع از تخفیف‌ها</div>
-          <div className="font-body text-xs text-[#a09990]">شماره‌ت رو بذار، خبرت می‌کنیم</div>
+          <div className="font-body font-bold text-[#1a1714] text-sm">{t.title}</div>
+          <div className="font-body text-xs text-[#a09990]">{t.subtitle}</div>
         </div>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label className="block font-body text-sm text-[#6b6560] mb-1.5">
-            شماره موبایل
+            {t.phone}
           </label>
           <input
             type="tel"
@@ -80,13 +81,13 @@ export default function DiscountNotifyForm() {
 
         <div>
           <label className="block font-body text-sm text-[#6b6560] mb-1.5">
-            نام <span className="text-[#c8c2ba]">(اختیاری)</span>
+            {t.name} <span className="text-[#c8c2ba]">{t.optional}</span>
           </label>
           <input
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            placeholder="اسمت"
+            placeholder={t.namePlaceholder}
             className="w-full bg-[#FAF6F1] border border-[#e8e2d9] rounded-xl px-4 py-3 font-body text-sm text-[#1a1714] placeholder:text-[#c8c2ba] focus:outline-none focus:border-[#8b5cf6]/50 transition-colors"
           />
         </div>
@@ -98,11 +99,11 @@ export default function DiscountNotifyForm() {
           disabled={loading}
           className="w-full flex items-center justify-center gap-2 bg-[#1a1714] hover:bg-[#2d2926] disabled:opacity-60 disabled:cursor-not-allowed text-white font-body font-semibold py-3.5 rounded-2xl transition-all"
         >
-          {loading ? "در حال ثبت..." : "می‌خوام از تخفیف‌ها باخبر شم"}
+          {loading ? t.sending : t.submit}
         </button>
 
         <p className="text-[#a09990] font-body text-[11px] text-center leading-relaxed">
-          فقط برای اطلاع‌رسانی تخفیف و دوره‌های جدید — اسپم نمی‌فرستیم.
+          {t.note}
         </p>
       </form>
     </div>

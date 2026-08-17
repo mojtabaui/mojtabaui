@@ -1,21 +1,9 @@
 import type { Metadata } from "next";
 import QuadcampApply from "@/components/QuadcampApply";
-import type { Lang } from "@/lib/quadcamp-copy";
+import { getLang } from "@/lib/i18n/server";
 
-/**
- * صفحهٔ اپلای کوادکمپ — تنها صفحهٔ دوزبانهٔ سایت.
- *
- * ?lang=en انگلیسی رو باز می‌کنه تا بشه لینکش رو مستقیم برای کسی فرستاد.
- * بقیهٔ حالت‌ها فارسیه؛ عمداً از روی زبان مرورگر تصمیم نمی‌گیریم، چون
- * خیلی از هنرجوهای ایرانی هم مرورگرشون انگلیسیه.
- */
-
-interface Props {
-  searchParams: Promise<{ lang?: string }>;
-}
-
-export async function generateMetadata({ searchParams }: Props): Promise<Metadata> {
-  const { lang } = await searchParams;
+export async function generateMetadata(): Promise<Metadata> {
+  const lang = await getLang();
   const en = lang === "en";
 
   return {
@@ -27,9 +15,7 @@ export async function generateMetadata({ searchParams }: Props): Promise<Metadat
   };
 }
 
-export default async function QuadcampPage({ searchParams }: Props) {
-  const { lang } = await searchParams;
-  const initialLang: Lang = lang === "en" ? "en" : "fa";
-
-  return <QuadcampApply initialLang={initialLang} />;
+export default async function QuadcampPage() {
+  const lang = await getLang();
+  return <QuadcampApply lang={lang} />;
 }

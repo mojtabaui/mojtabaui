@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { Download, Loader2 } from "lucide-react";
+import { useLang } from "@/components/Providers";
+import { FORMS } from "@/lib/i18n/dict/forms";
 
 /**
  * دانلودِ PDFِ گواهی.
@@ -12,6 +14,7 @@ import { Download, Loader2 } from "lucide-react";
  * پشتیبانی از رنگ‌های مدرن (oklch) به‌جای html2canvas معمولی استفاده شده.
  */
 export default function PrintButton({ fileName = "certificate" }: { fileName?: string }) {
+  const t = FORMS[useLang()].print;
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
 
@@ -45,7 +48,7 @@ export default function PrintButton({ fileName = "certificate" }: { fileName?: s
       pdf.save(`${fileName}.pdf`);
     } catch (e) {
       console.error(e);
-      setError("ساختِ PDF ناموفق بود. دوباره تلاش کن.");
+      setError(t.failed);
     } finally {
       setBusy(false);
     }
@@ -59,7 +62,7 @@ export default function PrintButton({ fileName = "certificate" }: { fileName?: s
         className="inline-flex items-center gap-2 bg-[#1a1714] hover:bg-[#2d2926] disabled:opacity-70 disabled:cursor-wait text-white font-body font-bold text-sm px-6 py-3.5 rounded-2xl transition-all hover:scale-[1.02] active:scale-[0.98]"
       >
         {busy ? <Loader2 size={16} className="animate-spin" /> : <Download size={16} />}
-        {busy ? "در حال ساخت PDF…" : "دانلود PDF"}
+        {busy ? t.building : t.download}
       </button>
       {error && <span className="font-body text-xs text-rose-500">{error}</span>}
     </div>

@@ -71,6 +71,12 @@ export const COMMON = {
     lang: {
       switch: "زبان سایت",
     },
+
+    feedback: {
+      close: "بستن",
+      /** {n} با تعداد پر می‌شه — جای عدد توی جملهٔ دو زبان یکی نیست */
+      more: "مشاهده‌ی {n} فیدبک دیگر",
+    },
   },
 
   en: {
@@ -134,6 +140,11 @@ export const COMMON = {
 
     lang: {
       switch: "Site language",
+    },
+
+    feedback: {
+      close: "Close",
+      more: "Read {n} more",
     },
   },
 } as const;

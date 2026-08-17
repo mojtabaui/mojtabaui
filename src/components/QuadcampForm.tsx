@@ -13,7 +13,7 @@ import {
   Trash2,
   User,
 } from "lucide-react";
-import { COPY, SERVER_ERRORS, humanSize, num, type Lang } from "@/lib/quadcamp-copy";
+import { COPY, SERVER_ERRORS, humanSize, num, type Lang } from "@/lib/i18n/dict/quadcamp";
 
 /**
  * فرم ثبت‌نام کوادکمپ.

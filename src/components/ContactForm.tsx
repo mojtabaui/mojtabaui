@@ -1,8 +1,11 @@
 "use client";
 
 import { useState } from "react";
+import { useLang } from "@/components/Providers";
+import { FORMS } from "@/lib/i18n/dict/forms";
 
 export default function ContactForm() {
+  const t = FORMS[useLang()].contact;
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
@@ -15,7 +18,7 @@ export default function ContactForm() {
     e.preventDefault();
 
     if (!name.trim() || !email.trim() || !message.trim()) {
-      setError("نام، ایمیل و پیام رو پر کن");
+      setError(t.required);
       return;
     }
 
@@ -31,7 +34,7 @@ export default function ContactForm() {
       const data = await res.json();
 
       if (!res.ok) {
-        setError(data.error || "خطایی رخ داد");
+        setError(data.error || t.error);
       } else {
         setSent(true);
         setName("");
@@ -40,7 +43,7 @@ export default function ContactForm() {
         setMessage("");
       }
     } catch {
-      setError("خطا در ارسال — دوباره تلاش کن");
+      setError(t.failed);
     }
 
     setLoading(false);
@@ -49,36 +52,34 @@ export default function ContactForm() {
   if (sent) {
     return (
       <div className="bg-emerald-50 border border-emerald-200 text-emerald-700 rounded-2xl px-4 py-8 text-sm font-body text-center">
-        <p className="font-semibold mb-1">پیامت رسید ✓</p>
-        <p className="text-emerald-700/70 text-xs">
-          در اولین فرصت جوابت رو می‌دم.
-        </p>
+        <p className="font-semibold mb-1">{t.sentTitle}</p>
+        <p className="text-emerald-700/70 text-xs">{t.sentBody}</p>
         <button
           onClick={() => setSent(false)}
           className="text-emerald-700 underline font-body text-xs mt-4 hover:text-emerald-800 transition-colors"
         >
-          ارسال پیام دیگر
+          {t.sentAgain}
         </button>
       </div>
     );
   }
 
   return (
-    <div className="bg-white border border-[#e8e2d9] rounded-3xl p-7 shadow-sm text-right">
+    <div className="bg-white border border-[#e8e2d9] rounded-3xl p-7 shadow-sm text-start">
       <form className="space-y-4" onSubmit={handleSubmit}>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label className="block font-body text-sm text-[#6b6560] mb-1.5">نام</label>
+            <label className="block font-body text-sm text-[#6b6560] mb-1.5">{t.name}</label>
             <input
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              placeholder="اسمت"
+              placeholder={t.namePlaceholder}
               className="w-full bg-[#FAF6F1] border border-[#e8e2d9] rounded-xl px-4 py-3 font-body text-sm text-[#1a1714] placeholder:text-[#c8c2ba] focus:outline-none focus:border-[#1a1714]/40 transition-colors"
             />
           </div>
           <div>
-            <label className="block font-body text-sm text-[#6b6560] mb-1.5">ایمیل</label>
+            <label className="block font-body text-sm text-[#6b6560] mb-1.5">{t.email}</label>
             <input
               type="email"
               dir="ltr"
@@ -92,7 +93,7 @@ export default function ContactForm() {
 
         <div>
           <label className="block font-body text-sm text-[#6b6560] mb-1.5">
-            شماره تماس <span className="text-[#c8c2ba]">(اختیاری)</span>
+            {t.phone} <span className="text-[#c8c2ba]">{t.optional}</span>
           </label>
           <input
             type="tel"
@@ -105,12 +106,12 @@ export default function ContactForm() {
         </div>
 
         <div>
-          <label className="block font-body text-sm text-[#6b6560] mb-1.5">پیام</label>
+          <label className="block font-body text-sm text-[#6b6560] mb-1.5">{t.message}</label>
           <textarea
             rows={4}
             value={message}
             onChange={(e) => setMessage(e.target.value)}
-            placeholder="سوالت رو بنویس..."
+            placeholder={t.messagePlaceholder}
             className="w-full bg-[#FAF6F1] border border-[#e8e2d9] rounded-xl px-4 py-3 font-body text-sm text-[#1a1714] placeholder:text-[#c8c2ba] focus:outline-none focus:border-[#1a1714]/40 transition-colors resize-none"
           />
         </div>
@@ -122,7 +123,7 @@ export default function ContactForm() {
           disabled={loading}
           className="w-full bg-[#1a1714] hover:bg-[#2d2926] disabled:opacity-60 disabled:cursor-not-allowed text-white font-body font-semibold py-3.5 rounded-2xl transition-all mt-1"
         >
-          {loading ? "در حال ارسال..." : "ارسال پیام"}
+          {loading ? t.sending : t.submit}
         </button>
       </form>
     </div>

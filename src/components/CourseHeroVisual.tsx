@@ -1,4 +1,6 @@
 import { PenTool, Layers, Sparkles } from "lucide-react";
+import { DEFAULT_LANG, type Lang } from "@/lib/i18n";
+import { COURSE } from "@/lib/i18n/dict/course";
 
 /**
  * تصویر گرافیکیِ هیروِ صفحه‌ی دوره — جایگزین بنر عکسی.
@@ -18,6 +20,8 @@ interface Props {
   /** ساعت ویدیو — به‌عنوان عدد شاخص گوشه */
   videoHours: number;
   tags: string[];
+  /** پیش‌فرض فارسیه چون جزوهٔ چاپیِ برنامهٔ هفتگی هم از همین کارت استفاده می‌کنه */
+  lang?: Lang;
 }
 
 const fa = (n: number | string) =>
@@ -29,7 +33,9 @@ export default function CourseHeroVisual({
   color,
   videoHours,
   tags,
+  lang = DEFAULT_LANG,
 }: Props) {
+  const num = (n: number | string) => (lang === "fa" ? fa(n) : String(n));
   const card =
     "rounded-3xl border transition-transform duration-300 hover:scale-[1.02]";
   const cardStyle = {
@@ -93,7 +99,7 @@ export default function CourseHeroVisual({
           </span>
           <div className="flex items-end gap-1 leading-none" aria-hidden>
             <span className="font-display font-black text-3xl text-[#1a1714]">Aa</span>
-            <span className="font-body text-[10px] text-[#a09990] mb-1">۱۲/۱۶/۲۴</span>
+            <span className="font-body text-[10px] text-[#a09990] mb-1">{num("12/16/24")}</span>
           </div>
         </div>
 
@@ -121,8 +127,10 @@ export default function CourseHeroVisual({
           style={{ ...cardStyle, backgroundColor: color.accent, borderColor: color.accent }}
         >
           <div className="leading-none">
-            <div className="font-display font-black text-3xl text-white">{fa(videoHours)}</div>
-            <div className="font-body text-[10px] text-white/70 mt-1">ساعت ویدیو</div>
+            <div className="font-display font-black text-3xl text-white">{num(videoHours)}</div>
+            <div className="font-body text-[10px] text-white/70 mt-1">
+              {COURSE[lang].heroVisual.hours}
+            </div>
           </div>
           <Sparkles size={18} className="text-white/70" />
         </div>

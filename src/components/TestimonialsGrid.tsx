@@ -4,6 +4,8 @@ import { useState } from "react";
 import { Star, ChevronDown } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import FadeIn from "@/components/FadeIn";
+import { useLang } from "@/components/Providers";
+import { COMMON } from "@/lib/i18n/dict/common";
 
 export interface Testimonial {
   name: string;
@@ -59,6 +61,8 @@ function Card({ t }: { t: Testimonial }) {
  * چون باز و بسته شدن state داره، این تکه کلاینت‌ه، ولی خودِ داده از سرور میاد.
  */
 export default function TestimonialsGrid({ testimonials }: { testimonials: Testimonial[] }) {
+  const lang = useLang();
+  const t = COMMON[lang].feedback;
   const [expanded, setExpanded] = useState(false);
   const rest = testimonials.slice(INITIAL);
   const hasMore = rest.length > 0;
@@ -106,7 +110,9 @@ export default function TestimonialsGrid({ testimonials }: { testimonials: Testi
             onClick={() => setExpanded((v) => !v)}
             className="inline-flex items-center gap-2 bg-white/[0.06] hover:bg-white/[0.1] border border-white/10 hover:border-white/20 text-white font-body font-semibold text-sm px-6 py-3 rounded-2xl transition-all"
           >
-            {expanded ? "بستن" : `مشاهده‌ی ${toFa(rest.length)} فیدبک دیگر`}
+            {expanded
+              ? t.close
+              : t.more.replace("{n}", lang === "fa" ? toFa(rest.length) : String(rest.length))}
             <ChevronDown
               size={16}
               className={`transition-transform ${expanded ? "rotate-180" : ""}`}

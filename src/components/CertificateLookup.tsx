@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { CheckCircle, XCircle, Search, FileText } from "lucide-react";
+import { useLang } from "@/components/Providers";
+import { FORMS } from "@/lib/i18n/dict/forms";
 
 interface Result {
   found: boolean;
@@ -12,6 +14,7 @@ interface Result {
 }
 
 export default function CertificateLookup() {
+  const t = FORMS[useLang()].lookup;
   const [code, setCode] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -20,7 +23,7 @@ export default function CertificateLookup() {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!code.trim()) {
-      setError("کد گواهی را وارد کنید");
+      setError(t.needCode);
       return;
     }
 
@@ -37,12 +40,12 @@ export default function CertificateLookup() {
       const data = await res.json();
 
       if (!res.ok) {
-        setError(data.error || "خطایی رخ داد");
+        setError(data.error || t.error);
       } else {
         setResult(data);
       }
     } catch {
-      setError("خطا در برقراری ارتباط — دوباره تلاش کن");
+      setError(t.failed);
     }
 
     setLoading(false);
@@ -54,7 +57,7 @@ export default function CertificateLookup() {
         <form className="space-y-4" onSubmit={handleSubmit}>
           <div>
             <label className="block font-body text-sm text-[#6b6560] mb-1.5">
-              کد گواهی
+              {t.label}
             </label>
             <input
               type="text"
@@ -68,7 +71,7 @@ export default function CertificateLookup() {
               className="w-full bg-[#FAF6F1] border border-[#e8e2d9] rounded-xl px-4 py-3 font-body text-sm text-[#1a1714] placeholder:text-[#c8c2ba] focus:outline-none focus:border-[#1a1714]/40 transition-colors"
             />
             <p className="text-[#a09990] font-body text-xs mt-1.5">
-              کد درج‌شده روی گواهی — حروف کوچک و اعداد فارسی هم قبوله
+              {t.hint}
             </p>
           </div>
 
@@ -82,11 +85,11 @@ export default function CertificateLookup() {
             className="w-full flex items-center justify-center gap-2 bg-[#1a1714] hover:bg-[#2d2926] disabled:opacity-60 disabled:cursor-not-allowed text-white font-body font-semibold py-3.5 rounded-2xl transition-all mt-1"
           >
             {loading ? (
-              "در حال بررسی..."
+              t.checking
             ) : (
               <>
                 <Search size={15} />
-                استعلام گواهی
+                {t.submit}
               </>
             )}
           </button>
@@ -97,13 +100,13 @@ export default function CertificateLookup() {
         <div className="bg-emerald-50 border border-emerald-200 rounded-2xl p-6 mt-5">
           <div className="flex items-center gap-2 text-emerald-700 mb-4">
             <CheckCircle size={16} />
-            <span className="font-body font-semibold text-sm">گواهی معتبر است</span>
+            <span className="font-body font-semibold text-sm">{t.valid}</span>
           </div>
           <div className="space-y-3">
             {[
-              { label: "نام دانشجو", value: result.studentName },
-              { label: "دوره", value: result.courseTitle },
-              { label: "تاریخ شروع", value: result.startDate },
+              { label: t.studentName, value: result.studentName },
+              { label: t.course, value: result.courseTitle },
+              { label: t.startDate, value: result.startDate },
             ]
               .filter((row) => row.value && row.value.trim() !== "")
               .map((row) => (
@@ -111,7 +114,7 @@ export default function CertificateLookup() {
                 <span className="font-body text-xs text-emerald-700/60 flex-shrink-0">
                   {row.label}
                 </span>
-                <span className="font-body text-sm text-emerald-900 font-medium text-left">
+                <span className="font-body text-sm text-emerald-900 font-medium text-end">
                   {row.value}
                 </span>
               </div>
@@ -126,7 +129,7 @@ export default function CertificateLookup() {
               className="mt-5 inline-flex items-center justify-center gap-2 w-full bg-emerald-600 hover:bg-emerald-700 text-white font-body font-bold text-sm px-5 py-3 rounded-xl transition-colors"
             >
               <FileText size={15} />
-              مشاهده و دانلود گواهی
+              {t.view}
             </a>
           )}
         </div>
@@ -136,11 +139,9 @@ export default function CertificateLookup() {
         <div className="bg-rose-50 border border-rose-200 rounded-2xl p-6 mt-5 text-center">
           <div className="flex items-center justify-center gap-2 text-rose-600 mb-1.5">
             <XCircle size={16} />
-            <span className="font-body font-semibold text-sm">گواهی یافت نشد</span>
+            <span className="font-body font-semibold text-sm">{t.notFoundTitle}</span>
           </div>
-          <p className="font-body text-xs text-rose-500/80">
-            کدی با این شماره در سوابق ما ثبت نشده. اگه مطمئنی کد درسته، باهام تماس بگیر.
-          </p>
+          <p className="font-body text-xs text-rose-500/80">{t.notFoundBody}</p>
         </div>
       )}
     </div>

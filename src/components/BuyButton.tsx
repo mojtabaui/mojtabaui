@@ -4,6 +4,9 @@
 // فعلاً غیرفعالن و فروش کارت‌به‌کارت از طریق پشتیبانی انجام می‌شه.
 // برای برگردوندن خرید مستقیم: بلاک پرداختِ کامنت‌شده‌ی پایین رو جایگزین این نسخه کن.
 
+import { useLang } from "@/components/Providers";
+import { FORMS } from "@/lib/i18n/dict/forms";
+
 const SUPPORT_TELEGRAM = "https://t.me/melina_support";
 
 interface Props {
@@ -13,6 +16,8 @@ interface Props {
 }
 
 export default function BuyButton({ comingSoon }: Props) {
+  const t = FORMS[useLang()].buy;
+
   if (comingSoon) {
     return (
       <div className="mb-3">
@@ -20,10 +25,10 @@ export default function BuyButton({ comingSoon }: Props) {
           disabled
           className="w-full flex items-center justify-center bg-[#e8e2d9] text-[#a09990] font-body font-semibold py-3.5 rounded-2xl text-sm cursor-not-allowed"
         >
-          ثبت‌نام باز نیست
+          {t.closed}
         </button>
         <p className="text-center text-[#a09990] text-xs font-body mt-2">
-          تاریخِ برگزاریِ دوره‌ی بعدی به‌زودی اعلام می‌شود
+          {t.closedNote}
         </p>
       </div>
     );
@@ -36,7 +41,7 @@ export default function BuyButton({ comingSoon }: Props) {
       rel="noopener noreferrer"
       className="w-full flex items-center justify-center gap-2 bg-[#1a1714] hover:bg-[#2d2926] text-white font-body font-semibold py-3.5 rounded-2xl transition-all mb-3 text-sm"
     >
-      ثبت‌نام و مشاوره در تلگرام
+      {t.telegram}
     </a>
   );
 }

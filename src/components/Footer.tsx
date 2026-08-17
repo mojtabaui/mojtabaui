@@ -1,32 +1,11 @@
+"use client";
+
 import Link from "next/link";
 import { BrandGlyph } from "@/components/BrandMark";
-import { Send, Camera, Mail, ExternalLink, ArrowLeft } from "lucide-react";
-
-const courses = [
-  { href: "/courses/ui-infinity", label: "UI بی‌نهایت" },
-  { href: "/courses/ux-infinity", label: "UX بی‌نهایت" },
-  { href: "/courses/ui-offline",  label: "UI آفلاین"   },
-  { href: "/courses/portfolio",   label: "پرتفولیو"    },
-  { href: "/courses/prototype",   label: "پروتوتایپ"    },
-];
-
-const content = [
-  { href: "/checklist",    label: "چک‌لیست یادگیری"        },
-  { href: "/articles",     label: "مقالات"               },
-  { href: "/free",         label: "منابع رایگان"          },
-  { href: "/projects",     label: "نمونه‌کارهای دانشجوها" },
-  { href: "/courses",      label: "همه دوره‌ها"           },
-  { href: "/certificates", label: "استعلام گواهی"         },
-];
-
-const about = [
-  { href: "/#about",                         label: "درباره من", ext: false },
-  { href: "https://myazdanpanah.vercel.app", label: "پرتفولیو",  ext: true  },
-  { href: "/#contact",                       label: "تماس با من", ext: false },
-  // ورود/ثبت‌نام موقتاً مخفی — با حساب کاربری برمی‌گردن:
-  // { href: "/auth/login",    label: "ورود به پنل",    ext: false },
-  // { href: "/auth/register", label: "ثبت‌نام رایگان", ext: false },
-];
+import { Send, Camera, Mail, ExternalLink, ArrowLeft, ArrowRight } from "lucide-react";
+import LangSwitch from "@/components/LangSwitch";
+import { useLang } from "@/components/Providers";
+import { COMMON } from "@/lib/i18n/dict/common";
 
 const socials = [
   { href: "https://instagram.com/mojtabaui",           label: "Instagram", Icon: Camera },
@@ -35,6 +14,36 @@ const socials = [
 ];
 
 export default function Footer() {
+  const lang = useLang();
+  const t = COMMON[lang];
+  const rtl = lang === "fa";
+  const Forward = rtl ? ArrowLeft : ArrowRight;
+
+  const courses = [
+    { href: "/courses/ui-infinity", label: t.footer.courses.uiInfinity },
+    { href: "/courses/ux-infinity", label: t.footer.courses.uxInfinity },
+    { href: "/courses/ui-offline",  label: t.footer.courses.uiOffline  },
+    { href: "/courses/portfolio",   label: t.footer.courses.portfolio  },
+    { href: "/courses/prototype",   label: t.footer.courses.prototype  },
+  ];
+
+  const content = [
+    { href: "/checklist",    label: t.footer.content.checklist  },
+    // مقاله‌ها ترجمه نشدن، پس توی نسخهٔ انگلیسی لینکشون هم نمی‌ذاریم
+    ...(rtl ? [{ href: "/articles", label: t.footer.content.articles }] : []),
+    { href: "/free",         label: t.footer.content.free       },
+    { href: "/projects",     label: t.footer.content.projects   },
+    { href: "/courses",      label: t.footer.content.allCourses },
+    { href: "/certificates", label: t.footer.content.verify     },
+  ];
+
+  const about = [
+    { href: "/#about",                         label: t.footer.about.aboutMe,   ext: false },
+    { href: "https://myazdanpanah.vercel.app", label: t.footer.about.portfolio, ext: true  },
+    { href: "/#contact",                       label: t.footer.about.contact,   ext: false },
+    // ورود/ثبت‌نام موقتاً مخفی — با حساب کاربری برمی‌گردن
+  ];
+
   return (
     <footer className="bg-[#1a1714] text-white mt-auto">
 
@@ -42,23 +51,23 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-16 pb-12 border-b border-white/[0.06]">
         <div className="flex items-end justify-between flex-wrap gap-8">
 
-          {/* Brand — DOM first = RIGHT in RTL */}
+          {/* Brand — DOM first = start of the line */}
           <div>
             <div className="flex items-center gap-3 mb-3">
               <BrandGlyph size={52} className="text-[#FAF6F1] flex-shrink-0" />
-              <span className="font-body font-black text-2xl tracking-tight">مدرسه دیزاین ملینا</span>
+              <span className="font-body font-black text-2xl tracking-tight">{t.brand}</span>
             </div>
-            <p className="text-white/40 text-sm font-body">آموزش تخصصی UI/UX</p>
+            <p className="text-white/40 text-sm font-body">{t.tagline}</p>
           </div>
 
-          {/* CTA — DOM second = LEFT in RTL */}
+          {/* CTA — DOM second = end of the line */}
           {/* تا وقتی حساب کاربری مخفیه، CTA به‌جای ثبت‌نام به دوره‌ها می‌ره */}
           <Link
             href="/courses"
             className="inline-flex items-center gap-2 bg-white text-[#1a1714] font-body font-bold text-sm px-5 py-3 rounded-2xl hover:bg-white/90 transition-colors flex-shrink-0"
           >
-            <ArrowLeft size={14} />
-            مشاهده دوره‌ها
+            <Forward size={14} />
+            {t.cta.seeCourses}
           </Link>
         </div>
       </div>
@@ -67,10 +76,9 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-14">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-10">
 
-          {/* دوره‌ها — DOM first = rightmost in RTL */}
           <div>
             <div className="font-display text-[10px] font-bold tracking-[0.2em] uppercase text-white/25 mb-5">
-              COURSES
+              {t.footer.columns.courses}
             </div>
             <div className="space-y-3.5">
               {courses.map((l) => (
@@ -85,10 +93,9 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* محتوا */}
           <div>
             <div className="font-display text-[10px] font-bold tracking-[0.2em] uppercase text-white/25 mb-5">
-              CONTENT
+              {t.footer.columns.content}
             </div>
             <div className="space-y-3.5">
               {content.map((l) => (
@@ -103,10 +110,9 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* mojtabaui */}
           <div>
             <div className="font-display text-[10px] font-bold tracking-[0.2em] uppercase text-white/25 mb-5">
-              ABOUT
+              {t.footer.columns.about}
             </div>
             <div className="space-y-3.5">
               {about.map((l) =>
@@ -134,10 +140,9 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* ارتباط — DOM last = leftmost in RTL */}
           <div>
             <div className="font-display text-[10px] font-bold tracking-[0.2em] uppercase text-white/25 mb-5">
-              CONNECT
+              {t.footer.columns.connect}
             </div>
             <div className="space-y-3">
               {socials.map(({ href, label, Icon }) => (
@@ -161,8 +166,13 @@ export default function Footer() {
 
       {/* ── Bottom bar ── */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-5 border-t border-white/[0.06] flex items-center justify-between flex-wrap gap-3">
-        <span className="text-white/20 text-xs font-body">© ۱۴۰۵ مدرسه دیزاین ملینا · همه حقوق محفوظ است</span>
-        <span className="text-white/20 text-[11px] font-display tracking-[0.25em]">UI · UX · DESIGN</span>
+        <span className="text-white/20 text-xs font-body">{t.footer.rights}</span>
+        <div className="flex items-center gap-4">
+          <LangSwitch tone="dark" />
+          <span className="text-white/20 text-[11px] font-display tracking-[0.25em]">
+            UI · UX · DESIGN
+          </span>
+        </div>
       </div>
 
     </footer>

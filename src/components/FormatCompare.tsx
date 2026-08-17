@@ -2,6 +2,11 @@ import Link from "next/link";
 import { Check, Minus, ChevronLeft } from "lucide-react";
 import FadeIn from "@/components/FadeIn";
 import { infinityCourses, videoCourses, formatPrice } from "@/lib/mock-data";
+import { getLang } from "@/lib/i18n/server";
+import { COURSE } from "@/lib/i18n/dict/course";
+
+/** کدوم ردیف‌ها توی نسخهٔ آفلاین هست و کدوم نیست — ترتیبش با دیکشنری یکیه */
+const OFFLINE_HAS = [true, true, false, true, true, true];
 
 /**
  * مقایسه‌ی «کدوم نسخه به تو می‌خوره» — بی‌نهایت در برابر آفلاین.
@@ -9,37 +14,26 @@ import { infinityCourses, videoCourses, formatPrice } from "@/lib/mock-data";
  * قبلاً وسطِ صفحه‌ی اصلی بود و شلوغش می‌کرد؛ حالا سرِ جای درستش، صفحه‌ی
  * دوره‌هاست که آدم دقیقاً همون‌جا داره بین نسخه‌ها انتخاب می‌کنه.
  */
-export default function FormatCompare() {
+export default async function FormatCompare() {
+  const lang = await getLang();
+  const t = COURSE[lang].compare;
+
   const plans = [
     {
-      name: "بی‌نهایت",
-      tag: "ثبت‌نام بسته",
+      name: t.infinity.name,
+      tag: t.infinity.tag,
       price: infinityCourses[0]?.price,
-      desc: "برای کسی که می‌خواد کنارش کسی باشه. ثبت‌نامش فعلاً باز نیست.",
+      desc: t.infinity.desc,
       featured: false,
-      rows: [
-        { label: "۵۵ ساعت ویدیوی کامل", has: true },
-        { label: "۵ پروژه عملی", has: true },
-        { label: "۲۰ ساعت منتورینگ زنده", has: true },
-        { label: "برنامه‌ی هفتگی و گروه هم‌دوره‌ای", has: true },
-        { label: "فیدبک مستقیم روی کارت", has: true },
-        { label: "گواهی پایان دوره", has: true },
-      ],
+      rows: t.infinity.rows.map((label) => ({ label, has: true })),
     },
     {
-      name: "آفلاین",
-      tag: "الان باز است",
+      name: t.offline.name,
+      tag: t.offline.tag,
       price: videoCourses.find((c) => c.slug === "ui-offline")?.price,
-      desc: "همون محتوا و همون برنامه‌ی هفتگی، با تمپوی خودت.",
+      desc: t.offline.desc,
       featured: true,
-      rows: [
-        { label: "۵۵ ساعت ویدیوی کامل", has: true },
-        { label: "۵ پروژه عملی", has: true },
-        { label: "۲۰ ساعت منتورینگ زنده", has: false },
-        { label: "برنامه‌ی هفتگی", has: true },
-        { label: "پشتیبانی تلگرامی ۱۲ ماهه", has: true },
-        { label: "گواهی پایان دوره", has: true },
-      ],
+      rows: t.offline.rows.map((label, i) => ({ label, has: OFFLINE_HAS[i] })),
     },
   ];
 
@@ -52,11 +46,9 @@ export default function FormatCompare() {
               WHICH ONE
             </div>
             <h2 className="font-body font-extrabold text-3xl md:text-4xl text-[#1a1714] mb-3">
-              کدوم نسخه به تو می‌خوره؟
+              {t.title}
             </h2>
-            <p className="text-[#6b6560] font-body leading-relaxed">
-              محتوای ویدیویی هر دو نسخه دقیقاً یکیه. فرق‌شون توی همراهیه.
-            </p>
+            <p className="text-[#6b6560] font-body leading-relaxed">{t.body}</p>
           </div>
         </FadeIn>
 
@@ -103,7 +95,7 @@ export default function FormatCompare() {
                       plan.featured ? "text-white" : "text-[#1a1714]"
                     }`}
                   >
-                    {formatPrice(plan.price)}
+                    {formatPrice(plan.price, lang)}
                   </div>
                 )}
 
@@ -148,8 +140,8 @@ export default function FormatCompare() {
                       : "bg-[#1a1714] text-white hover:bg-[#2d2926]"
                   }`}
                 >
-                  جزئیات دوره
-                  <ChevronLeft size={15} />
+                  {t.details}
+                  <ChevronLeft size={15} className={lang === "fa" ? "" : "rotate-180"} />
                 </Link>
               </div>
             </FadeIn>

@@ -107,6 +107,12 @@ html {
   scroll-behavior: smooth;
 }
 
+/* نسخهٔ انگلیسی. بدون این، قانون بالا از صفت dir قوی‌تره و صفحه
+   با وجود dir="ltr" باز راست‌چین می‌مونه. */
+html[dir="ltr"] {
+  direction: ltr;
+}
+
 body {
   background-color: #FAF6F1;
   color: #1a1714;
