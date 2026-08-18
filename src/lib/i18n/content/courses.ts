@@ -28,6 +28,7 @@ export type CourseOverlay = Partial<
     | "targetAudience"
     | "afterCompletion"
     | "testimonials"
+    | "sessionDate"
   >
 >;
 
@@ -527,6 +528,7 @@ export const COURSE_EN: Record<string, CourseOverlay> = {
       "This workshop is for a designer who knows their craft but fears being left behind by AI. Across three three-hour sessions we carry one real feature all the way: from brief and idea, to an interface with Figma AI, to live code with Claude Code, and finally a deployment on Vercel with a link you can show. The focus isn't a single tool; it's the AI-first way of thinking and the designer's judgement — the part no tool replaces.",
     level: "Intermediate",
     instructor: INSTRUCTOR_EN,
+    sessionDate: "Early August 2026",
     topics: promptToProductTopicsEn,
     faqs: promptToProductFAQsEn,
   },

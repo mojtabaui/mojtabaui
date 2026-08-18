@@ -24,7 +24,11 @@ import CourseHeroVisual from "@/components/CourseHeroVisual";
 import FadeIn from "@/components/FadeIn";
 import ParallaxY from "@/components/ParallaxY";
 import { courses, formatPrice, formatStudents, typeLabel, featuredProjects } from "@/lib/mock-data";
-import { contentFor, disciplineOf, uiVsUx, guarantees } from "@/lib/course-content";
+import { contentFor, disciplineOf, uiVsUxFor, guaranteesFor } from "@/lib/course-content";
+import { getLang } from "@/lib/i18n/server";
+import { COURSE } from "@/lib/i18n/dict/course";
+import { localizeCourse, LEVEL_EN } from "@/lib/i18n/content/courses";
+import { localizeProjects } from "@/lib/i18n/content/projects";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -43,8 +47,14 @@ const colorMap: Record<string, { bg: string; badge: string; accent: string }> = 
 
 export default async function CourseDetailPage({ params }: Props) {
   const { slug } = await params;
-  const course = courses.find((c) => c.slug === slug);
-  if (!course) notFound();
+  const lang = await getLang();
+  const t = COURSE[lang];
+  const num = (n: number | string) =>
+    lang === "fa" ? String(n).replace(/\d/g, (d) => "۰۱۲۳۴۵۶۷۸۹"[+d]) : String(n);
+
+  const original = courses.find((c) => c.slug === slug);
+  if (!original) notFound();
+  const course = localizeCourse(original, lang);
 
   if (course.type === "workshop") {
     return (
@@ -62,16 +72,19 @@ export default async function CourseDetailPage({ params }: Props) {
   const counterpartSlug = course.type === "infinity"
     ? slug.replace("-infinity", "-offline")
     : slug.replace("-offline", "-infinity");
-  const counterpart = courses.find((c) => c.slug === counterpartSlug);
+  const counterpartFa = courses.find((c) => c.slug === counterpartSlug);
+  const counterpart = counterpartFa && localizeCourse(counterpartFa, lang);
 
   const discountPct = course.originalPrice
     ? Math.round((1 - course.price / course.originalPrice) * 100)
     : null;
 
   // محتوای معرفی رشته / پیش‌نیاز / مسیر یادگیری بر اساس رشته‌ی دوره
-  const content = contentFor(slug);
+  const content = contentFor(slug, lang);
+  const uiVsUx = uiVsUxFor(lang);
+  const guarantees = guaranteesFor(lang);
   const focus = disciplineOf(slug); // UI | UX | SKILL — کارت مرتبط هایلایت می‌شه
-  const projects = featuredProjects.slice(0, 3);
+  const projects = localizeProjects(featuredProjects, lang).slice(0, 3);
 
   return (
     <>
@@ -102,8 +115,8 @@ export default async function CourseDetailPage({ params }: Props) {
               href="/courses"
               className="inline-flex items-center gap-1.5 text-[#6b6560] hover:text-[#1a1714] text-sm font-body mb-10 transition-colors"
             >
-              <ChevronLeft size={14} className="rotate-180" />
-              بازگشت به دوره‌ها
+              <ChevronLeft size={14} className="rtl:rotate-180" />
+              {t.back}
             </Link>
 
             <div className="grid grid-cols-1 lg:grid-cols-5 gap-12">
@@ -115,6 +128,7 @@ export default async function CourseDetailPage({ params }: Props) {
                   color={color}
                   videoHours={course.videoHours}
                   tags={course.tags}
+                  lang={lang}
                 />
 
                 {/* Eyebrow chips */}
@@ -123,10 +137,12 @@ export default async function CourseDetailPage({ params }: Props) {
                     className="text-[11px] font-display font-bold tracking-widest uppercase px-3 py-1 rounded-full"
                     style={{ backgroundColor: color.badge, color: color.accent }}
                   >
-                    {typeLabel(course.type)}
+                    {typeLabel(course.type, lang)}
                   </span>
                   <span className="text-[#c9c2b8] font-body text-xs select-none">·</span>
-                  <span className="text-[#6b6560] font-body text-xs">{course.level}</span>
+                  <span className="text-[#6b6560] font-body text-xs">
+                    {lang === "fa" ? course.level : LEVEL_EN[course.level] ?? course.level}
+                  </span>
 
                   {/* تعداد دانشجو، به‌جای اینکه لای ردیف آمار گم بشه، چیپ مستقل
                       خودش رو داره. دوره‌ی تازه هنوز دانشجو نداره پس چیپ نمیاد. */}
@@ -140,7 +156,7 @@ export default async function CourseDetailPage({ params }: Props) {
                       }}
                     >
                       <User size={12} />
-                      {formatStudents(course.students)} دانشجو
+                      {formatStudents(course.students, lang)} {t.students}
                     </span>
                   )}
                 </div>
@@ -163,11 +179,11 @@ export default async function CourseDetailPage({ params }: Props) {
                 {/* Stats row */}
                 <div className="flex flex-wrap items-center gap-y-2 mb-8">
                   {[
-                    { label: `${course.videoHours} ساعت ویدیو`, icon: <Clock size={13} /> },
+                    { label: t.videoHours(num(course.videoHours)), icon: <Clock size={13} /> },
                     course.type === "infinity"
-                      ? { label: `${course.mentoringHours} ساعت منتورینگ`, icon: <Users size={13} /> }
-                      : { label: `پشتیبانی ${course.supportMonths} ماهه`, icon: <Calendar size={13} /> },
-                    { label: `${course.projects} پروژه عملی`, icon: <Layers size={13} /> },
+                      ? { label: t.mentoringHours(num(course.mentoringHours)), icon: <Users size={13} /> }
+                      : { label: t.support(num(course.supportMonths)), icon: <Calendar size={13} /> },
+                    { label: t.projects(num(course.projects)), icon: <Layers size={13} /> },
                   ].map((s, i, arr) => (
                     <span key={i} className="flex items-center">
                       <span className="flex items-center gap-1.5 text-sm font-body text-[#6b6560]">
@@ -200,15 +216,15 @@ export default async function CourseDetailPage({ params }: Props) {
                   <div className="mb-5">
                     {course.originalPrice && (
                       <div className="font-body text-sm text-[#a09990] line-through mb-0.5">
-                        {formatPrice(course.originalPrice)}
+                        {formatPrice(course.originalPrice, lang)}
                       </div>
                     )}
                     <div className="font-body font-black text-3xl text-[#1a1714]">
-                      {formatPrice(course.price)}
+                      {formatPrice(course.price, lang)}
                     </div>
                     {discountPct && (
                       <span className="inline-flex items-center gap-1 mt-1.5 text-[11px] font-body font-semibold px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-600">
-                        ↓ {discountPct}٪ تخفیف
+                        {t.discount(num(discountPct))}
                       </span>
                     )}
                   </div>
@@ -222,7 +238,7 @@ export default async function CourseDetailPage({ params }: Props) {
                       چون هنوز چیزی برای ثبت‌نام نیست؛ خودِ دکمه تاریخ رو توضیح می‌ده. */}
                   {!course.comingSoon && (
                     <p className="text-center text-[#a09990] text-xs font-body mb-6">
-                      برای ثبت‌نام و مشاوره، در تلگرام به پشتیبانی پیام بده
+                      {t.supportNote}
                     </p>
                   )}
                   {course.comingSoon && <div className="mb-6" />}
@@ -239,7 +255,7 @@ export default async function CourseDetailPage({ params }: Props) {
                   {counterpart && (
                     <div className="mt-6 pt-5 border-t border-[#f0ebe4]">
                       <p className="text-[#a09990] text-xs font-body mb-2">
-                        {course.type === "infinity" ? "نسخه آفلاین همین دوره:" : "نسخه بی‌نهایت با منتورینگ:"}
+                        {course.type === "infinity" ? t.counterpart.offline : t.counterpart.infinity}
                       </p>
                       <Link
                         href={`/courses/${counterpart.slug}`}
@@ -247,7 +263,7 @@ export default async function CourseDetailPage({ params }: Props) {
                       >
                         <span className="font-body text-sm text-[#1a1714] font-medium">{counterpart.title}</span>
                         <span className="font-body text-sm text-[#6b6560] group-hover:text-[#1a1714] transition-colors">
-                          {formatPrice(counterpart.price)}
+                          {formatPrice(counterpart.price, lang)}
                         </span>
                       </Link>
                     </div>
@@ -269,7 +285,7 @@ export default async function CourseDetailPage({ params }: Props) {
                 BASICS
               </div>
               <h2 className="font-body font-black text-2xl md:text-3xl text-[#1a1714] leading-[1.4] mb-4">
-                اصلاً UI و UX چی هستن؟
+                {t.basics.title}
               </h2>
               <p className="font-body text-[#6b6560] leading-relaxed">{content.intro}</p>
             </FadeIn>
@@ -292,10 +308,10 @@ export default async function CourseDetailPage({ params }: Props) {
                   >
                     {active && (
                       <span
-                        className="absolute -top-2.5 right-6 text-[10px] font-body font-bold px-2.5 py-1 rounded-full text-white"
+                        className="absolute -top-2.5 end-6 text-[10px] font-body font-bold px-2.5 py-1 rounded-full text-white"
                         style={{ backgroundColor: color.accent }}
                       >
-                        تمرکز این دوره
+                        {t.basics.focus}
                       </span>
                     )}
                     <div className="flex items-center gap-3 mb-3">
@@ -329,7 +345,7 @@ export default async function CourseDetailPage({ params }: Props) {
             {/* این دوره به درد کیا می‌خوره */}
             <div className="max-w-3xl">
               <h3 className="font-body font-bold text-lg text-[#1a1714] mb-5">
-                این دوره به درد کیا می‌خوره؟
+                {t.basics.goodFor}
               </h3>
               <div className="grid sm:grid-cols-2 gap-3">
                 {content.goodFor.map((item) => (
@@ -356,17 +372,17 @@ export default async function CourseDetailPage({ params }: Props) {
           <div className="max-w-7xl mx-auto px-4 sm:px-6">
             <div className="grid grid-cols-1 md:grid-cols-3 max-w-5xl">
               {[
-                { num: "۰۱", label: "چی یاد می‌گیری",      items: course.learningOutcomes },
-                { num: "۰۲", label: "این دوره برای کیه",   items: course.targetAudience   },
-                { num: "۰۳", label: "بعد از دوره چی داری", items: course.afterCompletion   },
+                { ...t.overview[0], items: course.learningOutcomes },
+                { ...t.overview[1], items: course.targetAudience   },
+                { ...t.overview[2], items: course.afterCompletion  },
               ].map((col, i, arr) => (
                 <div
                   key={i}
                   className={[
                     "py-8 md:py-0 md:px-8",
-                    i === 0 ? "md:pr-0" : "",
-                    i === arr.length - 1 ? "md:pl-0" : "",
-                    i < arr.length - 1 ? "border-b md:border-b-0 md:border-l border-[#e8e2d9]" : "",
+                    i === 0 ? "md:ps-0" : "",
+                    i === arr.length - 1 ? "md:pe-0" : "",
+                    i < arr.length - 1 ? "border-b md:border-b-0 md:border-e border-[#e8e2d9]" : "",
                   ].join(" ")}
                 >
                   {/* Big pale number */}
@@ -410,7 +426,7 @@ export default async function CourseDetailPage({ params }: Props) {
                 PREREQUISITES
               </div>
               <h2 className="font-body font-black text-2xl md:text-3xl text-[#1a1714] leading-[1.4] mb-6">
-                قبلش چی باید بلد باشی؟
+                {t.prerequisites}
               </h2>
               <ul className="space-y-3">
                 {content.prerequisites.map((item) => (
@@ -440,14 +456,14 @@ export default async function CourseDetailPage({ params }: Props) {
                   CURRICULUM
                 </div>
                 <h2 className="font-body font-black text-2xl md:text-3xl text-[#1a1714]">
-                  سرفصل‌های دوره
+                  {t.curriculum.title}
                 </h2>
               </div>
               <span
                 className="font-display font-bold text-sm px-3 py-1.5 rounded-full flex-shrink-0"
                 style={{ backgroundColor: color.badge, color: color.accent }}
               >
-                {course.topics.length} فصل
+                {t.curriculum.chapters(num(course.topics.length))}
               </span>
             </div>
 
@@ -510,16 +526,16 @@ export default async function CourseDetailPage({ params }: Props) {
                 ROADMAP
               </div>
               <h2 className="font-body font-black text-2xl md:text-3xl text-[#1a1714] leading-[1.4] mb-3">
-                مسیر یادگیری، قدم به قدم
+                {t.roadmap.title}
               </h2>
               <p className="font-body text-[#6b6560] leading-relaxed">
-                از صفر شروع می‌کنی و هر قدم روی قدم قبلی سوار می‌شه — آخرش یه خروجی واقعی داری.
+                {t.roadmap.body}
               </p>
             </div>
 
             <div className="relative">
               {/* خط عمودی مسیر */}
-              <div className="absolute top-2 bottom-2 right-[19px] w-px bg-[#e8e2d9] hidden sm:block" />
+              <div className="absolute top-2 bottom-2 start-[19px] w-px bg-[#e8e2d9] hidden sm:block" />
               <div className="space-y-5">
                 {content.roadmap.map((step, i) => (
                   <FadeIn key={step.title} delay={i * 0.07}>
@@ -528,7 +544,7 @@ export default async function CourseDetailPage({ params }: Props) {
                       className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 font-display font-black text-sm relative z-10 border-4 border-white"
                       style={{ backgroundColor: color.badge, color: color.accent }}
                     >
-                      {String(i + 1).replace(/\d/g, (d) => "۰۱۲۳۴۵۶۷۸۹"[+d])}
+                      {num(i + 1)}
                     </span>
                     <div className="pt-1.5">
                       <h3 className="font-body font-bold text-[#1a1714] mb-1">{step.title}</h3>
@@ -563,28 +579,22 @@ export default async function CourseDetailPage({ params }: Props) {
 
                 <div className="flex flex-wrap items-end gap-x-6 gap-y-2 mb-3">
                   <h2 className="font-body font-black text-2xl md:text-3xl text-white">
-                    جلسات منتورینگ چطوره؟
+                    {t.mentoring.title}
                   </h2>
                   <div className="flex items-baseline gap-1 mb-0.5">
                     <span className="font-display font-black text-5xl leading-none" style={{ color: color.accent }}>
-                      ۱۰
+                      {t.mentoring.weeksNum}
                     </span>
-                    <span className="font-body text-sm text-white/30">هفته</span>
+                    <span className="font-body text-sm text-white/30">{t.mentoring.weeks}</span>
                   </div>
                 </div>
 
                 <p className="text-white/40 font-body text-sm mb-10 max-w-lg leading-relaxed">
-                  هر هفته یه جلسه گروهی آنلاین — پروژه‌ها بررسی میشن، فیدبک مستقیم می‌گیری
-                  و از فیدبک بقیه هم یاد می‌گیری
+                  {t.mentoring.body}
                 </p>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-                  {[
-                    { num: "۱", title: "جلسه گروهی",    desc: "همه هم‌دوره‌ای‌ها با هم. از فیدبک بقیه هم یاد می‌گیری." },
-                    { num: "۲", title: "بررسی پروژه",    desc: "کار هفته قبل بررسی میشه — نقاط قوت، ضعف و راه بهبود." },
-                    { num: "۳", title: "فردی یا گروهی",  desc: "پروژه رو تنها انجام بده یا با یه هم‌دوره‌ای. انتخاب با خودته." },
-                    { num: "۴", title: "ضبط جلسات",      desc: "همه جلسات ضبط میشن. هیچ جلسه‌ای از دست نمیره." },
-                  ].map((item, i) => (
+                  {t.mentoring.items.map((item, i) => (
                     <div
                       key={i}
                       className="rounded-2xl p-5 border border-white/8 bg-white/[0.04] hover:bg-white/[0.07] transition-colors"
@@ -613,7 +623,7 @@ export default async function CourseDetailPage({ params }: Props) {
                 FAQ
               </div>
               <h2 className="font-body font-black text-2xl md:text-3xl text-[#1a1714] mb-10">
-                سوالات پرتکرار
+                {t.faq}
               </h2>
 
               <div className="space-y-2">
@@ -624,7 +634,7 @@ export default async function CourseDetailPage({ params }: Props) {
                   >
                     <summary className="flex items-center gap-4 px-5 py-4 cursor-pointer list-none">
                       <span
-                        className="font-display font-black text-xs w-5 text-right flex-shrink-0"
+                        className="font-display font-black text-xs w-5 text-start flex-shrink-0"
                         style={{ color: color.accent, opacity: 0.4 }}
                       >
                         {String(i + 1).padStart(2, "0")}
@@ -640,7 +650,7 @@ export default async function CourseDetailPage({ params }: Props) {
                       </span>
                     </summary>
                     <div className="px-5 pb-5 pt-2 border-t border-[#f0ebe4]">
-                      <p className="font-body text-sm text-[#6b6560] leading-relaxed pr-9">
+                      <p className="font-body text-sm text-[#6b6560] leading-relaxed ps-9">
                         {faq.a}
                       </p>
                     </div>
@@ -659,7 +669,7 @@ export default async function CourseDetailPage({ params }: Props) {
                 TESTIMONIALS
               </div>
               <h2 className="font-body font-black text-2xl md:text-3xl text-[#1a1714] mb-10">
-                دانشجوها می‌گن
+                {t.testimonials}
               </h2>
 
               <div className="max-w-3xl space-y-3">
@@ -760,15 +770,15 @@ export default async function CourseDetailPage({ params }: Props) {
                     STUDENT WORK
                   </div>
                   <h2 className="font-body font-black text-2xl md:text-3xl text-[#1a1714] leading-[1.4]">
-                    نمونه‌کار دانشجوها
+                    {t.work.title}
                   </h2>
                 </div>
                 <Link
                   href="/projects"
                   className="inline-flex items-center gap-2 text-sm font-body text-[#6b6560] hover:text-[#1a1714] border border-[#e8e2d9] hover:border-[#1a1714]/20 px-4 py-2.5 rounded-xl transition-colors"
                 >
-                  همه‌ی نمونه‌کارها
-                  <ChevronLeft size={14} />
+                  {t.work.all}
+                  <ChevronLeft size={14} className="ltr:rotate-180" />
                 </Link>
               </div>
 
@@ -811,11 +821,10 @@ export default async function CourseDetailPage({ params }: Props) {
                 </span>
                 <div>
                   <h2 className="font-body font-bold text-white text-lg mb-1.5">
-                    گواهی پایان دوره، قابل استعلام
+                    {t.certificate.title}
                   </h2>
                   <p className="font-body text-white/50 text-sm leading-relaxed">
-                    بعد از اتمام دوره گواهی می‌گیری که یه کد یکتا داره — هر کسی (و هر کارفرمایی)
-                    می‌تونه اعتبارش رو همین‌جا روی سایت چک کنه.
+                    {t.certificate.body}
                   </p>
                 </div>
               </div>
@@ -823,8 +832,8 @@ export default async function CourseDetailPage({ params }: Props) {
                 href="/certificates"
                 className="inline-flex items-center gap-2 bg-white hover:bg-white/90 text-[#1a1714] font-body font-bold text-sm px-6 py-3.5 rounded-2xl transition-colors flex-shrink-0"
               >
-                استعلام گواهی
-                <ChevronLeft size={15} />
+                {t.certificate.cta}
+                <ChevronLeft size={15} className="ltr:rotate-180" />
               </Link>
             </div>
           </div>
@@ -839,22 +848,22 @@ export default async function CourseDetailPage({ params }: Props) {
                   className="w-14 h-14 rounded-2xl flex items-center justify-center text-xl font-body font-bold"
                   style={{ backgroundColor: color.badge, color: color.accent }}
                 >
-                  م
+                  {t.instructor.avatar}
                 </div>
                 <div>
                   <div className="font-display text-[9px] font-bold tracking-[0.2em] uppercase text-[#a09990] mb-0.5">
                     INSTRUCTOR
                   </div>
                   <div className="font-body font-bold text-[#1a1714]">{course.instructor}</div>
-                  <div className="text-[#a09990] text-xs font-body">طراح UI/UX — @mojtabaui</div>
+                  <div className="text-[#a09990] text-xs font-body">{t.instructor.role}</div>
                 </div>
               </div>
               <Link
                 href="/courses"
                 className="inline-flex items-center gap-2 bg-[#f7f4ef] hover:bg-[#f0ebe4] text-[#1a1714] font-body text-sm px-5 py-2.5 rounded-xl transition-colors"
               >
-                <ChevronLeft size={14} className="rotate-180" />
-                دیدن همه دوره‌ها
+                <ChevronLeft size={14} className="rtl:rotate-180" />
+                {t.instructor.all}
               </Link>
             </div>
           </div>
@@ -871,7 +880,7 @@ export default async function CourseDetailPage({ params }: Props) {
                 WHY US
               </div>
               <h2 className="font-body font-black text-2xl md:text-3xl text-[#1a1714] leading-[1.4]">
-                چی تحویل می‌گیری؟
+                {t.guarantees}
               </h2>
             </div>
 
@@ -900,11 +909,10 @@ export default async function CourseDetailPage({ params }: Props) {
         <section className="py-20 bg-[#1a1714] border-t border-[#e8e2d9]">
           <div className="max-w-3xl mx-auto px-4 sm:px-6 text-center">
             <h2 className="font-body font-black text-3xl md:text-4xl text-white leading-[1.3] mb-4">
-              هنوز مطمئن نیستی این دوره مناسبته؟
+              {t.finalCta.title}
             </h2>
             <p className="font-body text-white/45 leading-relaxed mb-8 max-w-lg mx-auto">
-              قبل از ثبت‌نام بپرس. توی تلگرام بگو الان کجای مسیری و چی می‌خوای —
-              اگه این دوره برات مناسب نبود، خودم صادقانه می‌گم.
+              {t.finalCta.body}
             </p>
             <div className="flex items-center justify-center gap-3 flex-wrap">
               <a
@@ -914,14 +922,14 @@ export default async function CourseDetailPage({ params }: Props) {
                 className="inline-flex items-center gap-2 bg-white hover:bg-white/90 text-[#1a1714] font-body font-bold px-8 py-4 rounded-2xl transition-all hover:scale-[1.02] active:scale-[0.98]"
               >
                 <Send size={17} />
-                مشاوره و ثبت‌نام در تلگرام
+                {t.finalCta.telegram}
               </a>
               <Link
                 href="/courses"
                 className="inline-flex items-center gap-2 border border-white/20 hover:border-white/40 text-white/70 hover:text-white font-body font-semibold px-7 py-4 rounded-2xl transition-all text-sm"
               >
-                مقایسه با بقیه دوره‌ها
-                <ChevronLeft size={15} />
+                {t.finalCta.compare}
+                <ChevronLeft size={15} className="ltr:rotate-180" />
               </Link>
             </div>
           </div>
