@@ -10,6 +10,8 @@ import {
   useReducedMotion,
 } from "framer-motion";
 import { Award, Star, Users, Sparkles, Percent } from "lucide-react";
+import { useLang } from "@/components/Providers";
+import { COMMON } from "@/lib/i18n/dict/common";
 
 /**
  * مدل سه‌بعدی (public/images/3d_remember.glb) با <model-viewer> + المان‌های تزئینی.
@@ -22,6 +24,7 @@ import { Award, Star, Users, Sparkles, Percent } from "lucide-react";
  *  حرکتِ کاربر-محور (درگ/لمس) حتی در reduced-motion فعاله؛ فقط bobِ خودکار خاموش می‌شه.
  */
 export default function Model3D() {
+  const t = COMMON[useLang()].trust;
   const ref = useRef<HTMLDivElement>(null);
   const mvRef = useRef<HTMLElement | null>(null);
   const reduce = useReducedMotion();
@@ -84,7 +87,7 @@ export default function Model3D() {
   const modelProps: Record<string, unknown> = {
     ref: mvRef,
     src: "/images/3d_remember.glb",
-    alt: "المان سه‌بعدی مدرسه دیزاین ملینا",
+    alt: t.alt,
     "camera-controls": true,
     "disable-zoom": true,
     "touch-action": "pan-y",
@@ -156,15 +159,15 @@ export default function Model3D() {
             <span className="w-7 h-7 rounded-lg bg-[#8b5cf6]/10 text-[#8b5cf6] flex items-center justify-center">
               <Award size={15} />
             </span>
-            <span className="font-body font-semibold text-xs text-[#1a1714]">گواهی معتبر</span>
+            <span className="font-body font-semibold text-xs text-[#1a1714]">{t.certificate}</span>
           </motion.div>
         </motion.div>
 
         <motion.div style={{ x: c2x, y: c2y }} className="absolute top-20 left-3 z-20 pointer-events-none">
           <motion.div className="flex items-center gap-1.5 bg-white/90 backdrop-blur-sm border border-[#e8e2d9] rounded-2xl px-3 py-2 shadow-[0_12px_30px_-12px_rgba(26,23,20,0.28)]" {...bob(0.7)}>
             <Star size={14} className="text-amber-400 fill-amber-400" />
-            <span className="font-display font-bold text-sm text-[#1a1714]">۴.۹</span>
-            <span className="font-body text-[10px] text-[#a09990]">از ۵</span>
+            <span className="font-display font-bold text-sm text-[#1a1714]">{t.rating}</span>
+            <span className="font-body text-[10px] text-[#a09990]">{t.outOf}</span>
           </motion.div>
         </motion.div>
 
@@ -174,8 +177,8 @@ export default function Model3D() {
               <Users size={15} />
             </span>
             <div className="leading-tight">
-              <div className="font-display font-bold text-sm text-[#1a1714]">+۶٬۵۰۰</div>
-              <div className="font-body text-[10px] text-[#a09990] -mt-0.5">دانشجو</div>
+              <div className="font-display font-bold text-sm text-[#1a1714]">{t.students}</div>
+              <div className="font-body text-[10px] text-[#a09990] -mt-0.5">{t.studentsLabel}</div>
             </div>
           </motion.div>
         </motion.div>
@@ -183,7 +186,7 @@ export default function Model3D() {
         <motion.div style={{ x: c4x, y: c4y }} className="absolute bottom-4 right-8 z-20 pointer-events-none">
           <motion.div className="flex items-center gap-1.5 bg-[#8b5cf6] text-white rounded-full px-3.5 py-2 shadow-[0_12px_30px_-10px_rgba(139,92,246,0.7)]" {...bob(2, 9)}>
             <Percent size={13} />
-            <span className="font-body font-bold text-xs">تخفیف ویژه</span>
+            <span className="font-body font-bold text-xs">{t.discount}</span>
           </motion.div>
         </motion.div>
       </div>

@@ -77,6 +77,17 @@ export const COMMON = {
       /** {n} با تعداد پر می‌شه — جای عدد توی جملهٔ دو زبان یکی نیست */
       more: "مشاهده‌ی {n} فیدبک دیگر",
     },
+
+    /** چیپ‌های شناورِ کنار المان سه‌بعدی */
+    trust: {
+      alt: "المان سه‌بعدی مدرسه دیزاین ملینا",
+      certificate: "گواهی معتبر",
+      rating: "۴.۹",
+      outOf: "از ۵",
+      students: "+۶٬۵۰۰",
+      studentsLabel: "دانشجو",
+      discount: "تخفیف ویژه",
+    },
   },
 
   en: {
@@ -145,6 +156,16 @@ export const COMMON = {
     feedback: {
       close: "Close",
       more: "Read {n} more",
+    },
+
+    trust: {
+      alt: "A 3D element from Melina Design School",
+      certificate: "Verified certificate",
+      rating: "4.9",
+      outOf: "out of 5",
+      students: "6,500+",
+      studentsLabel: "students",
+      discount: "Special offer",
     },
   },
 } as const;
