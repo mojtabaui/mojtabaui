@@ -19,8 +19,9 @@ export default function Navbar() {
     { href: "/projects", label: t.nav.projects },
     { href: "/free", label: t.nav.free },
     { href: "/checklist", label: t.nav.checklist },
-    // مقاله‌ها فقط فارسی‌ان، پس توی نسخهٔ انگلیسی اصلاً پیشنهاد نمی‌شن
-    ...(rtl ? [{ href: "/articles", label: t.nav.articles }] : []),
+    // مقاله‌ها فارسی‌ان ولی صفحه‌شون همین رو توی نسخهٔ انگلیسی صریح می‌گه،
+    // پس لینکش دیگه لازم نیست پنهان بمونه
+    { href: "/articles", label: t.nav.articles },
     { href: "/certificates", label: t.nav.certificates },
     { href: "/#about", label: t.nav.about },
   ];

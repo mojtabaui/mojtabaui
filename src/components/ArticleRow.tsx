@@ -4,6 +4,8 @@ import Link from "next/link";
 import { Download } from "lucide-react";
 import { useState } from "react";
 import type { Article } from "@/lib/mock-data";
+import { useLang } from "@/components/Providers";
+import { PAGES } from "@/lib/i18n/dict/pages";
 
 interface Props {
   article: Article;
@@ -11,6 +13,8 @@ interface Props {
 }
 
 export default function ArticleRow({ article, index }: Props) {
+  const lang = useLang();
+  const t = PAGES[lang].articles;
   const [hovered, setHovered] = useState(false);
   const num = String(index + 1).padStart(2, "0");
 
@@ -29,7 +33,7 @@ export default function ArticleRow({ article, index }: Props) {
       {/* Animated right accent bar */}
       <span
         aria-hidden
-        className="absolute right-0 rounded-full pointer-events-none"
+        className="absolute end-0 rounded-full pointer-events-none"
         style={{
           top: "12px",
           bottom: "12px",
@@ -67,7 +71,7 @@ export default function ArticleRow({ article, index }: Props) {
           {article.category}
         </span>
         <span className="text-[11px] font-body text-[#b0a89f] whitespace-nowrap">
-          {article.readTime} دقیقه
+          {lang === "fa" ? String(article.readTime).replace(/[0-9]/g, (d) => "۰۱۲۳۴۵۶۷۸۹"[+d]) : article.readTime} {t.minutes}
         </span>
         <span
           className="hidden sm:flex items-center gap-1 text-[10px] font-body font-semibold whitespace-nowrap"
@@ -78,7 +82,7 @@ export default function ArticleRow({ article, index }: Props) {
           }}
         >
           <Download size={10} />
-          دانلود
+          {t.download}
         </span>
       </div>
     </Link>

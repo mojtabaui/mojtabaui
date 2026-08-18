@@ -7,6 +7,8 @@ import Footer from "@/components/Footer";
 import FadeIn from "@/components/FadeIn";
 import ParallaxY from "@/components/ParallaxY";
 import { articles } from "@/lib/mock-data";
+import { getLang } from "@/lib/i18n/server";
+import { PAGES } from "@/lib/i18n/dict/pages";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -14,6 +16,10 @@ interface Props {
 
 export default async function ArticleDetailPage({ params }: Props) {
   const { slug } = await params;
+  const lang = await getLang();
+  const t = PAGES[lang].articles;
+  const num = (n: number | string) =>
+    lang === "fa" ? String(n).replace(/[0-9]/g, (d) => "۰۱۲۳۴۵۶۷۸۹"[+d]) : String(n);
   const article = articles.find((a) => a.slug === slug);
   if (!article) notFound();
 
@@ -47,8 +53,8 @@ export default async function ArticleDetailPage({ params }: Props) {
               href="/articles"
               className="inline-flex items-center gap-1.5 text-[#6b6560] hover:text-[#1a1714] text-sm font-body mb-10 transition-colors"
             >
-              <ChevronLeft size={14} className="rotate-180" />
-              بازگشت به مقالات
+              <ChevronLeft size={14} className="rtl:rotate-180" />
+              {t.back}
             </Link>
 
             <span
@@ -73,9 +79,9 @@ export default async function ArticleDetailPage({ params }: Props) {
               </span>
               <span className="flex items-center gap-1.5">
                 <Clock size={13} />
-                {article.readTime} دقیقه مطالعه
+                {num(article.readTime)} {t.readTime}
               </span>
-              <span className="font-body text-[#6b6560]">مجتبا یزدانپناه</span>
+              <span className="font-body text-[#6b6560]">{t.author}</span>
             </div>
           </div>
         </section>
@@ -98,7 +104,9 @@ export default async function ArticleDetailPage({ params }: Props) {
 
         {/* Body */}
         <section className="py-16 max-w-3xl mx-auto px-4 sm:px-6">
-          <article>
+          {/* بدنهٔ مقاله ترجمه نشده. جهت و زبانش رو صریح روی خودش می‌ذاریم تا
+              وقتی صفحه انگلیسیه، متن فارسی همچنان راست‌چین و درست رندر شه. */}
+          <article dir="rtl" lang="fa">
             {/* پاراگراف اول به‌عنوان لید، درشت‌تر و پررنگ‌تر */}
             <p
               className="font-body text-[#1a1714] text-xl leading-[1.85] mb-8 pr-5 border-r-[3px]"
@@ -135,11 +143,10 @@ export default async function ArticleDetailPage({ params }: Props) {
             style={{ backgroundColor: article.color, borderColor: `${article.accent}26` }}
           >
             <h2 className="font-body font-black text-xl text-[#1a1714] leading-relaxed mb-2.5">
-              سوالی برات پیش اومد؟
+              {t.cta.title}
             </h2>
             <p className="font-body text-[#6b6560] text-sm leading-relaxed mb-6 max-w-lg">
-              اگر جایی از این مطلب برات مبهم بود یا می‌خوای بدونی کدوم دوره به کارت میاد،
-              در تلگرام بپرس. خودم جواب می‌دم.
+              {t.cta.body}
             </p>
             <div className="flex items-center gap-3 flex-wrap">
               <a
@@ -150,14 +157,14 @@ export default async function ArticleDetailPage({ params }: Props) {
                 style={{ backgroundColor: article.accent }}
               >
                 <Send size={15} />
-                پرسیدن در تلگرام
+                {t.cta.telegram}
               </a>
               <Link
                 href="/courses"
                 className="inline-flex items-center gap-2 font-body font-semibold text-sm px-5 py-3 rounded-2xl bg-white/70 hover:bg-white transition-colors text-[#1a1714]"
               >
-                دیدن دوره‌ها
-                <ChevronLeft size={14} />
+                {t.cta.courses}
+                <ChevronLeft size={14} className="ltr:rotate-180" />
               </Link>
             </div>
           </div></FadeIn>
@@ -167,7 +174,7 @@ export default async function ArticleDetailPage({ params }: Props) {
             <div className="mt-16 pt-10 border-t border-[#e8e2d9]">
               <div className="flex items-center gap-4 mb-6">
                 <h2 className="font-display text-[10px] font-bold tracking-[0.2em] uppercase text-[#a09990]">
-                  KEEP READING
+                  {t.keepReading}
                 </h2>
                 <span className="h-px flex-1 bg-[#e8e2d9]" />
               </div>
@@ -194,7 +201,7 @@ export default async function ArticleDetailPage({ params }: Props) {
                     </h3>
                     <span className="text-[10px] font-body text-[#a09990] flex items-center gap-1">
                       <Clock size={9} />
-                      {other.readTime} دقیقه
+                      {num(other.readTime)} {t.minutes}
                     </span>
                   </Link>
                   </FadeIn>

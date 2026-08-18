@@ -29,8 +29,7 @@ export default function Footer() {
 
   const content = [
     { href: "/checklist",    label: t.footer.content.checklist  },
-    // مقاله‌ها ترجمه نشدن، پس توی نسخهٔ انگلیسی لینکشون هم نمی‌ذاریم
-    ...(rtl ? [{ href: "/articles", label: t.footer.content.articles }] : []),
+    { href: "/articles", label: t.footer.content.articles },
     { href: "/free",         label: t.footer.content.free       },
     { href: "/projects",     label: t.footer.content.projects   },
     { href: "/courses",      label: t.footer.content.allCourses },

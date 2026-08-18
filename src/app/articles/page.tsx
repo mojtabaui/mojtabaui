@@ -7,14 +7,20 @@ import FadeIn from "@/components/FadeIn";
 import ParallaxY from "@/components/ParallaxY";
 import MarqueeBand from "@/components/MarqueeBand";
 import { articles } from "@/lib/mock-data";
+import { getLang } from "@/lib/i18n/server";
+import { PAGES } from "@/lib/i18n/dict/pages";
 
-export const metadata = {
-  title: "مقالات | مدرسه دیزاین ملینا",
-  description:
-    "آموزش‌های متنی طراحی رابط و تجربه کاربری، هوش مصنوعی برای طراح‌ها و مسیر بازار کار.",
-};
+export async function generateMetadata() {
+  const t = PAGES[await getLang()].articles;
+  return { title: t.metaTitle, description: t.metaDescription };
+}
 
-export default function ArticlesPage() {
+export default async function ArticlesPage() {
+  const lang = await getLang();
+  const t = PAGES[lang].articles;
+  const num = (n: number | string) =>
+    lang === "fa" ? String(n).replace(/[0-9]/g, (d) => "۰۱۲۳۴۵۶۷۸۹"[+d]) : String(n);
+
   const [featured, ...rest] = articles;
 
   return (
@@ -43,11 +49,19 @@ export default function ArticlesPage() {
                   JOURNAL
                 </div>
                 <h1 className="font-body font-black text-4xl md:text-5xl text-[#1a1714] leading-[1.25] mb-4">
-                  مقالات
+                  {t.title}
                 </h1>
                 <p className="text-[#6b6560] font-body text-lg leading-relaxed">
-                  آموزش متنی، نکته‌های عملی و تجربه‌های واقعی از طراحی محصول. همه رایگان.
+                  {t.body}
                 </p>
+                {/* مقاله‌ها ترجمه نشدن. توی نسخه‌ی انگلیسی همین‌جا صریح گفته
+                    می‌شه، به‌جای اینکه کسی روی تیتر انگلیسی کلیک کنه و به متن
+                    فارسی برسه. */}
+                {t.persianOnly && (
+                  <p className="mt-4 inline-block rounded-xl border border-[#e8e2d9] bg-white/70 px-4 py-2.5 font-body text-sm text-[#6b6560] leading-relaxed">
+                    {t.persianOnly}
+                  </p>
+                )}
               </FadeIn>
               <ParallaxY speed={26}>
                 <div className="font-display font-black text-[#1a1714]/[0.07] text-7xl leading-none select-none">
@@ -72,7 +86,7 @@ export default function ArticlesPage() {
                 style={{ fontSize: "12rem", color: featured.accent, opacity: 0.09 }}
                 aria-hidden
               >
-                ۰۱
+                {num(1).padStart(2, lang === "fa" ? "۰" : "0")}
               </span>
 
               {featured.cover && (
@@ -94,7 +108,7 @@ export default function ArticlesPage() {
                     className="text-[11px] font-body font-bold px-3 py-1 rounded-full text-white"
                     style={{ backgroundColor: featured.accent }}
                   >
-                    تازه‌ترین
+                    {t.newest}
                   </span>
                   <span
                     className="text-[11px] font-body font-semibold px-3 py-1 rounded-full bg-white/70"
@@ -116,12 +130,12 @@ export default function ArticlesPage() {
                     className="inline-flex items-center gap-2 font-body font-bold text-sm px-5 py-2.5 rounded-2xl text-white transition-transform group-hover:scale-[1.02]"
                     style={{ backgroundColor: featured.accent }}
                   >
-                    بخون
-                    <ChevronLeft size={15} />
+                    {t.read}
+                    <ChevronLeft size={15} className="ltr:rotate-180" />
                   </span>
                   <span className="flex items-center gap-1.5 text-[#6b6560] text-xs font-body">
                     <Clock size={12} />
-                    {featured.readTime} دقیقه
+                    {num(featured.readTime)} {t.minutes}
                   </span>
                   <span className="flex items-center gap-1.5 text-[#a09990] text-xs font-body">
                     <Calendar size={12} />
@@ -143,7 +157,7 @@ export default function ArticlesPage() {
         <section className="pb-24 pt-4 max-w-7xl mx-auto px-4 sm:px-6">
           <div className="flex items-center gap-4 py-8">
             <span className="font-display text-[10px] font-bold tracking-[0.2em] uppercase text-[#a09990]">
-              ALL ARTICLES
+              {t.all}
             </span>
             <span className="h-px flex-1 bg-[#e8e2d9]" />
           </div>
@@ -192,11 +206,11 @@ export default function ArticlesPage() {
                     <div className="mt-auto pt-4 border-t border-[#f0ebe4] flex items-center justify-between">
                       <span className="flex items-center gap-1.5 text-[#a09990] text-xs font-body">
                         <Clock size={11} />
-                        {article.readTime} دقیقه
+                        {num(article.readTime)} {t.minutes}
                       </span>
                       <ChevronLeft
                         size={15}
-                        className="text-[#c8c2ba] group-hover:text-[#1a1714] group-hover:-translate-x-0.5 transition-all"
+                        className="text-[#c8c2ba] group-hover:text-[#1a1714] group-hover:-translate-x-0.5 transition-all ltr:rotate-180"
                       />
                     </div>
                   </div>
