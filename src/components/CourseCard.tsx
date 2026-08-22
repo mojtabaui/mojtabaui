@@ -177,9 +177,6 @@ export default function CourseCard({ course }: { course: Course }) {
               <span className="flex items-center gap-1.5">
                 <Calendar size={12} /> {course.sessionDate}
               </span>
-              <span className="flex items-center gap-1.5">
-                <Users size={12} /> {tc.seats(course.capacity)}
-              </span>
             </>
           ) : (
             <>

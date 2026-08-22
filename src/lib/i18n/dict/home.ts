@@ -40,23 +40,22 @@ export const HOME = {
     },
 
     workshop: {
-      badge: "کارگاه جدید",
+      badge: "دورهٔ جدید",
       kicker: "PROMPT TO PRODUCT",
-      title: "کارگاه پرامپت تا پروداکت",
-      body: "موجِ AI اومده و طراحی رو زیر و رو کرده. من کلِ ورک‌فلوی طراحیم رو هوشمند کردم، توی همین چند ماه دو تا محصول منتشر کردم و یه پروژه‌ی فول‌تایم رو هم با ورک‌فلوی AI پیش می‌برم. توی این کارگاه دقیقاً می‌گم چطور می‌شه AI رو وارد فرایندِ طراحی کرد.",
+      title: "دورهٔ پرامپت تا پروداکت",
+      body: "موجِ AI اومده و طراحی رو زیر و رو کرده. من کلِ ورک‌فلوی طراحیم رو هوشمند کردم، توی همین چند ماه دو تا محصول منتشر کردم و یه پروژه‌ی فول‌تایم رو هم با ورک‌فلوی AI پیش می‌برم. توی این دوره دقیقاً می‌گم چطور می‌شه AI رو وارد فرایندِ طراحی کرد.",
       bullets: [
         "مهندسیِ لوپ و مهندسیِ پرامپت",
         "استفاده از ایجنت‌ها در فرایندِ طراحی",
         "یادگیریِ Claude Code و Figma AI",
         "دیپلوی سبک و تستِ خروجی",
       ],
-      duration: "۳ جلسه‌ی ۳ ساعته",
-      date: "اواسط مرداد ۱۴۰۵",
-      price: "۵٬۰۰۰٬۰۰۰",
+      duration: "۹ ساعت ویدیو",
+      date: "شهریور ۱۴۰۵",
+      price: "۸٬۰۰۰٬۰۰۰",
       currency: "تومان",
-      capacity: "ظرفیت: ۲۰ نفر",
       cta: "به زودی!",
-      bannerAlt: "کارگاه پرامپت تا پروداکت",
+      bannerAlt: "دورهٔ پرامپت تا پروداکت",
     },
 
     courses: {
@@ -217,23 +216,22 @@ export const HOME = {
     },
 
     workshop: {
-      badge: "New workshop",
+      badge: "New course",
       kicker: "PROMPT TO PRODUCT",
-      title: "Prompt to Product workshop",
-      body: "AI has turned design upside down. I rebuilt my entire design workflow around it, shipped two products in the last few months, and run a full-time project on an AI workflow. This workshop is exactly how you bring AI into the design process.",
+      title: "Prompt to Product",
+      body: "AI has turned design upside down. I rebuilt my entire design workflow around it, shipped two products in the last few months, and run a full-time project on an AI workflow. This course is exactly how you bring AI into the design process.",
       bullets: [
         "Loop engineering and prompt engineering",
         "Putting agents to work inside the design process",
         "Working with Claude Code and Figma AI",
         "Lightweight deploys and testing what comes out",
       ],
-      duration: "3 sessions, 3 hours each",
-      date: "Early August 2026",
-      price: "5,000,000",
+      duration: "9 hours of video",
+      date: "September 2026",
+      price: "8,000,000",
       currency: "Toman",
-      capacity: "Seats: 20",
       cta: "Coming soon",
-      bannerAlt: "Prompt to Product workshop",
+      bannerAlt: "Prompt to Product course",
     },
 
     courses: {

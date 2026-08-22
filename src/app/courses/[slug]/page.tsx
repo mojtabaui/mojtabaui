@@ -56,7 +56,8 @@ export default async function CourseDetailPage({ params }: Props) {
   if (!original) notFound();
   const course = localizeCourse(original, lang);
 
-  if (course.type === "workshop") {
+  // این دوره صفحهٔ فروشِ اختصاصی خودش را دارد؛ بقیه با قالب استاندارد می‌آیند
+  if (slug === "prompt-to-product") {
     return (
       <>
         <Navbar />

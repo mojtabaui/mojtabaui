@@ -411,12 +411,12 @@ const promptToProductTopicsEn: CourseTopic[] = [
 
 const promptToProductFAQsEn: FAQ[] = [
   {
-    q: "Is this workshop for me?",
+    q: "Is this course for me?",
     a: "If you're a designer afraid of falling behind the AI wave, yes. It isn't for absolute beginners; it assumes you know design and want to bring AI into your work.",
   },
   {
     q: "How many sessions, and how are they run?",
-    a: "Three live online sessions of three hours, interactive and hands-on, on a real project that we carry all the way to deployment.",
+    a: "On video, module by module, on a real project we carry all the way to deployment. Each module ends in a concrete artefact the next one starts from.",
   },
   {
     q: "Do I need to know how to code?",
@@ -424,7 +424,7 @@ const promptToProductFAQsEn: FAQ[] = [
   },
   {
     q: "Which tools do I need?",
-    a: "Figma for design (with Figma AI), Claude Code for the code, and a free Vercel account for deployment. I'll show you how to set them up in the workshop.",
+    a: "Figma for design (with Figma AI), Claude Code for the code, and a free Vercel account for deployment. I'll show you how to set them up in the course.",
   },
   {
     q: "Are the sessions recorded?",
@@ -520,15 +520,15 @@ export const COURSE_EN: Record<string, CourseOverlay> = {
   },
 
   "prompt-to-product": {
-    title: "Prompt to Product workshop",
+    title: "Prompt to Product",
     subtitle: "PROMPT TO PRODUCT",
     description:
-      "Three live sessions for the designer who refuses to fall behind the AI wave — from prompt and idea, through Figma AI and Claude Code, to a product deployed on Vercel.",
+      "A course for the designer who refuses to fall behind the AI wave — from prompt and idea, through Figma AI and Claude Code, to a product deployed on Vercel.",
     longDescription:
-      "This workshop is for a designer who knows their craft but fears being left behind by AI. Across three three-hour sessions we carry one real feature all the way: from brief and idea, to an interface with Figma AI, to live code with Claude Code, and finally a deployment on Vercel with a link you can show. The focus isn't a single tool; it's the AI-first way of thinking and the designer's judgement — the part no tool replaces.",
+      "This course is for a designer who knows their craft but fears being left behind by AI. We carry one real feature all the way: from brief and idea, to an interface with Figma AI, to live code with Claude Code, and finally a deployment on Vercel with a link you can show. The focus isn't a single tool; it's the AI-first way of thinking and the designer's judgement — the part no tool replaces.",
     level: "Intermediate",
     instructor: INSTRUCTOR_EN,
-    sessionDate: "Early August 2026",
+    sessionDate: "September 2026",
     topics: promptToProductTopicsEn,
     faqs: promptToProductFAQsEn,
   },

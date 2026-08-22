@@ -1,7 +1,7 @@
 import type { Lang } from "@/lib/i18n";
 
 /**
- * متنِ صفحهٔ تکِ دوره، لندینگ کارگاه و کارت مقایسهٔ نسخه‌ها.
+ * متنِ صفحهٔ تکِ دوره، لندینگ دورهٔ ویژه و کارت مقایسهٔ نسخه‌ها.
  *
  * چیزهایی که عدد توشون هست تابع شدن نه رشته، چون جای عدد توی جملهٔ فارسی و
  * انگلیسی یکی نیست («۵۵ ساعت ویدیو» در برابر «55 hours of video») و با
@@ -125,7 +125,7 @@ export const COURSE = {
 
     workshop: {
       back: "بازگشت به دوره‌ها",
-      badge: "کارگاه زنده — ظرفیت محدود",
+      badge: "دورهٔ ویدیویی",
       hours: (n: string) => `${n} ساعت`,
       capacity: (n: string) => `ظرفیت ${n} نفر`,
       bonus: "همراه با کتابخانه‌ی پرامپت و فایل‌های آموزشی",
@@ -135,7 +135,7 @@ export const COURSE = {
         { title: "سریع‌تر تحویل بده", sub: "با اطمینان" },
       ],
       pillars: {
-        title: "مسیر کارگاه در ۵ قدم",
+        title: "مسیر دوره در ۵ قدم",
         body: "از ریسرچ تا تحویل — با Claude کنارت در هر مرحله",
         items: [
           { fa: "ریسرچ و اینسایت", desc: "از دیتای خام تا persona و journey map" },
@@ -152,7 +152,7 @@ export const COURSE = {
         nums: ["۰۱", "۰۲"],
         length: "۳ ساعت",
       },
-      outcomes: ["چی یاد می‌گیری", "این کارگاه برای کیه", "بعد از کارگاه چی داری"],
+      outcomes: ["چی یاد می‌گیری", "این دوره برای کیه", "بعد از دوره چی داری"],
       outcomeNums: ["۰۱", "۰۲", "۰۳"],
       faq: "سوالات پرتکرار",
       finalCta: { line1: "آماده‌ای Claude رو", line2: "وارد کارت کنی؟" },
@@ -276,17 +276,17 @@ export const COURSE = {
 
     workshop: {
       back: "Back to courses",
-      badge: "Live workshop — limited places",
+      badge: "Video course",
       hours: (n: string) => `${n} hours`,
       capacity: (n: string) => `${n} places`,
-      bonus: "Comes with the prompt library and the workshop files",
+      bonus: "Comes with the prompt library and the course files",
       values: [
         { title: "Work smarter", sub: "not harder" },
         { title: "Design better", sub: "with AI behind you" },
         { title: "Ship faster", sub: "and with confidence" },
       ],
       pillars: {
-        title: "The workshop in 5 steps",
+        title: "The course in 5 steps",
         body: "From research to handoff — with Claude beside you at every step",
         items: [
           { fa: "Research and insight", desc: "From raw data to personas and journey maps" },
@@ -303,7 +303,7 @@ export const COURSE = {
         nums: ["01", "02"],
         length: "3 hours",
       },
-      outcomes: ["What you learn", "Who this workshop is for", "What you walk away with"],
+      outcomes: ["What you learn", "Who this course is for", "What you walk away with"],
       outcomeNums: ["01", "02", "03"],
       faq: "Frequently asked",
       finalCta: { line1: "Ready to bring Claude", line2: "into your work?" },

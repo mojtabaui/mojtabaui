@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { motion, useScroll, useTransform } from "framer-motion";
 import {
-  Clock, Calendar, Users, Sparkle, Target, Layers, Code, Rocket,
+  Clock, Calendar, Sparkle, Target, Layers, Code, Rocket,
   Check, ChevronLeft, Zap, PenTool, Gauge,
 } from "lucide-react";
 import BuyButton from "@/components/BuyButton";
@@ -145,7 +145,6 @@ export default function WorkshopLanding({ course }: { course: Course }) {
               <div className="flex flex-wrap items-center gap-x-6 gap-y-2 mb-9 text-sm font-body text-white/60">
                 <span className="flex items-center gap-2"><Clock size={15} className="text-[#E88A5C]" /> {t.hours(num(course.durationHours))}</span>
                 <span className="flex items-center gap-2"><Calendar size={15} className="text-[#E88A5C]" /> {course.sessionDate}</span>
-                <span className="flex items-center gap-2"><Users size={15} className="text-[#E88A5C]" /> {t.capacity(num(course.capacity))}</span>
               </div>
 
               <div className="max-w-xs">
@@ -346,7 +345,7 @@ export default function WorkshopLanding({ course }: { course: Course }) {
         <motion.div {...reveal} className="max-w-2xl mx-auto px-4 sm:px-6 text-center relative">
           <div className="inline-flex mb-6"><Sparkle size={30} className="text-[#E88A5C]" fill="#E88A5C" /></div>
           <h2 className="font-body font-black text-4xl md:text-5xl text-white mb-4 leading-tight">{t.finalCta.line1}<br />{t.finalCta.line2}</h2>
-          <p className="text-white/45 font-body mb-3">{t.priceLine(formatPrice(course.price, lang), num(course.capacity))}</p>
+          <p className="text-white/45 font-body mb-3">{formatPrice(course.price, lang)}</p>
           <p className="text-[#E88A5C] font-body text-sm mb-10">{course.sessionDate}</p>
           <div className="max-w-xs mx-auto">
             <BuyButton slug={course.slug} comingSoon={course.comingSoon} externalUrl={course.externalUrl} />

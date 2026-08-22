@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowLeft, ArrowRight, Star, ChevronLeft, ChevronRight, ExternalLink, Send, Layers, Clock, Calendar, Users, Check, Plus, Gift, MonitorPlay, MessageCircle } from "lucide-react";
+import { ArrowLeft, ArrowRight, Star, ChevronLeft, ChevronRight, ExternalLink, Send, Layers, Clock, Calendar, Check, Plus, Gift, MonitorPlay, MessageCircle } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import CoursesClient from "@/components/CoursesClient";
@@ -269,12 +269,6 @@ export default async function Home() {
                       <span className="font-body font-black text-white text-lg">{t.workshop.price}</span>
                       <span className="text-white/40 text-xs">{t.workshop.currency}</span>
                     </span>
-                  </div>
-
-                  {/* ظرفیت محدود، درست بالای دکمه تا حس فوریت بده */}
-                  <div className="flex items-center gap-2 text-sm font-body text-white/70 mb-4">
-                    <Users size={15} className="text-[#a78bfa]" />
-                    {t.workshop.capacity}
                   </div>
 
                   {/* CTA — هنوز ثبت‌نام باز نیست */}
