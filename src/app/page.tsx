@@ -22,6 +22,10 @@ import { TESTIMONIALS } from "@/lib/i18n/dict/testimonials";
 import { localizeCourses } from "@/lib/i18n/content/courses";
 
 
+/** اعلان دورهٔ پرامپت تا پروداکت روی صفحهٔ اصلی. تا وقتی روی خودِ دوره کار
+ *  می‌کنیم خاموشه؛ برای برگردوندنش کافیه true بشه. */
+const SHOW_COURSE_PROMO = false;
+
 export default async function Home() {
   const lang = await getLang();
   const t = HOME[lang];
@@ -215,11 +219,11 @@ export default async function Home() {
           </div>
         </section>
 
-        {/* ─── اعلان کارگاه پرامپت تا پروداکت ───
+        {/* ─── اعلان دورهٔ پرامپت تا پروداکت ───
             سکشن مستقل و بالای صفحه، جدا از داده‌ی دوره (که هنوز مخفیه). محتوا
-            این‌جا صریح نوشته شده تا بدون باز کردنِ صفحه‌ی کارگاه دیده بشه. CTA
-            چون هنوز ثبت‌نام باز نیست «به زودی» می‌گه و لینک نمی‌ره. عکس رو
-            بعداً می‌ذاریم؛ فعلاً یه پلیس‌هولدرِ تیره سرجاشه. */}
+            این‌جا صریح نوشته شده تا بدون باز کردنِ صفحه‌ی دوره دیده بشه. CTA
+            چون هنوز ثبت‌نام باز نیست «به زودی» می‌گه و لینک نمی‌ره. */}
+        {SHOW_COURSE_PROMO && (
         <section className="relative overflow-hidden bg-black border-y border-white/10">
           <div className="grain-static absolute inset-0 pointer-events-none mix-blend-overlay" style={{ opacity: 0.12 }} />
           <div className="absolute -top-32 left-1/2 -translate-x-1/2 w-[640px] h-[640px] rounded-full pointer-events-none" style={{ background: "radial-gradient(circle, rgba(124,92,252,0.18), transparent 70%)" }} />
@@ -299,6 +303,7 @@ export default async function Home() {
             </div>
           </div>
         </section>
+        )}
 
         {/* ─── دوره‌ها (تب‌دار) ─── */}
         {/* دو سکشنِ جدا (بی‌نهایت و ویدیویی) شدن یک سکشنِ تب‌دار تا صفحه کوتاه‌تر
