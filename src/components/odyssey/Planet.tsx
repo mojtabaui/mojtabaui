@@ -1,126 +1,154 @@
 "use client";
 
+import { useId } from "react";
 import type { Mission } from "@/lib/odyssey";
 
 /**
- * یک سیاره، ساخته از چهار لایهٔ CSS. عمداً WebGL نیست.
+ * یک سیاره، ساخته از فیلترهای SVG. عمداً WebGL نیست.
  *
- * سبکِ «3D & Hyperrealism» کارایی ضعیفی روی موبایل دارد، پس عمق را از
- * چیزهایی می‌گیریم که مرورگر ارزان رندر می‌کند: یک گرادیان شعاعیِ
- * آفست‌شده (منبع نور)، یک سایهٔ داخلی (خط شب و روز)، یک هالهٔ محو
- * (جوّ) و یک بافتِ کشویی (چرخش).
+ * سبکِ «3D & Hyperrealism» روی موبایل کارایی ضعیفی دارد، پس عمق را از
+ * چیزهایی می‌گیریم که مرورگر خودش بلد است:
  *
- *   halo      → پشت کره، محوشده، رنگِ جوّ
- *   sphere    → گرادیان شعاعی با مرکز بالا-چپ
- *   texture   → نوار یا لکه، داخل کره بریده می‌شود و آرام می‌لغزد
- *   specular  → نقطهٔ درخشانِ کوچک، همان جایی که نور می‌تابد
+ *   feTurbulence     نویزِ فرکتال → بافت واقعی سطح، نه یک گرادیانِ صاف
+ *   feColorMatrix    همان نویز را به ماسکِ آلفا تبدیل می‌کند
+ *   feDiffuseLighting همان نویز را این‌بار به‌عنوان ارتفاع می‌خواند و
+ *                    با یک نورِ دوردست، برجستگی می‌سازد
+ *   سایهٔ کروی        روزِ بالا-چپ تا شبِ عمیقِ پایین-راست
+ *   نورِ لبه          باریکه‌ای که کره را از پس‌زمینه جدا می‌کند
  *
- * چرخش با translateX روی لایهٔ بافت انجام می‌شود نه با background-position،
- * چون اولی روی GPU می‌رود و دومی هر فریم layout را دوباره حساب می‌کند.
+ * شناسه‌های فیلتر با useId ساخته می‌شوند چون یک سیاره ممکن است دو بار
+ * روی صفحه باشد (ردیف بالا و سکشن خودش) و شناسهٔ تکراری باعث می‌شود
+ * دومی فیلترِ اولی را بردارد.
  */
 
+/** حلقهٔ زحل. front یعنی فقط نیمهٔ جلویی، که روی خودِ کره می‌افتد. */
+function Ring({ m, uid, front }: { m: Mission; uid: string; front?: boolean }) {
+  return (
+    <g
+      transform="translate(120 120) rotate(-15)"
+      clipPath={front ? `url(#rf-${uid})` : undefined}
+    >
+      <g transform="scale(1 .23)">
+        <circle r="152" fill="none" stroke={m.hi} strokeOpacity=".30" strokeWidth="30" />
+        <circle r="132" fill="none" stroke={m.deep} strokeOpacity=".55" strokeWidth="4" />
+        <circle r="121" fill="none" stroke={m.base} strokeOpacity=".50" strokeWidth="15" />
+        <circle r="107" fill="none" stroke={m.hi} strokeOpacity=".24" strokeWidth="7" />
+      </g>
+    </g>
+  );
+}
+
 export default function Planet({
-  mission,
+  mission: m,
   className = "",
 }: {
   mission: Mission;
   className?: string;
 }) {
-  const { lit, dark, halo, tint, ring, bands } = mission;
+  const uid = useId().replace(/:/g, "");
 
   return (
-    <div
-      className={`relative aspect-square ${className}`}
-      style={{ ["--lit" as string]: lit, ["--dark" as string]: dark, ["--halo" as string]: halo }}
+    <svg
+      viewBox="0 0 240 240"
+      className={`block h-auto w-full overflow-visible ${className}`}
       aria-hidden="true"
+      focusable="false"
     >
-      {/* جوّ — بیرون از کره می‌زند بیرون و لبه را نرم می‌کند */}
-      <div
-        className="absolute inset-[-18%] rounded-full opacity-45 blur-2xl"
-        style={{ background: `radial-gradient(circle, ${halo} 0%, transparent 68%)` }}
-      />
-
-      {/* کره */}
-      <div
-        className="absolute inset-0 overflow-hidden rounded-full"
-        style={{
-          background: `radial-gradient(circle at 32% 26%, ${lit} 0%, ${lit} 12%, ${dark} 68%, #05050c 100%)`,
-          boxShadow: `inset -14px -12px 44px rgba(0,0,0,.75), inset 8px 6px 26px ${halo}44, 0 0 60px ${halo}33`,
-        }}
-      >
-        {/* بافت — دو نسخهٔ پشت‌سرهم تا وقتی می‌لغزد درزی دیده نشود.
-            همیشه رندر می‌شود؛ کاهش حرکت را خودِ CSS خاموش می‌کند، وگرنه
-            درختِ سرور و مرورگر یکی نمی‌شد و hydration می‌شکست. */}
-        <div
-            className="absolute inset-y-0 left-0 w-[200%] odyssey-spin"
-            style={{
-              background: bands
-                ? // نوارهای مشتری: ضخامتِ نامساوی، وگرنه راه‌راهِ پارچه می‌شود
-                  `repeating-linear-gradient(
-                     0deg,
-                     transparent 0 6%,
-                     rgba(0,0,0,.20) 6% 9%,
-                     transparent 9% 14%,
-                     rgba(255,255,255,.10) 14% 17%,
-                     transparent 17% 26%,
-                     rgba(0,0,0,.26) 26% 32%,
-                     transparent 32% 41%,
-                     rgba(255,255,255,.07) 41% 44%,
-                     transparent 44% 55%,
-                     rgba(0,0,0,.18) 55% 60%,
-                     transparent 60% 72%,
-                     rgba(255,255,255,.06) 72% 75%,
-                     transparent 75% 100%
-                   )`
-                : // لکه‌های قاره‌مانند برای بقیه
-                  `radial-gradient(ellipse 22% 13% at 18% 34%, rgba(0,0,0,.30), transparent 60%),
-                   radial-gradient(ellipse 15% 9%  at 44% 62%, rgba(0,0,0,.24), transparent 62%),
-                   radial-gradient(ellipse 12% 16% at 68% 28%, rgba(255,255,255,.10), transparent 64%),
-                   radial-gradient(ellipse 18% 10% at 84% 70%, rgba(0,0,0,.22), transparent 60%)`,
-              maskImage: "radial-gradient(circle at 50% 50%, #000 62%, transparent 78%)",
-              WebkitMaskImage: "radial-gradient(circle at 50% 50%, #000 62%, transparent 78%)",
-          }}
-        />
-
-        {/* خط شب و روز — لبهٔ سایه را عمیق‌تر می‌کند */}
-        <div
-          className="absolute inset-0 rounded-full"
-          style={{
-            background:
-              "radial-gradient(circle at 30% 24%, transparent 30%, rgba(2,2,8,.55) 78%, rgba(2,2,8,.92) 100%)",
-          }}
-        />
-
-        {/* بازتاب نور */}
-        <div
-          className="absolute left-[22%] top-[16%] h-[16%] w-[22%] rounded-full opacity-50 blur-lg"
-          style={{ background: `radial-gradient(circle, #fff 0%, transparent 70%)` }}
-        />
-      </div>
-
-      {/* حلقهٔ زحل — با چرخش سه‌بعدی، پس واقعاً دور کره می‌نشیند */}
-      {ring && (
-        <div
-          className="pointer-events-none absolute inset-[-30%]"
-          style={{ perspective: "700px" }}
-        >
-          <div
-            className="absolute inset-0 rounded-full border-[6px]"
-            style={{
-              transform: "rotateX(76deg) rotateZ(-16deg)",
-              borderColor: `${tint}66`,
-              boxShadow: `0 0 0 6px ${tint}22, inset 0 0 0 5px ${tint}18`,
-            }}
+      <defs>
+        {/* رنگِ سطح */}
+        <filter id={`t-${uid}`} x="0" y="0" width="100%" height="100%">
+          <feTurbulence
+            type="fractalNoise"
+            baseFrequency={m.freq}
+            numOctaves={m.oct}
+            seed={m.seed}
+            stitchTiles="stitch"
+            result="n"
           />
-          <div
-            className="absolute inset-[9%] rounded-full border-2"
-            style={{
-              transform: "rotateX(76deg) rotateZ(-16deg)",
-              borderColor: `${tint}33`,
-            }}
+          <feColorMatrix
+            in="n"
+            type="matrix"
+            result="mask"
+            values={`0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  .40 .40 .40 0 ${m.blot ?? -0.06}`}
           />
-        </div>
-      )}
-    </div>
+          <feFlood floodColor={m.hi} result="hi" />
+          <feComposite in="hi" in2="mask" operator="in" result="blots" />
+          <feFlood floodColor={m.base} result="base" />
+          <feMerge>
+            <feMergeNode in="base" />
+            <feMergeNode in="blots" />
+          </feMerge>
+        </filter>
+
+        {/* برجستگی سطح */}
+        <filter id={`b-${uid}`} x="0" y="0" width="100%" height="100%">
+          <feTurbulence
+            type="fractalNoise"
+            baseFrequency={m.freq}
+            numOctaves={m.oct}
+            seed={m.seed}
+            stitchTiles="stitch"
+            result="n"
+          />
+          <feDiffuseLighting
+            in="n"
+            surfaceScale={m.rough * 3}
+            diffuseConstant={1}
+            lightingColor="#fff"
+          >
+            <feDistantLight azimuth={215} elevation={58} />
+          </feDiffuseLighting>
+        </filter>
+
+        <clipPath id={`c-${uid}`}>
+          <circle cx="120" cy="120" r="88" />
+        </clipPath>
+        <clipPath id={`rf-${uid}`}>
+          <rect x="-60" y="120" width="360" height="220" />
+        </clipPath>
+
+        {/* سایهٔ کروی */}
+        <radialGradient id={`s-${uid}`} cx="33%" cy="29%" r="76%">
+          <stop offset="0" stopColor="#fff" stopOpacity=".16" />
+          <stop offset=".28" stopColor="#000" stopOpacity="0" />
+          <stop offset=".55" stopColor="#000" stopOpacity=".42" />
+          <stop offset=".76" stopColor="#000" stopOpacity=".80" />
+          <stop offset=".92" stopColor="#000" stopOpacity=".95" />
+          <stop offset="1" stopColor="#000" stopOpacity="1" />
+        </radialGradient>
+
+        {/* نورِ لبه */}
+        <radialGradient id={`r-${uid}`} cx="50%" cy="50%" r="50%">
+          <stop offset=".84" stopColor={m.air} stopOpacity="0" />
+          <stop offset=".97" stopColor={m.air} stopOpacity=".6" />
+          <stop offset="1" stopColor={m.air} stopOpacity="0" />
+        </radialGradient>
+
+        {/* جوّ */}
+        <radialGradient id={`g-${uid}`} cx="50%" cy="50%" r="50%">
+          <stop offset=".62" stopColor={m.air} stopOpacity=".22" />
+          <stop offset="1" stopColor={m.air} stopOpacity="0" />
+        </radialGradient>
+      </defs>
+
+      <circle cx="120" cy="120" r="112" fill={`url(#g-${uid})`} />
+      {m.ring && <Ring m={m} uid={uid} />}
+
+      <g clipPath={`url(#c-${uid})`}>
+        <rect x="0" y="0" width="240" height="240" filter={`url(#t-${uid})`} />
+        <rect
+          x="0"
+          y="0"
+          width="240"
+          height="240"
+          filter={`url(#b-${uid})`}
+          style={{ mixBlendMode: "overlay", opacity: m.mix }}
+        />
+        <circle cx="120" cy="120" r="88" fill={`url(#s-${uid})`} />
+      </g>
+
+      <circle cx="120" cy="120" r="88" fill={`url(#r-${uid})`} />
+      {m.ring && <Ring m={m} uid={uid} front />}
+    </svg>
   );
 }
