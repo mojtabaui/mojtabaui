@@ -421,3 +421,24 @@ img, svg, video, canvas {
     inset: 0;
   }
 }
+
+/* ── چرخش سیاره‌های AI Odyssey ────────────────────────────────────
+   بافتِ سیاره دو برابر عرضِ کره‌ست و نصفِ راه رو می‌لغزه، پس وقتی به
+   ابتدا برمی‌گرده درزی دیده نمی‌شه. فقط transform حرکت می‌کنه تا کار
+   روی GPU بمونه و layout هر فریم دوباره حساب نشه.
+
+   ۶۰ ثانیه عمداً کنده: این حرکت نباید دیده بشه، باید حس بشه. */
+@keyframes odyssey-spin {
+  from { transform: translate3d(0, 0, 0); }
+  to   { transform: translate3d(-50%, 0, 0); }
+}
+
+.odyssey-spin {
+  animation: odyssey-spin 60s linear infinite;
+  will-change: transform;
+}
+
+/* حرکتِ تزئینی، پس در کاهش حرکت کاملاً خاموش می‌شه */
+@media (prefers-reduced-motion: reduce) {
+  .odyssey-spin { animation: none; }
+}
