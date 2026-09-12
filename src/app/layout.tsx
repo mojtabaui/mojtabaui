@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Space_Grotesk } from "next/font/google";
+import { Space_Grotesk, Michroma } from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
 import { DIR } from "@/lib/i18n";
@@ -9,6 +9,21 @@ const spaceGrotesk = Space_Grotesk({
   variable: "--font-space-grotesk",
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
+});
+
+/**
+ * فونتِ نشانِ واژه‌ایِ هیروِ دوره — فقط برای همان یک کلمه.
+ *
+ * تک‌وزنه و عریض و تکنو، با انتهای صافِ حروف و «O»ی تقریباً مربع:
+ * نزدیک‌ترین چیزی که به فونتِ مرجع می‌رسد و در دسترس هم هست. هیچ
+ * جای دیگرِ سایت از آن استفاده نمی‌کند، پس هزینه‌اش فقط روی همان
+ * صفحه است.
+ */
+const michroma = Michroma({
+  variable: "--font-wordmark",
+  subsets: ["latin"],
+  weight: "400",
+  display: "swap",
 });
 
 const meem = localFont({
@@ -76,7 +91,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       lang={lang}
       dir={DIR[lang]}
       data-lang={lang}
-      className={`${spaceGrotesk.variable} ${meem.variable}`}
+      className={`${spaceGrotesk.variable} ${meem.variable} ${michroma.variable}`}
     >
       <body className="antialiased min-h-screen flex flex-col">
         <Providers lang={lang}>
