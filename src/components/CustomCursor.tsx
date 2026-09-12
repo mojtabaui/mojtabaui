@@ -88,7 +88,10 @@ export default function CustomCursor() {
   // صفحه‌های ابزاری نشانگر سیستم رو می‌خوان. اگه اینجا هم رندر بشه، هم
   // حباب شناور می‌مونه هم نشانگر سیستم، و دو تا نشانگر همزمان دیده می‌شه.
   const pathname = usePathname();
-  const toolPage = pathname?.startsWith("/admin") || pathname?.startsWith("/project");
+  // روباتایپ صفحهٔ خودش را دارد: تماماً مشکی، با نشانگرِ سیستم. حباب
+  // اینجا مهمانِ ناخوانده است.
+  const NATIVE = ["/admin", "/project", "/robotype", "/ai7"];
+  const toolPage = NATIVE.some((prefix) => pathname?.startsWith(prefix));
   const enabled = finePointer && !reduce && !toolPage;
 
   useEffect(() => {

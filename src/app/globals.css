@@ -442,3 +442,38 @@ img, svg, video, canvas {
 @media (prefers-reduced-motion: reduce) {
   .odyssey-spin { animation: none; }
 }
+
+/* ── ظهورِ سکشن‌ها در صفحهٔ ROBOTYPE ──────────────────────────────
+   هر سکشن وقتی وارد کادر دید می‌شه، بچه‌هاش یکی‌یکی بالا میان. خودِ
+   تأخیر پلکانی کارِ اصلی رو می‌کنه: اگه همه با هم ظاهر بشن، یه پرشِ
+   ناگهانیه؛ وقتی پشتِ سر هم میان، چشم دنبالشون می‌ره.
+
+   قلاب روی ریشهٔ صفحه‌ست (.neo-anim) و فقط بعد از سوارشدنِ JS اضافه
+   می‌شه. یعنی چیزی که خزنده و مرورگرِ بدونِ JS می‌بینه، متنِ کاملِ
+   دیده‌شده‌ست، نه یه صفحهٔ نامرئی. */
+.neo-anim .neo-reveal > :not(.neo-deco) {
+  opacity: 0;
+  transform: translateY(22px);
+  transition:
+    opacity 0.75s cubic-bezier(0.22, 0.7, 0.25, 1),
+    transform 0.75s cubic-bezier(0.22, 0.7, 0.25, 1);
+}
+
+.neo-anim .neo-reveal.is-on > :not(.neo-deco) {
+  opacity: 1;
+  transform: none;
+}
+
+/* پلکان — چهار قدمِ کوتاه. بیشتر از این، سکشن دیر تمام می‌شه. */
+.neo-anim .neo-reveal > :not(.neo-deco):nth-child(2) { transition-delay: 0.07s; }
+.neo-anim .neo-reveal > :not(.neo-deco):nth-child(3) { transition-delay: 0.14s; }
+.neo-anim .neo-reveal > :not(.neo-deco):nth-child(4) { transition-delay: 0.21s; }
+.neo-anim .neo-reveal > :not(.neo-deco):nth-child(n + 5) { transition-delay: 0.28s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .neo-anim .neo-reveal > * {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}

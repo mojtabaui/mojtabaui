@@ -18,11 +18,20 @@ import {
   Volume2,
   VolumeX,
   Terminal,
-
+  Compass,
+  Images,
+  Users,
+  Layers,
+  Ticket,
+  MessagesSquare,
+  Route,
   X,
 } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 import dynamic from "next/dynamic";
 import { BrandGlyph } from "@/components/BrandMark";
+import { TOOL_MARKS } from "./ToolMarks";
+import { RobotPattern } from "./RobotFlat";
 import { useStill } from "@/components/odyssey/useStill";
 import { MISSIONS, EPISODE_COUNT } from "@/lib/odyssey";
 import {
@@ -72,11 +81,23 @@ const NeoStudio = dynamic(() => import("./NeoStudio"), { ssr: false });
  * عرضِ ۳۷۵ پیکسل به هیچ اندازه‌ای خوانا نمی‌شود.
  */
 
-// توکن‌های برند — globals.css منبعِ اصلی است
-const PAPER = "#faf6f1";
-const INK = "#1a1714";
-const MUTE = "#6b6560";
-const LINE = "#e8e2d9";
+/**
+ * توکن‌های برند.
+ *
+ * هر کدام یک متغیرِ CSS با مقدارِ پیش‌فرض است، نه یک رشتهٔ ثابت. در
+ * حالتِ عادی هیچ‌کس آن متغیرها را تعریف نمی‌کند و همان پیش‌فرضِ
+ * روشن می‌نشیند — یعنی بیرون از این فایل چیزی عوض نشده.
+ *
+ * فایده‌اش جایی پیدا می‌شود که یک سکشن مشکی می‌شود: به‌جای اینکه
+ * ده‌ها `style` داخلش تک‌تک رنگِ تیره بگیرند، فقط همان هفت متغیر
+ * روی قابِ سکشن نوشته می‌شوند و کارت و خط و دکمه و شمارهٔ داخلش
+ * خودشان برمی‌گردند. یعنی مشکی‌کردنِ یک سکشن، یک تصمیم است نه یک
+ * بازنویسی.
+ */
+const PAPER = "var(--neo-paper, #faf6f1)";
+const INK = "var(--neo-ink, #1a1714)";
+const MUTE = "var(--neo-mute, #6b6560)";
+const LINE = "var(--neo-line, #e8e2d9)";
 /**
  * صفحه **تک‌رنگ** است: سیاه، سفید، خاکستری. هیچ لهجهٔ رنگی.
  *
@@ -91,11 +112,11 @@ const LINE = "#e8e2d9";
  * نامِ متغیرها عمداً دست نخورد. اگر روزی لهجه برگشت، همین دو خط.
  */
 /** خاکستریِ لهجه — نشانه‌های ریز، روی هر دو زمینه خوانا */
-const VIOLET = "#8f8a82";
+const VIOLET = "var(--neo-accent, #8f8a82)";
 /** جوهر — پُرکنندهٔ دکمه‌ها و متنِ تأکیدی روی زمینهٔ روشن */
-const VIOLET_INK = "#1a1714";
+const VIOLET_INK = "var(--neo-strong, #1a1714)";
 /** کارتِ روی کاغذ — کرمِ روشن‌تر از زمینه، نه سفیدِ خالص */
-const CARD = "#fffcf6";
+const CARD = "var(--neo-card, #fffcf6)";
 /**
  * ثبت‌نام از راه پشتیبانی، نه درگاهِ پرداخت.
  *
@@ -548,6 +569,19 @@ export default function Ai7Minimal({
    */
   const heroClicks = useTransform(heroOut, (v) => (v > 0.5 ? "auto" : "none"));
 
+  /**
+   * حرکت تا بعد از اولین رندرِ مرورگر روشن نمی‌شود.
+   *
+   * قاعده‌های ظهور بچه‌های سکشن را نامرئی می‌کنند؛ اگر همان HTMLِ
+   * سرور هم نامرئی بیاید، هر کسی که JS برایش اجرا نشود صفحه‌ای خالی
+   * می‌بیند. پس سرور صفحهٔ کامل را می‌فرستد و حرکت یک فریم بعد سوار
+   * می‌شود.
+   */
+  const root = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    root.current?.classList.add("neo-anim");
+  }, []);
+
   return (
     /*
       نشانگرِ سیستم، نه نشانگرِ سفارشیِ سایت.
@@ -559,6 +593,15 @@ export default function Ai7Minimal({
       همین کار استفاده می‌کنند.
     */
     <div
+      /*
+        `neo-anim` تنها بعد از سوارشدنِ JS روشن می‌شود.
+
+        قاعده‌های ظهور در `globals.css` همه پشتِ همین کلاس‌اند، پس
+        اگر اسکریپت اجرا نشود — خزنده، مرورگرِ بی‌JS، یا فقط چند صدم
+        ثانیه پیش از هیدریشن — چیزی که دیده می‌شود متنِ کامل است، نه
+        صفحه‌ای که هیچ‌وقت ظاهر نشد.
+      */
+      ref={root}
       className="native-cursor relative min-h-dvh"
       style={{ background: PAPER, color: INK }}
     >
@@ -801,8 +844,8 @@ export default function Ai7Minimal({
 
           دو ستون از یک خطِ افقیِ مشترک شروع می‌شوند و هر دو با یک
           خط تمام — بدونِ آن، ستونِ کوتاه‌تر معلق می‌ماند. */}
-      <section className="mx-auto max-w-5xl px-5 pt-24 sm:px-6 sm:pt-32">
-        <Eyebrow>{t.briefLabel}</Eyebrow>
+      <Sec className="mx-auto max-w-5xl px-5 pt-24 sm:px-6 sm:pt-32" mark="OVERVIEW" icon={Compass}>
+        <Eyebrow icon={Compass}>{t.briefLabel}</Eyebrow>
         <h2 className="-mt-4 max-w-[20ch] text-balance font-light leading-[1.14] text-[clamp(1.8rem,4.8vw,3.2rem)]">
           {t.briefHead}
         </h2>
@@ -896,10 +939,10 @@ export default function Ai7Minimal({
             </a>
           </div>
         </div>
-      </section>
+      </Sec>
 
       {/* ── مسیرِ دوره ── */}
-      <section className="mx-auto max-w-5xl px-5 sm:px-6">
+      <Sec className="mx-auto max-w-5xl px-5 sm:px-6" mark="PATH" icon={Route}>
         <div className="flex min-h-[62dvh] flex-col items-center justify-center py-24 text-center sm:min-h-[70dvh]">
           <h2 className="max-w-[20ch] text-balance font-light leading-[1.12] text-[clamp(2rem,6vw,4.25rem)]">
             {t.pathTitle}
@@ -912,7 +955,7 @@ export default function Ai7Minimal({
           </p>
         </div>
         <PathStack path={t.path} lang={lang} />
-      </section>
+      </Sec>
 
       {/* ── ابزارها ──
           در بنتو فقط چهار چیپ بود، و چیپ هیچ‌چیز نمی‌گوید.
@@ -922,8 +965,8 @@ export default function Ai7Minimal({
           نمی‌دانم؟» و جوابش دقیقاً همان است که فصلِ دوم را می‌فروشد.
           پس هر ابزار یک کارتِ کامل شد: نقشش در یک خط، شش جزءِ داخلش،
           و یک جملهٔ نظر — همان چیزی که یک فهرستِ لوگو هرگز ندارد. */}
-      <section className="mx-auto max-w-5xl px-5 pt-20 sm:px-6 sm:pt-24">
-        <Eyebrow>{t.toolsLabel}</Eyebrow>
+      <Sec className="mx-auto max-w-5xl px-5 pt-20 sm:px-6 sm:pt-24" mark="TOOLS" icon={Boxes}>
+        <Eyebrow icon={Boxes}>{t.toolsLabel}</Eyebrow>
         <h2 className="-mt-4 max-w-[18ch] text-balance font-light leading-[1.12] text-[clamp(1.7rem,4.4vw,2.9rem)]">
           {tools.title}
         </h2>
@@ -938,12 +981,24 @@ export default function Ai7Minimal({
               className="flex flex-col rounded-none border p-6 sm:p-7"
               style={{ borderColor: LINE, background: CARD }}
             >
-              <div className="flex items-baseline justify-between gap-3">
-                <h3 className="text-lg font-bold sm:text-xl">{tool.name}</h3>
-                <span className="text-[0.65rem] tabular-nums" style={{ color: VIOLET_INK }} dir="ltr">
+              {/* لوگو بالای اسم، نه کنارش: سه کارتِ هم‌شکل با یک
+                  نشانهٔ بزرگ در بالا، از یک نگاه از هم جدا می‌شوند. */}
+              <div className="flex items-start justify-between gap-3">
+                <span
+                  className="flex h-9 items-center"
+                  style={{ color: VIOLET_INK }}
+                  aria-hidden="true"
+                >
+                  {(() => {
+                    const Mark = TOOL_MARKS[i % TOOL_MARKS.length];
+                    return <Mark className="h-full w-auto" />;
+                  })()}
+                </span>
+                <span className="text-[0.65rem] tabular-nums" style={{ color: VIOLET }} dir="ltr">
                   {String(i + 1).padStart(2, "0")}
                 </span>
               </div>
+              <h3 className="mt-5 text-lg font-bold sm:text-xl">{tool.name}</h3>
               <p className="mt-1.5 text-[0.8rem]" style={{ color: MUTE }}>
                 {tool.role}
               </p>
@@ -981,15 +1036,15 @@ export default function Ai7Minimal({
           <span style={{ color: VIOLET_INK }}>{tools.more}</span>
           {tools.moreNote}
         </p>
-      </section>
+      </Sec>
 
       {/* ── قالبِ فصل ──
           «ویدیوی ضبط‌شده» یک خانهٔ بنتو بود و عملاً هیچ نمی‌گفت.
           آنچه واقعاً تحویل داده می‌شود چهار چیز است، و یکی‌شان —
           جزوه — همان چیزی است که به کسی که هنوز حساب نخریده اجازه
           می‌دهد دنبال کند. این را نگفتن، فروختنِ کمتر است نه بیشتر. */}
-      <section className="mx-auto max-w-5xl px-5 pt-20 sm:px-6 sm:pt-24">
-        <Eyebrow>{t.formatLabel}</Eyebrow>
+      <Sec className="mx-auto max-w-5xl px-5 pt-20 sm:px-6 sm:pt-24" mark="FORMAT" icon={MonitorPlay}>
+        <Eyebrow icon={MonitorPlay}>{t.formatLabel}</Eyebrow>
         <h2 className="-mt-4 max-w-[20ch] text-balance font-light leading-[1.12] text-[clamp(1.7rem,4.4vw,2.9rem)]">
           {format.title}
         </h2>
@@ -1035,7 +1090,7 @@ export default function Ai7Minimal({
         >
           {format.note}
         </p>
-      </section>
+      </Sec>
 
       {/* ── اسلایدها ──
           بلافاصله بعد از «قالبِ فصل»، چون آنجا از دک حرف زده شد و
@@ -1045,8 +1100,8 @@ export default function Ai7Minimal({
           نه. این چهارتا عکسِ همان فایل‌هایی است که سرِ کلاس باز
           می‌شوند — بدونِ بازسازی و بدونِ تمیزکاری، با همان شمارهٔ
           صفحه و پاورقی که در دک هست. */}
-      <section className="mx-auto max-w-5xl px-5 pt-24 sm:px-6 sm:pt-32">
-        <Eyebrow>{slides.title}</Eyebrow>
+      <Sec className="mx-auto max-w-5xl px-5 pt-24 sm:px-6 sm:pt-32" mark="SLIDES" icon={Images}>
+        <Eyebrow icon={Images}>{slides.title}</Eyebrow>
         <p className="-mt-4 max-w-xl text-sm leading-loose sm:text-base" style={{ color: MUTE }}>
           {slides.lede}
         </p>
@@ -1079,7 +1134,7 @@ export default function Ai7Minimal({
             </li>
           ))}
         </ul>
-      </section>
+      </Sec>
 
       {/* ── برای چه کسی ──
           هر بند حالا یک دلیل هم دارد.
@@ -1088,8 +1143,8 @@ export default function Ai7Minimal({
           خواننده خودش را در آن نمی‌بیند. جمله‌ای که *چرا* را می‌گوید،
           هم قانع می‌کند و هم — مهم‌تر — کسی را که نباید بخرد بیرون
           می‌گذارد. همین است که باقیِ ادعاهای صفحه را باورپذیر می‌کند. */}
-      <section className="mx-auto max-w-5xl px-5 pt-20 sm:px-6 sm:pt-24">
-        <Eyebrow>{t.forTitle}</Eyebrow>
+      <Sec className="mx-auto max-w-5xl px-5 pt-20 sm:px-6 sm:pt-24" mark="AUDIENCE" icon={Users} dark>
+        <Eyebrow icon={Users}>{t.forTitle}</Eyebrow>
         {/*
           تیترِ این بخش، جمله‌ای است که تا پیش از این روی صفحهٔ
           ترمینالِ بنتو نوشته بود. با رفتنِ بنتو، تنها چیزِ آن شبکه
@@ -1107,14 +1162,16 @@ export default function Ai7Minimal({
           <FitList title={t.forYes} items={fit.yes} tone="yes" />
           <FitList title={t.forNo} items={fit.no} tone="no" />
         </div>
-      </section>
+      </Sec>
 
       {/* ── سرفصل‌ها ── */}
-      <section
+      <Sec
         id="outline"
         className="mx-auto max-w-4xl scroll-mt-8 px-5 pt-20 sm:px-6 sm:pt-24"
+        mark="SYLLABUS"
+        icon={ListOrdered}
       >
-        <Eyebrow>{t.outline}</Eyebrow>
+        <Eyebrow icon={ListOrdered}>{t.outline}</Eyebrow>
         <p className="-mt-5 max-w-lg text-sm leading-relaxed" style={{ color: MUTE }}>
           {t.outlineLede}
         </p>
@@ -1317,7 +1374,7 @@ export default function Ai7Minimal({
             </li>
           ))}
         </ol>
-      </section>
+      </Sec>
 
       {/* ── پروژه ──
           یک محصول، و فقط آنچه بدونش نمی‌شود فهمید چرا این یکی
@@ -1328,7 +1385,7 @@ export default function Ai7Minimal({
           این نقطه هنوز دوره را نشناخته و «۲۷ خوشه» برایش عدد است نه
           معنا. آن جزئیات جای خودشان را دارند — داخلِ فصل‌های سوم و
           چهارم، جایی که خواننده دنبالشان می‌گردد. */}
-      <section className="mx-auto max-w-4xl px-5 pt-24 sm:px-6 sm:pt-32">
+      <Sec className="mx-auto max-w-4xl px-5 pt-24 sm:px-6 sm:pt-32" mark="PROJECT" icon={Layers}>
         <div className="border-t pt-10" style={{ borderColor: LINE }}>
           <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
             <h3 className="text-2xl font-bold sm:text-3xl">{proj.name}</h3>
@@ -1356,13 +1413,13 @@ export default function Ai7Minimal({
             ))}
           </ul>
         </div>
-      </section>
+      </Sec>
 
       {/* ── پیش از شروع ──
           صادق‌بودن دربارهٔ هزینه‌ای که کاربر باید بدهد، همان‌قدر می‌فروشد
           که شمردنِ مزیت‌ها. کسی که وقت ندارد بهتر است همین‌جا برود. */}
-      <section className="mx-auto max-w-4xl px-5 pt-20 sm:px-6 sm:pt-24">
-        <Eyebrow>{t.needTitle}</Eyebrow>
+      <Sec className="mx-auto max-w-4xl px-5 pt-20 sm:px-6 sm:pt-24" mark="SETUP" icon={KeyRound}>
+        <Eyebrow icon={KeyRound}>{t.needTitle}</Eyebrow>
         {/*
           سه چیزی که کاربر باید *بیاورد*، نه سه چیزی که می‌گیرد.
 
@@ -1430,10 +1487,10 @@ export default function Ai7Minimal({
             </p>
           </div>
         </div>
-      </section>
+      </Sec>
 
       {/* ── یادداشت ── */}
-      <section className="mx-auto max-w-3xl px-5 pt-20 sm:px-6 sm:pt-24">
+      <Sec className="mx-auto max-w-3xl px-5 pt-20 sm:px-6 sm:pt-24">
         <div
           className="rounded-none border p-7 sm:p-11"
           style={{ borderColor: LINE, background: CARD }}
@@ -1457,14 +1514,14 @@ export default function Ai7Minimal({
             </p>
           </div>
         </div>
-      </section>
+      </Sec>
 
       {/* ── ثبت‌نام ──
           پیش از سؤال‌ها می‌آید، نه بعدشان: کسی که تا اینجا خوانده تصمیمش را
           گرفته، و نباید مجبور شود از پنج سؤال رد شود تا راهِ ثبت‌نام را
           پیدا کند. سؤال‌ها برای کسی است که هنوز مردد است. */}
-      <section className="mx-auto max-w-3xl px-5 pt-20 sm:px-6 sm:pt-24">
-        <Eyebrow>{t.joinTitle}</Eyebrow>
+      <Sec className="mx-auto max-w-3xl px-5 pt-20 sm:px-6 sm:pt-24" mark="PRICING" icon={Ticket} dark>
+        <Eyebrow icon={Ticket}>{t.joinTitle}</Eyebrow>
         <div
           className="mt-8 rounded-none border p-7 sm:p-11"
           style={{ borderColor: LINE, background: CARD }}
@@ -1514,11 +1571,11 @@ export default function Ai7Minimal({
             {t.joinNote}
           </p>
         </div>
-      </section>
+      </Sec>
 
       {/* ── سؤال‌ها ── */}
-      <section className="mx-auto max-w-3xl px-5 pt-20 sm:px-6 sm:pt-24">
-        <Eyebrow>{t.faqTitle}</Eyebrow>
+      <Sec className="mx-auto max-w-3xl px-5 pt-20 sm:px-6 sm:pt-24" mark="FAQ" icon={MessagesSquare}>
+        <Eyebrow icon={MessagesSquare}>{t.faqTitle}</Eyebrow>
         <div>
           {t.faq.map((f) => (
             <details key={f.q} className="group border-t py-5" style={{ borderColor: LINE }}>
@@ -1538,7 +1595,7 @@ export default function Ai7Minimal({
             </details>
           ))}
         </div>
-      </section>
+      </Sec>
 
 
       {/* ── پایان ──
@@ -1550,7 +1607,7 @@ export default function Ai7Minimal({
 
           دکمهٔ دوم به خودِ مدرسه می‌رود، برای کسی که هنوز تصمیم
           نگرفته و نباید به بن‌بست بخورد. */}
-      <section className="mx-auto max-w-3xl px-5 py-24 text-center sm:px-6 sm:py-32">
+      <Sec className="mx-auto max-w-3xl px-5 py-24 text-center sm:px-6 sm:py-32">
         <h2 className="text-2xl font-bold sm:text-4xl">{t.finalTitle}</h2>
         <p className="mt-4 text-sm sm:text-base" style={{ color: MUTE }}>
           {t.finalBody}
@@ -1579,7 +1636,64 @@ export default function Ai7Minimal({
         <p className="mt-8 text-xs" style={{ color: MUTE }}>
           {t.joinNote}
         </p>
-      </section>
+      </Sec>
+
+      {/* ── فوتر ──
+          صفحه با یک پیکره باز می‌شود؛ اگر روی یک خطِ متن تمام شود،
+          حسِ «تمام شد» نمی‌دهد، حسِ «قطع شد» می‌دهد.
+
+          ولی پیکرهٔ دوم هم لازم نیست — همان یکی در هیرو کارش را کرده.
+          اینجا فقط ردِ او می‌ماند: ردیفی از سرهای محو پشتِ نشان، و
+          لبه‌ای صاف که بی‌مقدمه به سیاهی می‌رود. محوکردنِ لبه امتحان
+          شد و نتیجه‌اش لکهٔ خاکستری بود، نه گذر. */}
+      <footer
+        className="relative mt-24 overflow-hidden"
+        style={{ background: NIGHT, color: NIGHT_INK, ["--robot-cut" as string]: NIGHT }}
+      >
+        <RobotPattern
+          className="pointer-events-none absolute inset-0 h-full w-full"
+          style={{ color: NIGHT_INK, opacity: 0.038 }}
+        />
+
+        <div className="relative mx-auto flex max-w-5xl flex-col items-center px-5 py-24 text-center sm:px-6 sm:py-28">
+          <p className="text-[0.7rem] tracking-[0.3em]" style={{ color: NIGHT_MUTE }} dir="ltr">
+            {t.kicker}
+          </p>
+          <p
+            className="mt-5 text-[clamp(2.6rem,11vw,6rem)] leading-none"
+            style={{
+              fontFamily: "var(--font-wordmark), var(--font-space-grotesk), sans-serif",
+              letterSpacing: "-0.02em",
+            }}
+            dir="ltr"
+          >
+            {WORDMARK}
+          </p>
+          <p className="mt-4 text-[0.78rem] tracking-[0.22em]" style={{ color: NIGHT_MUTE }} dir="ltr">
+            {t.wordSub}
+          </p>
+
+          <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
+            <a
+              href={SUPPORT}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2.5 px-6 py-3.5 text-sm font-semibold transition-opacity hover:opacity-85"
+              style={{ background: NIGHT_INK, color: NIGHT }}
+            >
+              {t.cta}
+              <Forward className="size-4" aria-hidden="true" />
+            </a>
+            <Link
+              href="/"
+              className="inline-flex items-center gap-2 border px-5 py-3.5 text-sm transition-opacity hover:opacity-70"
+              style={{ borderColor: NIGHT_LINE }}
+            >
+              {t.back}
+            </Link>
+          </div>
+        </div>
+      </footer>
 
     </div>
   );
@@ -1850,15 +1964,177 @@ function PathCard({
  */
 
 /** برچسبِ بالای هر بخش — یک شکل، همه‌جا */
-function Eyebrow({ children }: { children: React.ReactNode }) {
+/**
+ * تیترِ کوچکِ بالای هر سکشن.
+ *
+ * خطِ کوتاهِ قبلی فقط یک جداکننده بود. آیکن همان جا می‌نشیند و یک
+ * کار بیشتر می‌کند: وقتی خواننده صفحه را تند بالا و پایین می‌کند،
+ * نشانه‌ها زودتر از حروف دیده می‌شوند و می‌فهمد کجای صفحه است.
+ * داخلِ یک قابِ مربعِ بی‌گِردی، مثلِ بقیهٔ صفحه.
+ */
+function Eyebrow({ children, icon: Icon }: { children: React.ReactNode; icon?: LucideIcon }) {
   return (
     <h2
       className="mb-8 flex items-center gap-3 text-[0.66rem] tracking-[0.26em] sm:text-[0.7rem] sm:tracking-[0.3em]"
       style={{ color: MUTE }}
     >
-      <span className="inline-block h-px w-6" style={{ background: VIOLET }} />
+      {Icon ? (
+        <span
+          className="grid size-7 shrink-0 place-items-center border"
+          style={{ borderColor: LINE, color: VIOLET_INK }}
+          aria-hidden="true"
+        >
+          <Icon className="size-3.5" strokeWidth={1.5} />
+        </span>
+      ) : (
+        <span className="inline-block h-px w-6" style={{ background: VIOLET }} />
+      )}
       {children}
     </h2>
+  );
+}
+
+/**
+ * سکشنِ محتوا: ظهورِ پلکانی، به‌علاوهٔ یک نشانهٔ تزئینی که کندتر از
+ * صفحه حرکت می‌کند.
+ *
+ * پارالکس اینجا روی متن اعمال نمی‌شود — متنی که با اسکرول بلغزد،
+ * خواندنش سخت می‌شود. فقط همان ستونِ کناری می‌لغزد: در ستونِ خالیِ
+ * سمتِ چپ (صفحه راست‌چین است) یک آیکن، یک خطِ عمودی و نامِ انگلیسیِ
+ * سکشن. همین کافی است تا اسکرول عمق داشته باشد.
+ *
+ * روی موبایل کلاً نمایش داده نمی‌شود: آنجا ستونِ خالی‌ای وجود ندارد
+ * که تزئین در آن بنشیند.
+ */
+/**
+ * پالتِ سکشنِ تیره — همان هفت متغیر، وارونه.
+ *
+ * `--robot-cut` هم اینجاست چون چشمِ کاشی با رنگِ زمینه بریده می‌شود،
+ * و زمینه اینجا دیگر کاغذ نیست.
+ */
+const DARK_VARS: React.CSSProperties = {
+  background: NIGHT,
+  color: NIGHT_INK,
+  ["--neo-paper" as string]: NIGHT,
+  ["--neo-ink" as string]: NIGHT_INK,
+  ["--neo-mute" as string]: NIGHT_MUTE,
+  ["--neo-line" as string]: NIGHT_LINE,
+  ["--neo-card" as string]: "rgba(255,255,255,.035)",
+  ["--neo-accent" as string]: NIGHT_MUTE,
+  ["--neo-strong" as string]: NIGHT_INK,
+  ["--robot-cut" as string]: NIGHT,
+};
+
+function Sec({
+  className,
+  children,
+  mark,
+  icon: Icon,
+  id,
+  dark = false,
+}: {
+  className?: string;
+  children: React.ReactNode;
+  mark?: string;
+  icon?: LucideIcon;
+  id?: string;
+  /** نوارِ تمام‌عرضِ مشکی با کاشیِ سرها پشتش */
+  dark?: boolean;
+}) {
+  const ref = useRef<HTMLElement>(null);
+  const still = useStill();
+  const [on, setOn] = useState(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    /*
+      یک‌بار مصرف: بعد از اولین ورود، ناظر قطع می‌شود. سکشنی که با
+      هر بار رد شدن دوباره محو و ظاهر شود، در اسکرولِ برگشت آزاردهنده
+      است — خواننده دنبالِ چیزی می‌گردد که همین الان دیده بود.
+    */
+    const io = new IntersectionObserver(
+      ([e]) => {
+        if (!e.isIntersecting) return;
+        setOn(true);
+        io.disconnect();
+      },
+      { threshold: 0.12, rootMargin: "0px 0px -6% 0px" }
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
+  const drift = useTransform(scrollYProgress, [0, 1], [64, -64]);
+  const soft = useSpring(drift, { stiffness: 70, damping: 22, mass: 0.6 });
+  /** در دو سرِ سکشن محو می‌شود تا ناگهان قطع نشود */
+  const fade = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0]);
+
+  const deco = mark && (
+        <motion.div
+          className="neo-deco pointer-events-none absolute end-0 top-16 hidden select-none flex-col items-center gap-4 md:flex"
+          style={{ y: still ? 0 : soft, opacity: still ? 0.55 : fade }}
+          aria-hidden="true"
+        >
+          {Icon && (
+            <span
+              className="grid size-9 place-items-center border"
+              style={{ borderColor: LINE, color: VIOLET }}
+            >
+              <Icon className="size-4" strokeWidth={1.4} />
+            </span>
+          )}
+          <span className="h-14 w-px" style={{ background: LINE }} />
+          <span
+            className="text-[0.6rem]"
+            style={{
+              writingMode: "vertical-rl",
+              fontFamily: "var(--font-wordmark), var(--font-space-grotesk), sans-serif",
+              letterSpacing: "0.28em",
+              color: VIOLET,
+            }}
+            dir="ltr"
+          >
+            {mark}
+          </span>
+        </motion.div>
+  );
+
+  const inner = (
+    <>
+      {deco}
+      {children}
+    </>
+  );
+
+  if (!dark) {
+    return (
+      <section
+        id={id}
+        ref={ref}
+        className={`neo-reveal relative ${on ? "is-on" : ""} ${className ?? ""}`}
+      >
+        {inner}
+      </section>
+    );
+  }
+
+  /*
+    نوارِ تیره تمام‌عرض است، ولی محتوایش داخلِ همان ستونِ همیشگی
+    می‌ماند: اگر خودِ ستون را سیاه کنیم، یک مستطیلِ شناور وسطِ صفحه
+    می‌شود، نه یک وقفه. وقفه وقتی کار می‌کند که از لبه تا لبه برود.
+  */
+  return (
+    <section id={id} ref={ref} className="relative mt-20 overflow-hidden sm:mt-24" style={DARK_VARS}>
+      <RobotPattern
+        className="pointer-events-none absolute inset-0 h-full w-full"
+        style={{ color: NIGHT_INK, opacity: 0.038 }}
+      />
+      <div className={`neo-reveal relative pb-20 sm:pb-24 ${on ? "is-on" : ""} ${className ?? ""}`}>
+        {inner}
+      </div>
+    </section>
   );
 }
 
