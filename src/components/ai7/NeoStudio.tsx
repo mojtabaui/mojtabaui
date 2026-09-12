@@ -8,6 +8,7 @@ import { carbonWeave, dotMatrix, sparkleRoughness, textLabel } from "./neoTextur
 import { buildNeoGuitar, type GuitarMaterials } from "./neoGuitar";
 import { solveArm } from "./armIK";
 import { createSceneAudio, type SceneAudio } from "./neoAudio";
+import { RobotGlyph } from "./RobotFlat";
 
 /**
  * صحنهٔ پیکرهٔ مشکی.
@@ -232,6 +233,16 @@ export default function NeoStudio({
     if (!el) return;
 
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    /**
+     * گوشی، نه فقط «صفحهٔ باریک».
+     *
+     * همان صحنه‌ای که روی لپ‌تاپ روان است، روی یک گوشیِ میان‌رده
+     * می‌تواند کانتکست را از دست بدهد و آن‌وقت کاربر یک قابِ سیاهِ
+     * خالی می‌بیند، نه یک صحنهٔ کندتر. دو گران‌ترین چیز — تعدادِ
+     * پیکسل و نقشهٔ سایه — روی گوشی پایین می‌آیند؛ بقیهٔ نورپردازی
+     * دست‌نخورده می‌ماند چون همان است که جسم را مشکی نگه می‌دارد.
+     */
+    const small = window.matchMedia("(max-width: 820px)").matches;
     const disposables: { dispose(): void }[] = [];
     const keep = <T extends { dispose(): void }>(v: T) => (disposables.push(v), v);
 
@@ -256,7 +267,12 @@ export default function NeoStudio({
     } catch {
       return;
     }
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.75));
+    /*
+      روی گوشی ۱٫۲ به‌جای ۱٫۷۵: روی صفحه‌ای با چگالیِ ۳، همین یک عدد
+      مساحتِ بافرِ رنگ را بیش از دو برابر کم می‌کند. جسم مشکیِ براق
+      است و لبه‌هایش کم‌اند، پس این افت تقریباً دیده نمی‌شود.
+    */
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, small ? 1.2 : 1.75));
     renderer.outputColorSpace = THREE.SRGBColorSpace;
     /**
      * AgX، نه Neutral.
@@ -271,10 +287,34 @@ export default function NeoStudio({
      */
     renderer.toneMapping = THREE.AgXToneMapping;
     renderer.toneMappingExposure = 1.12;
-    renderer.shadowMap.enabled = true;
+    /*
+      سایه روی گوشی خاموش است. زمینِ زیرِ پیکره تقریباً سیاه است و
+      سایه روی سیاه چیزِ کمی اضافه می‌کند — ولی نقشهٔ سایه یک رندرِ
+      کاملِ دیگر در هر به‌روزرسانی است، و همان چیزی است که بودجهٔ
+      یک گوشی را تمام می‌کند.
+    */
+    renderer.shadowMap.enabled = !small;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     /** سایه دستی به‌روز می‌شود: هر به‌روزرسانی یک رندرِ کاملِ دیگر است */
     renderer.shadowMap.autoUpdate = false;
+    /**
+     * گم‌شدنِ کانتکست باید *دیده* شود.
+     *
+     * وقتی مرورگر بافرِ WebGL را پس می‌گیرد — کمبودِ حافظه روی گوشی،
+     * یا رفتن به تبِ دیگر و برگشتن — کانواس بی‌سروصدا خالی می‌ماند و
+     * کاربر یک هیروِ سیاهِ بی‌جسم می‌بیند و فکر می‌کند صفحه خراب است.
+     * این پرچم همان حالت را به CSS می‌گوید تا جایگزینِ ثابت بنشیند.
+     *
+     * `preventDefault` لازم است وگرنه مرورگر هیچ‌وقت رویدادِ بازیابی
+     * را نمی‌فرستد.
+     */
+    renderer.domElement.addEventListener("webglcontextlost", (ev) => {
+      ev.preventDefault();
+      el.dataset.scene = "down";
+    });
+    renderer.domElement.addEventListener("webglcontextrestored", () => {
+      delete el.dataset.scene;
+    });
     el.appendChild(renderer.domElement);
     Object.assign(renderer.domElement.style, {
       width: "100%",
@@ -591,7 +631,7 @@ export default function NeoStudio({
       dist = w < 640 ? 17.5 : w < 1024 ? 15.5 : 14.2;
       baseScale = w < 640 ? 0.92 : 1;
       camera.updateProjectionMatrix();
-      renderer.shadowMap.needsUpdate = true;
+      if (!small) renderer.shadowMap.needsUpdate = true;
     };
     resize();
     const ro = new ResizeObserver(resize);
@@ -986,5 +1026,20 @@ export default function NeoStudio({
     };
   }, [progress, shift, chestText, muted]);
 
-  return <div ref={host} className={className} aria-hidden="true" />;
+  /*
+    جایگزین همیشه در درخت هست و با CSS پنهان می‌ماند، نه با state.
+    اگر با state بود، خودِ تشخیصِ خرابی یک رندرِ دیگر لازم داشت —
+    درست همان لحظه‌ای که مرورگر دارد حافظه کم می‌آورد.
+  */
+  return (
+    <div ref={host} className={className} aria-hidden="true">
+      <style>{`
+        .neo-down { display: none }
+        [data-scene="down"] .neo-down { display: flex }
+      `}</style>
+      <div className="neo-down absolute inset-0 items-center justify-center">
+        <RobotGlyph className="h-[38dvh] w-auto" style={{ color: "rgba(244,239,232,.22)" }} />
+      </div>
+    </div>
+  );
 }

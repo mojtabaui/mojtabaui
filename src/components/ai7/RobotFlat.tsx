@@ -20,6 +20,31 @@ type Props = { className?: string; style?: React.CSSProperties };
  * چشم‌ها با رنگِ زمینه بریده می‌شوند (`--robot-cut`)، نه با رنگِ
  * روشن — یعنی هر جا بگذاریش، سوراخ‌ها همان زمینه را نشان می‌دهند.
  */
+/**
+ * همان سر، تک و بزرگ.
+ *
+ * فقط یک جا استفاده می‌شود: وقتی صحنهٔ سه‌بعدی بالا نمی‌آید. قابِ
+ * سیاهِ خالی به کاربر می‌گوید «صفحه خراب است»؛ یک سیلوئتِ ساکت
+ * می‌گوید «اینجا چیزی هست که دستگاهِ تو نتوانست نشانش بدهد» — و
+ * بقیهٔ صفحه سرِ جایش می‌ماند.
+ */
+export function RobotGlyph({ className, style }: Props) {
+  return (
+    <svg viewBox="0 0 48 70" className={className} style={style} aria-hidden="true">
+      <g fill="currentColor">
+        <circle cx="24" cy="24" r="24" />
+        <rect x="14" y="50" width="20" height="9" />
+        <rect x="4" y="62" width="40" height="5" />
+      </g>
+      {/* چشم‌ها با رنگِ زمینه بریده می‌شوند، مثلِ کاشی */}
+      <g fill="var(--robot-cut, #0a0908)">
+        <rect x="7.5" y="19" width="12" height="8" />
+        <rect x="28.5" y="19" width="12" height="8" />
+      </g>
+    </svg>
+  );
+}
+
 export function RobotPattern({ className, style }: Props) {
   const id = "neo-head-tile";
   return (

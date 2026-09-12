@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useTransition } from "react";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, useScroll, useTransform, useSpring, type MotionValue } from "framer-motion";
@@ -651,6 +652,8 @@ export default function Ai7Minimal({
             <BrandGlyph size={22} style={{ color: VIOLET }} />
 
             <div className="flex items-center gap-2.5">
+              <LangPick lang={lang} line={line} ink={ink} mute={mute} bg={bg} />
+
               {/* خاموشیِ صدا — آیکن‌تنها، چون توضیح نمی‌خواهد */}
               <button
                 type="button"
@@ -1673,7 +1676,11 @@ export default function Ai7Minimal({
             {t.wordSub}
           </p>
 
-          <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
+          <div className="mt-8">
+            <LangPick lang={lang} line={NIGHT_LINE} ink={NIGHT_INK} mute={NIGHT_MUTE} bg={NIGHT} />
+          </div>
+
+          <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
             <a
               href={SUPPORT}
               target="_blank"
@@ -1972,6 +1979,72 @@ function PathCard({
  * نشانه‌ها زودتر از حروف دیده می‌شوند و می‌فهمد کجای صفحه است.
  * داخلِ یک قابِ مربعِ بی‌گِردی، مثلِ بقیهٔ صفحه.
  */
+/**
+ * انتخابِ زبان.
+ *
+ * این صفحه نوار و فوترِ سایت را ندارد، پس کلیدِ زبانِ همیشگی هم اینجا
+ * نیست. و چون زبان در کوکی می‌ماند، کسی که یک‌بار جای دیگری انگلیسی
+ * را زده باشد اینجا هم انگلیسی می‌بیند و **هیچ راهی برای برگشتن
+ * ندارد** جز دست‌کاریِ آدرس. همین یک دکمه آن بن‌بست را می‌بندد.
+ *
+ * کاری که می‌کند همان کارِ `LangSwitch` سایت است — `?lang` را به
+ * همین آدرس می‌چسباند و پروکسی کوکی را می‌نویسد — ولی ظاهرش مربعی و
+ * تک‌رنگ است تا با بقیهٔ صفحه یکی باشد.
+ */
+function LangPick({
+  lang,
+  line,
+  ink,
+  mute,
+  bg,
+}: {
+  lang: Lang;
+  line: string;
+  ink: string;
+  mute: string;
+  bg: string;
+}) {
+  const router = useRouter();
+  const [pending, start] = useTransition();
+
+  function go(next: Lang) {
+    if (next === lang) return;
+    const url = new URL(window.location.href);
+    url.searchParams.set("lang", next);
+    start(() => {
+      router.push(url.pathname + url.search);
+      // بدونِ این، نسخهٔ کش‌شدهٔ زبانِ قبلی سرِ جایش می‌ماند
+      router.refresh();
+    });
+  }
+
+  return (
+    <div
+      role="group"
+      aria-label="Language"
+      className="inline-flex border"
+      style={{ borderColor: line, opacity: pending ? 0.6 : 1 }}
+    >
+      {(["fa", "en"] as const).map((code) => {
+        const on = code === lang;
+        return (
+          <button
+            key={code}
+            type="button"
+            lang={code}
+            onClick={() => go(code)}
+            aria-pressed={on}
+            className="px-2.5 py-2 text-[0.68rem] leading-none transition-opacity hover:opacity-80"
+            style={on ? { background: ink, color: bg } : { color: mute }}
+          >
+            {code === "fa" ? "فا" : "EN"}
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
 function Eyebrow({ children, icon: Icon }: { children: React.ReactNode; icon?: LucideIcon }) {
   return (
     <h2
