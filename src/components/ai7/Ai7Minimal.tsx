@@ -724,7 +724,7 @@ export default function Ai7Minimal({
             className="absolute inset-x-0 top-0 z-20 flex items-center justify-between gap-4 px-5 py-5 sm:px-8 sm:py-6"
             style={{ opacity: heroOut, pointerEvents: heroClicks }}
           >
-            <span className="hidden text-[0.62rem] tracking-[0.22em] sm:inline" style={{ color: mute }}>
+            <span className="neo-cap hidden text-[0.62rem] sm:inline" style={{ color: mute }}>
               {t.kicker}
             </span>
 
@@ -969,7 +969,7 @@ export default function Ai7Minimal({
             بگردد. کنارِ فهرستِ فصل‌ها، سؤال و جواب در یک نگاه‌اند.
           */}
           <div className="flex flex-col border-t pt-2" style={{ borderColor: INK }}>
-            <p className="py-3.5 text-[0.66rem] tracking-[0.26em]" style={{ color: MUTE }}>
+            <p className="neo-cap py-3.5 text-[0.66rem]" style={{ color: MUTE }}>
               {price.title}
             </p>
 
@@ -1738,7 +1738,7 @@ export default function Ai7Minimal({
         />
 
         <div className="relative mx-auto flex max-w-5xl flex-col items-center px-5 py-24 text-center sm:px-6 sm:py-28">
-          <p className="text-[0.7rem] tracking-[0.3em]" style={{ color: NIGHT_MUTE }} dir="ltr">
+          <p className="neo-cap text-[0.7rem]" style={{ color: NIGHT_MUTE }} dir="ltr">
             {t.kicker}
           </p>
           <p
@@ -1955,7 +1955,7 @@ function PathCard({
       </span>
 
       <div className="relative">
-        <span className="text-[0.66rem] tracking-[0.24em]" style={{ color: VIOLET_INK }}>
+        <span className="neo-cap text-[0.66rem]" style={{ color: VIOLET_INK }}>
           {stage}
         </span>
         <h3 className="mt-3 text-2xl font-normal sm:text-4xl">{s.t}</h3>
@@ -2127,7 +2127,7 @@ function LangPick({
 function Eyebrow({ children, icon: Icon }: { children: React.ReactNode; icon?: LucideIcon }) {
   return (
     <h2
-      className="mb-8 flex items-center gap-3 text-[0.66rem] tracking-[0.26em] sm:text-[0.7rem] sm:tracking-[0.3em]"
+      className="neo-cap mb-8 flex items-center gap-3 text-[0.66rem] sm:text-[0.7rem]"
       style={{ color: MUTE }}
     >
       {Icon ? (
