@@ -531,6 +531,18 @@ export default function Ai7Minimal({
   const p = useSpring(scrollYProgress, { stiffness: 110, damping: 30, restDelta: 0.0005 });
 
   /** در کاهش حرکت، هر چیز از همان اول در حالت نهایی می‌نشیند */
+  /**
+   * در حالتِ کاهشِ حرکت، این مقدار **جابه‌جا** نشود.
+   *
+   * فقط برای `transform` است، عمداً. یک دور همین کمک روی شفافیت هم
+   * به کار رفت و نتیجه‌اش این شد که هرچه با اسکرول محو می‌شد، برای
+   * کاربرِ کاهشِ حرکت **از اول** نامرئی می‌ماند: نوارِ بالا، نشانِ
+   * واژه‌ای، و دو پردهٔ آخر. یعنی تنظیمی که قرار بود حرکت را کم کند،
+   * نصفِ صفحه را حذف می‌کرد.
+   *
+   * محوشدن حرکت نیست؛ لغزیدن و پارالاکس است که هست. پس شفافیت همیشه
+   * از اسکرول می‌آید و فقط جابه‌جایی صفر می‌شود.
+   */
   const fixed = <V,>(v: MotionValue<V>, end: V) => (still ? end : v);
 
   /**
@@ -599,9 +611,27 @@ export default function Ai7Minimal({
     */
     const prev = history.scrollRestoration;
     if ("scrollRestoration" in history) history.scrollRestoration = "manual";
-    if (!window.location.hash) window.scrollTo(0, 0);
+
+    /*
+      یک بار کافی نیست.
+
+      سافاری جای اسکرول را *بعد از* رویدادِ `load` برمی‌گرداند، یعنی
+      بعد از این افکت. و اگر صفحه از حافظهٔ عقب/جلو بیاید (`pageshow`
+      با `persisted`) اصلاً این افکت دوباره اجرا نمی‌شود. پس همان
+      «بالا برو» در هر سه لحظه‌ای که صفحه دارد *می‌رسد* تکرار می‌شود،
+      نه در لحظه‌های دلخواهِ بعدی — وگرنه اسکرولِ خودِ کاربر را خراب
+      می‌کردیم.
+    */
+    const toTop = () => {
+      if (!window.location.hash) window.scrollTo(0, 0);
+    };
+    toTop();
+    window.addEventListener("load", toTop);
+    window.addEventListener("pageshow", toTop);
 
     return () => {
+      window.removeEventListener("load", toTop);
+      window.removeEventListener("pageshow", toTop);
       if ("scrollRestoration" in history) history.scrollRestoration = prev;
     };
   }, []);
@@ -664,7 +694,21 @@ export default function Ai7Minimal({
         ۳۲۰dvh همان سه پرده را در نصفِ مسافت می‌دهد؛ کوریوگرافی عوض
         نمی‌شود، فقط فشرده‌تر می‌شود.
       */}
-      <div ref={stage} className="relative h-[320dvh] md:h-[480dvh]">
+      {/*
+        `svh` برای بلندیِ صحنه، نه `dvh`.
+
+        روی آی‌فون نوارِ آدرس با اسکرول جمع و باز می‌شود و `dvh` هر
+        بار عوض می‌شود. وقتی واحدِ یک عنصرِ **بلند** این باشد، بلندیِ
+        کلِ صفحه وسطِ اسکرول تغییر می‌کند، مرورگر جای اسکرول را جبران
+        می‌کند، و کاربر یک پرش می‌بیند — همان «یک لحظه می‌آید و سریع
+        می‌رود پایین».
+
+        `svh` کوچک‌ترین حالتِ نما است و **ثابت** می‌ماند، پس طولِ
+        مسیرِ اسکرول دیگر زیرِ پا تکان نمی‌خورد. پردهٔ چسبانِ داخلش
+        همچنان `dvh` است، چون آن باید دقیقاً قابِ دیده‌شده را پر کند
+        و تغییرِ بلندی‌اش طولِ مسیر را عوض نمی‌کند.
+      */}
+      <div ref={stage} className="relative h-[320svh] md:h-[480svh]">
         <motion.div
           className="sticky top-0 h-dvh overflow-hidden"
           style={{ background: bg, color: ink }}
@@ -678,7 +722,7 @@ export default function Ai7Minimal({
           */}
           <motion.div
             className="absolute inset-x-0 top-0 z-20 flex items-center justify-between gap-4 px-5 py-5 sm:px-8 sm:py-6"
-            style={{ opacity: fixed(heroOut, 0), pointerEvents: fixed(heroClicks, "none") }}
+            style={{ opacity: heroOut, pointerEvents: heroClicks }}
           >
             <span className="hidden text-[0.62rem] tracking-[0.22em] sm:inline" style={{ color: mute }}>
               {t.kicker}
@@ -734,7 +778,7 @@ export default function Ai7Minimal({
           */}
           <motion.h1
             className="pointer-events-none absolute inset-x-0 top-[15dvh] z-0 px-2 text-center sm:top-[13dvh]"
-            style={{ opacity: fixed(wordOut, 0), y: fixed(wordY, -40) }}
+            style={{ opacity: wordOut, y: fixed(wordY, 0) }}
           >
             <span className="sr-only">{t.title}</span>
             {/*
@@ -2384,7 +2428,14 @@ function Panel({
   return (
     <motion.div
       style={{
-        opacity: still ? (index === 0 ? 1 : 0) : opacity,
+        /*
+          شفافیت همیشه از اسکرول می‌آید.
+
+          اینجا در حالتِ کاهشِ حرکت فقط پردهٔ اول نشان داده می‌شد و دو
+          تای دیگر همیشه صفر می‌ماندند — یعنی دو سومِ متنِ هیرو برای
+          آن کاربر اصلاً وجود نداشت. فرقی هم نمی‌کرد چقدر اسکرول کند.
+        */
+        opacity,
         y: still ? 0 : y,
       }}
       data-panel={no}
