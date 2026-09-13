@@ -303,3 +303,184 @@ export function carbonWeave({
   tex.anisotropy = 8;
   return tex;
 }
+
+/**
+ * سطحِ بدنه — یک میدانِ ارتفاع، سه بافت.
+ *
+ * تا حالا بافتِ کربن و زبری جدا ساخته می‌شدند و هیچ‌کدام خبر از آن
+ * یکی نداشت. مشکلِ این کار وقتی پیدا می‌شود که درز هم اضافه شود:
+ * ماده در `three` فقط **یک** `normalMap` می‌گیرد، پس درز و بافت
+ * نمی‌توانند دو بافتِ جدا باشند — باید پیش از تبدیل‌شدن به نرمال با
+ * هم جمع شوند.
+ *
+ * پس اول یک میدانِ ارتفاع ساخته می‌شود و چهار چیز رویش جمع می‌شود:
+ * بافتِ بافته‌شدهٔ ریز، شیارِ بینِ قطعه‌ها، منفذهای ریزِ روی صفحه، و
+ * خش‌های نازک. بعد از همان یک میدان، هر سه بافت بیرون می‌آید:
+ *
+ * - نرمال، از شیبِ ارتفاع (سوبل)
+ * - زبری، از خودِ ارتفاع: بلندی صیقلی‌ست، تهِ شیار مات
+ * - سایهٔ محیطی، باز از ارتفاع: شیار تاریک می‌ماند
+ *
+ * و چون هر سه از یک میدان می‌آیند، دقیقاً روی هم می‌افتند. همین
+ * هم‌راستایی است که سطح را «ساخته‌شده» نشان می‌دهد؛ سه بافتِ
+ * بی‌ربط، فقط شلوغی است.
+ */
+export function shellSurface({
+  size = 1024,
+  /** خانه‌های بافت در هر ضلع — بالا برود، بافت ریزتر می‌شود */
+  cells = 64,
+  /** عمقِ نرمال */
+  depth = 1.6,
+  /** زبریِ سطحِ صیقلی */
+  base = 0.13,
+  /** زبریِ تهِ شیار */
+  rough = 0.52,
+  /** منفذها روشن‌اند یا نه — روی مفصل‌ها لازم نیست */
+  perf = true,
+  seed = 7,
+} = {}) {
+  let st = seed >>> 0;
+  const rand = () => ((st = (st * 1664525 + 1013904223) >>> 0) / 4294967296);
+
+  const h = new Float32Array(size * size);
+  const cell = size / cells;
+
+  /**
+   * جای درزها — عمداً نامنظم.
+   *
+   * شبکهٔ مساوی، کاشیِ حمام می‌سازد. فاصله‌های نابرابر همان چیزی است
+   * که قطعه‌های یک بدنهٔ واقعی دارند. صفر هم داخلش هست تا بافت در
+   * تکرار، درزِ لبه را روی هم بیندازد.
+   */
+  const seamX = [0, 0.37, 0.62].map((v) => v * size);
+  const seamY = [0, 0.28, 0.55, 0.81].map((v) => v * size);
+  /** نصفِ پهنای شیار، برحسبِ پیکسل */
+  const SEAM = size / 280;
+
+  const near = (v: number, list: number[]) => {
+    let d = Infinity;
+    for (const s0 of list) {
+      const raw = Math.abs(v - s0);
+      d = Math.min(d, Math.min(raw, size - raw));
+    }
+    return d;
+  };
+
+  for (let y = 0; y < size; y++) {
+    for (let x = 0; x < size; x++) {
+      /* ۱) بافتِ بافته‌شده — نوارهایی که خانه‌به‌خانه جهت عوض می‌کنند */
+      const cx = Math.floor(x / cell);
+      const cy = Math.floor(y / cell);
+      const u = x % cell;
+      const v = y % cell;
+      const t = (cx + cy) % 2 === 0 ? u + v : u - v + cell;
+      const strand = Math.cos((t / cell) * Math.PI * 4);
+      const edge = Math.min(u, cell - u, v, cell - v) / (cell * 0.5);
+      let z = strand * 0.22 + 0.16 * Math.min(1, edge * 2.2);
+
+      /* ۲) منفذهای ریز — شبکهٔ شش‌گوش، نه مربع */
+      if (perf) {
+        const STEP = size / 48;
+        const row = Math.round(y / STEP);
+        const ox = (row % 2) * STEP * 0.5;
+        const dx = x - (Math.round((x - ox) / STEP) * STEP + ox);
+        const dy = y - row * STEP;
+        const r = Math.sqrt(dx * dx + dy * dy);
+        const R = STEP * 0.17;
+        if (r < R) z -= (1 - r / R) * 0.34;
+      }
+
+      /* ۳) شیارِ بینِ قطعه‌ها — عمیق‌ترین چیزِ سطح */
+      const g = Math.min(near(x, seamX), near(y, seamY));
+      if (g < SEAM) z -= (1 - g / SEAM) * 0.75;
+
+      h[y * size + x] = z;
+    }
+  }
+
+  /* ۴) خش — خطوطِ نازکِ تصادفی، فقط چند صدم واحد */
+  for (let i = 0; i < 260; i++) {
+    const x0 = rand() * size;
+    const y0 = rand() * size;
+    const a = rand() * Math.PI;
+    const len = size * (0.03 + rand() * 0.16);
+    const amp = 0.03 + rand() * 0.05;
+    for (let k = 0; k < len; k++) {
+      const x = Math.round(x0 + Math.cos(a) * k) % size;
+      const y = Math.round(y0 + Math.sin(a) * k) % size;
+      const idx = ((y + size) % size) * size + ((x + size) % size);
+      h[idx] -= amp;
+    }
+  }
+
+  /* دامنه، برای نگاشتِ ارتفاع به زبری و سایه */
+  let lo = Infinity;
+  let hi = -Infinity;
+  for (let i = 0; i < h.length; i++) {
+    if (h[i] < lo) lo = h[i];
+    if (h[i] > hi) hi = h[i];
+  }
+  const span = hi - lo || 1;
+
+  const at = (x: number, y: number) =>
+    h[((y + size) % size) * size + ((x + size) % size)];
+  const make = () => {
+    const c = document.createElement("canvas");
+    c.width = c.height = size;
+    return c;
+  };
+
+  const nCvs = make();
+  const rCvs = make();
+  const aCvs = make();
+  const nCtx = nCvs.getContext("2d")!;
+  const rCtx = rCvs.getContext("2d")!;
+  const aCtx = aCvs.getContext("2d")!;
+  const nImg = nCtx.createImageData(size, size);
+  const rImg = rCtx.createImageData(size, size);
+  const aImg = aCtx.createImageData(size, size);
+
+  for (let y = 0; y < size; y++) {
+    for (let x = 0; x < size; x++) {
+      const i = (y * size + x) * 4;
+
+      const dx = (at(x + 1, y) - at(x - 1, y)) * depth;
+      const dy = (at(x, y + 1) - at(x, y - 1)) * depth;
+      const len = Math.sqrt(dx * dx + dy * dy + 1);
+      nImg.data[i] = Math.round(((-dx / len) * 0.5 + 0.5) * 255);
+      nImg.data[i + 1] = Math.round(((-dy / len) * 0.5 + 0.5) * 255);
+      nImg.data[i + 2] = Math.round((1 / len) * 255);
+      nImg.data[i + 3] = 255;
+
+      // ۰ تهِ شیار، ۱ بلندترین جا
+      const t = (at(x, y) - lo) / span;
+      const r = Math.round((rough + (base - rough) * t) * 255);
+      rImg.data[i] = rImg.data[i + 1] = rImg.data[i + 2] = r;
+      rImg.data[i + 3] = 255;
+
+      // سایه فقط در فرورفتگی‌ها، و ملایم — وگرنه بدنه کثیف می‌شود
+      const a = Math.round((0.62 + 0.38 * t) * 255);
+      aImg.data[i] = aImg.data[i + 1] = aImg.data[i + 2] = a;
+      aImg.data[i + 3] = 255;
+    }
+  }
+
+  nCtx.putImageData(nImg, 0, 0);
+  rCtx.putImageData(rImg, 0, 0);
+  aCtx.putImageData(aImg, 0, 0);
+
+  const wrap = (c: HTMLCanvasElement, repeat: number, srgb = false) => {
+    const tex = new THREE.CanvasTexture(c);
+    tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
+    tex.repeat.set(repeat, repeat);
+    tex.anisotropy = 8;
+    if (srgb) tex.colorSpace = THREE.SRGBColorSpace;
+    return tex;
+  };
+
+  return {
+    normalMap: wrap(nCvs, 3),
+    roughnessMap: wrap(rCvs, 3),
+    aoMap: wrap(aCvs, 3),
+  };
+}

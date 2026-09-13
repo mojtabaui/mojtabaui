@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react";
 import type { MotionValue } from "framer-motion";
 import * as THREE from "three";
 import { buildNeoBot, type NeoMaterials } from "./neoBot";
-import { carbonWeave, dotMatrix, sparkleRoughness, textLabel } from "./neoTextures";
+import { carbonWeave, dotMatrix, shellSurface, sparkleRoughness, textLabel } from "./neoTextures";
 import { buildNeoGuitar, type GuitarMaterials } from "./neoGuitar";
 import { solveArm } from "./armIK";
 import { createSceneAudio, type SceneAudio } from "./neoAudio";
@@ -257,15 +257,33 @@ export default function NeoStudio({
      * شتاب‌دهنده‌اش خاموش است به‌جای صفحه‌ای بدونِ پیکره، یک صفحهٔ
      * سفید می‌بیند. تیتر و بقیهٔ صفحه هیچ ربطی به سه‌بعدی ندارند.
      */
+    /**
+     * دو تلاش، نه یکی.
+     *
+     * سافاریِ آی‌فون سخت‌گیرترین جایی است که این صحنه اجرا می‌شود و
+     * وقتی نتواند کانتکست بدهد چیزی نمی‌گوید — فقط یک کانواسِ خالی
+     * می‌ماند. گران‌ترین درخواستِ ما هم `antialias` است: روی iOS یک
+     * بافرِ چندنمونه‌ایِ جدا می‌خواهد و همان اولین چیزی است که رد
+     * می‌شود.
+     *
+     * پس روی صفحهٔ کوچک اصلاً درخواستش نمی‌کنیم، و اگر باز هم نشد،
+     * یک بار دیگر با کمینه‌ترین تنظیمات. لبهٔ کمی دندانه‌دار،
+     * بی‌نهایت بهتر از نبودنِ پیکره است.
+     */
     let renderer: THREE.WebGLRenderer;
     try {
-      renderer = new THREE.WebGLRenderer({
-        antialias: true,
-        alpha: true,
-        powerPreference: "high-performance",
-      });
+      renderer = new THREE.WebGLRenderer(
+        small
+          ? { antialias: false, alpha: true }
+          : { antialias: true, alpha: true, powerPreference: "high-performance" },
+      );
     } catch {
-      return;
+      try {
+        renderer = new THREE.WebGLRenderer({ alpha: true });
+      } catch {
+        el.dataset.scene = "down";
+        return;
+      }
     }
     /*
       روی گوشی ۱٫۲ به‌جای ۱٫۷۵: روی صفحه‌ای با چگالیِ ۳، همین یک عدد
@@ -308,6 +326,9 @@ export default function NeoStudio({
      * `preventDefault` لازم است وگرنه مرورگر هیچ‌وقت رویدادِ بازیابی
      * را نمی‌فرستد.
      */
+    renderer.domElement.addEventListener("webglcontextcreationerror", () => {
+      el.dataset.scene = "down";
+    });
     renderer.domElement.addEventListener("webglcontextlost", (ev) => {
       ev.preventDefault();
       el.dataset.scene = "down";
@@ -350,60 +371,154 @@ export default function NeoStudio({
      * خیلی کم‌رنگ روی لبه‌ها می‌گذارد — همان چیزی که سطحِ فلزیِ
      * گران‌قیمت را از پلاستیکِ مشکی جدا می‌کند.
      */
-    const shellRough = keep(
-      sparkleRoughness({ base: 0.15, spread: 0.11, flecks: 0.055, seed: 9 }),
-    );
     /**
-     * بافتِ کربن، با شدتِ خیلی کم.
+     * سطحِ بدنه.
      *
-     * `normalScale` عمداً ۰٫۲۲ است نه ۱. در این اندازه، بافتِ پررنگ
-     * به شبکهٔ توری می‌زند و بدتر از نبودنش است؛ آنچه لازم است فقط
-     * یک ریزساختارِ نیمه‌محسوس است که نور موقعِ لغزیدن رویش بشکند.
-     * همان شکستن است که به چشم می‌گوید سطح، *ساخته* شده.
+     * تا اینجا یک اشتباهِ ساده کلِ بافت را بی‌اثر کرده بود:
+     * `roughness` روی ۰٫۱۴ بود و `roughnessMap` هم حولِ ۰٫۱۵ —
+     * و در `three` این دو در هم **ضرب** می‌شوند. یعنی زبریِ واقعیِ
+     * سطح حدودِ ۰٫۰۲ بود: آینه. هر بافتی که می‌ساختیم، در آن آینه
+     * گم می‌شد.
+     *
+     * حالا پایه ۱ است و تمامِ زبری از نقشه می‌آید.
+     *
+     * دامنه‌اش اما عمداً باریک و پایین است. اولین تلاش ۰٫۱۲ تا ۰٫۵
+     * بود و نتیجه‌اش بدنه‌ای شد که *روشن‌تر* از قبل به نظر می‌رسید،
+     * نه تیره‌تر: سطحِ زبر بازتابِ نرم‌افزارهای بزرگِ نور را پخش
+     * می‌کند و کلِ سینه را خاکستری می‌کند، در حالی که سطحِ صیقلی
+     * همان نور را در یک لکهٔ کوچک جمع می‌کند و بقیه سیاه می‌ماند.
+     *
+     * مرجع سیاهِ عمیق است، پس دامنه ۰٫۰۲ تا ۰٫۱۱ ماند — بافت از
+     * نرمال می‌آید و از تیزیِ لبهٔ همان لکه، نه از کدرکردنِ سطح.
      */
-    const shellWeave = keep(carbonWeave({ cells: 30, depth: 1.05 }));
+    const shellTex = shellSurface({
+      /*
+        روی گوشی نصف.
+
+        سه بافتِ ۱۰۲۴ روی حافظهٔ ویدیو حدودِ ۱۶ مگابایت می‌گیرند و
+        روی آی‌فون همین‌هاست که کانتکست را از پا درمی‌آورد. ۵۱۲ یک
+        چهارمِ آن است و در این اندازه‌ی نمایش، تفاوتش دیده نمی‌شود.
+      */
+      size: small ? 512 : 1024,
+      cells: 58,
+      depth: 1.0,
+      base: 0.02,
+      rough: 0.11,
+      seed: 7,
+    });
+    /*
+      قطعه‌ها باید بزرگ باشند.
+
+      تکرارِ ۳ روی یک سینه یعنی شش صفحه در عرض — شبکه‌ای که به کاشی
+      می‌زند. ۱٫۶ همان چند قطعهٔ بزرگی را می‌دهد که در مرجع هست.
+    */
+    for (const t of [shellTex.normalMap, shellTex.roughnessMap, shellTex.aoMap]) {
+      t.repeat.set(1.6, 1.6);
+    }
+    keep(shellTex.normalMap);
+    keep(shellTex.roughnessMap);
+    keep(shellTex.aoMap);
+    /*
+      سایهٔ محیطی روی همان UVِ اول می‌نشیند.
+
+      پیش‌فرضِ `three` برای `aoMap` مجموعهٔ دومِ UV است و این
+      هندسه‌ها — کره، کپسول، اکسترود — فقط یکی دارند. بدونِ این خط،
+      نقشه بی‌صدا نادیده گرفته می‌شود.
+    */
+    shellTex.aoMap.channel = 0;
+
     const shell = keep(
       new THREE.MeshPhysicalMaterial({
-        color: new THREE.Color("#0b0b0e"),
-        metalness: 0.42,
-        roughness: 0.14,
-        roughnessMap: shellRough,
-        normalMap: shellWeave,
-        normalScale: new THREE.Vector2(0.22, 0.22),
+        color: new THREE.Color("#08080b"),
+        metalness: 0.38,
+        /** پایه ۱: تمامِ زبری از نقشه می‌آید، نه از این عدد */
+        roughness: 1,
+        roughnessMap: shellTex.roughnessMap,
+        normalMap: shellTex.normalMap,
+        normalScale: new THREE.Vector2(0.26, 0.26),
+        aoMap: shellTex.aoMap,
+        aoMapIntensity: 0.34,
+        /**
+         * لاک کامل می‌ماند، ولی **بافت‌دار**.
+         *
+         * نصف‌کردنِ لاک امتحان شد و نتیجه‌اش بدنه‌ای بود که از فاصله
+         * یک لکهٔ مشکیِ تخت با یک خطِ نور دورش می‌شد. دلیلش این است
+         * که در این صحنه تمامِ حجمِ جسم از بازتابِ محیط می‌آید؛ سطحِ
+         * مات، بازتاب ندارد، پس حجم هم ندارد.
+         *
+         * راهِ درست این نیست که آینه را کدر کنیم، این است که آینه
+         * خودش سطح داشته باشد: `clearcoatNormalMap` همان بافتِ بدنه
+         * را به لایهٔ براق هم می‌دهد. نتیجه‌اش بازتابی است که روی
+         * تار و پودِ سطح می‌شکند — همان چیزی که در مرجع می‌بینی.
+         */
         clearcoat: 1,
-        clearcoatRoughness: 0.05,
-        iridescence: 0.32,
+        clearcoatRoughness: 0.055,
+        clearcoatNormalMap: shellTex.normalMap,
+        clearcoatNormalScale: new THREE.Vector2(0.3, 0.3),
+        iridescence: 0.2,
         iridescenceIOR: 1.9,
         iridescenceThicknessRange: [120, 460],
         reflectivity: 1,
-        envMapIntensity: 1.7,
+        envMapIntensity: 1.55,
       }),
     );
 
-    /** مفصل‌ها — کمی مات‌تر از بدنه، تا بندبندی در بازتاب خوانده شود */
     /**
-     * مفصل‌ها هم بافت می‌گیرند، نه فقط بدنه.
+     * مفصل‌ها — همان سطح، ولی ماشین‌کاری‌شده نه بافته‌شده.
      *
-     * تا اینجا مفصل‌ها سطحِ کاملاً صافِ تیره بودند و کنارِ بدنهٔ
-     * بافت‌دار، مثلِ قطعهٔ پلاستیکیِ ارزان می‌خواندند — همان چیزی که
-     * کلِ جسم را «مدلِ کامپیوتری» نشان می‌داد. حالا همان بافتِ
-     * کربن رویشان هست، ولی ریزتر (تکرارِ بیشتر) و کم‌جان‌تر: قطعهٔ
-     * فلزیِ ماشین‌کاری‌شده، نه پوستهٔ بافته‌شده.
+     * منفذها خاموش‌اند و تکرار بیشتر: قطعهٔ فلزیِ کوچک، نه پوسته.
      */
-    const jointWeave = keep(carbonWeave({ cells: 44, depth: 0.85 }));
-    jointWeave.repeat.set(9, 9);
-    const jointRough = keep(
-      sparkleRoughness({ base: 0.28, spread: 0.09, flecks: 0.03, seed: 77 }),
-    );
+    const jointTex = shellSurface({
+      size: small ? 256 : 512,
+      cells: 36,
+      depth: 1.15,
+      base: 0.08,
+      rough: 0.24,
+      perf: false,
+      seed: 77,
+    });
+    for (const t of [jointTex.normalMap, jointTex.roughnessMap, jointTex.aoMap]) {
+      t.repeat.set(7, 7);
+      keep(t);
+    }
+    jointTex.aoMap.channel = 0;
+
     const joint = keep(
       new THREE.MeshPhysicalMaterial({
-        color: new THREE.Color("#121216"),
-        metalness: 0.72,
-        roughness: 0.28,
-        roughnessMap: jointRough,
-        normalMap: jointWeave,
-        normalScale: new THREE.Vector2(0.16, 0.16),
-        envMapIntensity: 1.2,
+        color: new THREE.Color("#101014"),
+        metalness: 0.8,
+        roughness: 1,
+        roughnessMap: jointTex.roughnessMap,
+        normalMap: jointTex.normalMap,
+        normalScale: new THREE.Vector2(0.42, 0.42),
+        aoMap: jointTex.aoMap,
+        aoMapIntensity: 0.7,
+        envMapIntensity: 1.25,
+      }),
+    );
+
+    /**
+     * نقاب — تنها سطحِ آینه‌ایِ کلِ پیکره.
+     *
+     * در مرجع، بدنه مات است و صورت **خیس**: یک صفحهٔ مشکیِ براق که
+     * نورِ صحنه را تیز برمی‌گرداند و چشم‌ها از داخلش می‌تابند. همین
+     * تضاد است که سر را از یک توپِ مشکی جدا می‌کند.
+     *
+     * نه بافت دارد نه زبری: هر لکهٔ ریزی روی نقاب، شیشه را به
+     * پلاستیکِ خش‌دار تبدیل می‌کند.
+     */
+    const visor = keep(
+      new THREE.MeshPhysicalMaterial({
+        color: new THREE.Color("#050508"),
+        metalness: 0.1,
+        roughness: 0.035,
+        clearcoat: 1,
+        clearcoatRoughness: 0.02,
+        iridescence: 0.45,
+        iridescenceIOR: 2.2,
+        iridescenceThicknessRange: [180, 620],
+        reflectivity: 1,
+        envMapIntensity: 2.1,
       }),
     );
 
@@ -443,7 +558,7 @@ export default function NeoStudio({
       }),
     );
 
-    const mats: NeoMaterials = { shell, joint, eye, label };
+    const mats: NeoMaterials = { shell, joint, eye, label, visor };
     const bot = buildNeoBot(mats);
     scene.add(bot.group);
 
@@ -1012,7 +1127,23 @@ export default function NeoStudio({
     }
     tick();
 
+    /**
+     * دیدبان — تنها راهِ دیدنِ شکستِ خاموش.
+     *
+     * همهٔ راه‌هایی که این صحنه می‌تواند بی‌سروصدا نیاید یک نشانهٔ
+     * مشترک دارند: هیچ فریمی رندر نمی‌شود. کانتکست ساخته شد ولی
+     * مرورگر پسش گرفت، شیدر کامپایل نشد، حلقه پشتِ یک ناظر ماند —
+     * از بیرون هر سه یک قابِ سیاه‌اند.
+     *
+     * پس به‌جای حدسِ علت، خودِ نشانه گرفته می‌شود: سه ثانیه بعد،
+     * اگر شمارندهٔ فریم هنوز صفر باشد، جایگزینِ ثابت بالا می‌آید.
+     */
+    const watchdog = window.setTimeout(() => {
+      if (frame === 0) el.dataset.scene = "down";
+    }, 3000);
+
     return () => {
+      window.clearTimeout(watchdog);
       cancelAnimationFrame(raf);
       stopWatch();
       io.disconnect();
