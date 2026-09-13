@@ -286,11 +286,14 @@ export default function NeoStudio({
       }
     }
     /*
-      روی گوشی ۱٫۲ به‌جای ۱٫۷۵: روی صفحه‌ای با چگالیِ ۳، همین یک عدد
-      مساحتِ بافرِ رنگ را بیش از دو برابر کم می‌کند. جسم مشکیِ براق
-      است و لبه‌هایش کم‌اند، پس این افت تقریباً دیده نمی‌شود.
+      ۱٫۵ روی گوشی.
+
+      دورِ اول ۱٫۲ گذاشته شد و افتش دیده می‌شد — روی جسمِ براق لبه‌ها
+      پله‌پله شدند. ۱٫۵ هنوز نزدیکِ نصفِ مساحتِ ۱٫۷۵ است ولی لبه‌ها
+      سرِ جایشان می‌مانند، و حالا که ضدِ دندانه روی گوشی خاموش است،
+      همین چگالیِ بیشتر جایش را می‌گیرد.
     */
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, small ? 1.2 : 1.75));
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, small ? 1.5 : 1.75));
     renderer.outputColorSpace = THREE.SRGBColorSpace;
     /**
      * AgX، نه Neutral.
@@ -306,12 +309,16 @@ export default function NeoStudio({
     renderer.toneMapping = THREE.AgXToneMapping;
     renderer.toneMappingExposure = 1.12;
     /*
-      سایه روی گوشی خاموش است. زمینِ زیرِ پیکره تقریباً سیاه است و
-      سایه روی سیاه چیزِ کمی اضافه می‌کند — ولی نقشهٔ سایه یک رندرِ
-      کاملِ دیگر در هر به‌روزرسانی است، و همان چیزی است که بودجهٔ
-      یک گوشی را تمام می‌کند.
+      سایه روی گوشی هم روشن می‌ماند، ولی با نقشهٔ یک‌چهارم و
+      به‌روزرسانیِ نصف.
+
+      خاموش‌کردنش امتحان شد و پیکره روی زمین شناور شد — سایه تنها
+      چیزی است که می‌گوید جسم *ایستاده*، نه چسبیده به پس‌زمینه.
+      گرانیِ سایه هم بیشتر از اندازهٔ نقشه می‌آید تا از وجودش: ۱۰۲۴
+      به‌جای ۲۰۴۸ یعنی یک‌چهارمِ پیکسل، و در این فاصله لبهٔ سایه
+      آن‌قدر نرم هست که تفاوتش دیده نشود.
     */
-    renderer.shadowMap.enabled = !small;
+    renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     /** سایه دستی به‌روز می‌شود: هر به‌روزرسانی یک رندرِ کاملِ دیگر است */
     renderer.shadowMap.autoUpdate = false;
@@ -672,7 +679,7 @@ export default function NeoStudio({
     const key = new THREE.DirectionalLight(0xffffff, 0.5);
     key.position.set(-3.4, 7.2, 5.2);
     key.castShadow = true;
-    key.shadow.mapSize.set(2048, 2048);
+    key.shadow.mapSize.set(small ? 1024 : 2048, small ? 1024 : 2048);
     key.shadow.camera.near = 1;
     key.shadow.camera.far = 22;
     key.shadow.camera.left = -3.2;
@@ -746,7 +753,7 @@ export default function NeoStudio({
       dist = w < 640 ? 17.5 : w < 1024 ? 15.5 : 14.2;
       baseScale = w < 640 ? 0.92 : 1;
       camera.updateProjectionMatrix();
-      if (!small) renderer.shadowMap.needsUpdate = true;
+      renderer.shadowMap.needsUpdate = true;
     };
     resize();
     const ro = new ResizeObserver(resize);
@@ -1122,7 +1129,7 @@ export default function NeoStudio({
       }
 
       // یک‌درمیانِ سه فریم؛ جسم آرام می‌چرخد و کسی نمی‌فهمد
-      renderer.shadowMap.needsUpdate = frame % 3 === 1;
+      renderer.shadowMap.needsUpdate = frame % (small ? 6 : 3) === 1;
       renderer.render(scene, camera);
     }
     tick();
