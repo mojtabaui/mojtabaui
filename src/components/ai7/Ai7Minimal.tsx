@@ -581,6 +581,29 @@ export default function Ai7Minimal({
   const root = useRef<HTMLDivElement>(null);
   useEffect(() => {
     root.current?.classList.add("neo-anim");
+
+    /*
+      صفحه باید از بالای صحنه باز شود.
+
+      مرورگر — و به‌خصوص سافاریِ آی‌فون — جای اسکرولِ دفعهٔ قبلِ همین
+      نشانی را به خاطر می‌سپارد و موقعِ باز شدن به همان‌جا برمی‌گردد.
+      روی یک صفحهٔ معمولی این لطف است؛ روی صفحه‌ای که کلِ هیرواش یک
+      کوریوگرافیِ وابسته به اسکرول است، فاجعه است: کاربر یک لحظه نوار
+      و صحنه را می‌بیند و بعد صفحه خودش می‌پرد وسط یا تهِ آن، و آنچه
+      می‌ماند حسِ «هیرو نیامد» است.
+
+      پس بازگردانیِ خودکار خاموش می‌شود و از بالا شروع می‌کنیم — مگر
+      اینکه نشانی خودش لنگر داشته باشد، که آن‌وقت کاربر عمداً وسطِ
+      صفحه را خواسته. موقعِ ترکِ صفحه، رفتارِ قبلی برمی‌گردد تا بقیهٔ
+      سایت دکمهٔ بازگشتِ سالمش را از دست ندهد.
+    */
+    const prev = history.scrollRestoration;
+    if ("scrollRestoration" in history) history.scrollRestoration = "manual";
+    if (!window.location.hash) window.scrollTo(0, 0);
+
+    return () => {
+      if ("scrollRestoration" in history) history.scrollRestoration = prev;
+    };
   }, []);
 
   return (

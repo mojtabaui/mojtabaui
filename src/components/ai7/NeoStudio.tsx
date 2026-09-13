@@ -798,7 +798,7 @@ export default function NeoStudio({
      */
     const stopWatch = progress.on("change", (v) => {
       // همان لحظه‌ای که ساز به دست می‌آید — نه زودتر، و فقط یک بار
-      if (!reduce && v >= 0.18) sound.play();
+      if (v >= 0.18) sound.play();
       t = v;
     });
 
@@ -896,7 +896,7 @@ export default function NeoStudio({
        * کامل، مکانیکی به‌نظر می‌رسد.
        */
       const wake = clamp01((p - 0.02) / 0.1);
-      const open = reduce ? 1 : wake * wake * (3 - 2 * wake);
+      const open = wake * wake * (3 - 2 * wake);
       bot.eyes[0].scale.y = 0.07 + 0.93 * open;
       bot.eyes[1].scale.y = 0.07 + 0.93 * clamp01((open - 0.08) / 0.92);
 
@@ -929,7 +929,19 @@ export default function NeoStudio({
        * بازه. با پنجرهٔ دوبرابر، همان مسیر در دو برابرِ اسکرول طی
        * می‌شود و چشم می‌تواند دنبالش کند.
        */
-      const rawPlay = reduce ? 0 : clamp01((p - 0.18) / 0.2);
+      /**
+       * «کاهشِ حرکت» یعنی حرکتِ **خودبه‌خود** کمتر، نه محتوای کمتر.
+       *
+       * اینجا `reduce` کلِ این عدد را صفر می‌کرد، و نتیجه‌اش روی هر
+       * آی‌فونی که Reduce Motion را روشن کرده — که کم هم نیستند —
+       * این بود: پیکره می‌آمد، با اسکرول می‌چرخید، و گیتار هیچ‌وقت
+       * به دستش نمی‌رسید. از بیرون دقیقاً شبیهِ یک تریگرِ خراب بود.
+       *
+       * ولی آمدنِ ساز به اسکرولِ خودِ کاربر بسته است، نه به یک
+       * تایمر. چیزی که باید ساکت شود، حرکتِ مستقل است: ضربِ زخمه،
+       * تابِ بدن، تپشِ نور. آن‌ها پایین‌تر با `beatOn` خاموش می‌شوند.
+       */
+      const rawPlay = clamp01((p - 0.18) / 0.2);
       /** نرم در هر دو سر — بدونِ آن، شروع و پایانِ حرکت تکان دارد */
       const play = rawPlay * rawPlay * (3 - 2 * rawPlay);
       const playing = rawPlay > 0.002;
@@ -959,11 +971,21 @@ export default function NeoStudio({
          * نلغزند. حالا که فقط یک ضربِ کوتاهِ بازخوردی مانده، چیزی
          * برای هم‌زمان ماندن وجود ندارد و تایمرِ صحنه کافی است.
          */
-        const beat = time * (BEAT_PER_SEC);
+        /**
+         * کلیدِ حرکتِ خودبه‌خود.
+         *
+         * صفر که باشد، `hit` روی ۰٫۴ قفل می‌شود — و چون هر جایی که
+         * از ضرب استفاده می‌کند به شکلِ `(hit - 0.4)` نوشته شده،
+         * همه‌شان دقیقاً صفر می‌شوند. یعنی دست‌ها سرِ جایشان روی ساز
+         * می‌نشینند و تکان نمی‌خورند، بی‌آنکه لازم باشد هر خط شرط
+         * بخورد.
+         */
+        const beatOn = reduce ? 0 : 1;
+        const beat = time * BEAT_PER_SEC;
         /** فاز داخلِ هر ضرب، ۰ تا ۱ */
         const ph = beat - Math.floor(beat);
         /** ضربهٔ مضراب: تیزِ اول، رهایی نرم — نه یک سینوسِ متقارن */
-        const hit = Math.pow(1 - ph, 2.4);
+        const hit = beatOn ? Math.pow(1 - ph, 2.4) : 0.4;
 
         /**
          * نور و دامنهٔ حرکت از **خودِ صدا** می‌آیند، نه از یک سینوسِ جدا.
@@ -974,7 +996,7 @@ export default function NeoStudio({
          * می‌زند که شنیده می‌شود، و همین است که «انگار دارد می‌نوازد»
          * را می‌سازد.
          */
-        const amp = sound.level();
+        const amp = beatOn ? sound.level() : 0;
         const pulse = hit * 0.5 + amp * 1.4;
 
         /**
@@ -1059,12 +1081,13 @@ export default function NeoStudio({
         }
 
         /** سر روی ضرب تکان می‌خورد، و کمی دیرتر از دست */
-        bot.head.rotation.x += hit * (0.09 + amp * 0.09) * play;
-        bot.head.rotation.z = Math.sin(beat * Math.PI) * 0.05 * play;
+        bot.head.rotation.x += beatOn * hit * (0.09 + amp * 0.09) * play;
+        bot.head.rotation.z = beatOn * Math.sin(beat * Math.PI) * 0.05 * play;
 
         /** تابِ بدن روی هر دو ضرب، نه هر ضرب — وگرنه عصبی می‌شود */
-        bot.torso.rotation.z = Math.sin(beat * Math.PI * 0.5) * (0.045 + amp * 0.05) * play;
-        bot.torso.position.y += hit * 0.03 * play;
+        bot.torso.rotation.z =
+          beatOn * Math.sin(beat * Math.PI * 0.5) * (0.045 + amp * 0.05) * play;
+        bot.torso.position.y += beatOn * hit * 0.03 * play;
 
         /**
          * لرزشِ سیم‌ها.
