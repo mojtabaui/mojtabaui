@@ -1197,12 +1197,34 @@ export default function Ai7Minimal({
           })}
         </div>
 
-        <p
-          className="mt-4 rounded-none border p-6 text-sm leading-loose sm:p-7 sm:text-[0.95rem]"
-          style={{ borderColor: LINE, background: CARD }}
-        >
-          {format.note}
-        </p>
+        {/*
+          دو یادداشت کنارِ هم، نه یکی زیرِ آن یکی.
+
+          اولی قانونِ دوره است و دومی جایی که وقتی گیر می‌کنی سراغش
+          می‌روی — دو نوعِ متفاوت از اطمینان، و هیچ‌کدام زیرمجموعهٔ
+          آن یکی نیست. زیرِ هم که بنشینند، دومی مثلِ پانوشتِ اولی
+          خوانده می‌شود.
+        */}
+        <div className="mt-4 grid gap-4 md:grid-cols-2">
+          <p
+            className="rounded-none border p-6 text-sm leading-loose sm:p-7 sm:text-[0.95rem]"
+            style={{ borderColor: LINE, background: CARD }}
+          >
+            {format.note}
+          </p>
+          <div
+            className="flex gap-4 rounded-none border p-6 sm:p-7"
+            style={{ borderColor: LINE, background: CARD }}
+          >
+            <MessagesSquare
+              className="mt-0.5 size-5 shrink-0"
+              strokeWidth={1.6}
+              style={{ color: VIOLET }}
+              aria-hidden="true"
+            />
+            <p className="text-sm leading-loose sm:text-[0.95rem]">{format.group}</p>
+          </div>
+        </div>
       </Sec>
 
       {/* ── اسلایدها ──
@@ -1611,6 +1633,35 @@ export default function Ai7Minimal({
             <h3 className="text-[0.95rem] font-semibold sm:text-base">{need[4].t}</h3>
             <p className="mt-2 text-sm leading-relaxed" style={{ color: MUTE }}>
               {need[4].d}
+            </p>
+          </div>
+        </div>
+
+        {/*
+          هزینه، در همان فهرستی که بقیهٔ پیش‌نیازها هستند.
+
+          این تنها چیزِ این صفحه است که کاربر باید *بابتش پول بدهد* و
+          جایش دقیقاً همین‌جاست، نه کنارِ قیمتِ دوره: کسی که پیش‌نیازها
+          را می‌خواند دارد حساب می‌کند که واقعاً از پسِ این دوره
+          برمی‌آید یا نه، و نگفتنِ این، همان حساب را غلط می‌کند.
+
+          قابِ پُررنگ هم برای همین است — بقیهٔ پیش‌نیازها رایگان‌اند و
+          این یکی نه.
+        */}
+        <div
+          className="mt-4 flex flex-col gap-5 rounded-none border p-6 sm:flex-row sm:items-center sm:p-8"
+          style={{ borderColor: LINE, background: CARD }}
+        >
+          <Ticket
+            className="size-6 shrink-0"
+            strokeWidth={1.5}
+            style={{ color: VIOLET }}
+            aria-hidden="true"
+          />
+          <div className="min-w-0">
+            <h3 className="text-[0.95rem] font-semibold sm:text-base">{need[5].t}</h3>
+            <p className="mt-2 text-sm leading-relaxed" style={{ color: MUTE }}>
+              {need[5].d}
             </p>
           </div>
         </div>

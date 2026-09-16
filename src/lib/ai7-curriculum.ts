@@ -690,6 +690,8 @@ export const FORMAT = {
     ],
     note:
       "و یک قانون مهم در کل دوره داریم: یک پروژه را با هم جلو می‌بریم. قرار نیست هرکس چند تمرین جدا بسازد و آخر دوره ده تا فایل نصفه‌نیمه داشته باشد.",
+    group:
+      "یک گروه هم برای رفع اشکال و اطلاع‌رسانی داریم. سؤالی که وسط کار برایت پیش می‌آید همان‌جا جواب می‌گیرد، و خبرِ فصل‌های تازه هم اول همان‌جا می‌آید.",
   },
   en: {
     title: "What a chapter actually is",
@@ -715,6 +717,8 @@ export const FORMAT = {
     ],
     note:
       "And one rule the whole course rests on: we carry one project together. Nobody builds a private thing on the side and finishes none of it.",
+    group:
+      "There is a group too, for questions and for news. Whatever stops you mid-task gets answered there, and new chapters are announced there first.",
   },
 } as const;
 
@@ -868,6 +872,11 @@ export const NEED = {
       d:
         "شاید به نظر بی‌ربط بیاد، ولی از همهٔ ابزارها مهم‌تره. بعضی چیزها را قبل از اینکه به سراغ AI برویم، روی کاغذ درمی‌آوریم. درس چهارم فصل اول هم دقیقاً از همین‌جا شروع می‌شود.",
     },
+    {
+      t: "اشتراکِ AI — برای پروژه، نه برای تماشا",
+      d:
+        "برای دیدن درس‌ها لازم نیست هیچ اشتراکی بخری. هر راهِ رایگانی هم که برای گرفتن توکن باشد، تا وقتی که هست همین‌جا معرفی می‌کنیم. ولی برای اینکه یک پروژه را واقعاً از صفر تا صد جلو ببری، دست‌کم یکی از اشتراک‌ها را لازم داری.",
+    },
   ],
   en: [
     {
@@ -889,6 +898,10 @@ export const NEED = {
     {
       t: "A notebook",
       d: "Not a tool, and more important than any of them. The fourth lesson of chapter one starts on paper, not at a keyboard.",
+    },
+    {
+      t: "A subscription — for the project, not the lessons",
+      d: "Watching the course costs nothing beyond the course. Any free route to tokens gets shared here for as long as it lasts. Carrying one project the whole way, though, takes at least one paid plan.",
     },
   ],
 } as const;

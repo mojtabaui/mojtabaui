@@ -230,7 +230,6 @@ export const MISSIONS: Mission[] = [
       { fa: "The Visual QA Agent", en: "The Visual QA Agent" },
       { fa: "Handoff Without a Document", en: "Handoff Without a Document" },
     ],
-    draft: true,
     tint: "#ecd9b4", // 13.9:1
     hi: "#e0c99c",
     base: "#8f7340",
