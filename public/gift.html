@@ -1,0 +1,554 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>ROBOTYPE — مهمانِ من</title>
+<meta name="robots" content="noindex, nofollow" />
+<!--
+  صفحهٔ هدیه — یک فایل، سه مهمان.
+
+  نام و لایسنس از خودِ نشانی خوانده می‌شوند:
+
+    /gift.html?to=نام&key=کدِ‌لایسنس
+
+  پس برای هر مهمان یک لینک ساخته می‌شود و فایل یکی می‌ماند. اگر
+  پارامتری نیامد، صفحه خالی نمی‌شود؛ حالتِ نمونه را نشان می‌دهد تا
+  بشود قبل از فرستادن نگاهش کرد.
+
+  عمداً بیرونِ اپلیکیشنِ Next است: این صفحه قرار است سال‌ها بعد هم
+  با یک لینک باز شود، بی‌آنکه به بیلد و روتینگِ سایت بند باشد.
+-->
+<style>
+  /* ── فونت‌ها ──
+     میم از خودِ سایت می‌آید، پس این صفحه به هیچ CDN خارجی بند نیست
+     و پشتِ فیلتر هم همان‌شکلی باز می‌شود که اینجا می‌بینیم. */
+  /* میکروما، برای نشانِ واژه‌ای — از خودِ سایت، نه از گوگل فونتس */
+  @font-face {
+    font-family: "Michroma";
+    src: url("/fonts/michroma.woff2") format("woff2");
+    font-weight: 400;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: "Meem";
+    src: url("/fonts/Meem-Light.ttf") format("truetype");
+    font-weight: 300;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: "Meem";
+    src: url("/fonts/Meem-Bold.ttf") format("truetype");
+    font-weight: 700;
+    font-display: swap;
+  }
+
+  :root {
+    --night: #0a0908;
+    --ink: #f4efe8;
+    --mute: #9b9086;
+    --line: rgba(244, 239, 232, 0.1);
+    --line-strong: rgba(244, 239, 232, 0.22);
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    background: var(--night);
+    color: var(--ink);
+  }
+
+  body {
+    font-family: "Meem", "Segoe UI", Tahoma, sans-serif;
+    font-weight: 300;
+    line-height: 1.85;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  /* هیچ گوشهٔ گِردی در کلِ صفحه — مثلِ بقیهٔ ROBOTYPE */
+  button, input, .box { border-radius: 0; }
+
+  a { color: inherit; }
+
+  .wrap {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  /* ── نوارِ بالا ── */
+  .bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 22px 0 0;
+  }
+
+  .word {
+    font-family: "Michroma", "Space Grotesk", system-ui, sans-serif;
+    font-size: clamp(1.1rem, 3.4vw, 1.5rem);
+    letter-spacing: 0.06em;
+    line-height: 1;
+    direction: ltr;
+  }
+
+  .sub {
+    font-size: 0.66rem;
+    letter-spacing: 0.24em;
+    color: var(--mute);
+    direction: ltr;
+  }
+
+  /* ── صحنه ── */
+  .stage {
+    display: grid;
+    gap: 8px;
+    align-items: center;
+    padding: 28px 0 8px;
+  }
+
+  @media (min-width: 900px) {
+    .stage {
+      grid-template-columns: 1fr 0.85fr;
+      gap: 40px;
+      padding: 40px 0 16px;
+    }
+  }
+
+  /*
+    تصویر روی زمینه **محو** می‌شود، نه اینکه لبه بخورد.
+
+    خودِ فایل مشکیِ تقریباً مطلق است (#030303) و زمینهٔ صفحه مشکیِ
+    گرم (#0a0908). این دو نزدیک‌اند ولی یکی نیستند، و بدونِ محو،
+    مستطیلِ تصویر به‌صورتِ یک لکهٔ سردترِ کم‌رنگ دیده می‌شود. ماسک
+    لبه‌ها را به زمینه می‌رساند، پس پیکره انگار از داخلِ تاریکی
+    بیرون می‌آید.
+  */
+  .figure {
+    position: relative;
+    order: 2;
+  }
+
+  .figure img {
+    display: block;
+    width: 100%;
+    max-width: 460px;
+    margin-inline: auto;
+    height: auto;
+    -webkit-mask-image:
+      radial-gradient(120% 90% at 50% 45%, #000 42%, transparent 88%);
+    mask-image:
+      radial-gradient(120% 90% at 50% 45%, #000 42%, transparent 88%);
+  }
+
+  @media (min-width: 900px) {
+    .figure { order: 0; }
+  }
+
+  .letter { order: 1; }
+
+  .kicker {
+    font-size: 0.68rem;
+    letter-spacing: 0.22em;
+    color: var(--mute);
+    direction: ltr;
+    margin: 0 0 18px;
+  }
+
+  h1 {
+    margin: 0 0 22px;
+    font-weight: 300;
+    font-size: clamp(1.9rem, 5.4vw, 3.1rem);
+    line-height: 1.22;
+    letter-spacing: normal;
+  }
+
+  h1 b { font-weight: 700; }
+
+  .letter p {
+    margin: 0 0 16px;
+    font-size: clamp(0.92rem, 2.3vw, 1.02rem);
+    color: var(--mute);
+  }
+
+  .letter p.lead { color: var(--ink); }
+
+  .sign {
+    margin-top: 26px;
+    padding-top: 18px;
+    border-top: 1px solid var(--line);
+    font-size: 0.9rem;
+  }
+
+  .sign span {
+    display: block;
+    font-size: 0.76rem;
+    color: var(--mute);
+    margin-top: 4px;
+  }
+
+  /* ── لایسنس ── */
+  section { padding: 54px 0; }
+
+  .eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 0.68rem;
+    color: var(--mute);
+    margin: 0 0 20px;
+    font-weight: 300;
+  }
+
+  .eyebrow::before {
+    content: "";
+    width: 26px;
+    height: 1px;
+    background: var(--line-strong);
+    flex: none;
+  }
+
+  .box {
+    border: 1px solid var(--line);
+    padding: 26px 22px;
+    background: rgba(255, 255, 255, 0.025);
+  }
+
+  @media (min-width: 700px) {
+    .box { padding: 32px 30px; }
+  }
+
+  .key-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 14px;
+  }
+
+  /*
+    کد در یک `<input>` فقط‌خواندنی می‌نشیند، نه در یک `<p>`.
+
+    دلیلش دستِ کاربر است: روی موبایل انتخابِ یک رشتهٔ بلند با انگشت
+    کابوس است، و اینجا یک ضربه کلِ کد را انتخاب می‌کند. دکمهٔ کپی هم
+    هست، ولی وقتی مرورگر اجازهٔ کلیپ‌بورد ندهد، همین انتخابِ دستی
+    راهِ دومِ سالم می‌ماند.
+  */
+  #key {
+    flex: 1 1 260px;
+    min-width: 0;
+    border: 1px solid var(--line-strong);
+    background: var(--night);
+    color: var(--ink);
+    font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    font-size: clamp(0.82rem, 2.6vw, 1rem);
+    letter-spacing: 0.06em;
+    padding: 15px 16px;
+    direction: ltr;
+    text-align: left;
+  }
+
+  #copy {
+    border: 1px solid transparent;
+    background: var(--ink);
+    color: var(--night);
+    font-family: inherit;
+    font-weight: 700;
+    font-size: 0.85rem;
+    padding: 15px 26px;
+    cursor: pointer;
+    transition: opacity 0.2s;
+  }
+
+  #copy:hover { opacity: 0.85; }
+
+  #copy.done { background: transparent; color: var(--ink); border-color: var(--line-strong); }
+
+  .hint {
+    margin: 16px 0 0;
+    font-size: 0.78rem;
+    color: var(--mute);
+  }
+
+  /* ── راهنمای فعال‌سازی ── */
+  ol.steps {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+  }
+
+  @media (min-width: 760px) {
+    ol.steps { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  ol.steps li {
+    background: var(--night);
+    padding: 24px 22px;
+  }
+
+  .n {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    background: var(--ink);
+    color: var(--night);
+    font-size: 0.72rem;
+    font-weight: 700;
+    margin-bottom: 14px;
+  }
+
+  ol.steps h3 {
+    margin: 0 0 8px;
+    font-size: 0.95rem;
+    font-weight: 700;
+  }
+
+  ol.steps p {
+    margin: 0;
+    font-size: 0.84rem;
+    color: var(--mute);
+  }
+
+  ol.steps a { color: var(--ink); text-decoration-color: var(--line-strong); }
+
+  .note {
+    margin-top: 16px;
+    border: 1px dashed var(--line-strong);
+    padding: 18px 20px;
+    font-size: 0.82rem;
+    color: var(--mute);
+  }
+
+  /* ── پایان ── */
+  footer {
+    border-top: 1px solid var(--line);
+    padding: 34px 0 46px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    font-size: 0.8rem;
+    color: var(--mute);
+  }
+
+  footer a {
+    border: 1px solid var(--line-strong);
+    padding: 11px 20px;
+    text-decoration: none;
+    color: var(--ink);
+    transition: opacity 0.2s;
+  }
+
+  footer a:hover { opacity: 0.75; }
+
+  /*
+    دانهٔ فیلم.
+
+    زمینهٔ تخت مشکی روی نمایشگرهای ارزان نوار نوار می‌شود (banding).
+    یک لایهٔ نویزِ خیلی کم‌رنگ آن نوارها را می‌شکند و در ضمن همان
+    بافتِ آنالوگِ صفحهٔ اصلی را می‌آورد. ثابت است و متحرک نیست، پس
+    نه چیزی می‌خورد نه کسی را اذیت می‌کند.
+  */
+  .grain {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.045;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/></filter><rect width='160' height='160' filter='url(%23n)'/></svg>");
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<div class="grain" aria-hidden="true"></div>
+
+<div class="wrap">
+
+  <div class="bar">
+    <div>
+      <div class="word">ROBOTYPE</div>
+      <div class="sub">AI Native Product Design</div>
+    </div>
+    <div class="sub" id="badge">مدرسه دیزاین ملینا</div>
+  </div>
+
+  <div class="stage">
+    <div class="figure">
+      <img src="/images/robot.png" alt="" />
+    </div>
+
+    <div class="letter">
+      <p class="kicker">A GIFT</p>
+      <h1>این یکی <b>مهمانِ من</b>، <span id="name">دوستِ من</span>.</h1>
+
+      <p class="lead">
+        هفت فصل نوشتم، و یک جاهایی‌اش — بی‌آنکه خودت بدانی — از تو شروع شده.
+        چیزهایی که یادم دادی، جاهایی که گفتی این‌طوری نه، و سؤال‌هایی که
+        جوابشان را نداشتم و مجبورم کردی بروم پیدا کنم.
+      </p>
+
+      <p>
+        پس این دوره برای تو رایگان است. نه تخفیف، نه کدِ هدیه — دسترسیِ
+        کامل به همهٔ فصل‌ها، بدون تاریخ انقضا.
+      </p>
+
+      <p>
+        اگر جایی‌اش به کارت آمد، خوشحال می‌شوم. و اگر جایی‌اش ایراد داشت،
+        مثل همیشه رک بگو؛ من همان یکی را بیشتر لازم دارم.
+      </p>
+
+      <p class="sign">
+        مجتبی
+        <span>مدرسه دیزاین ملینا</span>
+      </p>
+    </div>
+  </div>
+
+  <section>
+    <p class="eyebrow">لایسنس تو</p>
+    <div class="box">
+      <div class="key-row">
+        <input id="key" readonly value="—" aria-label="کد لایسنس" />
+        <button id="copy" type="button">کپی کد</button>
+      </div>
+      <p class="hint" id="hint">
+        این کد مخصوصِ توست. برای فعال کردن دوره در اسپات پلیر لازمش داری.
+      </p>
+    </div>
+  </section>
+
+  <section>
+    <p class="eyebrow">چطور فعالش کنی</p>
+    <ol class="steps">
+      <li>
+        <span class="n">۱</span>
+        <h3>اسپات پلیر را بگیر</h3>
+        <p>
+          از <a href="https://spotplayer.ir" target="_blank" rel="noopener">spotplayer.ir</a>
+          نسخهٔ سیستم خودت را دانلود کن — ویندوز، مک، اندروید یا iOS. نصبش
+          چند ثانیه بیشتر طول نمی‌کشد.
+        </p>
+      </li>
+      <li>
+        <span class="n">۲</span>
+        <h3>لایسنس را وارد کن</h3>
+        <p>
+          اپ را باز کن و گزینهٔ افزودن لایسنس را بزن. کدِ بالا را همان‌جا
+          بچسبان و تأیید کن.
+        </p>
+      </li>
+      <li>
+        <span class="n">۳</span>
+        <h3>دوره می‌آید</h3>
+        <p>
+          بعد از تأیید، فصل‌ها داخل خود اپ ظاهر می‌شوند. هر فصل را جدا
+          دانلود می‌کنی یا همان‌جا آنلاین می‌بینی.
+        </p>
+      </li>
+      <li>
+        <span class="n">۴</span>
+        <h3>هر وقت خواستی</h3>
+        <p>
+          محدودیتی برای تعداد دفعات دیدن نیست. فصل‌های تازه هم که اضافه
+          شوند، خودشان روی همین لایسنس می‌آیند.
+        </p>
+      </li>
+    </ol>
+    <p class="note">
+      لایسنس اسپات پلیر به دستگاه گره می‌خورد. اگر خواستی روی گوشی و لپ‌تاپ
+      هر دو داشته باشی یا دستگاهت عوض شد، یک پیام بده تا درستش کنم.
+    </p>
+  </section>
+
+  <footer>
+    <span>ساخته شده برای سه نفر. این یکی مالِ توست.</span>
+    <a href="/robotype">صفحهٔ دوره را ببین</a>
+  </footer>
+
+</div>
+
+<script>
+  (function () {
+    var q = new URLSearchParams(location.search);
+    var to = (q.get("to") || "").trim();
+    var key = (q.get("key") || "").trim();
+
+    if (to) {
+      document.getElementById("name").textContent = to;
+      document.title = "ROBOTYPE — مهمانِ من · " + to;
+    }
+
+    var input = document.getElementById("key");
+    var copy = document.getElementById("copy");
+    var hint = document.getElementById("hint");
+
+    if (key) {
+      input.value = key;
+    } else {
+      /*
+        بدونِ لایسنس، دکمه‌ای که کار نکند از نبودنش بدتر است.
+
+        صفحه بدونِ پارامتر هم باز می‌شود — مثلاً وقتی قبل از فرستادن
+        می‌خواهی نگاهش کنی — و آن‌وقت باید *بگوید* که چه چیزی کم دارد،
+        نه اینکه یک کادر خالی و یک دکمهٔ بی‌اثر نشان بدهد.
+      */
+      input.value = "—";
+      copy.style.display = "none";
+      hint.textContent =
+        "کد لایسنس در این لینک نیست. لینکی که برایت فرستاده شده را باز کن، یا یک پیام بده.";
+    }
+
+    copy.addEventListener("click", function () {
+      var done = function () {
+        copy.textContent = "کپی شد";
+        copy.classList.add("done");
+        setTimeout(function () {
+          copy.textContent = "کپی کد";
+          copy.classList.remove("done");
+        }, 1800);
+      };
+
+      /*
+        دو راه، چون اولی همیشه در دسترس نیست.
+
+        `navigator.clipboard` روی اتصالِ غیرامن یا داخلِ بعضی مرورگرهای
+        درون‌اپلیکیشنی اصلاً وجود ندارد. آن‌وقت انتخابِ خودِ فیلد و
+        `execCommand` قدیمی کار را در می‌آورد — و اگر آن هم نشد، متن
+        دست‌کم انتخاب‌شده می‌ماند تا کاربر خودش کپی کند.
+      */
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(input.value).then(done, fallback);
+      } else {
+        fallback();
+      }
+
+      function fallback() {
+        input.focus();
+        input.select();
+        input.setSelectionRange(0, 99999);
+        try {
+          if (document.execCommand("copy")) done();
+        } catch (e) {
+          /* انتخاب‌شده می‌ماند؛ کاربر خودش کپی می‌کند */
+        }
+      }
+    });
+  })();
+</script>
+
+</body>
+</html>
