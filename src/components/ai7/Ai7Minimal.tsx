@@ -6,8 +6,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { motion, useScroll, useTransform, useSpring, type MotionValue } from "framer-motion";
 import {
-  ArrowLeft,
-  ArrowRight,
   Boxes,
   FileText,
   ListOrdered,
@@ -118,15 +116,15 @@ const VIOLET = "var(--neo-accent, #8f8a82)";
 const VIOLET_INK = "var(--neo-strong, #1a1714)";
 /** کارتِ روی کاغذ — کرمِ روشن‌تر از زمینه، نه سفیدِ خالص */
 const CARD = "var(--neo-card, #fffcf6)";
-/**
- * ثبت‌نام از راه پشتیبانی، نه درگاهِ پرداخت.
- *
- * همان مسیری که `BuyButton` در بقیهٔ سایت می‌رود: فروش کارت‌به‌کارت
- * است و درگاه فعلاً خاموش. قیمت اما روی صفحه چاپ می‌شود و در
- * `PRICING` زندگی می‌کند — چون تخفیفِ رونمایی پلکانی است و پله،
- * خودش بخشی از پیام است. عددها فقط یک جا نوشته شده‌اند.
- */
-const SUPPORT = "https://t.me/melina_support";
+/*
+  لینکِ پشتیبانی و فلشِ دکمه‌ها تا باز شدنِ ثبت‌نام برداشته شدند.
+
+  هر پنج دکمهٔ ثبت‌نام جایشان را به یک خط خبر داده‌اند، پس این دو
+  دیگر مصرفی ندارند. وقتی ثبت‌نام باز شد هر دو با همان کامیت
+  برمی‌گردند — نشانیِ تلگرام همان است که `BuyButton` در بقیهٔ سایت
+  می‌رود، و قیمت‌ها که هیچ‌وقت اینجا نبودند و در `PRICING` زندگی
+  می‌کنند.
+*/
 /**
  * نشانِ واژه‌ای قابِ اول.
  *
@@ -149,6 +147,67 @@ const NIGHT_INK = "#f4efe8";
 const NIGHT_MUTE = "#9b9086";
 /** خطِ نازکِ قابِ صحنه — هیرو تا آخر تاریک است، پس یک حالت بیشتر ندارد */
 const NIGHT_LINE = "rgba(244,239,232,.09)";
+
+/**
+ * دانهٔ فیلم — یک بافت، نه یک فایل.
+ *
+ * `feTurbulence` یعنی هیچ تصویری دانلود نمی‌شود و در هر چگالیِ
+ * پیکسل تیز می‌ماند.
+ */
+const GRAIN_URL =
+  "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E\")";
+
+/**
+ * لایهٔ دانه — همان یک چیز، هرجا که زمینه تاریک است.
+ *
+ * تا اینجا فقط هیرو دانه داشت و همین بود که نوارهای تیرهٔ پایینِ
+ * صفحه را از آن جدا می‌کرد: هر دو مشکی بودند، ولی یکی مشکیِ *فیلم*
+ * بود و آن یکی مشکیِ CSS. چشم این تفاوت را بدونِ اینکه بداند
+ * می‌گیرد، و نتیجه‌اش این است که نوارهای پایین مثلِ وصله به‌نظر
+ * می‌رسند نه مثلِ ادامهٔ همان صحنه.
+ *
+ * حالتِ ترکیب فرق می‌کند و این عمدی است. روی هیرو `overlay` درست
+ * است: آنجا یک جسمِ سه‌بعدی با میان‌پردهٔ کامل هست و overlay سیاه را
+ * سیاه نگه می‌دارد و دانه را فقط در میان‌پرده‌ها می‌گذارد — رفتارِ
+ * دانهٔ واقعی. ولی روی یک نوارِ تختِ مشکی هیچ میان‌پرده‌ای نیست، پس
+ * overlay عملاً نامرئی است. آنجا `screen` لازم است تا سیاه را چند
+ * درصد بالا بیاورد؛ همان چیزی که کفِ نگاتیوِ یک قابِ شبانه هست و
+ * هیچ‌وقت سیاهِ مطلق نیست.
+ *
+ * لایه از قابش بزرگ‌تر است چون می‌لرزد: با قابِ دقیق، هر پرش یک
+ * نوارِ بی‌دانه از لبه بیرون می‌گذارد.
+ */
+function Grain({
+  className = "",
+  blend = "overlay",
+  opacity = 0.13,
+}: {
+  className?: string;
+  blend?: "overlay" | "screen";
+  opacity?: number;
+}) {
+  const still = useStill();
+  if (still) return null;
+  return (
+    <div
+      aria-hidden="true"
+      className={`pointer-events-none absolute -inset-[12%] ${className}`}
+      style={{
+        opacity,
+        mixBlendMode: blend,
+        backgroundImage: GRAIN_URL,
+        backgroundSize: "180px 180px",
+        /*
+          دانه باید هر فریم *بپرد*، نه اینکه نرم بلغزد. با
+          `steps(1)` هر مرحله یک جهشِ ناگهانی است؛ لغزشِ نرم، نویز
+          را به یک بافتِ شناور تبدیل می‌کند که دیده می‌شود، و جهش
+          همان تپشی است که فقط حس می‌شود.
+        */
+        animation: "ai7-grain 640ms steps(1) infinite",
+      }}
+    />
+  );
+}
 
 /**
  * رقم‌های فارسی.
@@ -199,6 +258,11 @@ const T = {
     soundOn: "صدا روشن است",
     soundOff: "صدا خاموش است",
     heroCta: "ثبت‌نام",
+    /**
+     * تا وقتی ثبت‌نام باز نشده، همین یک خط جای هر پنج دکمهٔ صفحه
+     * می‌نشیند. یک رشته، پنج جا — تاریخ که عوض شد، یک‌جا عوض می‌شود.
+     */
+    openAt: "شروع ثبت‌نام ۱ مهر، ساعت ۱۱",
     heroCta2: "سرفصل‌ها را ببین",
     heroSeats: "ظرفیت محدود است",
     briefLabel: "در یک نگاه",
@@ -352,6 +416,7 @@ const T = {
     soundOn: "sound on",
     soundOff: "sound off",
     heroCta: "Enrol",
+    openAt: "Enrolment opens 23 September, 11:00",
     heroCta2: "See the outline",
     heroSeats: "limited seats",
     briefLabel: "At a glance",
@@ -520,7 +585,6 @@ export default function Ai7Minimal({
   /** عددهای ریزِ صفحه — فارسی که باشد، رقمِ لاتین وسطِ جمله می‌زند توی ذوق */
   const num = (n: number) => (lang === "fa" ? faNum(n) : String(n));
   const price = PRICING[lang];
-  const Forward = rtl ? ArrowLeft : ArrowRight;
   const still = useStill();
 
   const stage = useRef<HTMLDivElement>(null);
@@ -749,16 +813,7 @@ export default function Ai7Minimal({
                 )}
               </button>
 
-              <a
-                href={SUPPORT}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-5 py-2.5 text-[0.78rem] font-semibold transition-opacity hover:opacity-85"
-                style={{ background: VIOLET_INK, color: PAPER }}
-              >
-                {t.heroCta}
-                <Forward className="size-3.5" aria-hidden="true" />
-              </a>
+              <OpenNote text={t.openAt} color={ink} size="text-[0.72rem] sm:text-[0.78rem]" />
             </div>
 
           </motion.div>
@@ -837,27 +892,7 @@ export default function Ai7Minimal({
             overlay یعنی سیاه‌ها سیاه می‌مانند و دانه فقط در میان‌پرده‌ها
             دیده می‌شود، که رفتارِ دانهٔ واقعیِ فیلم است.
           */}
-          {!still && (
-            <div
-              aria-hidden="true"
-              /*
-                لایه از قاب **بزرگ‌تر** است.
-
-                چون با `translate` می‌لرزد، اگر دقیقاً اندازهٔ قاب
-                باشد در هر پرش یک نوارِ بی‌دانه از لبه بیرون می‌زند —
-                یک مستطیلِ روشن دورِ کلِ صفحه که در اسکرین‌شات فوراً
-                دیده می‌شد. حاشیهٔ ده درصدی یعنی لبه هیچ‌وقت وارد قاب
-                نمی‌شود.
-              */
-              className="pointer-events-none absolute -inset-[12%] z-30 opacity-[0.13] mix-blend-overlay"
-              style={{
-                backgroundImage:
-                  "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E\")",
-                backgroundSize: "180px 180px",
-                animation: "ai7-grain 640ms steps(1) infinite",
-              }}
-            />
-          )}
+          <Grain className="z-30" />
 
           <NeoStudio
             progress={p}
@@ -1009,16 +1044,12 @@ export default function Ai7Minimal({
               {price.note}
             </p>
 
-            <a
-              href={SUPPORT}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mt-auto inline-flex items-center justify-center gap-2.5 px-7 py-4 pt-4 text-sm font-semibold transition-opacity hover:opacity-85"
-              style={{ background: VIOLET_INK, color: PAPER, marginBlockStart: "2rem" }}
-            >
-              {t.joinCta}
-              <Forward className="size-4" aria-hidden="true" />
-            </a>
+            <OpenNote
+              text={t.openAt}
+              color={VIOLET_INK}
+              className="mt-auto"
+              size="text-[0.85rem]"
+            />
           </div>
         </div>
       </Sec>
@@ -1467,7 +1498,21 @@ export default function Ai7Minimal({
           این نقطه هنوز دوره را نشناخته و «۲۷ خوشه» برایش عدد است نه
           معنا. آن جزئیات جای خودشان را دارند — داخلِ فصل‌های سوم و
           چهارم، جایی که خواننده دنبالشان می‌گردد. */}
-      <Sec className="mx-auto max-w-4xl px-5 pt-24 sm:px-6 sm:pt-32" mark="PROJECT" icon={Layers}>
+      {/*
+        این سکشن هم تیره شد.
+
+        تا حالا فقط دو نوارِ تیره در کلِ صفحه بود و فاصله‌شان آن‌قدر
+        زیاد که هرکدام مثلِ یک اتفاقِ جدا خوانده می‌شد. سه‌تا که شد،
+        ضرب پیدا می‌کند: کاغذ، تاریکی، کاغذ، تاریکی — و از آن به بعد
+        تاریکی دیگر وقفه نیست، یکی از دو حالتِ صفحه است. هیرو هم
+        همان‌جا از غریبگی درمی‌آید.
+
+        جایش هم انتخابی است: پروژه همان چیزی است که کاربر آخرش
+        می‌سازد، و بردنش روی تاریکی از یک بندِ توضیحی یک *نمایش*
+        می‌سازد. کارت‌ها و خط‌ها همه از همان متغیرهای `--neo-*`
+        می‌خوانند، پس با عوض‌شدنِ زمینه خودشان وارونه می‌شوند.
+      */}
+      <Sec className="mx-auto max-w-4xl px-5 pt-24 sm:px-6 sm:pt-32" mark="PROJECT" icon={Layers} dark>
         <div className="border-t pt-10" style={{ borderColor: LINE }}>
           <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
             <h3 className="text-2xl font-bold sm:text-3xl">{proj.name}</h3>
@@ -1639,16 +1684,7 @@ export default function Ai7Minimal({
             ))}
           </ol>
 
-          <a
-            href={SUPPORT}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="mt-7 inline-flex items-center gap-2.5 rounded-none px-7 py-3.5 text-sm font-semibold transition-opacity hover:opacity-85"
-            style={{ background: VIOLET_INK, color: PAPER }}
-          >
-            {t.joinCta}
-            <Forward className="size-4" aria-hidden="true" />
-          </a>
+          <OpenNote text={t.openAt} color={VIOLET_INK} className="mt-7" />
           <p className="mt-4 text-xs" style={{ color: MUTE }}>
             {t.joinNote}
           </p>
@@ -1696,16 +1732,7 @@ export default function Ai7Minimal({
         </p>
 
         <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
-          <a
-            href={SUPPORT}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2.5 px-7 py-4 text-sm font-semibold transition-opacity hover:opacity-85"
-            style={{ background: VIOLET_INK, color: PAPER }}
-          >
-            {t.cta}
-            <Forward className="size-4" aria-hidden="true" />
-          </a>
+          <OpenNote text={t.openAt} color={VIOLET_INK} size="text-base" />
           <Link
             href="/"
             className="inline-flex items-center gap-2 border px-6 py-4 text-sm transition-opacity hover:opacity-70"
@@ -1729,13 +1756,15 @@ export default function Ai7Minimal({
           لبه‌ای صاف که بی‌مقدمه به سیاهی می‌رود. محوکردنِ لبه امتحان
           شد و نتیجه‌اش لکهٔ خاکستری بود، نه گذر. */}
       <footer
-        className="relative mt-24 overflow-hidden"
+        className="relative isolate mt-24 overflow-hidden"
         style={{ background: NIGHT, color: NIGHT_INK, ["--robot-cut" as string]: NIGHT }}
       >
         <RobotPattern
           className="pointer-events-none absolute inset-0 h-full w-full"
           style={{ color: NIGHT_INK, opacity: 0.038 }}
         />
+        {/* آخرین سطحِ تیرهٔ صفحه هم باید همان جنسِ هیرو را داشته باشد */}
+        <Grain blend="screen" opacity={0.07} />
 
         <div className="relative mx-auto flex max-w-5xl flex-col items-center px-5 py-24 text-center sm:px-6 sm:py-28">
           <p className="neo-cap text-[0.7rem]" style={{ color: NIGHT_MUTE }} dir="ltr">
@@ -1760,16 +1789,7 @@ export default function Ai7Minimal({
           </div>
 
           <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-            <a
-              href={SUPPORT}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2.5 px-6 py-3.5 text-sm font-semibold transition-opacity hover:opacity-85"
-              style={{ background: NIGHT_INK, color: NIGHT }}
-            >
-              {t.cta}
-              <Forward className="size-4" aria-hidden="true" />
-            </a>
+            <OpenNote text={t.openAt} color={NIGHT_INK} />
             <Link
               href="/"
               className="inline-flex items-center gap-2 border px-5 py-3.5 text-sm transition-opacity hover:opacity-70"
@@ -2059,6 +2079,38 @@ function PathCard({
  * داخلِ یک قابِ مربعِ بی‌گِردی، مثلِ بقیهٔ صفحه.
  */
 /**
+ * جای دکمهٔ ثبت‌نام، تا وقتی ثبت‌نام باز شود.
+ *
+ * دکمه‌ها برداشته شده‌اند، نه خاموش. دکمهٔ غیرفعال یک وعدهٔ شکسته
+ * است: چشم آن را می‌بیند، دست می‌رود سمتش، و هیچ اتفاقی نمی‌افتد.
+ * یک خط نوشته همان خبر را بدونِ آن تعارف می‌دهد.
+ *
+ * ساعت با آیکن می‌آید چون بدونِ آن، این جمله در میانِ متنِ صفحه گم
+ * می‌شود — و این تنها چیزی است که همین الان باید خوانده شود.
+ */
+function OpenNote({
+  text,
+  color,
+  className,
+  size = "text-sm",
+}: {
+  text: string;
+  color: string;
+  className?: string;
+  size?: string;
+}) {
+  return (
+    <p
+      className={`inline-flex items-center gap-2 font-semibold ${size} ${className ?? ""}`}
+      style={{ color }}
+    >
+      <Clock className="size-4 shrink-0" strokeWidth={1.8} aria-hidden="true" />
+      {text}
+    </p>
+  );
+}
+
+/**
  * انتخابِ زبان.
  *
  * این صفحه نوار و فوترِ سایت را ندارد، پس کلیدِ زبانِ همیشگی هم اینجا
@@ -2220,6 +2272,27 @@ function Sec({
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
   const drift = useTransform(scrollYProgress, [0, 1], [64, -64]);
   const soft = useSpring(drift, { stiffness: 70, damping: 22, mass: 0.6 });
+
+  /**
+   * پارالکسِ پس‌زمینهٔ نوارِ تیره — عکسِ جهتِ تزئینِ کناری.
+   *
+   * تزئین با اسکرول *بالا* می‌رود، یعنی تندتر از صفحه، یعنی
+   * نزدیک‌تر از آن. پس‌زمینه باید دقیقاً برعکس باشد: نسبت به خودِ
+   * سکشن به پایین بلغزد، که یعنی کندتر از صفحه می‌آید، که یعنی
+   * دورتر است. همین یک علامت است که یک مستطیلِ مشکی را به یک
+   * *فضا* تبدیل می‌کند.
+   *
+   * و همین است که نوار را به هیرو وصل می‌کند: در هیرو هم پیکره
+   * ثابت می‌ماند و متن از کنارش رد می‌شود. تجربهٔ مشترک، «چیزی
+   * پشتِ صفحه ایستاده» است؛ نوارِ تیره‌ای که پس‌زمینه‌اش با صفحه
+   * میخ‌کوب باشد، همان تجربه را قطع می‌کند و می‌شود یک بلوکِ
+   * جدا.
+   *
+   * فنر لازم است نه برای نرمی، برای *تأخیر*: چیزِ دور باید کمی
+   * دیر برسد.
+   */
+  const back = useTransform(scrollYProgress, [0, 1], [-56, 56]);
+  const backSoft = useSpring(back, { stiffness: 60, damping: 24, mass: 0.7 });
   /** در دو سرِ سکشن محو می‌شود تا ناگهان قطع نشود */
   const fade = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0]);
 
@@ -2278,11 +2351,31 @@ function Sec({
     می‌شود، نه یک وقفه. وقفه وقتی کار می‌کند که از لبه تا لبه برود.
   */
   return (
-    <section id={id} ref={ref} className="relative mt-20 overflow-hidden sm:mt-24" style={DARK_VARS}>
-      <RobotPattern
-        className="pointer-events-none absolute inset-0 h-full w-full"
-        style={{ color: NIGHT_INK, opacity: 0.038 }}
-      />
+    /*
+      `isolate` لازم است، نه تزئینی.
+
+      لایهٔ دانه با `mix-blend-mode` کار می‌کند و ترکیب با نزدیک‌ترین
+      زمینهٔ چیده‌شده انجام می‌شود. بدونِ این، «زمینه» می‌شد کلِ صفحه
+      و دانه از لبه‌های نوار به کاغذِ کرمِ بیرون هم می‌زد.
+    */
+    <section
+      id={id}
+      ref={ref}
+      className="relative isolate mt-20 overflow-hidden sm:mt-24"
+      style={DARK_VARS}
+    >
+      {/*
+        قاب از سکشن بلندتر است چون می‌لغزد؛ با قابِ دقیق، در دو سرِ
+        سکشن یک نوارِ بی‌کاشی از بالا و پایین بیرون می‌زد.
+      */}
+      <motion.div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 -inset-y-[16%]"
+        style={{ y: still ? 0 : backSoft }}
+      >
+        <RobotPattern className="h-full w-full" style={{ color: NIGHT_INK, opacity: 0.038 }} />
+      </motion.div>
+      <Grain blend="screen" opacity={0.07} />
       <div className={`neo-reveal relative pb-20 sm:pb-24 ${on ? "is-on" : ""} ${className ?? ""}`}>
         {inner}
       </div>
