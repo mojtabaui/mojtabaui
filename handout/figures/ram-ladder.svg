@@ -1,0 +1,23 @@
+<!--
+  نردبانِ RAM.
+
+  طولِ میله واقعاً نسبتِ حافظه است، نه تزئین: ۸ و ۱۶ و ۳۲. کسی که
+  فقط به شکل نگاه می‌کند هم باید بفهمد فاصلهٔ ردهٔ اول تا دوم همان
+  فاصلهٔ دوم تا سوم است. میله از راست رشد می‌کند، هم‌جهتِ متن.
+-->
+<svg viewBox="0 0 720 300" role="img" aria-label="چه مدلی روی چه مقدار RAM اجرا می‌شود">
+  <!-- ۸ گیگ -->
+  <text x="714" y="26" text-anchor="start" style="direction:rtl" fill="var(--ink)" font-size="17" font-weight="700">۸ گیگ RAM</text>
+  <rect x="546" y="40" width="168" height="16" fill="var(--ink)" opacity=".3"/>
+  <text x="714" y="80" text-anchor="start" style="direction:rtl" fill="var(--mute)" font-size="13.5">مدلِ ۳ تا ۴ میلیاردی — خلاصه و دسته‌بندی جواب می‌دهد، نوشتنِ خوب نه</text>
+
+  <!-- ۱۶ گیگ -->
+  <text x="714" y="126" text-anchor="start" style="direction:rtl" fill="var(--ink)" font-size="17" font-weight="700">۱۶ گیگ RAM</text>
+  <rect x="378" y="140" width="336" height="16" fill="var(--ink)" opacity=".58"/>
+  <text x="714" y="180" text-anchor="start" style="direction:rtl" fill="var(--mute)" font-size="13.5">مدلِ ۷ تا ۸ میلیاردی — نقطهٔ شروعِ منطقی، روی اپل‌سیلیکون روان</text>
+
+  <!-- ۳۲ گیگ -->
+  <text x="714" y="226" text-anchor="start" style="direction:rtl" fill="var(--ink)" font-size="17" font-weight="700">۳۲ گیگ، یا کارتِ گرافیکِ ۱۲ گیگ به بالا</text>
+  <rect x="42" y="240" width="672" height="16" fill="var(--accent)"/>
+  <text x="714" y="280" text-anchor="start" style="direction:rtl" fill="var(--mute)" font-size="13.5">مدلِ ۱۴ میلیاردی و بالاتر — تازه اینجا به کیفیتِ یک اپِ آنلاین نزدیک می‌شود</text>
+</svg>

@@ -3,191 +3,263 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>دسترسی به هوش مصنوعی — رایگان، محلی، یا خریدنی — و اینکه کدام برای کدام درس | مدرسه دیزاین ملینا</title>
-<meta name="description" content="پرتکرارترین سؤالِ قبل از ثبت‌نام این است: «برای این دوره باید اشتراک بخرم؟» جوابش یک کلمه نیست، ولی دو خط است. بقیهٔ این جزوه سه راهی است که بعد از آن دو خط باز می‌شود.">
+<title>دسترسی به هوش مصنوعی — رایگان، محلی، یا خریدنی — و اینکه کدام به کارِ کدام درس می‌آید | مدرسه دیزاین ملینا</title>
+<meta name="description" content="پرتکرارترین سؤالِ قبل از ثبت‌نام این است: «برای این دوره حتماً باید اشتراک بخرم؟» جوابش دو خط است. بقیهٔ این جزوه سه راهی است که بعد از آن دو خط باز می‌شود، با قدم‌های واقعی — نه اشاره‌های کلی.">
 <!-- ساخته‌شده از handout/copy.md — این فایل را دستی ویرایش نکن؛ متن آنجاست. -->
-<style>/* ══ توکن‌ها — همان‌های لندینگ. صفحه تک‌رنگ است: سیاه، کرم، خاکستری. ══ */
+<style>/* ══ توکن‌ها ══
+   این جزوه برعکسِ دو تای دیگر، تیره است.
+
+   دلیلش کاربردش است: جزوه‌های دیگر خوانده و چاپ می‌شوند، این یکی
+   کنارِ دستِ آدم باز می‌ماند در حالی که دارد با یک صفحهٔ دیگر کار
+   می‌کند — صرافی، اپِ کارت، ترمینال. آن صفحه‌ها تیره‌اند و یک
+   کاغذِ سفیدِ کرم وسطشان، هر بار چشم را می‌زند.
+
+   رنگ همچنان تک‌رنگ است، مثلِ صفحهٔ خودِ دوره: سیاه، استخوانی،
+   خاکستری. «لهجه» اینجا رنگ نیست، *روشنی* است. */
 :root{
-  --paper:#faf6f1; --ink:#1a1714; --mute:#6b6560; --line:#e8e2d9; --card:#fffcf6;
-  --night:#0a0908; --night-ink:#f4efe8; --night-mute:#9b9086; --night-line:rgba(244,239,232,.09);
-  --accent:#8f8a82;
+  --paper:#0b0a09; --ink:#f4efe8; --mute:#9b9086; --dim:#6b645c;
+  --line:rgba(244,239,232,.13); --card:rgba(244,239,232,.035);
+  --accent:#d9cfc0; --on-accent:#0b0a09;
 }
+
+/*
+  نوارِ روشن — همان `dark` در متنِ جزوه.
+
+  نام در فایلِ متن عوض نشد چون معنی‌اش عوض نشده: «این بخش برعکسِ
+  بقیه باشد». در جزوهٔ روشن آن برعکس سیاه بود؛ اینجا کرم است. اگر
+  نامش را عوض می‌کردم، هر سه جزوه دو جور نشانه‌گذاری پیدا می‌کردند
+  برای یک کار.
+*/
+.dark{
+  --paper:#f4efe8; --ink:#14120f; --mute:#5f584f; --dim:#8a8279;
+  --line:rgba(20,18,15,.15); --card:rgba(20,18,15,.045);
+  --accent:#3d362d; --on-accent:#f4efe8;
+  background:var(--paper); color:var(--ink);
+}
+
 *{box-sizing:border-box}
-html{-webkit-text-size-adjust:100%}
+/* زمینه روی html هم لازم است: کروم موقعِ چاپ زمینهٔ صفحه را از
+   html می‌گیرد، نه از body — بدونِ این، حاشیهٔ هر برگ سفید می‌ماند. */
+html{-webkit-text-size-adjust:100%; background:var(--paper)}
 body{
   margin:0; background:var(--paper); color:var(--ink);
   font-family:"Meem",'Segoe UI',Tahoma,sans-serif; font-weight:300;
   font-size:16px; line-height:2.05;
+  /* بدونِ این، کروم موقعِ چاپ زمینه را دور می‌ریزد و کلِ جزوه
+     می‌شود متنِ روشن روی کاغذِ سفید — یعنی نامرئی. */
+  -webkit-print-color-adjust:exact; print-color-adjust:exact;
 }
 .wrap{max-width:44rem; margin-inline:auto; padding-inline:1.35rem}
-
-/* ── نوارهای تیره ── تمام‌عرض، نه مستطیلِ شناور: وقفه وقتی کار می‌کند که از لبه تا لبه برود */
-.dark{
-  position:relative; isolation:isolate; overflow:hidden;
-  background:var(--night); color:var(--night-ink);
-  --ink:var(--night-ink); --mute:var(--night-mute); --line:var(--night-line);
-  --card:rgba(255,255,255,.04); --paper:var(--night);
-}
+.dark{position:relative; isolation:isolate; overflow:hidden}
 .dark .wrap{position:relative; z-index:2}
-/* اندازهٔ صریح لازم است: یک svg بدونِ width/height یک المانِ جایگزینِ
-   با اندازهٔ ذاتیِ ۳۰۰×۱۵۰ است، و inset:0 آن را کش نمی‌آورد — کاشی
-   فقط یک مستطیلِ کوچک بالای هر نوار می‌شد. */
-.tile{position:absolute; inset:0; width:100%; height:100%; z-index:0; opacity:.038; pointer-events:none}
-.grain{
-  position:absolute; inset:-12%; z-index:1; pointer-events:none;
-  opacity:.07; mix-blend-mode:screen; background-size:180px 180px;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E");
+
+/*
+  کاشی — شبکهٔ نقطه، نه سرِ ربات.
+
+  اسکلتِ مشترکِ جزوه‌ساز یک الگوی رباتی می‌کشد که امضای جزوه‌های
+  دیگر است. اینجا خاموشش می‌کنم: این سند راهنمای دسترسی است، نه
+  معرفیِ دوره، و پس‌زمینه‌اش نباید شخصیت داشته باشد.
+*/
+.tile{
+  position:absolute; inset:0; width:100%; height:100%; z-index:0; pointer-events:none;
+  background-image:radial-gradient(circle, rgba(244,239,232,.085) 1px, transparent 1px);
+  background-size:28px 28px;
 }
+.tile rect{fill:none}
+.dark .tile{background-image:radial-gradient(circle, rgba(20,18,15,.13) 1px, transparent 1px)}
+.grain{display:none}
 
 /* ══ تیپوگرافی ══
-   فارسی حروفش به هم می‌چسبد، پس letter-spacing رویش ممنوع است — جوش‌ها
-   را پاره می‌کند و کلمه تکه‌تکه خوانده می‌شود. فقط برچسبِ لاتین فاصله
-   می‌گیرد. ایتالیک هم همین حکم را دارد: قلمِ فارسی نسخهٔ کج ندارد و
-   مرورگر حروف را می‌شکند، پس تأکید با وزن ساخته می‌شود نه با شیب. */
-h1,h2,h3{font-weight:700; line-height:1.4; margin:0}
-h1{font-size:clamp(2.2rem,9vw,3.4rem); line-height:1.18}
-h2{font-size:clamp(1.3rem,5vw,1.65rem)}
+   فارسی حروفش به هم می‌چسبد، پس letter-spacing رویش ممنوع است —
+   فقط برچسبِ لاتین فاصله می‌گیرد. ایتالیک هم نداریم: قلمِ فارسی
+   نسخهٔ کج ندارد و مرورگر حروف را می‌شکند، پس تأکید با وزن. */
+h1,h2,h3{font-weight:700; line-height:1.42; margin:0}
+h1{font-size:clamp(2rem,8vw,3.1rem); line-height:1.2}
+h2{font-size:clamp(1.3rem,5vw,1.7rem)}
 h3{font-size:1rem; margin-bottom:.4rem}
 p{margin:0 0 1rem}
 em{font-style:normal; font-weight:700}
+strong{font-weight:700; color:var(--ink)}
 a{color:inherit}
+code{
+  font-family:'Space Grotesk','Segoe UI',monospace; font-size:.9em;
+  direction:ltr; unicode-bidi:isolate; color:var(--accent);
+}
 .cap{font-size:.68rem; font-weight:700; color:var(--accent); display:block}
 .cap-en{
   font-family:'Space Grotesk','Segoe UI',sans-serif; letter-spacing:.22em;
   text-transform:uppercase; direction:ltr; unicode-bidi:isolate;
 }
-.lede{font-size:1.04rem; color:var(--mute); margin-bottom:1.8rem}
+.lede{font-size:1.05rem; color:var(--mute); margin-bottom:1.8rem}
 .from{font-size:.7rem; color:var(--accent); margin:.5rem 0 0}
 
 /* ══ جلد ══
-   روی گوشی طراحی شده و بعد برای صفحهٔ بزرگ باز می‌شود، نه برعکس:
-   عرضِ ۳۶۰ پیکسل سخت‌ترین حالتِ این صفحه است و اگر آنجا جا شود،
-   جای دیگر خودبه‌خود جا می‌شود. */
-/* svh نه vh: نوارِ آدرسِ سافاری با اسکرول جمع می‌شود و vh وسطِ راه عوض
-   می‌شود — یعنی طولِ صفحه زیرِ انگشتِ خواننده تغییر می‌کند. */
-.cover{display:flex; min-height:100vh; min-height:100svh}
-/*
-  سه گروه، نه یک ستونِ وسط‌چین.
-
-  دورِ اول همه‌چیز با justify-content:center وسط جمع می‌شد و نتیجه
-  روی گوشی این بود: محتوا در دو سومِ بالا، و یک سومِ پایین سیاهیِ
-  خالی. جلد که نصفش خالی باشد، ناتمام به‌نظر می‌رسد نه مینیمال.
-
-  با space-between، نامِ مدرسه به بالا می‌چسبد و نوارِ مشخصات به
-  پایین، و بلوکِ اصلی وسط می‌ماند — سه لنگرِ واقعی به‌جای یک تودهٔ
-  شناور.
-*/
+   روی گوشی طراحی شده و بعد برای صفحهٔ بزرگ باز می‌شود، نه برعکس.
+   svh نه vh: نوارِ آدرسِ سافاری با اسکرول جمع می‌شود و vh وسطِ راه
+   عوض می‌شود — یعنی طولِ صفحه زیرِ انگشتِ خواننده تغییر می‌کند. */
+.cover{display:flex; min-height:100vh; min-height:100svh; position:relative; isolation:isolate; overflow:hidden}
+.cover .wrap{position:relative; z-index:2}
 .cover-in{
   display:flex; flex-direction:column; justify-content:space-between;
-  width:100%; padding-block:2.6rem; gap:2rem;
+  width:100%; padding-block:2.2rem; gap:1.6rem;
 }
 .cover-mid{align-self:stretch}
 
 /*
-  نشانِ واژه‌ای و سری که جلویش می‌ایستد.
+  نوارِ بالای جلد — نامِ مدرسه در یک سر، نشانِ واژه‌ای در آن سر.
 
-  دورِ اول سر کوچک بود و درست وسطِ کلمه — از دور به یک لکه یا یک
-  ایرادِ فونت می‌خورد، نه به یک پیکره. اینجا برعکس شده: سر درشت
-  است و *بالای* کلمه می‌نشیند، فقط آن‌قدر پایین که شانه‌هایش سرِ
-  حروف را بپوشانند.
-
-  همان حرکتِ هیروِ لندینگ است — پیکره جلوی تیتر می‌ایستد و نصفش
-  می‌کند — ولی در اندازه‌ای که روی یک صفحهٔ کوچک هم فرم بماند.
-  نشانه هنوز کامل خوانده می‌شود؛ چیزی که اضافه شده عمق است.
+  نسخهٔ قبلِ این جلد، نشانه را درشت وسطِ صفحه می‌گذاشت و سرِ ربات
+  را جلویش. مشکلش این بود که جلد داشت *دوره* را معرفی می‌کرد، در
+  حالی که این سند یک راهنمای فنی است و کسی که بازش می‌کند دوره را
+  می‌شناسد. حالا نشان به اندازهٔ یک امضا کوچک شده و جای اصلی را
+  داده به چیزی که خواننده واقعاً دنبالش است: نقشهٔ سه راه.
 */
-/*
-  inline-flex، نه flex.
-
-  با flex، قاب تمامِ عرض را می‌گیرد و align-items:center نشانه را
-  وسطِ صفحه می‌برد — در حالی که هر چیزِ دیگرِ جلد به راست چیده شده،
-  و یک عنصرِ وسط‌چین میانِ بقیه، اتفاقی خوانده می‌شود نه تصمیم.
-  با inline-flex قاب به اندازهٔ خودِ کلمه جمع می‌شود: سر همچنان
-  دقیقاً وسطِ نشانه می‌ایستد، ولی کلِ بلوک لبه‌به‌لبه با تیتر است.
-*/
-.lockup{display:inline-flex; flex-direction:column; align-items:center}
+.cover-bar{
+  display:flex; align-items:baseline; justify-content:space-between; gap:1rem;
+  border-bottom:1px solid var(--line); padding-bottom:1rem;
+}
 .wordmark{
   font-family:'Michroma','Space Grotesk','Segoe UI',sans-serif; font-weight:400;
   direction:ltr; unicode-bidi:isolate; letter-spacing:.04em; white-space:nowrap;
-  font-size:clamp(1.5rem,7.4vw,2.3rem); line-height:1; color:var(--night-ink);
+  font-size:clamp(1.5rem,7.4vw,2.3rem); line-height:1; color:var(--ink);
 }
-.glyph{
-  /* بدنه هم‌رنگِ زمینه است و فقط با خطِ مو و دو چشمِ روشن خوانده
-     می‌شود — همان‌طور که در هیرو فقط لبه و چشم‌ها دیده می‌شوند */
-  --g-fill:var(--night); --g-line:rgba(244,239,232,.22); --g-eye:var(--night-ink);
-  height:6.8rem; width:auto; margin-bottom:-1.4rem; pointer-events:none;
-  /* جلوی حروف، نه پشتشان: در ترتیبِ طبیعی، حروف بعد کشیده می‌شوند */
-  position:relative; z-index:1;
-}
-.lockup--sm .glyph{height:4.6rem; margin-bottom:-1rem}
-.lockup--sm .wordmark{font-size:clamp(1.3rem,6vw,1.9rem)}
-.cover h1{margin-top:2.4rem}
-.cover-sub{color:var(--night-mute); font-size:.95rem; margin:.7rem 0 1.8rem}
-.cover .lede{max-width:28rem; margin-bottom:0}
+.wordmark--bar{font-size:.82rem; letter-spacing:.2em; color:var(--mute)}
+.cover--art h1{margin-top:0}
+.cover-sub{color:var(--mute); font-size:.95rem; margin:.8rem 0 1.6rem}
+.cover .lede{max-width:30rem; margin-bottom:0}
+
+/* نقشهٔ جلد — بزرگ‌ترین چیزِ صفحه، چون حرفِ اصلیِ سند همان است */
+.cover-art{margin:2.6rem 0 0; padding:0}
+.cover-art svg{display:block; width:100%; height:auto}
 
 /* نوارِ مشخصات: یک خطِ افقی و چند قلم، نه فهرستی که وسطِ کلمه می‌شکند */
 .meta{
-  list-style:none; margin:0; padding:1rem 0 0; border-top:1px solid var(--night-line);
-  display:flex; flex-wrap:wrap; gap:.35rem 1.4rem; font-size:.76rem; color:var(--night-mute);
+  list-style:none; margin:0; padding:1rem 0 0; border-top:1px solid var(--line);
+  display:flex; flex-wrap:wrap; gap:.35rem 1.4rem; font-size:.76rem; color:var(--mute);
 }
 .meta li{position:relative}
 .meta li+li::before{content:"·"; position:absolute; inset-inline-end:-.85rem; color:var(--accent)}
 
 /* ══ بخش‌ها ══ */
-.sec{padding-block:3.6rem}
-.head{display:flex; gap:.9rem; border-top:1px solid var(--line); padding-top:1.4rem; margin-bottom:1.5rem}
-.no{font-size:.8rem; font-weight:700; color:var(--accent); flex:none; padding-top:.35rem; font-variant-numeric:tabular-nums}
+.sec{padding-block:3.8rem}
+
+/*
+  شمارهٔ بخش، درشت و کم‌رنگ، *پشتِ* عنوان.
+
+  همان کاری که سکشنِ «پیش از شروع» در صفحهٔ دوره می‌کند. دلیلش
+  فقط تزئین نیست: خواننده‌ای که دارد جزوه را اسکرول می‌کند تا به
+  قدمِ چهارم برسد، باید بتواند شماره را از گوشهٔ چشم پیدا کند
+  بدونِ اینکه عنوان‌ها را بخواند. شمارهٔ ۰٫۸ رمی این کار را نمی‌کرد.
+*/
+.head{position:relative; border-top:1px solid var(--line); padding-top:1.5rem; margin-bottom:1.6rem}
+.no{
+  /* پایین‌تر از خطِ بالا، وگرنه دقیقاً پشتِ برچسبِ لاتین می‌نشیند و
+     هر دو ناخوانا می‌شوند — برچسب چپ‌چین است و شماره هم. */
+  position:absolute; inset-block-start:2.1rem; inset-inline-end:0; z-index:0;
+  font-size:5rem; line-height:1; font-weight:300; color:var(--ink); opacity:.07;
+  pointer-events:none; user-select:none;
+  /* بدونِ جداسازیِ جهت، «۰۴» در جریانِ راست‌به‌چپ وارونه چیده می‌شود
+     و «۴۰» خوانده می‌شود. */
+  direction:ltr; unicode-bidi:isolate;
+}
+.head-t{position:relative; z-index:1}
 .head-t h2{margin-top:.45rem}
 
 /* بلوکِ «چرا» — همان خطِ نازکِ کنارِ نقل‌قولِ لندینگ */
-.why{border-inline-start:2px solid var(--accent); padding-inline-start:1.1rem; color:var(--mute); margin:1.5rem 0}
+.why{border-inline-start:2px solid var(--accent); padding-inline-start:1.1rem; color:var(--mute); margin:1.6rem 0}
 .why strong{color:var(--ink)}
 
-.card{border:1px solid var(--line); background:var(--card); padding:1.2rem 1.25rem; margin:1.4rem 0}
-.card p:last-child,.card ol:last-child,.card .pre:last-child{margin-bottom:0}
+.card{border:1px solid var(--line); background:var(--card); padding:1.3rem 1.35rem; margin:1.5rem 0}
+.card p:last-child,.card ol:last-child,.card ul:last-child,.card .pre:last-child{margin-bottom:0}
+
+/*
+  کادرِ هشدار — پررنگ، چون قرار نیست رد شود.
+
+  فقط دو بار در کلِ جزوه استفاده می‌شود. اگر بیشتر شود، دیگر هشدار
+  نیست؛ می‌شود بافتِ صفحه.
+*/
+.warn{
+  border:1px solid var(--accent); background:var(--card); padding:1.3rem 1.35rem; margin:1.5rem 0;
+  position:relative;
+}
+.warn::before{
+  content:""; position:absolute; inset-block:0; inset-inline-start:0; width:3px; background:var(--accent);
+}
+.warn p:last-child,.warn ul:last-child{margin-bottom:0}
+
+/* ══ قدم‌ها ══
+   شماره در ستونِ خودش می‌ماند و متن زیرش نمی‌رود. با فهرستِ
+   شماره‌دارِ معمولی این ممکن نبود، چون هر قدم اینجا چند پاراگراف و
+   گاهی یک تصویر دارد. */
+.step{
+  display:grid; grid-template-columns:auto 1fr; gap:0 1.1rem;
+  border-top:1px solid var(--line); padding:1.5rem 0;
+}
+.step:last-of-type{border-bottom:1px solid var(--line)}
+.step-n{
+  font-size:1.5rem; font-weight:300; line-height:1.4; color:var(--accent);
+  direction:ltr; unicode-bidi:isolate; grid-row:1;
+}
+.step-b h3{font-size:1.06rem; line-height:1.5; margin-bottom:.6rem}
+.step-b p:last-child,.step-b .pre:last-child,.step-b .fig:last-child{margin-bottom:0}
+
+/* ══ تصویرها ══
+   داخلِ سند چسبیده‌اند، نه لینک — پس رنگشان را از همین توکن‌ها
+   می‌گیرند و در نوارِ روشن خودشان روشن می‌شوند. */
+.fig{margin:1.7rem 0; padding:0}
+.fig svg{display:block; width:100%; height:auto; font-family:"Meem",'Segoe UI',Tahoma,sans-serif}
+.fig figcaption{
+  margin-top:.8rem; padding-top:.7rem; border-top:1px solid var(--line);
+  font-size:.78rem; line-height:1.9; color:var(--mute);
+}
 
 .pre{
   border:1px solid var(--line); background:var(--card); padding:1rem 1.1rem; margin:1.1rem 0;
-  font-size:.9rem; line-height:1.9; white-space:pre-wrap; overflow-wrap:anywhere;
+  font-family:'Space Grotesk','Segoe UI',monospace;
+  font-size:.86rem; line-height:1.95; white-space:pre-wrap; overflow-wrap:anywhere;
+  direction:ltr; unicode-bidi:isolate; text-align:left; color:var(--ink);
 }
-.card .pre{background:transparent}
+.card .pre,.step-b .pre{background:transparent}
 
 ol,ul{margin:0 0 1rem; padding-inline-start:1.25rem}
 li{margin-bottom:.5rem}
 li::marker{color:var(--accent)}
 
 /* ══ CTA ══ */
-.cta{padding-block:4rem}
-.cta .lockup{margin-top:1rem}
+.cta{padding-block:4.2rem}
+.cta .lockup{display:inline-flex; flex-direction:column; align-items:center; margin-top:1rem}
+.cta .glyph{height:3.4rem; width:auto; color:var(--ink)}
+.cta .wordmark{font-size:clamp(1.3rem,6vw,1.8rem); margin-top:.5rem}
 .cta-h{margin:1.8rem 0 1.1rem; font-size:clamp(1.35rem,5.2vw,1.9rem)}
 .btn{
   display:inline-flex; align-items:center; padding:.95rem 1.8rem; margin-top:.6rem;
-  background:var(--night-ink); color:var(--night); font-weight:700; font-size:.95rem;
-  text-decoration:none; border:1px solid var(--night-ink);
+  background:var(--ink); color:var(--paper); font-weight:700; font-size:.95rem;
+  text-decoration:none; border:1px solid var(--ink);
 }
-.url{font-family:'Space Grotesk','Segoe UI',sans-serif; direction:ltr; unicode-bidi:isolate; font-size:.8rem; color:var(--night-mute); margin-top:1.1rem}
+.url{font-family:'Space Grotesk','Segoe UI',sans-serif; direction:ltr; unicode-bidi:isolate; font-size:.8rem; color:var(--mute); margin-top:1.1rem}
 .rule{height:1px; background:var(--line); border:0; margin-block:2.4rem}
+.src{font-size:.74rem; color:var(--dim); margin:0 0 .6rem}
 .foot{font-size:.76rem; color:var(--mute); margin:0}
 
 /* ══ چاپ و PDF ══
-   نوارهای تیره روی کاغذ هم جوهر می‌خورند هم بد خوانده می‌شوند، پس در
-   چاپ همه‌چیز به کاغذِ روشن برمی‌گردد و سرِ ربات از سیلوئت به خطِ
-   کانتور تبدیل می‌شود. */
-@page{size:A4; margin:17mm 15mm}
+   برخلافِ دو جزوهٔ دیگر، اینجا تیرگی به کاغذ هم می‌رود. جزوه‌ای
+   که در تلگرام دست‌به‌دست می‌شود روی صفحه خوانده می‌شود نه روی
+   کاغذ، و اگر PDF روشن شود، همان سندی که در مرورگر دیده‌ای با
+   چیزی که فرستاده‌ای یکی نیست.
+
+   اگر روزی قرار شد چاپ شود، کلِ برگرداندنش همین بلوک است. */
+@page{size:A4; margin:16mm 14mm}
 @media print{
-  body{background:#fff; font-size:10.5pt; line-height:1.85}
+  body{font-size:10.5pt; line-height:1.85}
   .wrap{max-width:none; padding:0}
-  .dark{background:#fff; color:#000; --ink:#000; --mute:#444; --line:#ccc; --card:#fff}
-  .tile,.grain{display:none}
-  .wordmark,.cover-sub,.url,.meta{color:#000}
-  .glyph{--g-fill:#fff; --g-line:#000; --g-eye:#000}
   .cover{min-height:auto; display:block}
   .cover-in{padding-block:0}
-  .cover h1{margin-top:1.6rem}
-  .meta{border-color:#ccc; margin-top:2rem}
-  .sec{padding-block:1rem; break-inside:avoid}
+  .cover-art{margin:1.8rem 0 1.4rem}
+  .meta{margin-top:1.6rem}
+  .sec{padding-block:1.2rem}
   .sec.brk{break-before:page}
-  .card,.pre,.why,.head{break-inside:avoid}
-  .btn{background:#fff; color:#000; border-color:#000}
+  .card,.warn,.pre,.why,.head,.fig,.step{break-inside:avoid}
+  .btn{background:var(--ink); color:var(--paper)}
   a{text-decoration:none}
 }
 </style>
@@ -204,26 +276,54 @@ li::marker{color:var(--accent)}
     <g fill="#0a0908" transform="translate(24 26) scale(0.55)"><rect x="7.5" y="19" width="12" height="8"/><rect x="28.5" y="19" width="12" height="8"/></g>
   </pattern>
 </defs></svg>
-<header class="cover dark">
+<header class="cover cover--art">
   <svg class="tile" aria-hidden="true"><rect width="100%" height="100%" fill="url(#tile)"/></svg>
   <div class="grain" aria-hidden="true"></div>
   <div class="wrap cover-in">
-    <span class="cap">مدرسه دیزاین ملینا</span>
-    <div class="cover-mid">
-      <div class="lockup">
-        <svg class="glyph" viewBox="-1 -1 50 72" aria-hidden="true">
-  <g fill="var(--g-fill)" stroke="var(--g-line)" stroke-width="1">
-    <circle cx="24" cy="24" r="24"/><rect x="14" y="49" width="20" height="10"/><rect x="4" y="61.5" width="40" height="6"/>
-  </g>
-  <g fill="var(--g-eye)"><rect x="7.5" y="19" width="12" height="8"/><rect x="28.5" y="19" width="12" height="8"/></g>
-</svg>
-        <span class="wordmark">ROBOTYPE</span>
-      </div>
-      <h1>دسترسی به هوش مصنوعی</h1>
-      <p class="cover-sub">رایگان، محلی، یا خریدنی — و اینکه کدام برای کدام درس</p>
-      <p class="lede">پرتکرارترین سؤالِ قبل از ثبت‌نام این است: «برای این دوره باید اشتراک بخرم؟» جوابش یک کلمه نیست، ولی دو خط است. بقیهٔ این جزوه سه راهی است که بعد از آن دو خط باز می‌شود.</p>
+    <div class="cover-bar">
+      <span class="cap">مدرسه دیزاین ملینا</span>
+      <span class="wordmark wordmark--bar">ROBOTYPE</span>
     </div>
-    <ul class="meta"><li>شش بخش</li><li>یک جدولِ تصمیم</li><li>حدود ده دقیقه</li></ul>
+    <div class="cover-mid">
+      <h1>دسترسی به هوش مصنوعی</h1>
+      <p class="cover-sub">رایگان، محلی، یا خریدنی — و اینکه کدام به کارِ کدام درس می‌آید</p>
+      <p class="lede">پرتکرارترین سؤالِ قبل از ثبت‌نام این است: «برای این دوره حتماً باید اشتراک بخرم؟» جوابش دو خط است. بقیهٔ این جزوه سه راهی است که بعد از آن دو خط باز می‌شود، با قدم‌های واقعی — نه اشاره‌های کلی.</p>
+      <figure class="cover-art"><!--
+  جلد — سه راه که به یک پروژه می‌رسند.
+
+  خواندنش راست‌به‌چپ است، مثل خودِ متن. سه خط عمداً سه جورند:
+  رایگان بریده‌بریده (سقف دارد و قطع می‌شود)، محلی نازک و پیوسته،
+  خریدنی ضخیم و پیوسته. یعنی تفاوتشان قبل از خواندنِ برچسب‌ها هم
+  دیده می‌شود.
+-->
+<svg viewBox="0 0 720 268" role="img" aria-label="سه راه — رایگان، محلی، خریدنی — که همه به یک پروژه می‌رسند">
+  <g style="direction:rtl" fill="var(--ink)" font-size="19" font-weight="700">
+    <text x="714" y="52" text-anchor="start">رایگان</text>
+    <text x="714" y="134" text-anchor="start">محلی</text>
+    <text x="714" y="216" text-anchor="start">خریدنی</text>
+  </g>
+  <g style="direction:rtl" fill="var(--mute)" font-size="13">
+    <text x="714" y="74" text-anchor="start">سقف می‌دهی</text>
+    <text x="714" y="156" text-anchor="start">سخت‌افزار می‌دهی</text>
+    <text x="714" y="238" text-anchor="start">پول می‌دهی</text>
+  </g>
+
+  <g fill="none" stroke="var(--ink)" stroke-linecap="round">
+    <path d="M596 46 H452 C392 46 392 128 332 128" stroke-width="1.4" stroke-dasharray="7 9" opacity=".65"/>
+    <path d="M596 128 H332" stroke-width="1.6" opacity=".8"/>
+    <path d="M596 210 H452 C392 210 392 128 332 128" stroke-width="3.4"/>
+  </g>
+
+  <g fill="var(--ink)">
+    <path d="M318 128 L336 119 L336 137 Z"/>
+  </g>
+
+  <rect x="96" y="96" width="200" height="64" fill="none" stroke="var(--ink)" stroke-width="1.6"/>
+  <text x="196" y="127" text-anchor="middle" style="direction:rtl" fill="var(--ink)" font-size="18" font-weight="700">پروژهٔ تو</text>
+  <text x="196" y="148" text-anchor="middle" style="direction:rtl" fill="var(--mute)" font-size="12">یکی از این سه، کافی است</text>
+</svg></figure>
+    </div>
+    <ul class="meta"><li>شش بخش</li><li>آموزشِ قدم‌به‌قدم</li><li>جدولِ تصمیم</li><li>حدود پانزده دقیقه</li></ul>
   </div>
 </header>
 <section class="sec brk">
@@ -239,12 +339,12 @@ li::marker{color:var(--accent)}
     </div>
     <p class="lede">برای تماشای دوره، نه. برای اینکه پروژه را تا آخر جلو ببری، دست‌کم یکی.</p>
     <p>اسلایدِ اولِ فصلِ اول همین را صریح می‌گوید: <strong>لازم نیست همین الان حساب بخری.</strong></p>
-<p>دلیلش شکلِ خودِ دوره است. قرار نیست هر کسی جدا یک چیزی بسازد؛ <strong>یک پروژه را با هم جلو می‌بریم</strong> — از تحقیق تا دیزاین‌سیستم تا یک صفحهٔ زندهٔ روی اینترنت. اگر حساب داری، همراه بیا. اگر نداری، تماشا کن: همهٔ پرامپت‌ها و همهٔ خروجی‌ها داخلِ جزوه‌ها هست.</p>
+<p>دلیلش شکلِ خودِ دوره است. قرار نیست هر کسی جدا یک چیزی بسازد؛ <strong>یک پروژه را با هم جلو می‌بریم</strong> — از تحقیق تا دیزاین‌سیستم تا یک صفحهٔ زندهٔ روی اینترنت. اگر حساب داری، همراه بیا. اگر نداری، تماشا کن: همهٔ پرامپت‌ها و همهٔ خروجی‌ها داخلِ جزوه‌ها هست و کارِ خودِ پروژه دکِ جدای خودش را دارد.</p>
 <div class="card"><p><strong>تماشا</strong> هیچ چیزی جز خودِ دوره لازم نداری.</p>
-<p><strong>فصلِ اول</strong> نسخهٔ رایگانِ هر مدلِ متنی‌ای که بهش دسترسی داری کافی است. یک ویرایشگرِ متنِ ساده و یک دفتر هم می‌خواهی — و آن دفتر از هر ابزاری مهم‌تر است.</p>
+<p><strong>فصلِ اول</strong> نسخهٔ رایگانِ هر مدلِ متنی‌ای که بهش دسترسی داری کافی است. یک ویرایشگرِ متنِ ساده هم می‌خواهی — Notion، Word، حتی Notepad — و یک دفترِ کاغذی، که از هر ابزاری مهم‌تر است.</p>
 <p><strong>از فصلِ دوم</strong> فیگما وارد می‌شود. تا قبل از آن اصلاً بازش نمی‌کنیم.</p>
-<p><strong>پروژهٔ کامل</strong> دست‌کم یکی از اشتراک‌ها. کارِ فصل‌های آخر — سپردنِ کارِ طولانی، خواندنِ یک پوشهٔ واقعی، سه نسخه از یک کار — با سقفِ رایگان جا نمی‌شود.</p></div>
-<div class="why"><strong>چرا این تفکیک مهم است:</strong> چون تصمیمِ خرید را به عقب می‌اندازد. اول فصلِ اول را با رایگان جلو بیا و ببین این روشِ کار به دردت می‌خورد یا نه. اگر خورد، آن‌وقت می‌دانی داری بابتِ چه چیزی پول می‌دهی — و همان‌جا هم توضیح می‌دهیم که نسخهٔ پولی دقیقاً کجا واقعاً ارزش دارد.</div>
+<p><strong>پروژهٔ کامل</strong> دست‌کم یکی از اشتراک‌ها. کارِ فصل‌های آخر — سپردنِ کارِ طولانی، خواندنِ یک پوشهٔ واقعی، سه نسخه از یک کار به‌صورتِ موازی — با سقفِ رایگان جا نمی‌شود.</p></div>
+<div class="why"><strong>چرا این تفکیک مهم است:</strong> چون تصمیمِ خرید را به عقب می‌اندازد. اول فصلِ اول را با رایگان جلو بیا و ببین این روشِ کار به دردت می‌خورد یا نه. اگر خورد، آن‌وقت می‌دانی داری بابتِ چه چیزی پول می‌دهی — و همان‌جا هم توضیح می‌دهیم که نسخهٔ پولی دقیقاً کجا واقعاً ارزش دارد و کجا فقط عادت است.</div>
 <p>و یک قولِ کوچک: <strong>هر راهِ رایگانی که برای گرفتنِ توکن پیدا شود، تا وقتی که هست، در گروهِ دوره معرفی می‌شود.</strong> این چیزها ماه‌به‌ماه باز و بسته می‌شوند و جای اعلامشان یک جزوه نیست، یک گروه است.</p>
   </div>
 </section>
@@ -259,17 +359,58 @@ li::marker{color:var(--accent)}
         
       </div>
     </div>
-    <p class="lede">دو نوع رایگان وجود دارد و مدام با هم قاطی می‌شوند: نسخهٔ رایگانِ خودِ اپِ چت، و توکنِ رایگانِ API. اولی برای یادگیری است، دومی برای ساختن.</p>
-    <h3>الف) نسخهٔ رایگانِ اپ‌های چت</h3>
-<p>کلاود، چت‌جی‌پی‌تی و جمینای هر سه نسخهٔ رایگان دارند. برای فصلِ اول — که تمامش دربارهٔ نوشتنِ پرامپت، روبریک، شرطِ توقف و مرزهاست — همین کافی است. سقفِ پیام دارند و مدلِ قوی‌تر را محدود می‌دهند، ولی هیچ‌کدامِ این‌ها جلوی درس را نمی‌گیرد.</p>
+    <p class="lede">دو نوع «رایگان» وجود دارد و مدام با هم قاطی می‌شوند. یکی برای یاد گرفتن است، آن یکی برای ساختن. اگر این دو را جابه‌جا بگیری، هم وقت تلف می‌کنی هم ناامید می‌شوی.</p>
+    <figure class="fig"><!--
+  دو جور «رایگان» که مدام با هم اشتباه گرفته می‌شوند.
+
+  کنارِ هم، چون تفاوتشان نسبی است نه مطلق: یکی رابط دارد و کلید
+  ندارد، آن یکی کلید دارد و رابط ندارد.
+-->
+<svg viewBox="0 0 720 210" role="img" aria-label="دو جور رایگان: نسخهٔ رایگانِ اپِ چت در برابر توکنِ رایگانِ API">
+  <g stroke="var(--line)" stroke-width="1" fill="var(--card)">
+    <rect x="372" y="8" width="340" height="194"/>
+    <rect x="8"   y="8" width="340" height="194"/>
+  </g>
+
+  <!-- راست: اپِ چت -->
+  <text x="692" y="42" text-anchor="start" style="direction:rtl" fill="var(--accent)" font-size="12" font-weight="700">برای یاد گرفتن</text>
+  <text x="692" y="72" text-anchor="start" style="direction:rtl" fill="var(--ink)" font-size="19" font-weight="700">نسخهٔ رایگانِ اپِ چت</text>
+  <g style="direction:rtl" fill="var(--mute)" font-size="13.5">
+    <text x="692" y="104" text-anchor="start">پنجره‌ای که باز می‌کنی و تایپ می‌کنی</text>
+    <text x="692" y="130" text-anchor="start">سقفِ پیام دارد، مدلِ قوی محدود است</text>
+    <text x="692" y="156" text-anchor="start">کلیدِ API نمی‌دهد</text>
+  </g>
+  <text x="692" y="186" text-anchor="start" style="direction:rtl" fill="var(--ink)" font-size="13" font-weight="700">کلِ فصلِ اول با همین جلو می‌رود</text>
+
+  <!-- چپ: توکنِ API -->
+  <text x="328" y="42" text-anchor="start" style="direction:rtl" fill="var(--accent)" font-size="12" font-weight="700">برای ساختن</text>
+  <text x="328" y="72" text-anchor="start" style="direction:rtl" fill="var(--ink)" font-size="19" font-weight="700">توکنِ رایگانِ API</text>
+  <g style="direction:rtl" fill="var(--mute)" font-size="13.5">
+    <text x="328" y="104" text-anchor="start">یک کلیدِ متنی، بدونِ هیچ رابطی</text>
+    <text x="328" y="130" text-anchor="start">به ابزارهای دیگر وصل می‌شود</text>
+    <text x="328" y="156" text-anchor="start">سقفش روزانه یا ماهانه است</text>
+  </g>
+  <text x="328" y="186" text-anchor="start" style="direction:rtl" fill="var(--ink)" font-size="13" font-weight="700">وقتی می‌خواهی چیزی بسازی، این</text>
+</svg><figcaption>سمتِ راست چیزی است که باز می‌کنی و تایپ می‌کنی. سمتِ چپ یک رشتهٔ متنیِ بیست‌کاراکتری است که هیچ پنجره‌ای ندارد و باید به یک ابزارِ دیگر بدهی‌اش.</figcaption></figure>
+<h3>الف) نسخهٔ رایگانِ اپ‌های چت</h3>
+<p>کلاود، چت‌جی‌پی‌تی و جمینای هر سه نسخهٔ رایگان دارند. برای فصلِ اول — که تمامش دربارهٔ نوشتنِ پرامپت، ساختنِ روبریک، تعیینِ شرطِ توقف و کشیدنِ مرزهاست — همین کافی است.</p>
+<p>محدودیت‌هایشان واقعی‌اند ولی جلوی درس را نمی‌گیرند:</p>
+<ul><li><strong>سقفِ پیام.</strong> بعد از چند پیام در یک بازهٔ کوتاه، می‌گوید چند ساعت صبر کن. راهِ کنار آمدن با این، نوشتنِ پرامپتِ بهتر است نه پیامِ بیشتر — که اتفاقاً درسِ همان فصل است.</li><li><strong>مدلِ ضعیف‌تر.</strong> نسخهٔ رایگان معمولاً مدلِ سبک‌تر را می‌دهد. برای تمرین‌های فصلِ اول فرقی نمی‌کند.</li><li><strong>بی‌حافظه.</strong> پروژه و حافظه و اسکیل معمولاً در نسخهٔ رایگان نیستند. یعنی هر گفتگو از صفر شروع می‌شود — که دقیقاً همان چیزی است که در فصلِ اول یادش می‌گیریم چطور با یک فایلِ متنی جبرانش کنیم.</li></ul>
 <h3>ب) توکنِ رایگانِ API</h3>
-<p>این‌ها کلیدِ API می‌دهند؛ یعنی می‌شود به ابزارهای دیگر وصلشان کرد. تا امروز، این‌ها آن‌هایی‌اند که بدونِ کارتِ بانکی کار می‌کنند:</p>
-<div class="card"><p><strong>Google AI Studio</strong> سخاوتمندترین گزینهٔ کنونی برای مدلِ ردهٔ اول. با یک حسابِ گوگل، بدونِ کارت.</p>
-<p><strong>Groq</strong> سریع‌ترینشان. مدل‌های متن‌بازِ بزرگ با سرعتی که جای دیگری نیست. سقفِ روزانه دارد.</p>
-<p><strong>OpenRouter</strong> یک کلید، ده‌ها مدل — از جمله چند مدلِ رایگان. وقتی می‌خواهی چند مدل را روی یک کار مقایسه کنی، ساده‌ترین راه همین است.</p>
+<p>این‌ها یک <strong>کلید</strong> می‌دهند: یک رشتهٔ متنیِ بلند که آن را داخلِ یک ابزارِ دیگر می‌گذاری و آن ابزار به‌جای تو با مدل حرف می‌زند. خودشان پنجرهٔ چت ندارند.</p>
+<p>گرفتنشان در همهٔ این سرویس‌ها یک شکل است:</p>
+<div class="step"><span class="step-n">۰۱</span><div class="step-b"><h3>وارد شو</h3><p>با حسابی که از قبل داری — گوگل، گیت‌هاب، یا ایمیل. هیچ‌کدامِ این پنج‌تا کارتِ بانکی نمی‌خواهند.</p></div></div>
+<div class="step"><span class="step-n">۰۲</span><div class="step-b"><h3>صفحهٔ کلیدها را پیدا کن</h3><p>اسمش تقریباً همیشه یکی از این‌هاست: <code dir="ltr">API keys</code> یا <code dir="ltr">Credentials</code>. معمولاً زیرِ منوی حساب است، نه در صفحهٔ اول.</p></div></div>
+<div class="step"><span class="step-n">۰۳</span><div class="step-b"><h3>یک کلیدِ تازه بساز و همان لحظه کپی‌اش کن</h3><p>کلید فقط <strong>یک بار</strong> کامل نشان داده می‌شود. بعد از بستنِ آن پنجره دیگر نمی‌توانی ببینی‌اش و باید کلیدِ تازه بسازی. بگذارش در همان فایلِ متنیِ کیتِ پرامپت، نه در یک چتِ تلگرام.</p></div></div>
+<p>و این‌ها جاهایی‌اند که تا امروز بدونِ کارتِ بانکی کار می‌کنند:</p>
+<div class="card"><p><strong>Google AI Studio</strong> سخاوتمندترین گزینهٔ کنونی برای مدلِ ردهٔ اول. با یک حسابِ گوگل، بدونِ کارت. اگر قرار است فقط یکی را انتخاب کنی، این.</p>
+<p><strong>Groq</strong> سریع‌ترینشان — تفاوتش آن‌قدر زیاد است که موقعِ کار حس می‌شود. مدل‌های متن‌بازِ بزرگ، با سقفِ روزانه.</p>
+<p><strong>OpenRouter</strong> یک کلید، ده‌ها مدل، از جمله چند مدلِ رایگان. وقتی می‌خواهی یک پرامپت را روی سه مدل امتحان کنی، این ساده‌ترین راه است چون فقط نامِ مدل را عوض می‌کنی.</p>
 <p><strong>GitHub Models</strong> با همان حسابِ گیت‌هاب. برای امتحان‌کردن خوب است، برای کارِ حجمی نه.</p>
 <p><strong>Mistral</strong> سقفِ ماهانه‌اش از همه بازتر است، ولی شرطش این است که اجازهٔ آموزش روی داده‌هایت را بدهی.</p></div>
-<div class="why"><strong>رایگان یعنی با پرامپتت پول می‌دهی.</strong> سرویسی که پول نمی‌گیرد، معمولاً دارد از ورودیِ تو برای آموزش استفاده می‌کند. همان مرزی که در فصلِ اول کشیدیم اینجا دوبرابر جدی است: <strong>دادهٔ شخصیِ کاربر، متنِ مصاحبه، قرارداد، شمارهٔ حساب و هر چیزی که NDA دارد را داخلِ سرویسِ رایگان نچسبان.</strong> برای کارِ تمرینی و شخصی آزاد، برای کارِ مشتری نه.</div>
+<div class="warn"><p><strong>رایگان یعنی با پرامپتت پول می‌دهی.</strong> سرویسی که پول نمی‌گیرد، معمولاً دارد از ورودیِ تو برای آموزش استفاده می‌کند. همان مرزی که در فصلِ اول کشیدیم اینجا دوبرابر جدی است:</p>
+<p><strong>نچسبان:</strong> دادهٔ شخصیِ کاربر · متنِ مصاحبهٔ سلامت · قرارداد و شمارهٔ حساب · کد و کلیدِ دسترسی · هر چیزی که NDA دارد.</p>
+<p><strong>به‌جایش:</strong> اسم‌ها را با «کاربر ۱» عوض کن · عددها را نسبی کن · تنظیماتِ آموزش را خاموش کن · برای کارِ حساس، اصلاً سراغِ ردهٔ رایگان نرو.</p></div>
 <h3>و یک هشدارِ صادقانه</h3>
 <p>این فهرست عمرِ کوتاهی دارد. نمونه‌اش همین یک سالِ گذشته: سقفِ رایگانِ Qwen Code اول کم شد و بعد کلاً بسته شد؛ Cerebras رایگانش را به یک اعتبارِ آزمایشیِ کارت‌خواه تبدیل کرد؛ و Gemini CLI بازنشسته شد و جایش Antigravity آمد که سقفِ رایگانش چند بار عوض شده.</p>
 <p>پس این بخش را به‌عنوانِ <strong>فهرستِ جاهایی که باید نگاه کنی</strong> بخوان، نه فهرستِ چیزهایی که حتماً سرِ جایشان هستند.</p>
@@ -287,18 +428,46 @@ li::marker{color:var(--accent)}
       </div>
     </div>
     <p class="lede">تنها رایگانِ واقعی: بی‌سقف، بی‌کارت، آفلاین، و هیچ‌چیزی از دستگاهت بیرون نمی‌رود. قیمتش RAM است و کیفیت.</p>
-    <p>دو ابزار، برای دو جور آدم:</p>
-<ul><li><strong>LM Studio</strong> — یک اپِ معمولیِ ویندوز و مک با رابطِ گرافیکی. مدل را از داخلِ خودش سرچ می‌کنی، دانلود می‌کنی و همان‌جا چت می‌کنی. اگر ترمینال برایت دیوار است، از اینجا شروع کن.</li><li><strong>Ollama</strong> — همان کار، با دستور. سبک‌تر است و یک سرورِ محلی بالا می‌آورد که ابزارهای دیگر می‌توانند به آن وصل شوند.</li></ul>
-<h3>چه مدلی روی چه دستگاهی</h3>
-<div class="card"><p><strong>۸ گیگ RAM</strong> مدل‌های ۳ تا ۴ میلیاردی. برای خلاصه‌کردن، دسته‌بندی و مرتب‌کردن جواب می‌دهد. برای نوشتنِ خوب نه.</p>
-<p><strong>۱۶ گیگ RAM</strong> مدل‌های ۷ تا ۸ میلیاردی. نقطهٔ شروعِ منطقی. روی مکِ اپل‌سیلیکون روان است، روی لپ‌تاپِ بدونِ کارتِ گرافیک کُند ولی قابلِ استفاده.</p>
-<p><strong>۳۲ گیگ، یا کارتِ گرافیکِ ۱۲ گیگ به بالا</strong> مدل‌های ۱۴ میلیاردی و بالاتر. اینجا تازه کیفیت به چیزی نزدیک می‌شود که از یک اپِ آنلاین انتظار داری.</p></div>
-<p>بعد از نصبِ Ollama، کلِ کاری که لازم است:</p>
+    <p>مدل روی کامپیوترِ خودت اجرا می‌شود. یعنی نه اینترنت لازم دارد، نه حساب، نه کارت — و هیچ جمله‌ای از آنچه می‌نویسی به هیچ سروری نمی‌رود. برای کارِ محرمانه، این تنها گزینه‌ای است که واقعاً محرمانه است.</p>
+<h3>اول ببین دستگاهت چه چیزی را جا می‌دهد</h3>
+<figure class="fig"><!--
+  نردبانِ RAM.
+
+  طولِ میله واقعاً نسبتِ حافظه است، نه تزئین: ۸ و ۱۶ و ۳۲. کسی که
+  فقط به شکل نگاه می‌کند هم باید بفهمد فاصلهٔ ردهٔ اول تا دوم همان
+  فاصلهٔ دوم تا سوم است. میله از راست رشد می‌کند، هم‌جهتِ متن.
+-->
+<svg viewBox="0 0 720 300" role="img" aria-label="چه مدلی روی چه مقدار RAM اجرا می‌شود">
+  <!-- ۸ گیگ -->
+  <text x="714" y="26" text-anchor="start" style="direction:rtl" fill="var(--ink)" font-size="17" font-weight="700">۸ گیگ RAM</text>
+  <rect x="546" y="40" width="168" height="16" fill="var(--ink)" opacity=".3"/>
+  <text x="714" y="80" text-anchor="start" style="direction:rtl" fill="var(--mute)" font-size="13.5">مدلِ ۳ تا ۴ میلیاردی — خلاصه و دسته‌بندی جواب می‌دهد، نوشتنِ خوب نه</text>
+
+  <!-- ۱۶ گیگ -->
+  <text x="714" y="126" text-anchor="start" style="direction:rtl" fill="var(--ink)" font-size="17" font-weight="700">۱۶ گیگ RAM</text>
+  <rect x="378" y="140" width="336" height="16" fill="var(--ink)" opacity=".58"/>
+  <text x="714" y="180" text-anchor="start" style="direction:rtl" fill="var(--mute)" font-size="13.5">مدلِ ۷ تا ۸ میلیاردی — نقطهٔ شروعِ منطقی، روی اپل‌سیلیکون روان</text>
+
+  <!-- ۳۲ گیگ -->
+  <text x="714" y="226" text-anchor="start" style="direction:rtl" fill="var(--ink)" font-size="17" font-weight="700">۳۲ گیگ، یا کارتِ گرافیکِ ۱۲ گیگ به بالا</text>
+  <rect x="42" y="240" width="672" height="16" fill="var(--accent)"/>
+  <text x="714" y="280" text-anchor="start" style="direction:rtl" fill="var(--mute)" font-size="13.5">مدلِ ۱۴ میلیاردی و بالاتر — تازه اینجا به کیفیتِ یک اپِ آنلاین نزدیک می‌شود</text>
+</svg><figcaption>اندازهٔ مدل را حافظه تعیین می‌کند، نه سرعتِ پردازنده. اگر مدل در RAM جا نشود، اجرا نمی‌شود — یا آن‌قدر کُند می‌شود که عملاً اجرا نشده.</figcaption></figure>
+<p>روی مکِ اپل‌سیلیکون این عددها سخاوتمندترند، چون حافظه بینِ پردازنده و گرافیک مشترک است. روی ویندوزِ بدونِ کارتِ گرافیک، مدلِ هشت‌میلیاردی کار می‌کند ولی کُند — در حدِ خواندنِ جواب هم‌زمان با نوشته‌شدنش، نه سریع‌تر.</p>
+<h3>راهِ اول — LM Studio، اگر ترمینال برایت دیوار است</h3>
+<div class="step"><span class="step-n">۰۱</span><div class="step-b"><h3>نصب کن</h3><p>از <code dir="ltr">lmstudio.ai</code> نسخهٔ ویندوز یا مک را بگیر. یک نصبِ معمولی است، مثلِ هر اپِ دیگری. چیزی به سیستم اضافه نمی‌کند که بعداً نشود پاکش کرد.</p></div></div>
+<div class="step"><span class="step-n">۰۲</span><div class="step-b"><h3>یک مدل دانلود کن</h3><p>داخلِ خودِ اپ، تبِ جست‌وجو. اسمِ مدل را بزن و نسخه‌ای را بگیر که کنارش نوشته <code dir="ltr">Q4_K_M</code> — این یعنی فشرده‌شده تا در حافظه جا شود، با کم‌ترین افتِ کیفیت. اپ خودش می‌گوید کدام نسخه روی دستگاهِ تو جا می‌شود و کدام نه.</p></div></div>
+<div class="step"><span class="step-n">۰۳</span><div class="step-b"><h3>چت کن</h3><p>تبِ چت. از اینجا به بعد دقیقاً مثلِ هر اپِ چتِ دیگری است، فقط آفلاین.</p></div></div>
+<div class="step"><span class="step-n">۰۴</span><div class="step-b"><h3>اگر خواستی، سرورش را روشن کن</h3><p>تبِ <code dir="ltr">Developer</code>، دکمهٔ <code dir="ltr">Start Server</code>. حالا ابزارهای دیگر می‌توانند به این مدل وصل شوند، انگار یک سرویسِ آنلاین است.</p></div></div>
+<h3>راهِ دوم — Ollama، اگر با دستور راحتی</h3>
+<p>بعد از نصب از <code dir="ltr">ollama.com</code>، کلِ کاری که لازم است:</p>
 <div class="pre">ollama pull qwen3:8b
 ollama run qwen3:8b</div>
-<p>و سرورِ محلی‌اش روی این آدرس بالا می‌آید، با همان قالبِ API که بقیهٔ ابزارها می‌شناسند:</p>
+<p>اولی مدل را دانلود می‌کند — چند گیگابایت، یک‌بار برای همیشه. دومی چت را باز می‌کند. برای بستن، <code dir="ltr">/bye</code>.</p>
+<p>و سرورِ محلی‌اش خودبه‌خود روی این آدرس بالا می‌آید، با همان قالبِ API که بقیهٔ ابزارها می‌شناسند:</p>
 <div class="pre">http://localhost:11434</div>
-<div class="why"><strong>مرزش را بدان:</strong> مدلِ محلیِ هشت‌میلیاردی رقیبِ مدلِ ردهٔ اول نیست و نخواهد بود. جایی می‌درخشد که کار <strong>تکراری، حجمی و محرمانه</strong> است: صد تا فایل را برچسب بزن، متنِ مصاحبه را پاک‌نویس کن، اسم‌ها را عوض کن. برای کارِ ظریفِ فصل‌های آخر — نقدِ طراحی، تصمیمِ ریز، نوشتنِ متنِ نهایی — سراغش نرو.</div>
+<p>یعنی هر ابزاری که می‌پرسد «آدرسِ سرور و کلیدت چیست؟»، این آدرس را قبول می‌کند و کلید را می‌شود خالی گذاشت یا هر چیزی نوشت.</p>
+<div class="why"><strong>مرزش را بدان:</strong> مدلِ محلیِ هشت‌میلیاردی رقیبِ مدلِ ردهٔ اول نیست و نخواهد بود. جایی می‌درخشد که کار <strong>تکراری، حجمی و محرمانه</strong> است: صد تا فایل را برچسب بزن، متنِ مصاحبه را پاک‌نویس کن، اسم‌ها را با «کاربر ۱» عوض کن. برای کارِ ظریفِ فصل‌های آخر — نقدِ طراحی، تصمیمِ ریز، نوشتنِ متنِ نهایی — سراغش نرو، وقتت را می‌گیرد.</div>
 <p>راهِ ترکیبی هم هست و بدترین گزینه نیست: <strong>کارِ حساس و حجمی روی مدلِ محلی، کارِ ظریف روی مدلِ آنلاین.</strong> همان حرفِ همیشگیِ دوره — افسار را با هزینهٔ خطا تنظیم کن، نه با حوصله‌ات.</p>
   </div>
 </section>
@@ -310,16 +479,130 @@ ollama run qwen3:8b</div>
       <div class="head-t">
         <span class="cap cap-en">Buy</span>
         <h2>خریدن با کارتِ مجازی</h2>
-        <p class="from">مسیرِ نوبیتکس ← تتر ← MPay ← ویزاکارتِ مجازی</p>
+        <p class="from">نوبیتکس ← تتر ← MPay ← ویزاکارتِ مجازی ← اشتراک</p>
       </div>
     </div>
-    <p class="lede">اگر تصمیم گرفتی اشتراک بخری، عملاً یک کارتِ بین‌المللی لازم داری. این مسیر همان است که خودم استفاده می‌کنم.</p>
+    <p class="lede">اگر تصمیم گرفتی اشتراک بخری، عملاً یک کارتِ بین‌المللی لازم داری. این مسیر همان است که خودم استفاده می‌کنم، و اولین بار حدود یک ساعت وقت می‌برد. دفعه‌های بعد، پنج دقیقه.</p>
     <p>MPay یک سرویسِ کارتِ ویزای مجازی است که با <strong>تتر</strong> شارژ می‌شود و <strong>احراز هویت نمی‌خواهد</strong>؛ با حسابِ گوگل وارد می‌شوی. کارت را که ساختی، مثلِ هر کارتِ دیگری در صفحهٔ پرداختِ آنتروپیک یا اوپن‌ای‌آی واردش می‌کنی.</p>
-<ol><li><strong>در نوبیتکس حساب بساز و احراز هویت را کامل کن.</strong> برای برداشتِ رمزارز لازم است و یکی دو روز وقت می‌برد؛ زودتر شروعش کن.</li><li><strong>با تومان، تتر بخر.</strong> کمی بیشتر از چیزی که لازم داری — کارمزدِ شبکه و کارمزدِ صرافی از همین کم می‌شود.</li><li><strong>در MPay ثبت‌نام کن</strong> و صفحهٔ واریز را باز کن.</li><li><strong>آدرس و شبکه را از داخلِ خودِ MPay بردار.</strong> مهم‌ترین قدمِ کلِ این فهرست همین است: شبکه را همان‌جا نگاه کن، نه از روی این جزوه و نه از روی هیچ آموزشِ دیگری.</li><li><strong>از نوبیتکس، تتر را به همان آدرس و روی همان شبکه برداشت کن.</strong> اول یک مبلغِ کوچک بفرست، برسد، بعد بقیه‌اش.</li><li><strong>کارتِ مجازی را بساز.</strong> ساختِ کارت هزینهٔ یک‌بارهٔ چنددلاری دارد و شارژِ کارت هم حداقلی دارد؛ عددِ دقیقش داخلِ خودِ اپ نوشته شده.</li><li><strong>کارت را در صفحهٔ پرداختِ سرویس وارد کن.</strong> کمی بیشتر از مبلغِ اشتراک روی کارت بگذار، چون تبدیلِ ارز چند درصد اضافه می‌کند و پرداختی که دو دلار کم بیاورد، رد می‌شود.</li></ol>
-<div class="card"><p><strong>لینکِ MPay</strong></p>
-<div class="pre">https://app.mpay.cards/?startapp=ref_F3DT3N</div></div>
-<div class="why"><strong>دو اشتباهی که پولت را می‌برد:</strong> یک، فرستادنِ تتر روی شبکه‌ای غیر از آنچه مقصد گفته — این پول تقریباً هیچ‌وقت برنمی‌گردد. دو، نفرستادنِ یک مبلغِ آزمایشیِ کوچک در دفعهٔ اول. هر دوتایش با سی ثانیه صبر حل می‌شود.</div>
-<p>و یک نکتهٔ جدا از کارت: بعضی سرویس‌ها به <strong>موقعیتِ اینترنتیِ</strong> تو هم حساس‌اند. اگر پرداخت رد شد، قبل از اینکه کارت را مقصر بدانی، همین را چک کن.</p>
+<figure class="fig"><!--
+  مسیرِ پول، از تومان تا اشتراک.
+
+  چهار ایستگاه، راست‌به‌چپ. زیرِ هر ایستگاه نوشته شده آنجا چه چیزی
+  از دست می‌رود — چون سؤالِ واقعیِ آدم‌ها این نیست که مسیر چیست،
+  این است که سرِ راه چقدر کم می‌شود.
+-->
+<svg viewBox="0 0 720 176" role="img" aria-label="مسیرِ خرید: نوبیتکس، MPay، کارتِ مجازی، اشتراک">
+  <g stroke="var(--line)" stroke-width="1" fill="var(--card)">
+    <rect x="560" y="26" width="158" height="72"/>
+    <rect x="374" y="26" width="158" height="72"/>
+    <rect x="188" y="26" width="158" height="72"/>
+    <rect x="2"   y="26" width="158" height="72"/>
+  </g>
+
+  <g style="direction:rtl" text-anchor="middle" font-size="16" font-weight="700" fill="var(--ink)">
+    <text x="639" y="58">نوبیتکس</text>
+    <text x="453" y="58">MPay</text>
+    <text x="267" y="58">کارتِ مجازی</text>
+    <text x="81"  y="58">اشتراک</text>
+  </g>
+  <g style="direction:rtl" text-anchor="middle" font-size="12" fill="var(--mute)">
+    <text x="639" y="80">تومان ← تتر</text>
+    <text x="453" y="80">تتر ← کیفِ دلاری</text>
+    <text x="267" y="80">ساخت و شارژ</text>
+    <text x="81"  y="80">پرداختِ ماهانه</text>
+  </g>
+
+  <g fill="none" stroke="var(--ink)" stroke-width="1.4" opacity=".7">
+    <path d="M556 62 H536"/>
+    <path d="M370 62 H350"/>
+    <path d="M184 62 H164"/>
+  </g>
+  <g fill="var(--ink)" opacity=".7">
+    <path d="M534 62 L548 56 L548 68 Z"/>
+    <path d="M348 62 L362 56 L362 68 Z"/>
+    <path d="M162 62 L176 56 L176 68 Z"/>
+  </g>
+
+  <text x="718" y="130" text-anchor="start" style="direction:rtl" fill="var(--accent)" font-size="12" font-weight="700">سرِ راه چه کم می‌شود</text>
+  <g style="direction:rtl" text-anchor="middle" font-size="12" fill="var(--mute)">
+    <text x="639" y="156">کارمزدِ صرافی</text>
+    <text x="453" y="156">کارمزدِ شبکه</text>
+    <text x="267" y="156">هزینهٔ ساختِ کارت</text>
+    <text x="81"  y="156">چند درصدِ تبدیلِ ارز</text>
+  </g>
+</svg><figcaption>چهار ایستگاه. پولِ تو در هر کدام کمی آب می‌رود، پس از اول کمی بیشتر از مبلغِ اشتراک حساب کن — نه دقیقاً به‌اندازه.</figcaption></figure>
+<div class="step"><span class="step-n">۰۱</span><div class="step-b"><h3>در نوبیتکس حساب بساز و احراز هویت را کامل کن</h3><p>برای برداشتِ رمزارز لازم است و بسته به شلوغی یکی دو روز طول می‌کشد. <strong>این تنها قدمی است که نمی‌شود همان روز تمامش کرد</strong>، پس اگر می‌دانی قرار است بخری، همین امروز شروعش کن حتی اگر بقیه‌اش را بعداً انجام دهی.</p>
+<p>واریزِ تومان هم باید از کارتِ بانکیِ <strong>به نامِ خودت</strong> باشد، وگرنه برگشت می‌خورد.</p></div></div>
+<div class="step"><span class="step-n">۰۲</span><div class="step-b"><h3>با تومان، تتر بخر</h3><p>در صفحهٔ معامله، جفتِ <code dir="ltr">USDT/IRT</code>. برای خریدِ ساده «معاملهٔ سریع» کافی است؛ اگر کارمزدِ کمتر می‌خواهی، سفارشِ <code dir="ltr">limit</code> بگذار.</p>
+<p>کمی بیشتر از چیزی که لازم داری بخر. کارمزدِ صرافی، کارمزدِ شبکه، هزینهٔ ساختِ کارت و چند درصدِ تبدیلِ ارز همه از همین کم می‌شوند. برای یک اشتراکِ بیست‌دلاری، حدودِ سی دلار خریدن منطقی است.</p></div></div>
+<div class="step"><span class="step-n">۰۳</span><div class="step-b"><h3>در MPay ثبت‌نام کن</h3><p>با حسابِ گوگل وارد شو. احراز هویت نمی‌خواهد. بعد از ورود، برو به کیفِ پول و صفحهٔ واریز را باز کن.</p>
+<div class="pre">https://app.mpay.cards/?startapp=ref_F3DT3N</div></div></div>
+<div class="step"><span class="step-n">۰۴</span><div class="step-b"><h3>آدرس و شبکه را از داخلِ خودِ MPay بردار</h3><p>مهم‌ترین قدمِ کلِ این فهرست همین است. صفحهٔ واریز دو چیز به تو می‌دهد: یک <strong>آدرس</strong> و یک <strong>شبکه</strong>. هر دو را از همان‌جا بردار — نه از روی این جزوه، نه از روی هیچ آموزشِ دیگری، نه از روی چیزی که دفعهٔ قبل یادداشت کرده‌ای.</p>
+<p>آدرس را با دکمهٔ کپی بردار، نه با تایپ کردن.</p></div></div>
+<div class="step"><span class="step-n">۰۵</span><div class="step-b"><h3>از نوبیتکس، روی همان شبکه برداشت کن</h3><p>در صفحهٔ برداشتِ تتر، آدرس را بچسبان و <strong>شبکه را دستی همان چیزی انتخاب کن که MPay نشان داد</strong>. نوبیتکس پیش‌فرضِ خودش را دارد و لزوماً همانی نیست که تو می‌خواهی.</p>
+<figure class="fig"><!--
+  قدمِ چهارم و پنجم، کنارِ هم.
+
+  این تنها جای مسیرِ خرید است که اشتباهش برگشت‌ناپذیر است، پس تنها
+  جایی است که دو صفحه را کنارِ هم گذاشته‌ام: منبع در راست، جایی که
+  باید تایپ شود در چپ، و خطِ بریده‌ای که آن دو کادر را به هم وصل
+  می‌کند. کادرهای دیگرِ صفحه عمداً کم‌رنگ‌اند — چیزی که باید دیده
+  شود دو تاست، نه هشت تا.
+
+  صفحه‌ها شماتیک‌اند نه اسکرین‌شات: رابطِ این دو سرویس هر چند ماه
+  عوض می‌شود و اسکرین‌شات زودتر از خودِ جزوه باطل می‌شود. چیزی که
+  عوض نمی‌شود، نسبتِ این دو فیلد است.
+-->
+<svg viewBox="0 0 720 330" role="img" aria-label="شبکهٔ واریز در MPay باید با شبکهٔ برداشت در نوبیتکس یکی باشد">
+  <!-- ══ راست: MPay ══ -->
+  <rect x="390" y="30" width="330" height="230" fill="var(--card)" stroke="var(--line)"/>
+  <text x="702" y="56" text-anchor="start" style="direction:rtl" fill="var(--ink)" font-size="14" font-weight="700">MPay · صفحهٔ واریز</text>
+  <path d="M390 70 H720" stroke="var(--line)"/>
+
+  <text x="702" y="96" text-anchor="start" style="direction:rtl" fill="var(--mute)" font-size="12">شبکه</text>
+  <rect x="408" y="104" width="294" height="34" fill="none" stroke="var(--accent)" stroke-width="2"/>
+  <text x="690" y="127" text-anchor="end" style="direction:ltr" fill="var(--ink)" font-size="14" font-weight="700">TRC20 · Tron</text>
+
+  <text x="702" y="166" text-anchor="start" style="direction:rtl" fill="var(--mute)" font-size="12">آدرسِ واریز</text>
+  <rect x="408" y="174" width="294" height="34" fill="none" stroke="var(--line)"/>
+  <text x="418" y="196" style="direction:ltr" font-family="'Space Grotesk',monospace" fill="var(--ink)" font-size="13">TXy9k2…P4kQb</text>
+
+  <text x="702" y="238" text-anchor="start" style="direction:rtl" fill="var(--accent)" font-size="12.5" font-weight="700">هر دو را از همین‌جا بردار</text>
+
+  <!-- ══ چپ: نوبیتکس ══ -->
+  <rect x="0" y="30" width="330" height="230" fill="var(--card)" stroke="var(--line)"/>
+  <text x="312" y="56" text-anchor="start" style="direction:rtl" fill="var(--ink)" font-size="14" font-weight="700">نوبیتکس · برداشتِ تتر</text>
+  <path d="M0 70 H330" stroke="var(--line)"/>
+
+  <text x="312" y="96" text-anchor="start" style="direction:rtl" fill="var(--mute)" font-size="12">آدرسِ مقصد</text>
+  <rect x="18" y="104" width="294" height="34" fill="none" stroke="var(--line)"/>
+  <text x="28" y="126" style="direction:ltr" font-family="'Space Grotesk',monospace" fill="var(--ink)" font-size="13">TXy9k2…P4kQb</text>
+
+  <text x="312" y="166" text-anchor="start" style="direction:rtl" fill="var(--mute)" font-size="12">شبکه</text>
+  <rect x="18" y="174" width="294" height="34" fill="none" stroke="var(--accent)" stroke-width="2"/>
+  <text x="300" y="197" text-anchor="end" style="direction:ltr" fill="var(--ink)" font-size="14" font-weight="700">TRC20</text>
+  <path d="M32 188 L40 196 L48 188" fill="none" stroke="var(--mute)" stroke-width="1.4"/>
+
+  <text x="312" y="238" text-anchor="start" style="direction:rtl" fill="var(--accent)" font-size="12.5" font-weight="700">و همین‌جا بگذار</text>
+
+  <!-- ══ خطی که آن دو کادر را به هم می‌دوزد ══ -->
+  <path d="M404 121 C368 121 354 191 318 191" fill="none" stroke="var(--accent)" stroke-width="1.6" stroke-dasharray="5 6"/>
+  <path d="M304 191 L320 184 L320 198 Z" fill="var(--accent)"/>
+
+  <!-- ══ و حرفی که نباید جا بیفتد ══ -->
+  <rect x="0" y="286" width="720" height="44" fill="var(--accent)"/>
+  <text x="360" y="314" text-anchor="middle" style="direction:rtl" fill="var(--on-accent)" font-size="15" font-weight="700">شبکهٔ این دو کادر باید دقیقاً یکی باشد. اگر نباشد، پول برنمی‌گردد.</text>
+</svg><figcaption>دو صفحه، یک فیلدِ مشترک. بقیهٔ فیلدهای هر دو صفحه مهم‌اند ولی برگشت‌پذیرند؛ این یکی نه.</figcaption></figure>
+<p>بارِ اول یک مبلغِ کوچک بفرست — مثلاً پنج تتر. برسد، آن‌وقت بقیه‌اش را بفرست. کارمزدِ این احتیاط، کمتر از یک دلار است.</p></div></div>
+<div class="step"><span class="step-n">۰۶</span><div class="step-b"><h3>کارتِ مجازی را بساز</h3><p>وقتی موجودیِ کیف نشست، از داخلِ اپ کارت بساز. ساختِ کارت یک هزینهٔ یک‌بارهٔ چنددلاری دارد و شارژِ کارت هم حداقلی دارد — عددِ دقیقش داخلِ خودِ اپ نوشته شده و همان درست است، نه عددی که در هیچ آموزشی خوانده‌ای.</p>
+<p>کارت که ساخته شد، شماره و تاریخ و CVV را می‌بینی. همین سه‌تا همان چیزی است که صفحهٔ پرداخت می‌خواهد.</p></div></div>
+<div class="step"><span class="step-n">۰۷</span><div class="step-b"><h3>در صفحهٔ پرداختِ سرویس واردش کن</h3><p>برو به صفحهٔ اشتراکِ همان سرویس و کارت را وارد کن. سه نکته:</p>
+<ul><li><strong>کمی بیشتر از مبلغِ اشتراک روی کارت بگذار.</strong> تبدیلِ ارز چند درصد اضافه می‌کند و پرداختی که دو دلار کم بیاورد، رد می‌شود.</li><li><strong>اگر آدرس خواست</strong>، همان آدرسی را بزن که MPay در پروفایلِ کارت نشان می‌دهد. آدرسِ اختراعی، پرداخت را رد می‌کند.</li><li><strong>اگر باز هم رد شد</strong>، قبل از اینکه کارت را مقصر بدانی، موقعیتِ اینترنتی‌ات را چک کن.</li></ul></div></div>
+<div class="warn"><p><strong>دو اشتباهی که پولت را می‌برد</strong></p>
+<p><strong>یک — شبکهٔ اشتباه.</strong> تتری که روی شبکه‌ای غیر از آنچه مقصد گفته فرستاده شود، تقریباً هیچ‌وقت برنمی‌گردد. هیچ پشتیبانی‌ای هم نمی‌تواند کاری بکند.</p>
+<p><strong>دو — نفرستادنِ مبلغِ آزمایشی.</strong> بارِ اول همیشه یک مبلغِ کوچک. هر دوی این‌ها با سی ثانیه صبر حل می‌شوند.</p></div>
+<h3>و یک چیز که بعداً یادت می‌رود</h3>
+<p>اگر ماهِ بعد نمی‌خواهی تمدید شود، <strong>اشتراک را از داخلِ خودِ سرویس لغو کن</strong>؛ خالی‌گذاشتنِ کارت راهِ درستی نیست. پرداختِ ناموفقِ تکراری گاهی حساب را قفل می‌کند و بازکردنش از قفلی که خودت انداخته‌ای، از خریدنش سخت‌تر است.</p>
   </div>
 </section>
 <section class="sec brk">
@@ -335,10 +618,11 @@ ollama run qwen3:8b</div>
     </div>
     <p class="lede">اگر نمی‌خواهی اصلاً وارد ماجرای تتر و کارت شوی، می‌شود مستقیم و با پرداختِ ریالی خرید.</p>
     <p>نامبرلند (<code dir="ltr">numberland.ir</code>) همین را می‌فروشد: اکانتِ آمادهٔ کلاود و چت‌جی‌پی‌تی، ارتقای اکانتِ خودت، اعتبارِ API، و شمارهٔ مجازی. پرداخت ریالی است و تحویل در بیشترِ موارد فوری.</p>
-<p>دو چیز را قبلش بدان:</p>
-<ul><li><strong>اکانتِ آماده با اکانتِ خودت فرق دارد.</strong> در حالتِ آماده، ایمیلِ اکانت مالِ تو نیست. برای امتحان‌کردن خوب است؛ برای پروژه‌ای که قرار است ماه‌ها رویش کار کنی، گزینهٔ «اکانتِ خودم را ارتقا بدهید» را انتخاب کن تا همه‌چیز روی ایمیلِ خودت بماند.</li><li><strong>قیمت‌ها را از خودِ صفحه بخوان.</strong> عددهایشان با دلار بالا و پایین می‌رود و نوشتنشان در یک جزوه فقط گمراه‌کننده است.</li></ul>
-<p>خودشان هم یک هشدار می‌دهند که درست است: <strong>شماره و موقعیتِ اینترنتیِ تو باید با کشورِ اکانت بخواند.</strong> آی‌پیِ ایران از سمتِ آنتروپیک محدود است و این چیزی نیست که فروشنده بتواند برایت حلش کند.</p>
-<div class="why"><strong>مقایسهٔ صادقانه:</strong> مسیرِ کارتِ مجازی سخت‌ترِ اولِ کار است، ولی اکانت مالِ خودت می‌شود و تمدیدِ هر ماه یک کلیک است. مسیرِ نامبرلند ساده‌ترِ اولِ کار است، ولی هر بار باید دوباره از یک واسطه بخری. اگر قرار است بیشتر از دو ماه ادامه بدهی، اولی در مجموع کم‌دردسرتر است.</div>
+<div class="step"><span class="step-n">۰۱</span><div class="step-b"><h3>نوعِ درست را انتخاب کن</h3><p>در صفحهٔ محصول دو گزینه هست. <strong>«اکانت برایم بسازید»</strong> یعنی یک اکانتِ آماده تحویل می‌گیری که ایمیلش مالِ تو نیست. <strong>«اکانتِ خودم را ارتقا بدهید»</strong> یعنی روی همان ایمیلی که خودت داری پلن فعال می‌شود.</p>
+<p>برای امتحان‌کردن، اولی. برای پروژه‌ای که قرار است ماه‌ها رویش کار کنی، <strong>حتماً دومی</strong> — وگرنه هر چیزی که در آن اکانت ساخته‌ای به یک ایمیلِ دستِ دیگری بند است.</p></div></div>
+<div class="step"><span class="step-n">۰۲</span><div class="step-b"><h3>قیمت را از خودِ صفحه بخوان</h3><p>عددهایشان با دلار بالا و پایین می‌رود. نوشتنشان در یک جزوه فقط گمراه‌کننده است، پس اینجا هیچ عددی ننوشته‌ام.</p></div></div>
+<div class="step"><span class="step-n">۰۳</span><div class="step-b"><h3>موقعیتِ اینترنتی‌ات را با کشورِ اکانت جور کن</h3><p>خودشان هم همین را هشدار می‌دهند و درست است: شماره و آی‌پیِ تو باید با کشورِ اکانت بخواند. آی‌پیِ ایران از سمتِ آنتروپیک محدود است و این چیزی نیست که فروشنده بتواند برایت حلش کند — چه از آن‌ها بخری چه نخری.</p></div></div>
+<div class="why"><strong>مقایسهٔ صادقانه:</strong> مسیرِ کارتِ مجازی سخت‌ترِ اولِ کار است، ولی اکانت مالِ خودت می‌شود و تمدیدِ هر ماه یک کلیک است. مسیرِ نامبرلند ساده‌ترِ اولِ کار است، ولی هر بار باید دوباره از یک واسطه بخری و هر بار همان ریسک را دوباره برداری. اگر قرار است بیشتر از دو ماه ادامه بدهی، اولی در مجموع کم‌دردسرتر است.</div>
   </div>
 </section>
 <section class="sec brk dark">
@@ -354,27 +638,50 @@ ollama run qwen3:8b</div>
       </div>
     </div>
     <p class="lede">اسم‌ها، عددها، قیمت‌ها و جای دکمه‌ها در این جزوه عمرِ کوتاهی دارند. این ذاتِ این ابزارهاست، نه ضعفِ این جزوه.</p>
-    <p>چیزی که کهنه نمی‌شود، <strong>دسته‌بندی</strong> است: رایگان، محلی، خریدنی. سه راه، با سه جور هزینه — سقف، سخت‌افزار، پول.</p>
-<div class="card"><p><strong>می‌خواهم دوره را تماشا کنم</strong> هیچ‌چیز لازم نیست.</p>
-<p><strong>می‌خواهم فصلِ اول را همراه با درس جلو بیایم</strong> نسخهٔ رایگانِ هر مدلِ متنی.</p>
-<p><strong>کارِ تکراری و حجمی دارم، یا داده‌ام محرمانه است</strong> مدلِ محلی با Ollama یا LM Studio.</p>
-<p><strong>می‌خواهم چند مدل را روی یک کار مقایسه کنم</strong> کلیدِ رایگانِ OpenRouter یا Google AI Studio.</p>
-<p><strong>می‌خواهم پروژه را تا انتشار جلو ببرم</strong> یک اشتراک — با کارتِ مجازی، یا از نامبرلند.</p></div>
+    <p>چیزی که کهنه نمی‌شود، <strong>دسته‌بندی</strong> است: رایگان، محلی، خریدنی. سه راه، با سه جورِ متفاوتِ هزینه — سقف، سخت‌افزار، پول. هر سه‌تایشان به یک جا می‌رسند.</p>
+<figure class="fig"><!--
+  جدولِ تصمیم — پنج وضعیت، پنج راه.
+
+  ستونِ راست وضعیتِ توست و ستونِ چپ جواب. عمداً جدول نیست و خطِ
+  عمودی ندارد: چیزی که خوانده می‌شود پنج سطرِ مستقل است، نه یک
+  ماتریس. هر سطر باید بدونِ خواندنِ بقیه معنی بدهد.
+-->
+<svg viewBox="0 0 720 320" role="img" aria-label="جدولِ تصمیم: کدام راه برای کدام وضعیت">
+  <g stroke="var(--line)">
+    <path d="M0 0 H720"/>
+    <path d="M0 64 H720"/>
+    <path d="M0 128 H720"/>
+    <path d="M0 192 H720"/>
+    <path d="M0 256 H720"/>
+    <path d="M0 320 H720"/>
+  </g>
+
+  <g style="direction:rtl" text-anchor="start" fill="var(--ink)" font-size="14.5">
+    <text x="714" y="40">فقط می‌خواهم دوره را تماشا کنم</text>
+    <text x="714" y="104">می‌خواهم فصلِ اول را همراهِ درس جلو بیایم</text>
+    <text x="714" y="168">کارم تکراری و حجمی است، یا داده‌ام محرمانه</text>
+    <text x="714" y="232">می‌خواهم چند مدل را روی یک کار مقایسه کنم</text>
+    <text x="714" y="296">می‌خواهم پروژه را تا انتشار جلو ببرم</text>
+  </g>
+
+  <g style="direction:rtl" text-anchor="end" font-size="14" font-weight="700">
+    <text x="6" y="40"  fill="var(--mute)">هیچ‌چیز</text>
+    <text x="6" y="104" fill="var(--ink)">نسخهٔ رایگانِ اپِ چت</text>
+    <text x="6" y="168" fill="var(--ink)">مدلِ محلی</text>
+    <text x="6" y="232" fill="var(--ink)">کلیدِ رایگانِ API</text>
+    <text x="6" y="296" fill="var(--accent)">یک اشتراک</text>
+  </g>
+</svg><figcaption>اگر فقط یک صفحه از این جزوه را نگه می‌داری، این صفحه.</figcaption></figure>
 <p>و همان عادتی که در فصلِ دوم ساختیم اینجا هم جواب می‌دهد: <strong>وقتی چیزی کار نکرد، اول صفحهٔ خودِ سرویس را باز کن.</strong> نُه بار از ده بار، اسم یا سقف عوض شده — نه اینکه تو اشتباه کرده باشی.</p>
   </div>
 </section>
-<footer class="sec brk cta dark">
+<footer class="sec brk cta">
   <svg class="tile" aria-hidden="true"><rect width="100%" height="100%" fill="url(#tile)"/></svg>
   <div class="grain" aria-hidden="true"></div>
   <div class="wrap">
     <span class="cap">قدمِ بعدی</span>
     <div class="lockup lockup--sm">
-      <svg class="glyph" viewBox="-1 -1 50 72" aria-hidden="true">
-  <g fill="var(--g-fill)" stroke="var(--g-line)" stroke-width="1">
-    <circle cx="24" cy="24" r="24"/><rect x="14" y="49" width="20" height="10"/><rect x="4" y="61.5" width="40" height="6"/>
-  </g>
-  <g fill="var(--g-eye)"><rect x="7.5" y="19" width="12" height="8"/><rect x="28.5" y="19" width="12" height="8"/></g>
-</svg>
+      <svg class="glyph" viewBox="0 4 120 108" aria-hidden="true"><path d="M60 54 C74 38 104 36 114 58 C104 48 80 54 68 70 C65 74 55 74 52 70 C40 54 16 48 6 58 C16 36 46 38 60 54 Z" fill="currentColor"/></svg>
       <span class="wordmark">ROBOTYPE</span>
     </div>
     <p class="cap cap-en">AI Native Product Design</p>
@@ -384,7 +691,7 @@ ollama run qwen3:8b</div>
     <p><a class="btn" href="https://mojtabaui.ir/robotype">صفحهٔ دوره را ببین</a></p>
     <p class="url">mojtabaui.ir/robotype</p>
     <hr class="rule">
-    <p class="src">MPay · ‎app.mpay.cards‎ · نامبرلند · ‎numberland.ir‎ · نوبیتکس · ‎nobitex.ir‎</p>
+    <p class="src">MPay · ‎app.mpay.cards‎ · نامبرلند · ‎numberland.ir‎ · نوبیتکس · ‎nobitex.ir‎ · LM Studio · ‎lmstudio.ai‎ · Ollama · ‎ollama.com‎</p>
     <p class="foot">جزوهٔ «دسترسی به هوش مصنوعی» — مدرسه دیزاین ملینا. عددها و اسم‌ها ممکن است تا وقتی این را می‌خوانی عوض شده باشند؛ سه راه نه. این جزوه را آزادانه برای هر کسی بفرست.</p>
   </div>
 </footer>

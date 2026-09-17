@@ -1,0 +1,32 @@
+<!--
+  دو جور «رایگان» که مدام با هم اشتباه گرفته می‌شوند.
+
+  کنارِ هم، چون تفاوتشان نسبی است نه مطلق: یکی رابط دارد و کلید
+  ندارد، آن یکی کلید دارد و رابط ندارد.
+-->
+<svg viewBox="0 0 720 210" role="img" aria-label="دو جور رایگان: نسخهٔ رایگانِ اپِ چت در برابر توکنِ رایگانِ API">
+  <g stroke="var(--line)" stroke-width="1" fill="var(--card)">
+    <rect x="372" y="8" width="340" height="194"/>
+    <rect x="8"   y="8" width="340" height="194"/>
+  </g>
+
+  <!-- راست: اپِ چت -->
+  <text x="692" y="42" text-anchor="start" style="direction:rtl" fill="var(--accent)" font-size="12" font-weight="700">برای یاد گرفتن</text>
+  <text x="692" y="72" text-anchor="start" style="direction:rtl" fill="var(--ink)" font-size="19" font-weight="700">نسخهٔ رایگانِ اپِ چت</text>
+  <g style="direction:rtl" fill="var(--mute)" font-size="13.5">
+    <text x="692" y="104" text-anchor="start">پنجره‌ای که باز می‌کنی و تایپ می‌کنی</text>
+    <text x="692" y="130" text-anchor="start">سقفِ پیام دارد، مدلِ قوی محدود است</text>
+    <text x="692" y="156" text-anchor="start">کلیدِ API نمی‌دهد</text>
+  </g>
+  <text x="692" y="186" text-anchor="start" style="direction:rtl" fill="var(--ink)" font-size="13" font-weight="700">کلِ فصلِ اول با همین جلو می‌رود</text>
+
+  <!-- چپ: توکنِ API -->
+  <text x="328" y="42" text-anchor="start" style="direction:rtl" fill="var(--accent)" font-size="12" font-weight="700">برای ساختن</text>
+  <text x="328" y="72" text-anchor="start" style="direction:rtl" fill="var(--ink)" font-size="19" font-weight="700">توکنِ رایگانِ API</text>
+  <g style="direction:rtl" fill="var(--mute)" font-size="13.5">
+    <text x="328" y="104" text-anchor="start">یک کلیدِ متنی، بدونِ هیچ رابطی</text>
+    <text x="328" y="130" text-anchor="start">به ابزارهای دیگر وصل می‌شود</text>
+    <text x="328" y="156" text-anchor="start">سقفش روزانه یا ماهانه است</text>
+  </g>
+  <text x="328" y="186" text-anchor="start" style="direction:rtl" fill="var(--ink)" font-size="13" font-weight="700">وقتی می‌خواهی چیزی بسازی، این</text>
+</svg>

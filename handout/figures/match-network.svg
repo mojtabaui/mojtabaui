@@ -1,0 +1,53 @@
+<!--
+  قدمِ چهارم و پنجم، کنارِ هم.
+
+  این تنها جای مسیرِ خرید است که اشتباهش برگشت‌ناپذیر است، پس تنها
+  جایی است که دو صفحه را کنارِ هم گذاشته‌ام: منبع در راست، جایی که
+  باید تایپ شود در چپ، و خطِ بریده‌ای که آن دو کادر را به هم وصل
+  می‌کند. کادرهای دیگرِ صفحه عمداً کم‌رنگ‌اند — چیزی که باید دیده
+  شود دو تاست، نه هشت تا.
+
+  صفحه‌ها شماتیک‌اند نه اسکرین‌شات: رابطِ این دو سرویس هر چند ماه
+  عوض می‌شود و اسکرین‌شات زودتر از خودِ جزوه باطل می‌شود. چیزی که
+  عوض نمی‌شود، نسبتِ این دو فیلد است.
+-->
+<svg viewBox="0 0 720 330" role="img" aria-label="شبکهٔ واریز در MPay باید با شبکهٔ برداشت در نوبیتکس یکی باشد">
+  <!-- ══ راست: MPay ══ -->
+  <rect x="390" y="30" width="330" height="230" fill="var(--card)" stroke="var(--line)"/>
+  <text x="702" y="56" text-anchor="start" style="direction:rtl" fill="var(--ink)" font-size="14" font-weight="700">MPay · صفحهٔ واریز</text>
+  <path d="M390 70 H720" stroke="var(--line)"/>
+
+  <text x="702" y="96" text-anchor="start" style="direction:rtl" fill="var(--mute)" font-size="12">شبکه</text>
+  <rect x="408" y="104" width="294" height="34" fill="none" stroke="var(--accent)" stroke-width="2"/>
+  <text x="690" y="127" text-anchor="end" style="direction:ltr" fill="var(--ink)" font-size="14" font-weight="700">TRC20 · Tron</text>
+
+  <text x="702" y="166" text-anchor="start" style="direction:rtl" fill="var(--mute)" font-size="12">آدرسِ واریز</text>
+  <rect x="408" y="174" width="294" height="34" fill="none" stroke="var(--line)"/>
+  <text x="418" y="196" style="direction:ltr" font-family="'Space Grotesk',monospace" fill="var(--ink)" font-size="13">TXy9k2…P4kQb</text>
+
+  <text x="702" y="238" text-anchor="start" style="direction:rtl" fill="var(--accent)" font-size="12.5" font-weight="700">هر دو را از همین‌جا بردار</text>
+
+  <!-- ══ چپ: نوبیتکس ══ -->
+  <rect x="0" y="30" width="330" height="230" fill="var(--card)" stroke="var(--line)"/>
+  <text x="312" y="56" text-anchor="start" style="direction:rtl" fill="var(--ink)" font-size="14" font-weight="700">نوبیتکس · برداشتِ تتر</text>
+  <path d="M0 70 H330" stroke="var(--line)"/>
+
+  <text x="312" y="96" text-anchor="start" style="direction:rtl" fill="var(--mute)" font-size="12">آدرسِ مقصد</text>
+  <rect x="18" y="104" width="294" height="34" fill="none" stroke="var(--line)"/>
+  <text x="28" y="126" style="direction:ltr" font-family="'Space Grotesk',monospace" fill="var(--ink)" font-size="13">TXy9k2…P4kQb</text>
+
+  <text x="312" y="166" text-anchor="start" style="direction:rtl" fill="var(--mute)" font-size="12">شبکه</text>
+  <rect x="18" y="174" width="294" height="34" fill="none" stroke="var(--accent)" stroke-width="2"/>
+  <text x="300" y="197" text-anchor="end" style="direction:ltr" fill="var(--ink)" font-size="14" font-weight="700">TRC20</text>
+  <path d="M32 188 L40 196 L48 188" fill="none" stroke="var(--mute)" stroke-width="1.4"/>
+
+  <text x="312" y="238" text-anchor="start" style="direction:rtl" fill="var(--accent)" font-size="12.5" font-weight="700">و همین‌جا بگذار</text>
+
+  <!-- ══ خطی که آن دو کادر را به هم می‌دوزد ══ -->
+  <path d="M404 121 C368 121 354 191 318 191" fill="none" stroke="var(--accent)" stroke-width="1.6" stroke-dasharray="5 6"/>
+  <path d="M304 191 L320 184 L320 198 Z" fill="var(--accent)"/>
+
+  <!-- ══ و حرفی که نباید جا بیفتد ══ -->
+  <rect x="0" y="286" width="720" height="44" fill="var(--accent)"/>
+  <text x="360" y="314" text-anchor="middle" style="direction:rtl" fill="var(--on-accent)" font-size="15" font-weight="700">شبکهٔ این دو کادر باید دقیقاً یکی باشد. اگر نباشد، پول برنمی‌گردد.</text>
+</svg>

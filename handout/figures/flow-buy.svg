@@ -1,0 +1,47 @@
+<!--
+  مسیرِ پول، از تومان تا اشتراک.
+
+  چهار ایستگاه، راست‌به‌چپ. زیرِ هر ایستگاه نوشته شده آنجا چه چیزی
+  از دست می‌رود — چون سؤالِ واقعیِ آدم‌ها این نیست که مسیر چیست،
+  این است که سرِ راه چقدر کم می‌شود.
+-->
+<svg viewBox="0 0 720 176" role="img" aria-label="مسیرِ خرید: نوبیتکس، MPay، کارتِ مجازی، اشتراک">
+  <g stroke="var(--line)" stroke-width="1" fill="var(--card)">
+    <rect x="560" y="26" width="158" height="72"/>
+    <rect x="374" y="26" width="158" height="72"/>
+    <rect x="188" y="26" width="158" height="72"/>
+    <rect x="2"   y="26" width="158" height="72"/>
+  </g>
+
+  <g style="direction:rtl" text-anchor="middle" font-size="16" font-weight="700" fill="var(--ink)">
+    <text x="639" y="58">نوبیتکس</text>
+    <text x="453" y="58">MPay</text>
+    <text x="267" y="58">کارتِ مجازی</text>
+    <text x="81"  y="58">اشتراک</text>
+  </g>
+  <g style="direction:rtl" text-anchor="middle" font-size="12" fill="var(--mute)">
+    <text x="639" y="80">تومان ← تتر</text>
+    <text x="453" y="80">تتر ← کیفِ دلاری</text>
+    <text x="267" y="80">ساخت و شارژ</text>
+    <text x="81"  y="80">پرداختِ ماهانه</text>
+  </g>
+
+  <g fill="none" stroke="var(--ink)" stroke-width="1.4" opacity=".7">
+    <path d="M556 62 H536"/>
+    <path d="M370 62 H350"/>
+    <path d="M184 62 H164"/>
+  </g>
+  <g fill="var(--ink)" opacity=".7">
+    <path d="M534 62 L548 56 L548 68 Z"/>
+    <path d="M348 62 L362 56 L362 68 Z"/>
+    <path d="M162 62 L176 56 L176 68 Z"/>
+  </g>
+
+  <text x="718" y="130" text-anchor="start" style="direction:rtl" fill="var(--accent)" font-size="12" font-weight="700">سرِ راه چه کم می‌شود</text>
+  <g style="direction:rtl" text-anchor="middle" font-size="12" fill="var(--mute)">
+    <text x="639" y="156">کارمزدِ صرافی</text>
+    <text x="453" y="156">کارمزدِ شبکه</text>
+    <text x="267" y="156">هزینهٔ ساختِ کارت</text>
+    <text x="81"  y="156">چند درصدِ تبدیلِ ارز</text>
+  </g>
+</svg>

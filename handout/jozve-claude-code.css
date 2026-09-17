@@ -1,0 +1,227 @@
+/* ══ توکن‌ها — مستقیم از globals.css خودِ سایت ══
+   کاغذِ کرم، جوهرِ قهوه‌ای‌سیاه، لهجهٔ بنفش. این جزوه با هویتِ
+   mojtabaui.ir طراحی شده، نه با هویتِ تک‌رنگِ صفحهٔ دوره — پس
+   گوشه‌ها گِرد است، کارت‌ها سفیدند، و رنگ اجازه دارد وجود داشته
+   باشد. */
+:root{
+  --paper:#faf6f1; --ink:#1a1714; --mute:#6b6560; --dim:#a09990;
+  --line:#e8e2d9; --card:#ffffff; --accent:#7c5cfc;
+  --night:#1a1714; --night-ink:#faf6f1; --night-mute:#a09990;
+  --night-line:rgba(250,246,241,.12);
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0; background:var(--paper); color:var(--ink);
+  font-family:"Meem",'Segoe UI',Tahoma,sans-serif; font-weight:300;
+  font-size:16px; line-height:2.05;
+}
+.wrap{max-width:44rem; margin-inline:auto; padding-inline:1.35rem}
+
+/* ── نوارِ تیره ── فقط یک بخش تیره است (سه قاعده)، و همان یکی
+   عمداً وسطِ جزوه نشسته: صفحه‌ای که باید بماند، باید *متفاوت*
+   دیده شود. */
+.dark{
+  position:relative; isolation:isolate; overflow:hidden;
+  background:var(--night); color:var(--night-ink);
+  --ink:var(--night-ink); --mute:var(--night-mute); --line:var(--night-line);
+  --card:rgba(250,246,241,.05); --paper:var(--night); --dim:var(--night-mute);
+}
+.dark .wrap{position:relative; z-index:2}
+
+/*
+  کاشی، همان شبکهٔ نقطهٔ سایت است نه سرِ ربات.
+
+  `dot-bg` در globals.css با همین گرادیانِ شعاعی ساخته شده و امضای
+  بصریِ صفحهٔ اولِ سایت است. مستطیلِ داخلِ svg خاموش می‌شود چون
+  اسکلتِ مشترکِ جزوه‌ساز آن را برای الگوی رباتی می‌کشد و اینجا
+  لازم نیست.
+*/
+.tile{
+  position:absolute; inset:0; width:100%; height:100%; z-index:0; pointer-events:none;
+  background-image:radial-gradient(circle, rgba(160,153,144,.22) 1px, transparent 1px);
+  background-size:22px 22px;
+}
+.tile rect{fill:none}
+.dark .tile{background-image:radial-gradient(circle, rgba(255,255,255,.07) 1px, transparent 1px)}
+.grain{display:none}
+
+/* ══ تیپوگرافی ══
+   فارسی حروفش به هم می‌چسبد، پس letter-spacing رویش ممنوع است و
+   فقط برچسبِ لاتین فاصله می‌گیرد. ایتالیک هم نداریم: قلمِ فارسی
+   نسخهٔ کج ندارد و مرورگر حروف را می‌شکند، پس تأکید با وزن. */
+h1,h2,h3{font-weight:700; line-height:1.45; margin:0}
+h1{font-size:clamp(1.9rem,7.6vw,3rem); line-height:1.28}
+h2{font-size:clamp(1.25rem,4.8vw,1.6rem)}
+h3{font-size:1rem; margin-bottom:.4rem}
+p{margin:0 0 1rem}
+em{font-style:normal; font-weight:700}
+a{color:inherit}
+.cap{font-size:.68rem; font-weight:700; color:var(--accent); display:block}
+.cap-en{
+  font-family:'Space Grotesk','Segoe UI',sans-serif; font-weight:700; letter-spacing:.2em;
+  text-transform:uppercase; direction:ltr; unicode-bidi:isolate; color:var(--accent);
+}
+.lede{font-size:1.04rem; color:var(--mute); margin-bottom:1.8rem}
+.from{font-size:.7rem; color:var(--dim); margin:.5rem 0 0}
+
+/* ══ جلد ══
+   اول برای عرضِ گوشی چیده شده. سه لنگر — نام بالا، بلوکِ اصلی
+   وسط، نوارِ مشخصات پایین — تا یک‌سومِ پایینِ صفحه خالی نماند. */
+.cover{display:flex; min-height:100vh; min-height:100svh}
+.cover-in{
+  display:flex; flex-direction:column; justify-content:space-between;
+  width:100%; padding-block:2.6rem; gap:2rem;
+}
+.cover-mid{align-self:stretch}
+
+/*
+  سیبیلِ برند، درشت و تنها.
+
+  نشانِ خودِ سایت است و روی کاغذِ کرم به یک چیز نیاز دارد: فضا.
+  پس هیچ‌چیز کنارش نیست — نه قاب، نه کلمه، نه خط. زیرش یک قاعدهٔ
+  بنفشِ کوتاه که چشم را از نشان به تیتر می‌رساند.
+*/
+.lockup{display:inline-flex; flex-direction:column; align-items:flex-start; margin-bottom:2rem}
+.glyph{height:4.6rem; width:auto; color:var(--ink); display:block}
+.lockup::after{
+  content:""; display:block; width:4.2rem; height:3px; margin-top:1.3rem;
+  background:var(--accent); border-radius:2px;
+}
+.cta .glyph{height:3rem}
+.cta .lockup::after{width:3rem; margin-top:1rem}
+.wordmark{display:none}
+.cover h1{margin-top:0}
+.cover-sub{color:var(--mute); font-size:1rem; margin:.9rem 0 1.8rem; font-weight:700}
+.cover .lede{max-width:30rem; margin-bottom:0; font-size:.98rem}
+
+.meta{
+  list-style:none; margin:0; padding:1rem 0 0; border-top:1px solid var(--line);
+  display:flex; flex-wrap:wrap; gap:.35rem 1.4rem; font-size:.76rem; color:var(--dim);
+}
+.meta li{position:relative}
+.meta li+li::before{content:"·"; position:absolute; inset-inline-end:-.85rem; color:var(--accent)}
+
+/* ══ بخش‌ها ══ */
+.sec{padding-block:3.4rem}
+.head{display:flex; gap:.9rem; border-top:1px solid var(--line); padding-top:1.4rem; margin-bottom:1.4rem}
+/* align-self لازم است: `.head` یک فلکس است و پیش‌فرضش کشیدن آیتم تا
+   ارتفاع کل ردیف است — که نشان شماره را از یک نشان گرد به یک قرص
+   کشیده تبدیل می‌کرد. flex:none فقط عرض را می‌بندد، نه ارتفاع را. */
+.no{
+  align-self:flex-start; flex:none; margin-top:.35rem;
+  font-size:.72rem; font-weight:700; color:var(--accent);
+  font-variant-numeric:tabular-nums; background:rgba(124,92,252,.09);
+  border-radius:999px; padding:.1rem .6rem; line-height:1.9;
+}
+.dark .no{background:rgba(250,246,241,.1); color:var(--night-ink)}
+.head-t h2{margin-top:.45rem}
+
+/* بلوکِ «چرا» — روی کاغذ، یک کارتِ کم‌رنگِ بنفش، نه فقط یک خط */
+.why{
+  border-inline-start:3px solid var(--accent); background:rgba(124,92,252,.055);
+  padding:1rem 1.15rem; border-radius:0 14px 14px 0; color:var(--mute); margin:1.5rem 0;
+}
+.why strong{color:var(--ink)}
+.dark .why{background:rgba(250,246,241,.05); border-radius:0 14px 14px 0}
+
+.card{
+  border:1px solid var(--line); background:var(--card); border-radius:18px;
+  padding:1.25rem 1.35rem; margin:1.4rem 0;
+}
+.card p:last-child,.card ol:last-child,.card ul:last-child,.card .pre:last-child{margin-bottom:0}
+
+/* متنِ آمادهٔ کپی — چپ‌چین و لاتین‌محور نیست؛ دستورها فارسی‌اند */
+.pre{
+  border:1px solid var(--line); background:#fdfbf8; border-radius:14px;
+  padding:1rem 1.15rem; margin:1.1rem 0; font-size:.92rem; line-height:1.95;
+  white-space:pre-wrap; overflow-wrap:anywhere;
+}
+.dark .pre{background:rgba(250,246,241,.04)}
+.card .pre{background:var(--paper)}
+
+ol,ul{margin:0 0 1rem; padding-inline-start:1.25rem}
+li{margin-bottom:.5rem}
+li::marker{color:var(--accent)}
+
+/* ══ پایان ══ */
+.cta{padding-block:3.6rem}
+.cta .lockup{margin-bottom:1.4rem}
+.cta-h{margin:1rem 0 1rem; font-size:clamp(1.6rem,6vw,2.2rem)}
+.btn{display:none}
+.url{display:none}
+.rule{height:1px; background:var(--line); border:0; margin-block:2.2rem}
+.foot{font-size:.76rem; color:var(--dim); margin:0}
+
+/* ══ چاپ و PDF ══ */
+@page{size:A4; margin:17mm 15mm}
+/* صفحه‌ی اول حاشیه ندارد، چون جلد تا لبه‌ی کاغذ می‌رود */
+@page :first{margin:0}
+@media print{
+  body{background:#fff; font-size:10.5pt; line-height:1.85}
+  .wrap{max-width:none; padding:0}
+  /* شبکه‌ی نقطه فقط پشت متن مزاحم است؛ روی جلد بافت است و می‌ماند */
+  .sec .tile, .cta .tile{display:none}
+  /*
+    نوار تیره‌ی وسط متن روی کاغذ سفید می‌شود، ولی جلد نه.
+
+    دلیلش فرق کارکردشان است. آن یکی یک بخش از متن است و متن سفید
+    روی زمینه‌ی خاکستری چاپ‌شده بد خوانده می‌شود؛ پس روی کاغذ با
+    یک قاب ضخیم متمایز می‌ماند، نه با زمینه. ولی جلد متن نیست —
+    جلد است. تنها صفحه‌ای که یکدست بودن رنگش خودِ کارکرد اوست.
+  */
+  .dark:not(.cover){
+    background:#fff; color:#000; --ink:#000; --mute:#444; --line:#ccc;
+    --card:#fff; --dim:#555;
+  }
+  .dark:not(.cover) .wrap{border:2px solid #000; border-radius:14px; padding:1.2rem}
+  /*
+    جلد یک صفحه‌ی کامل است.
+
+    print-color-adjust لازم است وگرنه مرورگر زمینه‌های تیره را در
+    چاپ حذف می‌کند — رفتار پیش‌فرضی که برای صرفه‌جویی جوهر درست
+    است و برای جلد غلط.
+  */
+  .cover{
+    height:297mm; display:flex; overflow:hidden; break-after:page;
+    print-color-adjust:exact; -webkit-print-color-adjust:exact;
+  }
+  .cover .wrap{padding:20mm 17mm}
+  .cover-in{padding-block:0}
+  .meta{margin-top:2rem}
+  /*
+    بخش‌ها پشت سر هم می‌آیند، نه هرکدام از صفحه‌ی نو.
+
+    قبلاً هر بخش یک break-before داشت و نتیجه‌اش این بود که یک بخش
+    چهارخطی هم یک صفحه‌ی کامل می‌گرفت. برای یک دک اسلاید درست است،
+    برای یک جزوه نه — جزوه را پشت سر هم می‌خوانند و صفحه‌ی نیمه‌خالی
+    فقط ورق زدن اضافه است.
+
+    چیزی که به جایش باید تضمین شود این است که هیچ عنوانی تهِ صفحه
+    تنها نماند و هیچ کارتی از وسط دو نیم نشود.
+  */
+  .sec{padding-block:1.4rem}
+  .head{break-after:avoid}
+  .card,.pre,.why,.head,h3{break-inside:avoid}
+  h3{break-after:avoid}
+  .pre{background:#fafafa}
+  a{text-decoration:none}
+}
+
+/* نام لاتین وسط جمله فارسی — جداسازی جهت لازم است وگرنه موتور
+   دوجهته مرورگر جای زیرخط و نقطه را جابه‌جا می‌کند */
+code{
+  font-family:'Space Grotesk','Segoe UI',monospace; font-size:.9em;
+  background:rgba(124,92,252,.08); color:var(--ink);
+  border-radius:6px; padding:.05em .35em;
+}
+.dark code{background:rgba(250,246,241,.09); color:var(--night-ink)}
+@media print{ code{background:#f0f0f0; color:#000} }
+
+/* ذکر منبع — جدا از امضای پایین صفحه و کمی پررنگ‌تر از آن.
+   جزوه‌ای که دست‌به‌دست می‌چرخد باید منبعش را همراه خودش ببرد،
+   و ریزتر از حدی که خوانده شود یعنی عملاً ننوشتنش. */
+.src{
+  font-size:.82rem; color:var(--mute); margin:0 0 1rem;
+  border-inline-start:3px solid var(--accent); padding-inline-start:.9rem;
+}

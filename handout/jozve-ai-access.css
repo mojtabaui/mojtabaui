@@ -1,184 +1,256 @@
-/* ══ توکن‌ها — همان‌های لندینگ. صفحه تک‌رنگ است: سیاه، کرم، خاکستری. ══ */
+/* ══ توکن‌ها ══
+   این جزوه برعکسِ دو تای دیگر، تیره است.
+
+   دلیلش کاربردش است: جزوه‌های دیگر خوانده و چاپ می‌شوند، این یکی
+   کنارِ دستِ آدم باز می‌ماند در حالی که دارد با یک صفحهٔ دیگر کار
+   می‌کند — صرافی، اپِ کارت، ترمینال. آن صفحه‌ها تیره‌اند و یک
+   کاغذِ سفیدِ کرم وسطشان، هر بار چشم را می‌زند.
+
+   رنگ همچنان تک‌رنگ است، مثلِ صفحهٔ خودِ دوره: سیاه، استخوانی،
+   خاکستری. «لهجه» اینجا رنگ نیست، *روشنی* است. */
 :root{
-  --paper:#faf6f1; --ink:#1a1714; --mute:#6b6560; --line:#e8e2d9; --card:#fffcf6;
-  --night:#0a0908; --night-ink:#f4efe8; --night-mute:#9b9086; --night-line:rgba(244,239,232,.09);
-  --accent:#8f8a82;
+  --paper:#0b0a09; --ink:#f4efe8; --mute:#9b9086; --dim:#6b645c;
+  --line:rgba(244,239,232,.13); --card:rgba(244,239,232,.035);
+  --accent:#d9cfc0; --on-accent:#0b0a09;
 }
+
+/*
+  نوارِ روشن — همان `dark` در متنِ جزوه.
+
+  نام در فایلِ متن عوض نشد چون معنی‌اش عوض نشده: «این بخش برعکسِ
+  بقیه باشد». در جزوهٔ روشن آن برعکس سیاه بود؛ اینجا کرم است. اگر
+  نامش را عوض می‌کردم، هر سه جزوه دو جور نشانه‌گذاری پیدا می‌کردند
+  برای یک کار.
+*/
+.dark{
+  --paper:#f4efe8; --ink:#14120f; --mute:#5f584f; --dim:#8a8279;
+  --line:rgba(20,18,15,.15); --card:rgba(20,18,15,.045);
+  --accent:#3d362d; --on-accent:#f4efe8;
+  background:var(--paper); color:var(--ink);
+}
+
 *{box-sizing:border-box}
-html{-webkit-text-size-adjust:100%}
+/* زمینه روی html هم لازم است: کروم موقعِ چاپ زمینهٔ صفحه را از
+   html می‌گیرد، نه از body — بدونِ این، حاشیهٔ هر برگ سفید می‌ماند. */
+html{-webkit-text-size-adjust:100%; background:var(--paper)}
 body{
   margin:0; background:var(--paper); color:var(--ink);
   font-family:"Meem",'Segoe UI',Tahoma,sans-serif; font-weight:300;
   font-size:16px; line-height:2.05;
+  /* بدونِ این، کروم موقعِ چاپ زمینه را دور می‌ریزد و کلِ جزوه
+     می‌شود متنِ روشن روی کاغذِ سفید — یعنی نامرئی. */
+  -webkit-print-color-adjust:exact; print-color-adjust:exact;
 }
 .wrap{max-width:44rem; margin-inline:auto; padding-inline:1.35rem}
-
-/* ── نوارهای تیره ── تمام‌عرض، نه مستطیلِ شناور: وقفه وقتی کار می‌کند که از لبه تا لبه برود */
-.dark{
-  position:relative; isolation:isolate; overflow:hidden;
-  background:var(--night); color:var(--night-ink);
-  --ink:var(--night-ink); --mute:var(--night-mute); --line:var(--night-line);
-  --card:rgba(255,255,255,.04); --paper:var(--night);
-}
+.dark{position:relative; isolation:isolate; overflow:hidden}
 .dark .wrap{position:relative; z-index:2}
-/* اندازهٔ صریح لازم است: یک svg بدونِ width/height یک المانِ جایگزینِ
-   با اندازهٔ ذاتیِ ۳۰۰×۱۵۰ است، و inset:0 آن را کش نمی‌آورد — کاشی
-   فقط یک مستطیلِ کوچک بالای هر نوار می‌شد. */
-.tile{position:absolute; inset:0; width:100%; height:100%; z-index:0; opacity:.038; pointer-events:none}
-.grain{
-  position:absolute; inset:-12%; z-index:1; pointer-events:none;
-  opacity:.07; mix-blend-mode:screen; background-size:180px 180px;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E");
+
+/*
+  کاشی — شبکهٔ نقطه، نه سرِ ربات.
+
+  اسکلتِ مشترکِ جزوه‌ساز یک الگوی رباتی می‌کشد که امضای جزوه‌های
+  دیگر است. اینجا خاموشش می‌کنم: این سند راهنمای دسترسی است، نه
+  معرفیِ دوره، و پس‌زمینه‌اش نباید شخصیت داشته باشد.
+*/
+.tile{
+  position:absolute; inset:0; width:100%; height:100%; z-index:0; pointer-events:none;
+  background-image:radial-gradient(circle, rgba(244,239,232,.085) 1px, transparent 1px);
+  background-size:28px 28px;
 }
+.tile rect{fill:none}
+.dark .tile{background-image:radial-gradient(circle, rgba(20,18,15,.13) 1px, transparent 1px)}
+.grain{display:none}
 
 /* ══ تیپوگرافی ══
-   فارسی حروفش به هم می‌چسبد، پس letter-spacing رویش ممنوع است — جوش‌ها
-   را پاره می‌کند و کلمه تکه‌تکه خوانده می‌شود. فقط برچسبِ لاتین فاصله
-   می‌گیرد. ایتالیک هم همین حکم را دارد: قلمِ فارسی نسخهٔ کج ندارد و
-   مرورگر حروف را می‌شکند، پس تأکید با وزن ساخته می‌شود نه با شیب. */
-h1,h2,h3{font-weight:700; line-height:1.4; margin:0}
-h1{font-size:clamp(2.2rem,9vw,3.4rem); line-height:1.18}
-h2{font-size:clamp(1.3rem,5vw,1.65rem)}
+   فارسی حروفش به هم می‌چسبد، پس letter-spacing رویش ممنوع است —
+   فقط برچسبِ لاتین فاصله می‌گیرد. ایتالیک هم نداریم: قلمِ فارسی
+   نسخهٔ کج ندارد و مرورگر حروف را می‌شکند، پس تأکید با وزن. */
+h1,h2,h3{font-weight:700; line-height:1.42; margin:0}
+h1{font-size:clamp(2rem,8vw,3.1rem); line-height:1.2}
+h2{font-size:clamp(1.3rem,5vw,1.7rem)}
 h3{font-size:1rem; margin-bottom:.4rem}
 p{margin:0 0 1rem}
 em{font-style:normal; font-weight:700}
+strong{font-weight:700; color:var(--ink)}
 a{color:inherit}
+code{
+  font-family:'Space Grotesk','Segoe UI',monospace; font-size:.9em;
+  direction:ltr; unicode-bidi:isolate; color:var(--accent);
+}
 .cap{font-size:.68rem; font-weight:700; color:var(--accent); display:block}
 .cap-en{
   font-family:'Space Grotesk','Segoe UI',sans-serif; letter-spacing:.22em;
   text-transform:uppercase; direction:ltr; unicode-bidi:isolate;
 }
-.lede{font-size:1.04rem; color:var(--mute); margin-bottom:1.8rem}
+.lede{font-size:1.05rem; color:var(--mute); margin-bottom:1.8rem}
 .from{font-size:.7rem; color:var(--accent); margin:.5rem 0 0}
 
 /* ══ جلد ══
-   روی گوشی طراحی شده و بعد برای صفحهٔ بزرگ باز می‌شود، نه برعکس:
-   عرضِ ۳۶۰ پیکسل سخت‌ترین حالتِ این صفحه است و اگر آنجا جا شود،
-   جای دیگر خودبه‌خود جا می‌شود. */
-/* svh نه vh: نوارِ آدرسِ سافاری با اسکرول جمع می‌شود و vh وسطِ راه عوض
-   می‌شود — یعنی طولِ صفحه زیرِ انگشتِ خواننده تغییر می‌کند. */
-.cover{display:flex; min-height:100vh; min-height:100svh}
-/*
-  سه گروه، نه یک ستونِ وسط‌چین.
-
-  دورِ اول همه‌چیز با justify-content:center وسط جمع می‌شد و نتیجه
-  روی گوشی این بود: محتوا در دو سومِ بالا، و یک سومِ پایین سیاهیِ
-  خالی. جلد که نصفش خالی باشد، ناتمام به‌نظر می‌رسد نه مینیمال.
-
-  با space-between، نامِ مدرسه به بالا می‌چسبد و نوارِ مشخصات به
-  پایین، و بلوکِ اصلی وسط می‌ماند — سه لنگرِ واقعی به‌جای یک تودهٔ
-  شناور.
-*/
+   روی گوشی طراحی شده و بعد برای صفحهٔ بزرگ باز می‌شود، نه برعکس.
+   svh نه vh: نوارِ آدرسِ سافاری با اسکرول جمع می‌شود و vh وسطِ راه
+   عوض می‌شود — یعنی طولِ صفحه زیرِ انگشتِ خواننده تغییر می‌کند. */
+.cover{display:flex; min-height:100vh; min-height:100svh; position:relative; isolation:isolate; overflow:hidden}
+.cover .wrap{position:relative; z-index:2}
 .cover-in{
   display:flex; flex-direction:column; justify-content:space-between;
-  width:100%; padding-block:2.6rem; gap:2rem;
+  width:100%; padding-block:2.2rem; gap:1.6rem;
 }
 .cover-mid{align-self:stretch}
 
 /*
-  نشانِ واژه‌ای و سری که جلویش می‌ایستد.
+  نوارِ بالای جلد — نامِ مدرسه در یک سر، نشانِ واژه‌ای در آن سر.
 
-  دورِ اول سر کوچک بود و درست وسطِ کلمه — از دور به یک لکه یا یک
-  ایرادِ فونت می‌خورد، نه به یک پیکره. اینجا برعکس شده: سر درشت
-  است و *بالای* کلمه می‌نشیند، فقط آن‌قدر پایین که شانه‌هایش سرِ
-  حروف را بپوشانند.
-
-  همان حرکتِ هیروِ لندینگ است — پیکره جلوی تیتر می‌ایستد و نصفش
-  می‌کند — ولی در اندازه‌ای که روی یک صفحهٔ کوچک هم فرم بماند.
-  نشانه هنوز کامل خوانده می‌شود؛ چیزی که اضافه شده عمق است.
+  نسخهٔ قبلِ این جلد، نشانه را درشت وسطِ صفحه می‌گذاشت و سرِ ربات
+  را جلویش. مشکلش این بود که جلد داشت *دوره* را معرفی می‌کرد، در
+  حالی که این سند یک راهنمای فنی است و کسی که بازش می‌کند دوره را
+  می‌شناسد. حالا نشان به اندازهٔ یک امضا کوچک شده و جای اصلی را
+  داده به چیزی که خواننده واقعاً دنبالش است: نقشهٔ سه راه.
 */
-/*
-  inline-flex، نه flex.
-
-  با flex، قاب تمامِ عرض را می‌گیرد و align-items:center نشانه را
-  وسطِ صفحه می‌برد — در حالی که هر چیزِ دیگرِ جلد به راست چیده شده،
-  و یک عنصرِ وسط‌چین میانِ بقیه، اتفاقی خوانده می‌شود نه تصمیم.
-  با inline-flex قاب به اندازهٔ خودِ کلمه جمع می‌شود: سر همچنان
-  دقیقاً وسطِ نشانه می‌ایستد، ولی کلِ بلوک لبه‌به‌لبه با تیتر است.
-*/
-.lockup{display:inline-flex; flex-direction:column; align-items:center}
+.cover-bar{
+  display:flex; align-items:baseline; justify-content:space-between; gap:1rem;
+  border-bottom:1px solid var(--line); padding-bottom:1rem;
+}
 .wordmark{
   font-family:'Michroma','Space Grotesk','Segoe UI',sans-serif; font-weight:400;
   direction:ltr; unicode-bidi:isolate; letter-spacing:.04em; white-space:nowrap;
-  font-size:clamp(1.5rem,7.4vw,2.3rem); line-height:1; color:var(--night-ink);
+  font-size:clamp(1.5rem,7.4vw,2.3rem); line-height:1; color:var(--ink);
 }
-.glyph{
-  /* بدنه هم‌رنگِ زمینه است و فقط با خطِ مو و دو چشمِ روشن خوانده
-     می‌شود — همان‌طور که در هیرو فقط لبه و چشم‌ها دیده می‌شوند */
-  --g-fill:var(--night); --g-line:rgba(244,239,232,.22); --g-eye:var(--night-ink);
-  height:6.8rem; width:auto; margin-bottom:-1.4rem; pointer-events:none;
-  /* جلوی حروف، نه پشتشان: در ترتیبِ طبیعی، حروف بعد کشیده می‌شوند */
-  position:relative; z-index:1;
-}
-.lockup--sm .glyph{height:4.6rem; margin-bottom:-1rem}
-.lockup--sm .wordmark{font-size:clamp(1.3rem,6vw,1.9rem)}
-.cover h1{margin-top:2.4rem}
-.cover-sub{color:var(--night-mute); font-size:.95rem; margin:.7rem 0 1.8rem}
-.cover .lede{max-width:28rem; margin-bottom:0}
+.wordmark--bar{font-size:.82rem; letter-spacing:.2em; color:var(--mute)}
+.cover--art h1{margin-top:0}
+.cover-sub{color:var(--mute); font-size:.95rem; margin:.8rem 0 1.6rem}
+.cover .lede{max-width:30rem; margin-bottom:0}
+
+/* نقشهٔ جلد — بزرگ‌ترین چیزِ صفحه، چون حرفِ اصلیِ سند همان است */
+.cover-art{margin:2.6rem 0 0; padding:0}
+.cover-art svg{display:block; width:100%; height:auto}
 
 /* نوارِ مشخصات: یک خطِ افقی و چند قلم، نه فهرستی که وسطِ کلمه می‌شکند */
 .meta{
-  list-style:none; margin:0; padding:1rem 0 0; border-top:1px solid var(--night-line);
-  display:flex; flex-wrap:wrap; gap:.35rem 1.4rem; font-size:.76rem; color:var(--night-mute);
+  list-style:none; margin:0; padding:1rem 0 0; border-top:1px solid var(--line);
+  display:flex; flex-wrap:wrap; gap:.35rem 1.4rem; font-size:.76rem; color:var(--mute);
 }
 .meta li{position:relative}
 .meta li+li::before{content:"·"; position:absolute; inset-inline-end:-.85rem; color:var(--accent)}
 
 /* ══ بخش‌ها ══ */
-.sec{padding-block:3.6rem}
-.head{display:flex; gap:.9rem; border-top:1px solid var(--line); padding-top:1.4rem; margin-bottom:1.5rem}
-.no{font-size:.8rem; font-weight:700; color:var(--accent); flex:none; padding-top:.35rem; font-variant-numeric:tabular-nums}
+.sec{padding-block:3.8rem}
+
+/*
+  شمارهٔ بخش، درشت و کم‌رنگ، *پشتِ* عنوان.
+
+  همان کاری که سکشنِ «پیش از شروع» در صفحهٔ دوره می‌کند. دلیلش
+  فقط تزئین نیست: خواننده‌ای که دارد جزوه را اسکرول می‌کند تا به
+  قدمِ چهارم برسد، باید بتواند شماره را از گوشهٔ چشم پیدا کند
+  بدونِ اینکه عنوان‌ها را بخواند. شمارهٔ ۰٫۸ رمی این کار را نمی‌کرد.
+*/
+.head{position:relative; border-top:1px solid var(--line); padding-top:1.5rem; margin-bottom:1.6rem}
+.no{
+  /* پایین‌تر از خطِ بالا، وگرنه دقیقاً پشتِ برچسبِ لاتین می‌نشیند و
+     هر دو ناخوانا می‌شوند — برچسب چپ‌چین است و شماره هم. */
+  position:absolute; inset-block-start:2.1rem; inset-inline-end:0; z-index:0;
+  font-size:5rem; line-height:1; font-weight:300; color:var(--ink); opacity:.07;
+  pointer-events:none; user-select:none;
+  /* بدونِ جداسازیِ جهت، «۰۴» در جریانِ راست‌به‌چپ وارونه چیده می‌شود
+     و «۴۰» خوانده می‌شود. */
+  direction:ltr; unicode-bidi:isolate;
+}
+.head-t{position:relative; z-index:1}
 .head-t h2{margin-top:.45rem}
 
 /* بلوکِ «چرا» — همان خطِ نازکِ کنارِ نقل‌قولِ لندینگ */
-.why{border-inline-start:2px solid var(--accent); padding-inline-start:1.1rem; color:var(--mute); margin:1.5rem 0}
+.why{border-inline-start:2px solid var(--accent); padding-inline-start:1.1rem; color:var(--mute); margin:1.6rem 0}
 .why strong{color:var(--ink)}
 
-.card{border:1px solid var(--line); background:var(--card); padding:1.2rem 1.25rem; margin:1.4rem 0}
-.card p:last-child,.card ol:last-child,.card .pre:last-child{margin-bottom:0}
+.card{border:1px solid var(--line); background:var(--card); padding:1.3rem 1.35rem; margin:1.5rem 0}
+.card p:last-child,.card ol:last-child,.card ul:last-child,.card .pre:last-child{margin-bottom:0}
+
+/*
+  کادرِ هشدار — پررنگ، چون قرار نیست رد شود.
+
+  فقط دو بار در کلِ جزوه استفاده می‌شود. اگر بیشتر شود، دیگر هشدار
+  نیست؛ می‌شود بافتِ صفحه.
+*/
+.warn{
+  border:1px solid var(--accent); background:var(--card); padding:1.3rem 1.35rem; margin:1.5rem 0;
+  position:relative;
+}
+.warn::before{
+  content:""; position:absolute; inset-block:0; inset-inline-start:0; width:3px; background:var(--accent);
+}
+.warn p:last-child,.warn ul:last-child{margin-bottom:0}
+
+/* ══ قدم‌ها ══
+   شماره در ستونِ خودش می‌ماند و متن زیرش نمی‌رود. با فهرستِ
+   شماره‌دارِ معمولی این ممکن نبود، چون هر قدم اینجا چند پاراگراف و
+   گاهی یک تصویر دارد. */
+.step{
+  display:grid; grid-template-columns:auto 1fr; gap:0 1.1rem;
+  border-top:1px solid var(--line); padding:1.5rem 0;
+}
+.step:last-of-type{border-bottom:1px solid var(--line)}
+.step-n{
+  font-size:1.5rem; font-weight:300; line-height:1.4; color:var(--accent);
+  direction:ltr; unicode-bidi:isolate; grid-row:1;
+}
+.step-b h3{font-size:1.06rem; line-height:1.5; margin-bottom:.6rem}
+.step-b p:last-child,.step-b .pre:last-child,.step-b .fig:last-child{margin-bottom:0}
+
+/* ══ تصویرها ══
+   داخلِ سند چسبیده‌اند، نه لینک — پس رنگشان را از همین توکن‌ها
+   می‌گیرند و در نوارِ روشن خودشان روشن می‌شوند. */
+.fig{margin:1.7rem 0; padding:0}
+.fig svg{display:block; width:100%; height:auto; font-family:"Meem",'Segoe UI',Tahoma,sans-serif}
+.fig figcaption{
+  margin-top:.8rem; padding-top:.7rem; border-top:1px solid var(--line);
+  font-size:.78rem; line-height:1.9; color:var(--mute);
+}
 
 .pre{
   border:1px solid var(--line); background:var(--card); padding:1rem 1.1rem; margin:1.1rem 0;
-  font-size:.9rem; line-height:1.9; white-space:pre-wrap; overflow-wrap:anywhere;
+  font-family:'Space Grotesk','Segoe UI',monospace;
+  font-size:.86rem; line-height:1.95; white-space:pre-wrap; overflow-wrap:anywhere;
+  direction:ltr; unicode-bidi:isolate; text-align:left; color:var(--ink);
 }
-.card .pre{background:transparent}
+.card .pre,.step-b .pre{background:transparent}
 
 ol,ul{margin:0 0 1rem; padding-inline-start:1.25rem}
 li{margin-bottom:.5rem}
 li::marker{color:var(--accent)}
 
 /* ══ CTA ══ */
-.cta{padding-block:4rem}
-.cta .lockup{margin-top:1rem}
+.cta{padding-block:4.2rem}
+.cta .lockup{display:inline-flex; flex-direction:column; align-items:center; margin-top:1rem}
+.cta .glyph{height:3.4rem; width:auto; color:var(--ink)}
+.cta .wordmark{font-size:clamp(1.3rem,6vw,1.8rem); margin-top:.5rem}
 .cta-h{margin:1.8rem 0 1.1rem; font-size:clamp(1.35rem,5.2vw,1.9rem)}
 .btn{
   display:inline-flex; align-items:center; padding:.95rem 1.8rem; margin-top:.6rem;
-  background:var(--night-ink); color:var(--night); font-weight:700; font-size:.95rem;
-  text-decoration:none; border:1px solid var(--night-ink);
+  background:var(--ink); color:var(--paper); font-weight:700; font-size:.95rem;
+  text-decoration:none; border:1px solid var(--ink);
 }
-.url{font-family:'Space Grotesk','Segoe UI',sans-serif; direction:ltr; unicode-bidi:isolate; font-size:.8rem; color:var(--night-mute); margin-top:1.1rem}
+.url{font-family:'Space Grotesk','Segoe UI',sans-serif; direction:ltr; unicode-bidi:isolate; font-size:.8rem; color:var(--mute); margin-top:1.1rem}
 .rule{height:1px; background:var(--line); border:0; margin-block:2.4rem}
+.src{font-size:.74rem; color:var(--dim); margin:0 0 .6rem}
 .foot{font-size:.76rem; color:var(--mute); margin:0}
 
 /* ══ چاپ و PDF ══
-   نوارهای تیره روی کاغذ هم جوهر می‌خورند هم بد خوانده می‌شوند، پس در
-   چاپ همه‌چیز به کاغذِ روشن برمی‌گردد و سرِ ربات از سیلوئت به خطِ
-   کانتور تبدیل می‌شود. */
-@page{size:A4; margin:17mm 15mm}
+   برخلافِ دو جزوهٔ دیگر، اینجا تیرگی به کاغذ هم می‌رود. جزوه‌ای
+   که در تلگرام دست‌به‌دست می‌شود روی صفحه خوانده می‌شود نه روی
+   کاغذ، و اگر PDF روشن شود، همان سندی که در مرورگر دیده‌ای با
+   چیزی که فرستاده‌ای یکی نیست.
+
+   اگر روزی قرار شد چاپ شود، کلِ برگرداندنش همین بلوک است. */
+@page{size:A4; margin:16mm 14mm}
 @media print{
-  body{background:#fff; font-size:10.5pt; line-height:1.85}
+  body{font-size:10.5pt; line-height:1.85}
   .wrap{max-width:none; padding:0}
-  .dark{background:#fff; color:#000; --ink:#000; --mute:#444; --line:#ccc; --card:#fff}
-  .tile,.grain{display:none}
-  .wordmark,.cover-sub,.url,.meta{color:#000}
-  .glyph{--g-fill:#fff; --g-line:#000; --g-eye:#000}
   .cover{min-height:auto; display:block}
   .cover-in{padding-block:0}
-  .cover h1{margin-top:1.6rem}
-  .meta{border-color:#ccc; margin-top:2rem}
-  .sec{padding-block:1rem; break-inside:avoid}
+  .cover-art{margin:1.8rem 0 1.4rem}
+  .meta{margin-top:1.6rem}
+  .sec{padding-block:1.2rem}
   .sec.brk{break-before:page}
-  .card,.pre,.why,.head{break-inside:avoid}
-  .btn{background:#fff; color:#000; border-color:#000}
+  .card,.warn,.pre,.why,.head,.fig,.step{break-inside:avoid}
+  .btn{background:var(--ink); color:var(--paper)}
   a{text-decoration:none}
 }

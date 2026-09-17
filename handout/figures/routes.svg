@@ -1,0 +1,34 @@
+<!--
+  جلد — سه راه که به یک پروژه می‌رسند.
+
+  خواندنش راست‌به‌چپ است، مثل خودِ متن. سه خط عمداً سه جورند:
+  رایگان بریده‌بریده (سقف دارد و قطع می‌شود)، محلی نازک و پیوسته،
+  خریدنی ضخیم و پیوسته. یعنی تفاوتشان قبل از خواندنِ برچسب‌ها هم
+  دیده می‌شود.
+-->
+<svg viewBox="0 0 720 268" role="img" aria-label="سه راه — رایگان، محلی، خریدنی — که همه به یک پروژه می‌رسند">
+  <g style="direction:rtl" fill="var(--ink)" font-size="19" font-weight="700">
+    <text x="714" y="52" text-anchor="start">رایگان</text>
+    <text x="714" y="134" text-anchor="start">محلی</text>
+    <text x="714" y="216" text-anchor="start">خریدنی</text>
+  </g>
+  <g style="direction:rtl" fill="var(--mute)" font-size="13">
+    <text x="714" y="74" text-anchor="start">سقف می‌دهی</text>
+    <text x="714" y="156" text-anchor="start">سخت‌افزار می‌دهی</text>
+    <text x="714" y="238" text-anchor="start">پول می‌دهی</text>
+  </g>
+
+  <g fill="none" stroke="var(--ink)" stroke-linecap="round">
+    <path d="M596 46 H452 C392 46 392 128 332 128" stroke-width="1.4" stroke-dasharray="7 9" opacity=".65"/>
+    <path d="M596 128 H332" stroke-width="1.6" opacity=".8"/>
+    <path d="M596 210 H452 C392 210 392 128 332 128" stroke-width="3.4"/>
+  </g>
+
+  <g fill="var(--ink)">
+    <path d="M318 128 L336 119 L336 137 Z"/>
+  </g>
+
+  <rect x="96" y="96" width="200" height="64" fill="none" stroke="var(--ink)" stroke-width="1.6"/>
+  <text x="196" y="127" text-anchor="middle" style="direction:rtl" fill="var(--ink)" font-size="18" font-weight="700">پروژهٔ تو</text>
+  <text x="196" y="148" text-anchor="middle" style="direction:rtl" fill="var(--mute)" font-size="12">یکی از این سه، کافی است</text>
+</svg>
