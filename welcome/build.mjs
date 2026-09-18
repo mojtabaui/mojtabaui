@@ -33,7 +33,7 @@ const CONFIG = {
   devices: 2,
 
   /** آی‌دی پشتیبانی، برای پایین صفحه */
-  support: "@mojtabaui",
+  support: "@melina_support",
 
   course: "ROBOTYPE · AI Native Product Design",
   courseFa: "دورهٔ روبوتایپ",
