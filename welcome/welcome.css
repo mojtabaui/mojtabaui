@@ -1,0 +1,127 @@
+/* ══ نامهٔ خوش‌آمد ══
+   برخلافِ جزوهٔ «دسترسی»، این یکی روشن است.
+
+   دلیلش کاربردش است: این سند در کنار گواهی‌نامه می‌نشیند نه کنار
+   یک اپِ صرافی — یک نامهٔ رسمیِ مدرسه است، ممکن است چاپ شود، و
+   کاغذِ کرمِ هویتِ mojtabaui.ir زبانِ درستِ همان نقش است. توکن‌ها
+   مستقیم از globals.css سایت و از `CertificateDocument` می‌آیند. */
+:root{
+  --paper:#faf6f1; --ink:#1a1714; --mute:#6b6560; --dim:#a09990;
+  --line:#e8e2d9; --card:#ffffff; --accent:#7c5cfc;
+}
+*{box-sizing:border-box}
+html{background:var(--paper)}
+body{
+  margin:0; background:var(--paper); color:var(--ink);
+  font-family:"Meem",'Segoe UI',Tahoma,sans-serif; font-weight:300;
+  font-size:13.6px; line-height:1.95;
+  -webkit-print-color-adjust:exact; print-color-adjust:exact;
+}
+
+/*
+  یک برگِ A4، نه یک صفحهٔ وب که اتفاقی چاپ شده.
+
+  اندازه‌ها میلی‌متری‌اند تا چیزی که در مرورگر می‌بینی همان چیزی
+  باشد که از چاپگر بیرون می‌آید. `min-height` نه `height`: اگر
+  روزی متنی اضافه شد باید سرریز شود و دیده شود، نه اینکه بی‌صدا
+  بریده شود.
+*/
+.sheet{
+  width:210mm; min-height:297mm; margin:0 auto; padding:16mm 15mm 13mm;
+  background:var(--paper); display:flex; flex-direction:column;
+}
+
+/* ══ سربرگ ══ */
+.top{
+  display:flex; align-items:center; justify-content:space-between;
+  border-bottom:1px solid var(--line); padding-bottom:9px;
+}
+.school{font-size:11.5px; font-weight:700; color:var(--mute)}
+.lockup{display:inline-flex; align-items:center; gap:7px}
+.lockup .glyph{height:22px; width:auto; color:var(--ink)}
+.wordmark{
+  font-family:'Michroma','Space Grotesk',sans-serif; font-size:11px;
+  letter-spacing:.2em; direction:ltr; unicode-bidi:isolate; color:var(--ink);
+}
+
+/* ══ تیتر ══
+   فارسی حروفش به هم می‌چسبد، پس letter-spacing رویش ممنوع. */
+h1{font-size:30px; font-weight:700; line-height:1.35; margin:26px 0 0}
+h2{font-size:14px; font-weight:700; margin:0 0 7px}
+.who{margin:9px 0 0; font-size:14.5px}
+.who strong{font-weight:700}
+.date{margin:2px 0 0; font-size:11.5px; color:var(--dim)}
+
+/* ══ کدِ لایسنس ══
+   تنها چیزی که اگر بقیهٔ صفحه هم خوانده نشود باید دیده شود، پس
+   تنها جایی است که لهجهٔ بنفش پُررنگ می‌آید. */
+.key{
+  margin:20px 0 0; padding:15px 18px 13px;
+  border:1.5px solid var(--accent); background:var(--card);
+}
+.key-cap{
+  display:block; font-size:10px; font-weight:700; color:var(--accent);
+  letter-spacing:.1em;
+}
+.key-code{
+  margin:6px 0 0; font-family:'Space Grotesk','Segoe UI',monospace;
+  font-size:20px; font-weight:700; line-height:1.5;
+  direction:ltr; unicode-bidi:isolate; text-align:left;
+  overflow-wrap:anywhere; color:var(--ink);
+}
+.key-note{margin:8px 0 0; font-size:11.5px; color:var(--mute)}
+.key-note strong{color:var(--ink); font-weight:700}
+
+/* ══ دو ستون ══ */
+.cols{display:flex; gap:11mm; margin:20px 0 0; align-items:flex-start}
+.col{flex:1; min-width:0}
+.col:last-child{flex:0 0 52mm}
+.lede{margin:0 0 10px; font-size:12px; color:var(--mute); line-height:1.85}
+
+/* شماره‌های فارسی، چون بقیهٔ صفحه فارسی است و «1 2 3» وسطِ
+   متنِ فارسی مثلِ یک تکهٔ جامانده از قالب دیده می‌شود */
+.steps{margin:0; padding-inline-start:20px; font-size:12.3px; list-style-type:persian}
+.steps li{margin-bottom:7px; line-height:1.8}
+.steps li::marker{color:var(--accent); font-weight:700}
+.steps strong{font-weight:700}
+code{
+  font-family:'Space Grotesk','Segoe UI',monospace; font-size:.92em;
+  direction:ltr; unicode-bidi:isolate; color:var(--accent);
+}
+
+/* QR روی کاغذ کار می‌کند، لینک روی صفحه — هر دو هست چون نمی‌دانیم
+   این نامه کجا باز می‌شود. */
+.qr{margin:0; padding:7px; border:1px solid var(--line); background:var(--card)}
+.qr svg{display:block; width:100%; height:auto}
+.link{margin:7px 0 0; font-size:10.5px; text-align:center}
+.link a{
+  color:var(--accent); text-decoration:none;
+  direction:ltr; unicode-bidi:isolate; overflow-wrap:anywhere;
+}
+
+/* ══ یادداشت‌ها ══ */
+/* فاصلهٔ خالیِ برگ بالای این بلوک می‌افتد، نه زیرش: نامه‌ای که
+   یادداشت‌هایش وسط صفحه رها شده و بعد یک وجب سفیدی تا پاصفحه
+   دارد، ناتمام به‌نظر می‌رسد. */
+.notes{margin:20px 0 0; margin-top:auto; padding-top:13px; border-top:1px solid var(--line)}
+.notes ul{margin:0; padding-inline-start:17px; font-size:12.3px}
+.notes li{margin-bottom:6px; line-height:1.8}
+.notes li::marker{color:var(--accent)}
+.notes strong{font-weight:700}
+
+/* ══ پاصفحه ══
+   کفِ برگ را `.notes` با `margin-top:auto` می‌گیرد و این بلافاصله
+   زیرش می‌نشیند؛ پس فاصلهٔ خالی بالای یادداشت‌ها می‌افتد نه اینجا. */
+.foot{
+  margin-top:14px; padding-top:11px; border-top:1px solid var(--line);
+  display:flex; justify-content:space-between; gap:10px;
+  font-size:10.5px; color:var(--dim);
+}
+.ltr{direction:ltr; unicode-bidi:isolate}
+
+/* ══ چاپ ══ */
+@page{size:A4; margin:0}
+@media print{
+  .sheet{width:auto; min-height:auto; height:297mm; margin:0}
+  a{text-decoration:none; color:var(--accent)}
+}

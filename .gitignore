@@ -57,3 +57,6 @@ _import/
 
 .vercel
 .env*
+
+# per-student welcome letters — contain licence keys, never commit
+/welcome/out/
