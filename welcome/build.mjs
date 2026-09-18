@@ -2,7 +2,11 @@
  * نامهٔ خوش‌آمد — برای هر نفر یک HTML و یک PDF، با لایسنس خودش.
  *
  *   node welcome/build.mjs "نام و نام خانوادگی" "LICENSE-KEY"
- *   node welcome/build.mjs --csv welcome/students.csv
+ *   node welcome/build.mjs --csv                 (‏= welcome/students.csv)
+ *
+ * `students.csv` و پوشهٔ `out/` هر دو در gitignore‌اند و باید بمانند:
+ * یکی فهرست کلیدهاست و آن یکی خودِ نامه‌ها. نمونهٔ ساختارِ فایل در
+ * `students.example.csv` است.
  *
  * خروجی در `welcome/out/` می‌نشیند، نه در `public/`.
  * این عمدی است: هر فایل یک کلید لایسنس دارد و هرچه در `public/`
@@ -104,7 +108,7 @@ function page({ name, license, qr }) {
   </header>
 
   <h1>ثبت‌نامت ثبت شد.</h1>
-  <p class="who"><strong>${esc(name)}</strong> · ${esc(CONFIG.course)}</p>
+  <p class="who"><strong><bdi>${esc(name)}</bdi></strong> <span class="sep">·</span> <span class="ltr">${esc(CONFIG.course)}</span></p>
   <p class="date">${esc(today)}</p>
 
   <section class="key">

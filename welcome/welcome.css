@@ -48,7 +48,16 @@ body{
    فارسی حروفش به هم می‌چسبد، پس letter-spacing رویش ممنوع. */
 h1{font-size:30px; font-weight:700; line-height:1.35; margin:26px 0 0}
 h2{font-size:14px; font-weight:700; margin:0 0 7px}
+/*
+  نامِ دانشجو ممکن است لاتین باشد یا فارسی — لایسنس را خودمان در
+  پنل می‌سازیم و همان نامی که آنجا ثبت شده اینجا هم می‌آید.
+
+  پس نام در <bdi> است، نه در یک span با جهتِ ثابت: bdi جهتِ محتوا
+  را خودش تشخیص می‌دهد، و بدونش یک نامِ لاتین وسطِ سطرِ راست‌به‌چپ
+  با نقطه‌چین و نامِ دوره جابه‌جا می‌شود.
+*/
 .who{margin:9px 0 0; font-size:14.5px}
+.who .sep{color:var(--dim)}
 .who strong{font-weight:700}
 .date{margin:2px 0 0; font-size:11.5px; color:var(--dim)}
 
