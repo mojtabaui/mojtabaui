@@ -53,6 +53,10 @@ h2{font-size:14px; font-weight:700; margin:0 0 7px}
 .date{margin:2px 0 0; font-size:11.5px; color:var(--dim)}
 
 /* ══ کدِ لایسنس ══
+   کلید یک رشتهٔ پیوستهٔ بلند است و جای شکستنی ندارد، پس
+   overflow-wrap:anywhere لازم است و اندازه محافظه‌کارانه، تا کلیدِ
+   بلند هم دو سه سطر بیشتر نشود. سطرِ اضافه فضای خالیِ
+   وسطِ برگ را می‌خورد، نه ارتفاعِ صفحه را.
    تنها چیزی که اگر بقیهٔ صفحه هم خوانده نشود باید دیده شود، پس
    تنها جایی است که لهجهٔ بنفش پُررنگ می‌آید. */
 .key{
@@ -65,7 +69,7 @@ h2{font-size:14px; font-weight:700; margin:0 0 7px}
 }
 .key-code{
   margin:6px 0 0; font-family:'Space Grotesk','Segoe UI',monospace;
-  font-size:20px; font-weight:700; line-height:1.5;
+  font-size:15px; font-weight:700; line-height:1.72; letter-spacing:.01em;
   direction:ltr; unicode-bidi:isolate; text-align:left;
   overflow-wrap:anywhere; color:var(--ink);
 }
@@ -84,6 +88,13 @@ h2{font-size:14px; font-weight:700; margin:0 0 7px}
 .steps li{margin-bottom:7px; line-height:1.8}
 .steps li::marker{color:var(--accent); font-weight:700}
 .steps strong{font-weight:700}
+/* یادداشتِ زیرِ مراحل — نه هشدار است نه قدم، پس نه کادر
+   می‌گیرد نه شماره؛ فقط هم‌ترازِ متنِ مراحل و کم‌رنگ‌تر. */
+.tip{
+  margin:9px 0 0; padding-inline-start:20px;
+  font-size:11.5px; line-height:1.8; color:var(--mute);
+}
+
 code{
   font-family:'Space Grotesk','Segoe UI',monospace; font-size:.92em;
   direction:ltr; unicode-bidi:isolate; color:var(--accent);
