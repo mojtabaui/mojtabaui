@@ -5,7 +5,7 @@
  * همان می‌خواند. آنچه اینجاست یک لایه پایین‌تر است: زیرِ هر درس، چه
  * چیزهایی واقعاً باز می‌شود.
  *
- * هر بند یک *اسلاید* از دکِ خودِ دوره است (`D:\workshop-prompt-to-product`،
+ * هر بند یک *اسلاید* از دکِ خودِ دوره است (`D:\robotype`،
  * صفتِ `data-c` روی هر `<section>`) نه خلاصه‌ای که این فایل ساخته باشد.
  * پس فهرست بلند است و باید هم باشد — همین است که «سرفصل» را از
  * «فهرستِ عنوان» جدا می‌کند.
@@ -13,9 +13,10 @@
  * ترتیبِ `TOPICS[no][i]` با `MISSIONS[no].episodes[i]` یکی است و باید
  * یکی بماند؛ اگر درسی به فصلی اضافه شد، هر دو جا.
  *
- * فصل‌های ۰۵ تا ۰۷ کلید ندارند چون دکشان هنوز نوشته نشده. نوشتنِ
- * زیرشاخه برای چیزی که هنوز ساخته نشده، همان وعده‌ای است که بعداً
- * باید پسش گرفت — و در `Ai7Minimal` ردیفِ بی‌کلید اصلاً باز نمی‌شود.
+ * هر هفت فصل حالا دک دارند و بندهایشان از همان دک‌ها استخراج شده.
+ * نوشتنِ زیرشاخه برای چیزی که ساخته نشده، همان وعده‌ای
+ * است که بعداً باید پسش گرفت — و در `Ai7Minimal` ردیفِ بی‌کلید
+ * اصلاً باز نمی‌شود.
  *
  * انگلیسی‌اند، مثل نامِ درس‌ها. دلیلش در `odyssey.ts` بالای `Episode`.
  */
@@ -396,11 +397,11 @@ export const TOPICS: Record<string, string[][]> = {
 
 /* ── فصل‌های ۰۵ تا ۰۷ ───────────────────────────────────────────
  *
- * فصلِ پنجم مثلِ چهارتای اول از دکِ واقعی درآمده (`deck-m5.html`).
- * شش و هفت هنوز دک ندارند و بندهایشان نوشته شده‌اند، نه استخراج —
- * ساختارشان از جمع‌بندیِ ماژول‌های قبلی می‌آید که صریحاً می‌گویند
- * بعدشان چه می‌آید. اگر دکشان ساخته شد، این دو کلید باید با همان
- * روشِ بقیه بازنویسی شوند.
+ * پنجم و ششم هم مثلِ چهارتای اول از دکِ واقعی درآمده‌اند
+ * (`deck-m5.html` و `deck-m6.html`). هفتم هنوز دک ندارد و بندهایش
+ * نوشته شده، نه استخراج — ساختارش از جمع‌بندیِ ماژول‌های قبلی
+ * می‌آید که صریحاً می‌گویند بعدشان چه می‌آید. اگر دکش ساخته شد،
+ * این کلید باید با همان روشِ بقیه بازنویسی شود.
  */
 
 /** ۰۵ · AI Native UI Design — deck-m5 */
@@ -469,77 +470,107 @@ TOPICS["05"] = [
   ],
 ];
 
-/** ۰۶ · Agentic UI Design — هنوز دک ندارد */
+/** ۰۶ · Agentic UI Design — deck-m6 */
 TOPICS["06"] = [
   [
-    "Where UI criteria become machine-checkable",
-    "A rubric row a script can run",
-    "Contrast, length, state coverage",
-    "What still needs a human eye",
+    "What we bring into this chapter",
+    "What this chapter does not repeat",
+    "The thesis of this chapter",
+    "The real danger here",
+    "Deliverable: two agents and a living scale",
+    "Judging versus measuring",
+    "Every row is one of three kinds",
+    "Hamghadam: thirteen rows, three columns",
+    "An executable row has three parts",
+    "Hamghadam: the trap we fell into on row 1",
+    "The one row no eye gets right",
+    "There are three verdicts, not two",
   ],
   [
-    "The style guide as agent context",
-    "Closed lists beat descriptions",
-    "Why a token file outperforms a screenshot",
-    "Keeping the context small on purpose",
+    "Three consumers, not one",
+    "Three sections, and the third is the one everyone drops",
+    "Read the scale from the file, not the prompt",
+    "Hamghadam: the scale the agent reads from",
+    "A value off the scale is not rounded",
+    "Hamghadam: eight things that look like defects and are not",
+    "A state the style guide never defined",
+    "The test: second run, zero changes",
+    "Count before you delete",
   ],
   [
-    "One layer builds, one layer reviews",
-    "Why the builder never grades itself",
-    "The handoff between the two",
-    "When the loop should stop",
+    "What the builder can no longer see",
+    "The dividing rule, in one line",
+    "The builder's report is not evidence",
+    "Hamghadam: the contract between layers, ten keys",
+    "Hamghadam: ten findings, eight rejected",
+    "Eight rejections, only three reasons",
+    "The loop that closes is not the fixing loop",
+    "Three that were neither rejected nor accepted",
   ],
   [
-    "The visual QA agent",
-    "Feeding it the rubric, not your taste",
-    "What it catches, and what it misses",
-    "Twenty screens as an eval set",
+    "Screenshot versus file",
+    "A finding with no address is not a finding",
+    "The agent file, in full",
+    "Count it, do not eyeball it",
+    "The most valuable output is the absence list",
+    "Hamghadam: three conflicts that were not resolved",
+    "A value on screen with no source",
+    "Four things this one still cannot see",
   ],
   [
-    "Handoff without a handoff document",
-    "The folder as the contract",
-    "What the engineer reads first",
-    "Where this method stops paying",
+    "Handoff is not a moment",
+    "Three things that make a folder runnable",
+    "Hamghadam: five lines that say everything",
+    "A presentation is not a new document",
+    "Hamghadam: the shape of the report that was built",
+    "Hamghadam: the five things written as lessons",
+    "The demo trap: AI built this in ten minutes",
+    "Four things to say, not to be found",
   ],
 ];
 
-/** ۰۷ · Vibe Coding For Designers — هنوز دک ندارد */
+/** ۰۷ · Vibe Coding For Product Designers — deck-m7 */
 TOPICS["07"] = [
   [
-    "How much code you actually need",
-    "Reading it versus writing it",
-    "The parts worth understanding",
-    "What you can safely not learn",
+    "What we bring into this chapter",
+    "The thesis of this chapter",
+    "The real danger here",
+    "Deliverable: a URL that opens",
+    "The definition, in three moves",
+    "Three things it gets confused with",
+    "What you can vibe code, and what you cannot",
+    "One test, instead of memorising the table",
+    "What you have that a programmer does not",
+    "Reading versus writing",
+    "Hamghadam: what ships and what does not",
   ],
   [
-    "Your first live page",
-    "Choosing the smallest stack that ships",
-    "From a local file to a URL",
-    "The first thing that breaks",
+    "Why you need it at all",
+    "Five words, and that is it",
+    "The first fifteen minutes, step by step",
+    "The sentence beside each commit",
+    "‎.gitignore‎, the file with no undo",
+    "A real example from this school",
+    "Four things that are never committed",
   ],
   [
-    "Data and forms",
-    "Where the data actually lives",
-    "Validation, and who owns it",
-    "What never goes in the front end",
+    "Deployment, in one sentence",
+    "A server versus a platform",
+    "Vercel, and why it is the one",
+    "Your first ten minutes on Vercel",
+    "Hamghadam and this site: what runs on what",
+    "Three cases that genuinely need a server",
+    "If you genuinely need one: where to buy",
+    "Why a local build lies",
+    "A domain, the last step",
   ],
   [
+    "What to build with",
+    "What to feed the model",
+    "One change, run, look, commit",
+    "Hamghadam: one state, from three files",
     "When it breaks",
-    "Reading an error without panic",
-    "Asking the model the right question",
-    "When to stop and revert",
-  ],
-  [
-    "Shipping it",
-    "Domains, deploys and the boring parts",
-    "What to check before you send the link",
-    "Keeping it alive afterwards",
-  ],
-  [
-    "The final project",
-    "Choosing something you will finish",
-    "The story that goes with it",
-    "Putting it in front of people",
+    "Six questions before you send the link",
   ],
 ];
 
@@ -995,13 +1026,13 @@ export const PRICING = {
     title: "قیمت",
     head: "تخفیف رونمایی، پلکانی",
     lede:
-      "دوره تازه رونمایی شده و برای شروع، قیمتش به‌صورت پلکانی بالا می‌رود. ۵۰ نفر اول با قیمت رونمایی وارد می‌شوند و بعد از آن پلهٔ بعدی فعال می‌شود.",
+      "دوره تازه رونمایی شده و برای شروع، قیمتش به‌صورت پلکانی بالا می‌رود. ۳۰ نفر اول با قیمت رونمایی وارد می‌شوند و بعد از آن پلهٔ بعدی فعال می‌شود.",
     unit: "تومان",
     fullLabel: "قیمت اصلی دوره",
     full: "۱۲٬۰۰۰٬۰۰۰",
     tiers: [
-      { seat: "۵۰ نفر اول", price: "۶٬۰۰۰٬۰۰۰", off: "۵۰٪ تخفیف", now: true },
-      { seat: "۵۰ نفر دوم", price: "۷٬۰۰۰٬۰۰۰", off: "۴۲٪ تخفیف", now: false },
+      { seat: "۳۰ نفر اول", price: "۶٬۰۰۰٬۰۰۰", off: "۵۰٪ تخفیف", now: true },
+      { seat: "۳۰ نفر دوم", price: "۷٬۰۰۰٬۰۰۰", off: "۴۲٪ تخفیف", now: false },
       { seat: "بعد از آن", price: "۱۲٬۰۰۰٬۰۰۰", off: "قیمت اصلی", now: false },
     ],
     note:
@@ -1010,13 +1041,13 @@ export const PRICING = {
   en: {
     title: "Price",
     head: "A launch price, in steps",
-    lede: "The course has just launched. The first hundred seats go at the launch price; after that it is the full price.",
+    lede: "The course has just launched. The first sixty seats go at a launch price, in two steps of thirty; after that it is the full price.",
     unit: "toman",
     fullLabel: "Full price",
     full: "12,000,000",
     tiers: [
-      { seat: "First 50 seats", price: "6,000,000", off: "50% off", now: true },
-      { seat: "Next 50 seats", price: "7,000,000", off: "42% off", now: false },
+      { seat: "First 30 seats", price: "6,000,000", off: "50% off", now: true },
+      { seat: "Next 30 seats", price: "7,000,000", off: "42% off", now: false },
       { seat: "After that", price: "12,000,000", off: "full price", now: false },
     ],
     note: "One payment, permanent access. Chapters added later open up without a new charge.",
