@@ -1330,10 +1330,20 @@ export default function Ai7Minimal({
             <span className="size-1.5" style={{ background: INK }} />
             {num(MISSIONS.filter((m) => !m.draft).length)} {t.readyCount}
           </span>
-          <span className="inline-flex items-center gap-2">
-            <span className="size-1.5" style={{ background: VIOLET_INK }} />
-            {num(MISSIONS.filter((m) => m.draft).length)} {t.draftCount}
-          </span>
+          {/*
+            «۰ فصلِ در حال نهایی شدن» بدتر از ننوشتن است.
+
+            تا وقتی فصلی نیمه‌کاره بود، گفتنش صداقت بود. حالا که همه
+            ضبط شده‌اند، همان جمله با عددِ صفر فقط یک شمارندهٔ خراب
+            به‌نظر می‌رسد — و خواننده به‌جای «تمام شد»، «یک چیزی این
+            وسط درست کار نمی‌کند» می‌خواند.
+          */}
+          {MISSIONS.some((m) => m.draft) && (
+            <span className="inline-flex items-center gap-2">
+              <span className="size-1.5" style={{ background: VIOLET_INK }} />
+              {num(MISSIONS.filter((m) => m.draft).length)} {t.draftCount}
+            </span>
+          )}
           <span className="inline-flex items-center gap-2">
             <span className="size-1.5" style={{ background: LINE }} />
             {num(EPISODE_COUNT)} {t.lessons}
