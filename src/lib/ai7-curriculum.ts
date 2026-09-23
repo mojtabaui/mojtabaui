@@ -1019,7 +1019,7 @@ export const PROJECTS = {
  * نوارِ ظرفیتِ صفحه از همین می‌خواند. با هر ثبت‌نام `taken` یکی
  * بالا می‌رود؛ `cap` باید با «۳۰ نفر اول» در `PRICING` یکی بماند.
  */
-export const LAUNCH_SEATS = { cap: 30, taken: 23 } as const;
+export const LAUNCH_SEATS = { cap: 30, taken: 27 } as const;
 
 /**
  * قیمت.
