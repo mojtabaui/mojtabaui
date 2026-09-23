@@ -6,6 +6,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { motion, useScroll, useTransform, useSpring, type MotionValue } from "framer-motion";
 import {
+  ArrowLeft,
+  ArrowRight,
   Boxes,
   FileText,
   ListOrdered,
@@ -43,6 +45,7 @@ import {
   PROJECTS,
   SLIDES,
   PRICING,
+  LAUNCH_SEATS,
 } from "@/lib/ai7-curriculum";
 import type { Lang } from "@/lib/i18n";
 import { STAGE_ART } from "./StageArt";
@@ -116,15 +119,15 @@ const VIOLET = "var(--neo-accent, #8f8a82)";
 const VIOLET_INK = "var(--neo-strong, #1a1714)";
 /** کارتِ روی کاغذ — کرمِ روشن‌تر از زمینه، نه سفیدِ خالص */
 const CARD = "var(--neo-card, #fffcf6)";
-/*
-  لینکِ پشتیبانی و فلشِ دکمه‌ها تا باز شدنِ ثبت‌نام برداشته شدند.
-
-  هر پنج دکمهٔ ثبت‌نام جایشان را به یک خط خبر داده‌اند، پس این دو
-  دیگر مصرفی ندارند. وقتی ثبت‌نام باز شد هر دو با همان کامیت
-  برمی‌گردند — نشانیِ تلگرام همان است که `BuyButton` در بقیهٔ سایت
-  می‌رود، و قیمت‌ها که هیچ‌وقت اینجا نبودند و در `PRICING` زندگی
-  می‌کنند.
-*/
+/**
+ * ثبت‌نام از راه پشتیبانی، نه درگاهِ پرداخت.
+ *
+ * همان مسیری که `BuyButton` در بقیهٔ سایت می‌رود: فروش کارت‌به‌کارت
+ * است و درگاه فعلاً خاموش. قیمت اما روی صفحه چاپ می‌شود و در
+ * `PRICING` زندگی می‌کند — چون تخفیفِ رونمایی پلکانی است و پله،
+ * خودش بخشی از پیام است. عددها فقط یک جا نوشته شده‌اند.
+ */
+const SUPPORT = "https://t.me/melina_support";
 /**
  * نشانِ واژه‌ای قابِ اول.
  *
@@ -258,11 +261,9 @@ const T = {
     soundOn: "صدا روشن است",
     soundOff: "صدا خاموش است",
     heroCta: "ثبت‌نام",
-    /**
-     * تا وقتی ثبت‌نام باز نشده، همین یک خط جای هر پنج دکمهٔ صفحه
-     * می‌نشیند. یک رشته، پنج جا — تاریخ که عوض شد، یک‌جا عوض می‌شود.
-     */
-    openAt: "شروع ثبت‌نام ۱ مهر، ساعت ۱۱",
+    seatsLabel: "ظرفیت پلهٔ اول",
+    seatsTaken: "{n} نفر از {cap} نفر ثبت‌نام کرده‌اند",
+    seatsLeft: "فقط {n} جا با ۵۰٪ تخفیف مانده",
     heroCta2: "سرفصل‌ها را ببین",
     heroSeats: "ظرفیت محدود است",
     briefLabel: "در یک نگاه",
@@ -416,7 +417,9 @@ const T = {
     soundOn: "sound on",
     soundOff: "sound off",
     heroCta: "Enrol",
-    openAt: "Enrolment opens 23 September, 11:00",
+    seatsLabel: "First-tier seats",
+    seatsTaken: "{n} of {cap} seats taken",
+    seatsLeft: "Only {n} left at 50% off",
     heroCta2: "See the outline",
     heroSeats: "limited seats",
     briefLabel: "At a glance",
@@ -585,6 +588,7 @@ export default function Ai7Minimal({
   /** عددهای ریزِ صفحه — فارسی که باشد، رقمِ لاتین وسطِ جمله می‌زند توی ذوق */
   const num = (n: number) => (lang === "fa" ? faNum(n) : String(n));
   const price = PRICING[lang];
+  const Forward = rtl ? ArrowLeft : ArrowRight;
   const still = useStill();
 
   const stage = useRef<HTMLDivElement>(null);
@@ -813,7 +817,16 @@ export default function Ai7Minimal({
                 )}
               </button>
 
-              <OpenNote text={t.openAt} color={ink} size="text-[0.72rem] sm:text-[0.78rem]" />
+              <a
+                href={SUPPORT}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-5 py-2.5 text-[0.78rem] font-semibold transition-opacity hover:opacity-85"
+                style={{ background: VIOLET_INK, color: PAPER }}
+              >
+                {t.heroCta}
+                <Forward className="size-3.5" aria-hidden="true" />
+              </a>
             </div>
 
           </motion.div>
@@ -1025,6 +1038,17 @@ export default function Ai7Minimal({
               <span style={{ color: MUTE }}>· {price.tiers[0].seat}</span>
             </p>
 
+            <SeatMeter
+              label={t.seatsLabel}
+              taken={t.seatsTaken
+                .replace("{n}", num(LAUNCH_SEATS.taken))
+                .replace("{cap}", num(LAUNCH_SEATS.cap))}
+              left={t.seatsLeft.replace("{n}", num(LAUNCH_SEATS.cap - LAUNCH_SEATS.taken))}
+              cap={LAUNCH_SEATS.cap}
+              filled={LAUNCH_SEATS.taken}
+              className="mt-8"
+            />
+
             <ol className="mt-8">
               {price.tiers.slice(1).map((tier) => (
                 <li
@@ -1044,12 +1068,16 @@ export default function Ai7Minimal({
               {price.note}
             </p>
 
-            <OpenNote
-              text={t.openAt}
-              color={VIOLET_INK}
-              className="mt-auto"
-              size="text-[0.85rem]"
-            />
+            <a
+              href={SUPPORT}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-auto inline-flex items-center justify-center gap-2.5 px-7 py-4 pt-4 text-sm font-semibold transition-opacity hover:opacity-85"
+              style={{ background: VIOLET_INK, color: PAPER, marginBlockStart: "2rem" }}
+            >
+              {t.joinCta}
+              <Forward className="size-4" aria-hidden="true" />
+            </a>
           </div>
         </div>
       </Sec>
@@ -1745,7 +1773,16 @@ export default function Ai7Minimal({
             ))}
           </ol>
 
-          <OpenNote text={t.openAt} color={VIOLET_INK} className="mt-7" />
+          <a
+            href={SUPPORT}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-7 inline-flex items-center gap-2.5 rounded-none px-7 py-3.5 text-sm font-semibold transition-opacity hover:opacity-85"
+            style={{ background: VIOLET_INK, color: PAPER }}
+          >
+            {t.joinCta}
+            <Forward className="size-4" aria-hidden="true" />
+          </a>
           <p className="mt-4 text-xs" style={{ color: MUTE }}>
             {t.joinNote}
           </p>
@@ -1793,7 +1830,16 @@ export default function Ai7Minimal({
         </p>
 
         <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
-          <OpenNote text={t.openAt} color={VIOLET_INK} size="text-base" />
+          <a
+            href={SUPPORT}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2.5 px-7 py-4 text-sm font-semibold transition-opacity hover:opacity-85"
+            style={{ background: VIOLET_INK, color: PAPER }}
+          >
+            {t.cta}
+            <Forward className="size-4" aria-hidden="true" />
+          </a>
           <Link
             href="/"
             className="inline-flex items-center gap-2 border px-6 py-4 text-sm transition-opacity hover:opacity-70"
@@ -1850,7 +1896,16 @@ export default function Ai7Minimal({
           </div>
 
           <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-            <OpenNote text={t.openAt} color={NIGHT_INK} />
+            <a
+              href={SUPPORT}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2.5 px-6 py-3.5 text-sm font-semibold transition-opacity hover:opacity-85"
+              style={{ background: NIGHT_INK, color: NIGHT }}
+            >
+              {t.cta}
+              <Forward className="size-4" aria-hidden="true" />
+            </a>
             <Link
               href="/"
               className="inline-flex items-center gap-2 border px-5 py-3.5 text-sm transition-opacity hover:opacity-70"
@@ -2140,34 +2195,55 @@ function PathCard({
  * داخلِ یک قابِ مربعِ بی‌گِردی، مثلِ بقیهٔ صفحه.
  */
 /**
- * جای دکمهٔ ثبت‌نام، تا وقتی ثبت‌نام باز شود.
+ * نوارِ ظرفیتِ پلهٔ تخفیف.
  *
- * دکمه‌ها برداشته شده‌اند، نه خاموش. دکمهٔ غیرفعال یک وعدهٔ شکسته
- * است: چشم آن را می‌بیند، دست می‌رود سمتش، و هیچ اتفاقی نمی‌افتد.
- * یک خط نوشته همان خبر را بدونِ آن تعارف می‌دهد.
+ * سی خانه، نه یک میلهٔ پیوسته: «چند جا مانده» سؤالی است که با
+ * شمردن جواب داده می‌شود، و خانه‌ها را می‌شود شمرد. تک‌رنگ می‌ماند —
+ * پُر جوهر است و خالی خط، مثلِ بقیهٔ صفحه.
  *
- * ساعت با آیکن می‌آید چون بدونِ آن، این جمله در میانِ متنِ صفحه گم
- * می‌شود — و این تنها چیزی است که همین الان باید خوانده شود.
+ * عددها از `LAUNCH_SEATS` می‌آیند؛ هر ثبت‌نامِ تازه همان یک خط است.
  */
-function OpenNote({
-  text,
-  color,
+function SeatMeter({
+  label,
+  taken,
+  left,
+  cap,
+  filled,
   className,
-  size = "text-sm",
 }: {
-  text: string;
-  color: string;
+  label: string;
+  taken: string;
+  left: string;
+  cap: number;
+  filled: number;
   className?: string;
-  size?: string;
 }) {
   return (
-    <p
-      className={`inline-flex items-center gap-2 font-semibold ${size} ${className ?? ""}`}
-      style={{ color }}
-    >
-      <Clock className="size-4 shrink-0" strokeWidth={1.8} aria-hidden="true" />
-      {text}
-    </p>
+    <div className={className}>
+      <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+        <p className="neo-cap text-[0.66rem]" style={{ color: MUTE }}>
+          {label}
+        </p>
+        <p className="text-[0.82rem] font-semibold" style={{ color: INK }}>
+          {left}
+        </p>
+      </div>
+      <div
+        role="meter"
+        aria-valuemin={0}
+        aria-valuemax={cap}
+        aria-valuenow={filled}
+        aria-valuetext={taken}
+        className="mt-3 flex gap-[3px]"
+      >
+        {Array.from({ length: cap }, (_, i) => (
+          <span key={i} className="h-3 flex-1" style={{ background: i < filled ? INK : LINE }} />
+        ))}
+      </div>
+      <p className="mt-2.5 text-xs" style={{ color: MUTE }}>
+        {taken}
+      </p>
+    </div>
   );
 }
 
