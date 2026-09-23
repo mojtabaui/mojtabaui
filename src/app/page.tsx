@@ -15,6 +15,7 @@ import DiscountNotifyForm from "@/components/DiscountNotifyForm";
 import Model3D from "@/components/Model3D";
 import PersonalNote from "@/components/PersonalNote";
 import TestimonialsGrid from "@/components/TestimonialsGrid";
+import RobotypePromo from "@/components/RobotypePromo";
 import { infinityCourses, videoCourses, formatPrice, articles, featuredProjects } from "@/lib/mock-data";
 import { getLang } from "@/lib/i18n/server";
 import { HOME } from "@/lib/i18n/dict/home";
@@ -168,6 +169,11 @@ export default async function Home() {
 
         {/* ─── Marquee ─── */}
         <MarqueeBand />
+
+        {/* ─── دورهٔ ROBOTYPE ───
+            سومین چیزی که دیده می‌شود: بعد از هیرو و عددها، قبل از اینکه
+            صفحه وارد توضیحِ مدرسه شود. */}
+        <RobotypePromo lang={lang} />
 
         {/* ─── Why Us ─── */}
         <section style={{ backgroundColor: "#E4DAD5" }} className="py-24 border-b border-[#d4c8c2]">
