@@ -23,6 +23,7 @@ import {
   Images,
   Users,
   Layers,
+  SwatchBook as Swatch,
   Ticket,
   MessagesSquare,
   Route,
@@ -30,6 +31,7 @@ import {
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import dynamic from "next/dynamic";
+import HamghadamShowcase from "./HamghadamShowcase";
 import { BrandGlyph } from "@/components/BrandMark";
 import { TOOL_MARKS } from "./ToolMarks";
 import { RobotPattern } from "./RobotFlat";
@@ -349,6 +351,10 @@ const T = {
     note2:
       "چیزهایی که توی این دوره می‌بینی از دل پروژه‌های واقعی اومده. طبیعتاً اشتباه و خرابکاری هم داشته‌ایم! حتی بعضی از همان اشتباه‌ها را عمداً نشانت می‌دهم، چون به نظرم دیدن اینکه یک تصمیم چرا جواب نداده، خیلی بیشتر از دیدن یک خروجی بی‌نقص به آدم یاد می‌دهد.",
     stepsTitle: "سه قدم و شروع می‌کنیم",
+    showTitle: "از داخلِ پروژه",
+    showHead: "این صفحه‌ها و این دیزاین سیستم رو توی دوره می‌سازی",
+    showLede:
+      "تزئینی نیستن. همین پنج صفحه و همین سیستمِ توکن، فصل‌به‌فصل ساخته می‌شن؛ از پرسشِ اول تا فهرستِ درمانگرها.",
     steps: [
       { t: "توی تلگرام پیام بده", d: "بهت می‌گیم الان قیمت روی کدوم پله‌ست و چند جا باقی مونده." },
       { t: "کارت‌به‌کارت کن", d: "شماره کارت رو همون‌جا می‌فرستیم؛ بعد رسید رو برامون بفرست." },
@@ -493,6 +499,10 @@ const T = {
     note2:
       "Everything in this course came out of real projects. So did its failures — and I repeat a few of them deliberately, in front of you, because that is the best way to learn them.",
     stepsTitle: "Three steps, today",
+    showTitle: "Inside the project",
+    showHead: "You build these screens and this design system in the course",
+    showLede:
+      "Not decoration. These five screens and this token system are built chapter by chapter — from the first question to the therapist list.",
     steps: [
       { t: "Message on Telegram", d: "We will tell you which price tier we are on and how many seats are left." },
       { t: "Transfer", d: "We send the account details there and you send back the receipt." },
@@ -1600,6 +1610,22 @@ export default function Ai7Minimal({
             ))}
           </ul>
         </div>
+      </Sec>
+
+      {/* ── ویترینِ هم‌قدم ──
+          سکشنِ قبل می‌گوید چه ساخته می‌شود؛ این یکی نشانش می‌دهد. درست
+          بعد از آن می‌آید تا ادعا و مدرک کنارِ هم خوانده شوند. روی کاغذ
+          است، نه تاریکی: صفحه‌های اپ و پالت کرم‌اند و روی مشکی مثلِ
+          برچسبِ چسبانده به‌نظر می‌رسیدند. */}
+      <Sec className="mx-auto max-w-5xl px-5 pt-24 sm:px-6 sm:pt-32" mark="SYSTEM" icon={Swatch}>
+        <Eyebrow icon={Swatch}>{t.showTitle}</Eyebrow>
+        <h2 className="-mt-4 max-w-[22ch] text-balance font-light leading-[1.14] text-[clamp(1.8rem,4.8vw,3.2rem)]">
+          {t.showHead}
+        </h2>
+        <p className="mt-5 mb-12 max-w-xl text-sm leading-loose sm:text-base" style={{ color: MUTE }}>
+          {t.showLede}
+        </p>
+        <HamghadamShowcase lang={lang} num={num} />
       </Sec>
 
       {/* ── پیش از شروع ──
