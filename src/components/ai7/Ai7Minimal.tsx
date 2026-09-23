@@ -48,6 +48,7 @@ import {
   SLIDES,
   PRICING,
   LAUNCH_SEATS,
+  currentTier,
 } from "@/lib/ai7-curriculum";
 import type { Lang } from "@/lib/i18n";
 import { STAGE_ART } from "./StageArt";
@@ -263,9 +264,11 @@ const T = {
     soundOn: "صدا روشن است",
     soundOff: "صدا خاموش است",
     heroCta: "ثبت‌نام",
-    seatsLabel: "ظرفیت پلهٔ اول",
+    seatsLabel: "ظرفیت پلهٔ فعلی",
     seatsTaken: "{n} نفر از {cap} نفر ثبت‌نام کرده‌اند",
-    seatsLeft: "فقط {n} جا با ۵۰٪ تخفیف مانده",
+    seatsLeft: "فقط {n} جا با این قیمت مانده",
+    tierDone: "تکمیل شد",
+    tierNow: "الان",
     heroCta2: "سرفصل‌ها را ببین",
     heroSeats: "ظرفیت محدود است",
     briefLabel: "در یک نگاه",
@@ -394,7 +397,7 @@ const T = {
         a: "فعلاً کارت‌به‌کارت و از طریق پشتیبانی. درگاه پرداخت سایت هنوز فعال نیست. قیمت و پله‌های تخفیف هم شفاف همین صفحه نوشته شده و چیزی پشت پرده نیست.",
       },
       {
-        q: "اگه پلهٔ اول پر شده باشه چی؟",
+        q: "اگه پلهٔ فعلی پر شده باشه چی؟",
         a: "پلهٔ بعدی فعال می‌شود. توی تلگرام پیام می‌دهی و همان‌جا می‌گوییم الان روی کدام پله هستیم و چند ظرفیت باقی مانده.",
       },
       {
@@ -423,9 +426,11 @@ const T = {
     soundOn: "sound on",
     soundOff: "sound off",
     heroCta: "Enrol",
-    seatsLabel: "First-tier seats",
+    seatsLabel: "Seats in this tier",
     seatsTaken: "{n} of {cap} seats taken",
-    seatsLeft: "Only {n} left at 50% off",
+    seatsLeft: "Only {n} left at this price",
+    tierDone: "sold out",
+    tierNow: "now",
     heroCta2: "See the outline",
     heroSeats: "limited seats",
     briefLabel: "At a glance",
@@ -598,6 +603,8 @@ export default function Ai7Minimal({
   /** عددهای ریزِ صفحه — فارسی که باشد، رقمِ لاتین وسطِ جمله می‌زند توی ذوق */
   const num = (n: number) => (lang === "fa" ? faNum(n) : String(n));
   const price = PRICING[lang];
+  /* پلهٔ باز — نه لزوماً اولی. رجوع به `currentTier` در ai7-curriculum */
+  const tier = currentTier(lang);
   const Forward = rtl ? ArrowLeft : ArrowRight;
   const still = useStill();
 
@@ -1034,7 +1041,7 @@ export default function Ai7Minimal({
             {/* عددِ درشت — تنها جایی از صفحه که عدد، تصویر است */}
             <p className="flex flex-wrap items-baseline gap-x-3">
               <span className="font-light leading-none tabular-nums text-[clamp(2.6rem,7vw,4.4rem)]">
-                {price.tiers[0].price}
+                {tier.price}
               </span>
               <span className="text-sm" style={{ color: MUTE }}>
                 {price.unit}
@@ -1044,32 +1051,81 @@ export default function Ai7Minimal({
               <span className="tabular-nums line-through" style={{ color: MUTE }}>
                 {price.full}
               </span>
-              <span style={{ color: INK }}>{price.tiers[0].off}</span>
-              <span style={{ color: MUTE }}>· {price.tiers[0].seat}</span>
+              <span style={{ color: INK }}>{tier.off}</span>
+              <span style={{ color: MUTE }}>· {tier.seat}</span>
             </p>
 
-            <SeatMeter
-              label={t.seatsLabel}
-              taken={t.seatsTaken
-                .replace("{n}", num(LAUNCH_SEATS.taken))
-                .replace("{cap}", num(LAUNCH_SEATS.cap))}
-              left={t.seatsLeft.replace("{n}", num(LAUNCH_SEATS.cap - LAUNCH_SEATS.taken))}
-              cap={LAUNCH_SEATS.cap}
-              filled={LAUNCH_SEATS.taken}
-              className="mt-8"
-            />
+            {/*
+              دو نوار، نه یکی: پلهٔ تمام‌شده و پلهٔ باز.
 
+              یک نوار فقط پلهٔ فعلی را نشان می‌داد و «۳۰ جای پُرشده» را
+              به یک برچسبِ متنی تقلیل می‌داد. سی خانهٔ پُر، همان حرف را
+              بدونِ خواندن می‌زند — و کنارِ نوارِ خالیِ زیرش، تازه معنی
+              پیدا می‌کند.
+            */}
+            {price.tiers
+              .filter((row) => row.done || row.now)
+              .map((row) => {
+                const done = row.done;
+                const filled = done ? LAUNCH_SEATS.cap : LAUNCH_SEATS.taken;
+                return (
+                  <SeatMeter
+                    key={row.seat}
+                    label={row.seat}
+                    taken={t.seatsTaken
+                      .replace("{n}", num(filled))
+                      .replace("{cap}", num(LAUNCH_SEATS.cap))}
+                    left={
+                      done
+                        ? t.tierDone
+                        : t.seatsLeft.replace("{n}", num(LAUNCH_SEATS.cap - filled))
+                    }
+                    cap={LAUNCH_SEATS.cap}
+                    filled={filled}
+                    className={done ? "mt-8" : "mt-6"}
+                  />
+                );
+              })}
+
+            {/*
+              کلِ نردبان، نه فقط پله‌های بعدی.
+
+              نسخهٔ قبل پلهٔ اول را بالا نشان می‌داد و بقیه را پایین.
+              حالا که پلهٔ اول تمام شده، حذفش کردن یعنی خواننده هیچ‌وقت
+              نمی‌فهمد قیمت از کجا آمده — و «تکمیل شد» دقیقاً همان چیزی
+              است که نشان می‌دهد این پلکان واقعی است، نه یک فوریتِ ساختگی.
+            */}
             <ol className="mt-8">
-              {price.tiers.slice(1).map((tier) => (
+              {price.tiers.map((row) => (
                 <li
-                  key={tier.seat}
+                  key={row.seat}
                   className="flex items-baseline gap-4 border-t py-3"
                   style={{ borderColor: LINE }}
                 >
-                  <span className="flex-1 text-[0.8rem]" style={{ color: MUTE }}>
-                    {tier.seat}
+                  <span
+                    className="flex-1 text-[0.8rem]"
+                    style={{ color: row.now ? INK : MUTE }}
+                  >
+                    {row.seat}
                   </span>
-                  <span className="tabular-nums text-[0.85rem]">{tier.price}</span>
+                  {(row.done || row.now) && (
+                    <span
+                      className="neo-cap text-[0.6rem]"
+                      style={{ color: row.now ? VIOLET : MUTE }}
+                    >
+                      {row.done ? t.tierDone : t.tierNow}
+                    </span>
+                  )}
+                  <span
+                    className="tabular-nums text-[0.85rem]"
+                    style={
+                      row.done
+                        ? { color: MUTE, textDecoration: "line-through" }
+                        : undefined
+                    }
+                  >
+                    {row.price}
+                  </span>
                 </li>
               ))}
             </ol>

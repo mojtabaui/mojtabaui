@@ -31,6 +31,7 @@ import {
   FIT,
   NEED,
   PRICING,
+  currentTier,
 } from "@/lib/ai7-curriculum";
 import { ARCHIVED_PROJECTS } from "./archivedProjects";
 import type { Lang } from "@/lib/i18n";
@@ -448,6 +449,7 @@ export default function Ai7Scroll({
   /** عددهای ریزِ صفحه — فارسی که باشد، رقمِ لاتین وسطِ جمله می‌زند توی ذوق */
   const num = (n: number) => (lang === "fa" ? faNum(n) : String(n));
   const price = PRICING[lang];
+  const tier = currentTier(lang);
   const Forward = rtl ? ArrowLeft : ArrowRight;
   const still = useStill();
 
@@ -558,10 +560,10 @@ export default function Ai7Scroll({
                   className="rounded-full px-2.5 py-1 text-[0.65rem]"
                   style={{ background: VIOLET_INK, color: PAPER }}
                 >
-                  {price.tiers[0].off}
+                  {tier.off}
                 </span>
                 <span className="font-bold tabular-nums">
-                  {price.tiers[0].price} {price.unit}
+                  {tier.price} {price.unit}
                 </span>
                 <motion.span
                   className="tabular-nums line-through"
@@ -570,7 +572,7 @@ export default function Ai7Scroll({
                   {price.full}
                 </motion.span>
                 <motion.span style={{ color: fixed(mute, MUTE) }}>
-                  · {price.tiers[0].seat}
+                  · {tier.seat}
                 </motion.span>
               </p>
 

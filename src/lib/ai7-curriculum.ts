@@ -1014,12 +1014,13 @@ export const PROJECTS = {
 } as const;
 
 /**
- * ظرفیتِ پلهٔ اولِ تخفیف و اینکه چندتایش پر شده.
+ * ظرفیتِ پلهٔ *فعلی* و اینکه چندتایش پر شده.
  *
- * نوارِ ظرفیتِ صفحه از همین می‌خواند. با هر ثبت‌نام `taken` یکی
- * بالا می‌رود؛ `cap` باید با «۳۰ نفر اول» در `PRICING` یکی بماند.
+ * نوارِ ظرفیتِ صفحه از همین می‌خواند. با هر ثبت‌نام `taken` یکی بالا
+ * می‌رود؛ وقتی به `cap` رسید، در `PRICING.tiers` آن پله `done` و
+ * پلهٔ بعدی `now` می‌شود و `taken` از صفر شروع می‌کند.
  */
-export const LAUNCH_SEATS = { cap: 30, taken: 27 } as const;
+export const LAUNCH_SEATS = { cap: 30, taken: 0 } as const;
 
 /**
  * قیمت.
@@ -1034,14 +1035,14 @@ export const PRICING = {
     title: "قیمت",
     head: "تخفیف رونمایی، پلکانی",
     lede:
-      "دوره تازه رونمایی شده و برای شروع، قیمتش به‌صورت پلکانی بالا می‌رود. ۳۰ نفر اول با قیمت رونمایی وارد می‌شوند و بعد از آن پلهٔ بعدی فعال می‌شود.",
+      "دوره تازه رونمایی شده و قیمتش پلکانی بالا می‌رود. پلهٔ اول تکمیل شد؛ الان پلهٔ دوم باز است و بعد از آن قیمت به عدد اصلی می‌رسد.",
     unit: "تومان",
     fullLabel: "قیمت اصلی دوره",
     full: "۱۲٬۰۰۰٬۰۰۰",
     tiers: [
-      { seat: "۳۰ نفر اول", price: "۶٬۰۰۰٬۰۰۰", off: "۵۰٪ تخفیف", now: true },
-      { seat: "۳۰ نفر دوم", price: "۷٬۰۰۰٬۰۰۰", off: "۴۲٪ تخفیف", now: false },
-      { seat: "بعد از آن", price: "۱۲٬۰۰۰٬۰۰۰", off: "قیمت اصلی", now: false },
+      { seat: "۳۰ نفر اول", price: "۶٬۰۰۰٬۰۰۰", off: "۵۰٪ تخفیف", now: false, done: true },
+      { seat: "۳۰ نفر دوم", price: "۷٬۰۰۰٬۰۰۰", off: "۴۲٪ تخفیف", now: true, done: false },
+      { seat: "بعد از آن", price: "۱۲٬۰۰۰٬۰۰۰", off: "قیمت اصلی", now: false, done: false },
     ],
     note:
       "هزینه را فقط یک‌بار پرداخت می‌کنی و دسترسی همیشگی است. فصل‌هایی هم که بعداً به دوره اضافه شوند، بدون پرداخت اضافه برایت باز می‌شوند.",
@@ -1049,15 +1050,27 @@ export const PRICING = {
   en: {
     title: "Price",
     head: "A launch price, in steps",
-    lede: "The course has just launched. The first sixty seats go at a launch price, in two steps of thirty; after that it is the full price.",
+    lede: "The course has just launched and the price climbs in steps. The first thirty seats are gone; the second step is open now, and after that it is the full price.",
     unit: "toman",
     fullLabel: "Full price",
     full: "12,000,000",
     tiers: [
-      { seat: "First 30 seats", price: "6,000,000", off: "50% off", now: true },
-      { seat: "Next 30 seats", price: "7,000,000", off: "42% off", now: false },
-      { seat: "After that", price: "12,000,000", off: "full price", now: false },
+      { seat: "First 30 seats", price: "6,000,000", off: "50% off", now: false, done: true },
+      { seat: "Next 30 seats", price: "7,000,000", off: "42% off", now: true, done: false },
+      { seat: "After that", price: "12,000,000", off: "full price", now: false, done: false },
     ],
     note: "One payment, permanent access. Chapters added later open up without a new charge.",
   },
 } as const;
+
+/**
+ * پلهٔ فعلی — تنها منبعِ «الان قیمت چند است».
+ *
+ * پیش‌تر هم لندینگ و هم `RobotypePromo` مستقیم `tiers[0]` را
+ * می‌خواندند، یعنی «پلهٔ اول» و «پلهٔ فعلی» یک چیز فرض شده بودند.
+ * تا وقتی پلهٔ اول باز بود این درست کار می‌کرد و لحظه‌ای که بسته شد،
+ * هر دو صفحه قیمتِ تمام‌شده را نشان می‌دادند. حالا پرچمِ `now`
+ * تصمیم می‌گیرد و جابه‌جایی پله یک خط است.
+ */
+export const currentTier = (lang: keyof typeof PRICING) =>
+  PRICING[lang].tiers.find((t) => t.now) ?? PRICING[lang].tiers[0];
