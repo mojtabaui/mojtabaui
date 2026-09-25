@@ -1020,7 +1020,7 @@ export const PROJECTS = {
  * می‌رود؛ وقتی به `cap` رسید، در `PRICING.tiers` آن پله `done` و
  * پلهٔ بعدی `now` می‌شود و `taken` از صفر شروع می‌کند.
  */
-export const LAUNCH_SEATS = { cap: 30, taken: 29 } as const;
+export const LAUNCH_SEATS = { cap: 30, taken: 30 } as const;
 
 /**
  * قیمت.
