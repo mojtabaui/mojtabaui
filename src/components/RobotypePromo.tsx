@@ -98,12 +98,16 @@ export default function RobotypePromo({ lang }: { lang: Lang }) {
                 <span className="text-3xl font-light tabular-nums">{tier.price}</span>
                 <span className="text-sm text-white/50">{price.unit}</span>
               </p>
-              <p className="mt-1 flex items-baseline gap-2 font-body text-xs">
-                <span className="tabular-nums text-white/40 line-through">{price.full}</span>
-                <span className="font-semibold text-emerald-300">{tier.off}</span>
-              </p>
+              {!tier.full && (
+                <p className="mt-1 flex items-baseline gap-2 font-body text-xs">
+                  <span className="tabular-nums text-white/40 line-through">{price.full}</span>
+                  <span className="font-semibold text-emerald-300">{tier.off}</span>
+                </p>
+              )}
             </div>
 
+            {/* پلهٔ بی‌سقف نوار ندارد — نواری با ۳۰ خانه، سقف اعلام می‌کند */}
+            {!tier.full && (
             <div className="min-w-[200px] flex-1">
               <div
                 role="meter"
@@ -123,6 +127,7 @@ export default function RobotypePromo({ lang }: { lang: Lang }) {
               </div>
               <p className="mt-2 font-body text-xs text-white/60">{fill(c.seats)}</p>
             </div>
+            )}
           </div>
 
           <Link

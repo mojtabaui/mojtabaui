@@ -1047,13 +1047,21 @@ export default function Ai7Minimal({
                 {price.unit}
               </span>
             </p>
-            <p className="mt-3 flex flex-wrap items-baseline gap-x-3 text-sm">
-              <span className="tabular-nums line-through" style={{ color: MUTE }}>
-                {price.full}
-              </span>
-              <span style={{ color: INK }}>{tier.off}</span>
-              <span style={{ color: MUTE }}>· {tier.seat}</span>
-            </p>
+            {/*
+              روی پلهٔ آخر، این خط اصلاً کشیده نمی‌شود.
+
+              قیمتِ خط‌خورده یعنی «قبلاً این‌قدر بود»؛ وقتی پلهٔ فعلی
+              خودِ قیمتِ اصلی است، این خط قیمت را روی خودش خط می‌زند.
+            */}
+            {!tier.full && (
+              <p className="mt-3 flex flex-wrap items-baseline gap-x-3 text-sm">
+                <span className="tabular-nums line-through" style={{ color: MUTE }}>
+                  {price.full}
+                </span>
+                <span style={{ color: INK }}>{tier.off}</span>
+                <span style={{ color: MUTE }}>· {tier.seat}</span>
+              </p>
+            )}
 
             {/*
               دو نوار، نه یکی: پلهٔ تمام‌شده و پلهٔ باز.
@@ -1064,7 +1072,8 @@ export default function Ai7Minimal({
               پیدا می‌کند.
             */}
             {price.tiers
-              .filter((row) => row.done || row.now)
+              /* پلهٔ بی‌سقف نوار ندارد: نواری که ۳۰ خانه دارد، سقف اعلام می‌کند */
+              .filter((row) => (row.done || row.now) && !row.full)
               .map((row) => {
                 const done = row.done;
                 const filled = done ? LAUNCH_SEATS.cap : LAUNCH_SEATS.taken;

@@ -1033,31 +1033,31 @@ export const LAUNCH_SEATS = { cap: 30, taken: 30 } as const;
 export const PRICING = {
   fa: {
     title: "قیمت",
-    head: "تخفیف رونمایی، پلکانی",
+    head: "تخفیف رونمایی تمام شد",
     lede:
-      "دوره تازه رونمایی شده و قیمتش پلکانی بالا می‌رود. پلهٔ اول تکمیل شد؛ الان پلهٔ دوم باز است و بعد از آن قیمت به عدد اصلی می‌رسد.",
+      "دوره با قیمت پلکانی رونمایی شد و هر دو پلهٔ تخفیف تکمیل شدند. قیمت حالا روی عدد اصلی است.",
     unit: "تومان",
     fullLabel: "قیمت اصلی دوره",
     full: "۱۲٬۰۰۰٬۰۰۰",
     tiers: [
-      { seat: "۳۰ نفر اول", price: "۶٬۰۰۰٬۰۰۰", off: "۵۰٪ تخفیف", now: false, done: true },
-      { seat: "۳۰ نفر دوم", price: "۷٬۰۰۰٬۰۰۰", off: "۴۲٪ تخفیف", now: true, done: false },
-      { seat: "بعد از آن", price: "۱۲٬۰۰۰٬۰۰۰", off: "قیمت اصلی", now: false, done: false },
+      { seat: "۳۰ نفر اول", price: "۶٬۰۰۰٬۰۰۰", off: "۵۰٪ تخفیف", now: false, done: true, full: false },
+      { seat: "۳۰ نفر دوم", price: "۷٬۰۰۰٬۰۰۰", off: "۴۲٪ تخفیف", now: false, done: true, full: false },
+      { seat: "بعد از آن", price: "۱۲٬۰۰۰٬۰۰۰", off: "قیمت اصلی", now: true, done: false, full: true },
     ],
     note:
       "هزینه را فقط یک‌بار پرداخت می‌کنی و دسترسی همیشگی است. فصل‌هایی هم که بعداً به دوره اضافه شوند، بدون پرداخت اضافه برایت باز می‌شوند.",
   },
   en: {
     title: "Price",
-    head: "A launch price, in steps",
-    lede: "The course has just launched and the price climbs in steps. The first thirty seats are gone; the second step is open now, and after that it is the full price.",
+    head: "The launch discount has ended",
+    lede: "The course launched with a stepped price, and both discount tiers are now full. The price is the full one.",
     unit: "toman",
     fullLabel: "Full price",
     full: "12,000,000",
     tiers: [
-      { seat: "First 30 seats", price: "6,000,000", off: "50% off", now: false, done: true },
-      { seat: "Next 30 seats", price: "7,000,000", off: "42% off", now: true, done: false },
-      { seat: "After that", price: "12,000,000", off: "full price", now: false, done: false },
+      { seat: "First 30 seats", price: "6,000,000", off: "50% off", now: false, done: true, full: false },
+      { seat: "Next 30 seats", price: "7,000,000", off: "42% off", now: false, done: true, full: false },
+      { seat: "After that", price: "12,000,000", off: "full price", now: true, done: false, full: true },
     ],
     note: "One payment, permanent access. Chapters added later open up without a new charge.",
   },
@@ -1065,6 +1065,11 @@ export const PRICING = {
 
 /**
  * پلهٔ فعلی — تنها منبعِ «الان قیمت چند است».
+ *
+ * پرچمِ `full` روی پلهٔ آخر است: آن پله سقفِ ظرفیت ندارد و قیمتش
+ * هم خودِ قیمتِ اصلی است. هر جایی که «قیمتِ خط‌خورده» یا «نوارِ
+ * ظرفیت» می‌کشد باید با همین پرچم خاموش شود، وگرنه قیمت روی خودش
+ * خط می‌خورد و نواری کشیده می‌شود که سقفش وجود ندارد.
  *
  * پیش‌تر هم لندینگ و هم `RobotypePromo` مستقیم `tiers[0]` را
  * می‌خواندند، یعنی «پلهٔ اول» و «پلهٔ فعلی» یک چیز فرض شده بودند.
