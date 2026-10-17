@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { BrandGlyph } from "@/components/BrandMark";
 import { contentForTrack } from "@/lib/certificate-skills";
+import QuadcampCertificate from "@/components/QuadcampCertificate";
 
 /**
  * سند گواهی، A4 افقی، کاملاً انگلیسی و چپ‌چین.
@@ -114,7 +115,14 @@ export default function CertificateDocument({
   cert: CertificateData;
   qrDataUrl?: string;
 }) {
-  const { discipline, hours, skills } = contentForTrack(cert.track);
+  // بوت‌کمپ سند تیره‌ی خودش رو داره، با چهار دوره و پروژه‌های هر ترم
+  if (cert.track === "QC") return <QuadcampCertificate cert={cert} qrDataUrl={qrDataUrl} />;
+
+  const { discipline, hours, deliverable, skills } = contentForTrack(cert.track);
+
+  // تاریخ شروع رشته‌ی آزاده و دست ادمینه. چون کل سند انگلیسیه، میلادی
+  // وارد می‌شه و همون‌طور که هست چاپ می‌شه. اگه خالی باشه بلوکش نمی‌آد.
+  const startDate = cert.startDate.trim();
 
   return (
     <div
@@ -203,8 +211,8 @@ export default function CertificateDocument({
 
         <p className="font-display text-[clamp(8.5px,1.2cqw,16px)] text-[#4a4540] leading-[1.8] mt-[1.8cqw] max-w-[88%]">
           in recognition of completing {hours} hours of rigorous {discipline.toLowerCase()} training,
-          covering the skills listed alongside, and delivering a complete hands on project.
-          We wish them continued success in their future endeavors.
+          covering the skills listed alongside, and {deliverable}. We wish them continued success
+          in their future endeavors.
         </p>
 
         {/* امضا */}
@@ -228,12 +236,24 @@ export default function CertificateDocument({
             </div>
           </div>
 
-          <div className="text-right">
-            <div className="font-display font-bold text-[clamp(8.5px,1.15cqw,15px)] text-[#1a1714]">
-              {enDate(cert.createdAt)}
-            </div>
-            <div className="font-display text-[clamp(7px,0.92cqw,12px)] text-[#a09990] mt-[0.15cqw]">
-              Date of issue
+          <div className="flex items-end gap-[3.2cqw] text-right">
+            {startDate && (
+              <div>
+                <div className="font-display font-bold text-[clamp(8.5px,1.15cqw,15px)] text-[#1a1714]">
+                  {startDate}
+                </div>
+                <div className="font-display text-[clamp(7px,0.92cqw,12px)] text-[#a09990] mt-[0.15cqw]">
+                  Start date
+                </div>
+              </div>
+            )}
+            <div>
+              <div className="font-display font-bold text-[clamp(8.5px,1.15cqw,15px)] text-[#1a1714]">
+                {enDate(cert.createdAt)}
+              </div>
+              <div className="font-display text-[clamp(7px,0.92cqw,12px)] text-[#a09990] mt-[0.15cqw]">
+                Date of issue
+              </div>
             </div>
           </div>
         </div>

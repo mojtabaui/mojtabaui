@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Award, Check, Copy, FileText, Users, User } from "lucide-react";
+import { COHORT_INFO, QC_COHORTS, type QcCohort } from "@/lib/quadcamp";
 
 type Track = "UI" | "UX" | "QC";
 type Mode = "single" | "bulk";
@@ -27,6 +28,7 @@ export default function CertificateForm() {
   // مشترک بین دو حالت
   const [track, setTrack] = useState<Track>("UI");
   const [year, setYear] = useState(CURRENT_YEAR);
+  const [cohort, setCohort] = useState<QcCohort>("FALL");
   const [startDate, setStartDate] = useState("");
   const [nextCode, setNextCode] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -48,6 +50,8 @@ export default function CertificateForm() {
 
   const isQC = track === "QC";
   const parsed = parseNames(namesRaw);
+  // کوادکمپ به‌جای سال، ترم می‌فرسته؛ سرور همون رو توی ستون year می‌ذاره
+  const yearParam = isQC ? cohort : year;
 
   // پیش‌نمایش کدِ بعدی هر بار که دوره یا سال عوض شه.
   useEffect(() => {
@@ -56,7 +60,7 @@ export default function CertificateForm() {
       return;
     }
     let active = true;
-    fetch(`/api/admin/certificates?track=${track}&year=${year}`)
+    fetch(`/api/admin/certificates?track=${track}&year=${yearParam}`)
       .then((r) => r.json())
       .then((d) => {
         if (active) setNextCode(d.code ?? null);
@@ -65,7 +69,7 @@ export default function CertificateForm() {
     return () => {
       active = false;
     };
-  }, [track, year, isQC]);
+  }, [track, year, isQC, yearParam]);
 
   function switchMode(next: Mode) {
     setMode(next);
@@ -86,7 +90,7 @@ export default function CertificateForm() {
       const res = await fetch("/api/admin/certificates", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ studentName, track, year, startDate }),
+        body: JSON.stringify({ studentName, track, year: yearParam, startDate }),
       });
       const data = await res.json();
       if (!res.ok) {
@@ -117,7 +121,7 @@ export default function CertificateForm() {
       const res = await fetch("/api/admin/certificates/bulk", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ names: namesRaw, track, year, startDate }),
+        body: JSON.stringify({ names: namesRaw, track, year: yearParam, startDate }),
       });
       const data = await res.json();
       if (!res.ok) {
@@ -172,6 +176,25 @@ export default function CertificateForm() {
           <option value="QC">کوادکمپ (QuadCamp)</option>
         </select>
       </div>
+      {isQC && (
+        <div>
+          <label className="block font-body text-sm text-[var(--ink-3)] mb-1.5">ترم</label>
+          <select
+            value={cohort}
+            onChange={(e) => setCohort(e.target.value as QcCohort)}
+            className={inputCls}
+          >
+            {QC_COHORTS.map((c) => {
+              const { fa, projects } = COHORT_INFO[c];
+              return (
+                <option key={c} value={c}>
+                  {fa} — {projects.ux} پروژه UX، {projects.ui} پروژه UI
+                </option>
+              );
+            })}
+          </select>
+        </div>
+      )}
       {!isQC && (
         <div>
           <label className="block font-body text-sm text-[var(--ink-3)] mb-1.5">سال</label>
@@ -188,16 +211,21 @@ export default function CertificateForm() {
       )}
       <div>
         <label className="block font-body text-sm text-[var(--ink-3)] mb-1.5">
-          تاریخ شروع <span className="text-[var(--ink-4)]">(اختیاری)</span>
+          تاریخ شروع <span className="text-[var(--ink-4)]">(اختیاری · میلادی)</span>
         </label>
         <input
           type="text"
           dir="ltr"
           value={startDate}
           onChange={(e) => setStartDate(e.target.value)}
-          placeholder="1405/01/15"
+          placeholder="October 2025"
           className={`${inputCls} text-center`}
         />
+        {/* عین همین رشته زیر تیتر Start date روی سند چاپ می‌شه، و سند
+            کاملاً انگلیسیه — پس شمسی اینجا وارد نکن */}
+        <p className="mt-1.5 font-body text-xs text-[var(--ink-4)] leading-6">
+          همین‌طور که بنویسی روی گواهی چاپ می‌شه. سند انگلیسیه، پس میلادی بنویس.
+        </p>
       </div>
     </div>
   );

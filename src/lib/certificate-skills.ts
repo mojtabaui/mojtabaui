@@ -11,6 +11,10 @@ export interface TrackContent {
   discipline: string;
   /** ساعت آموزش که در متن ذکر می‌شه */
   hours: number;
+  /**
+   * چیزی که دارنده‌ی گواهی عملاً تحویل داده، وسط جمله‌ی متن گواهی می‌شینه.
+   */
+  deliverable: string;
   skills: string[];
 }
 
@@ -18,6 +22,7 @@ export const TRACK_CONTENT: Record<string, TrackContent> = {
   UI: {
     discipline: "User Interface Design",
     hours: 150,
+    deliverable: "delivering a complete hands on project",
     skills: [
       "Introduction to User Interface Design",
       "Figma fundamentals and workflow",
@@ -37,6 +42,7 @@ export const TRACK_CONTENT: Record<string, TrackContent> = {
   UX: {
     discipline: "User Experience Design",
     hours: 150,
+    deliverable: "delivering a complete hands on project",
     skills: [
       "Introduction to User Experience Design",
       "Design thinking method",
@@ -53,23 +59,8 @@ export const TRACK_CONTENT: Record<string, TrackContent> = {
       "Case study",
     ],
   },
-  QC: {
-    discipline: "QuadCamp Product Design",
-    hours: 400,
-    skills: [
-      "Design foundations",
-      "Figma fundamentals",
-      "Visual hierarchy and layout",
-      "Color and typography",
-      "Components and reusability",
-      "User research basics",
-      "User flows and wireframes",
-      "Prototyping",
-      "Usability testing",
-      "Team collaboration",
-      "Final project",
-    ],
-  },
+  // کوادکمپ اینجا نیست: سند تیره‌ی خودش رو داره (QuadcampCertificate) و
+  // محتواش، که به ترم بستگی داره، توی lib/quadcamp.ts‌ه.
 };
 
 export function contentForTrack(track: string): TrackContent {

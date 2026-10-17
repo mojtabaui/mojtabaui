@@ -4,6 +4,7 @@ import { Prisma, type CertTrack } from "@prisma/client";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { buildCode, codePrefix, nextSeq } from "@/lib/cert-code";
+import { parseCohort } from "@/lib/quadcamp";
 
 /** ارقام فارسی/عربی رو به لاتین تبدیل می‌کنه (سال ممکنه با کیبورد فارسی وارد شه) */
 function toLatinDigits(input: string): string {
@@ -22,7 +23,13 @@ const TRACKS: CertTrack[] = ["UI", "UX", "QC"];
 function normalizeInput(trackRaw: string, yearRaw: string) {
   const track = trackRaw as CertTrack;
   if (!TRACKS.includes(track)) return { error: "دوره نامعتبر است" as const };
-  if (track === "QC") return { track, year: null };
+  // کوادکمپ سال نداره ولی ترم داره (تابستان / پاییز) و همون توی ستون year
+  // می‌شینه — تعداد پروژه‌های روی گواهی ازش میاد. کد گواهی بهش وابسته نیست.
+  if (track === "QC") {
+    const cohort = parseCohort(yearRaw);
+    if (!cohort) return { error: "ترم کوادکمپ رو انتخاب کن (تابستان یا پاییز)" as const };
+    return { track, year: cohort };
+  }
 
   const year = toLatinDigits(yearRaw).trim();
   if (!/^\d{4}$/.test(year)) return { error: "سال باید ۴ رقم باشه (مثلاً ۱۴۰۵)" as const };
@@ -95,7 +102,11 @@ export async function POST(req: NextRequest) {
 
   // کسایی که قبلاً توی همین دوره و سال گواهی دارن
   const already = await prisma.certificate.findMany({
-    where: { track, year, studentName: { in: unique } },
+    // کوادکمپ یک بار برگزار می‌شه برای هر نفر، پس ترم رو نگاه نمی‌کنیم —
+    // گواهی‌های قدیمی‌ترش اصلاً ترم ثبت‌شده ندارن
+    where: track === "QC"
+      ? { track, studentName: { in: unique } }
+      : { track, year, studentName: { in: unique } },
     select: { studentName: true, code: true },
   });
   const alreadyMap = new Map(already.map((c) => [c.studentName, c.code]));

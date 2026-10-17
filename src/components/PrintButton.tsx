@@ -13,7 +13,14 @@ import { FORMS } from "@/lib/i18n/dict/forms";
  * تبدیل شدن — عکس می‌گیریم و یک فایلِ PDF واقعی می‌سازیم. html2canvas-pro برای
  * پشتیبانی از رنگ‌های مدرن (oklch) به‌جای html2canvas معمولی استفاده شده.
  */
-export default function PrintButton({ fileName = "certificate" }: { fileName?: string }) {
+export default function PrintButton({
+  fileName = "certificate",
+  background = "#FAF6F1",
+}: {
+  fileName?: string;
+  /** رنگ زمینه‌ی عکس؛ سند بوت‌کمپ تیره‌ست و لبه‌هاش نباید کِرِم دربیان */
+  background?: string;
+}) {
   const t = FORMS[useLang()].print;
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
@@ -34,7 +41,16 @@ export default function PrintButton({ fileName = "certificate" }: { fileName?: s
 
       const canvas = await html2canvas(el, {
         scale: Math.max(2, Math.min(3, 2400 / el.clientWidth)),
-        backgroundColor: "#FAF6F1",
+        backgroundColor: background,
+        // html2canvas متریک فونت عریضِ Michroma رو اشتباه می‌خونه و متن رو
+        // حدود ۰٫۳۶em پایین‌تر می‌کشه (روی صفحه درسته). فقط توی کپیِ عکس
+        // برش می‌گردونیم بالا؛ عنصرهای اون فونت data-pdf-nudge دارن.
+        onclone: (doc: Document) => {
+          doc.querySelectorAll<HTMLElement>("[data-pdf-nudge]").forEach((n) => {
+            n.style.position = "relative";
+            n.style.top = "-0.36em";
+          });
+        },
         useCORS: true,
         logging: false,
       });

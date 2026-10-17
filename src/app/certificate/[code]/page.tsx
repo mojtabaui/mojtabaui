@@ -48,9 +48,18 @@ export default async function CertificatePage({ params }: Props) {
 
   // QR سمت سرور ساخته می‌شه و به‌صورت data URL جاسازی می‌شه، تا موقع چاپ
   // به هیچ درخواست شبکه‌ای وابسته نباشه.
+  // سند بوت‌کمپ تیره‌ست؛ QR همون تیره روی روشن می‌مونه (اسکنرها نسخه‌ی
+  // برعکس رو همیشه نمی‌خونن)، فقط زمینه‌اش کِرِم می‌شه تا با سند جور باشه.
+  const isQC = cert.track === "QC";
   const qrDataUrl = await QRCode.toDataURL(
     `https://mojtabaui.ir/certificate/${cert.code}`,
-    { margin: 0, width: 320, color: { dark: "#1a1714", light: "#ffffff" } }
+    {
+      margin: 0,
+      width: 320,
+      color: isQC
+        ? { dark: "#0A090D", light: "#F4EFE6" }
+        : { dark: "#1a1714", light: "#ffffff" },
+    }
   );
 
   return (
@@ -78,7 +87,10 @@ export default async function CertificatePage({ params }: Props) {
               </div>
             </div>
 
-            <PrintButton fileName={`melina-certificate-${cert.code}`} />
+            <PrintButton
+              fileName={`melina-certificate-${cert.code}`}
+              background={isQC ? "#0A090D" : "#FAF6F1"}
+            />
           </div>
 
           {/* سند.
@@ -90,7 +102,14 @@ export default async function CertificatePage({ params }: Props) {
             {t.dragHint}
           </div>
           <div id="cert-scroll" className="overflow-x-auto -mx-4 px-4 sm:mx-0 sm:px-0 pb-2 sm:pb-0">
-            <div id="cert-card" className="min-w-[560px] sm:min-w-0 rounded-3xl overflow-hidden border border-[#e8e2d9] shadow-[0_30px_70px_-40px_rgba(26,23,20,0.5)] bg-white">
+            <div
+              id="cert-card"
+              className={`${isQC ? "min-w-[760px]" : "min-w-[560px]"} sm:min-w-0 rounded-3xl overflow-hidden border ${
+                isQC
+                  ? "border-[#1d1a24] shadow-[0_40px_90px_-40px_rgba(60,40,140,0.65)] bg-[#0A090D]"
+                  : "border-[#e8e2d9] shadow-[0_30px_70px_-40px_rgba(26,23,20,0.5)] bg-white"
+              }`}
+            >
               <CertificateDocument cert={cert} qrDataUrl={qrDataUrl} />
             </div>
           </div>

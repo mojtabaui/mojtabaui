@@ -10,6 +10,45 @@ async function requireAdmin() {
 }
 
 /**
+ * PATCH → اصلاح تاریخ شروع یک گواهیِ صادرشده.
+ *
+ * فقط همین یک فیلد. کد و نام و دوره بعد از صدور دست‌نخورده می‌مونن، چون
+ * کد جای دیگه‌ای پخش شده و عوض کردنش یعنی بی‌اعتبار کردن گواهی‌ای که
+ * دست دانشجوئه.
+ */
+export async function PATCH(
+  req: Request,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  if (!(await requireAdmin())) {
+    return NextResponse.json({ error: "دسترسی ندارید" }, { status: 403 });
+  }
+
+  const { id } = await params;
+  const body = await req.json();
+
+  if (typeof body.startDate !== "string") {
+    return NextResponse.json({ error: "تاریخ شروع نامعتبر است" }, { status: 400 });
+  }
+  // رشته‌ی آزاده چون روی سند عیناً چاپ می‌شه، ولی طولش محدوده تا خط
+  // پایین سند نشکنه
+  const startDate = body.startDate.trim().slice(0, 60);
+
+  try {
+    const cert = await prisma.certificate.update({
+      where: { id },
+      data: { startDate },
+    });
+    return NextResponse.json({ ok: true, startDate: cert.startDate });
+  } catch (e) {
+    if (e instanceof Prisma.PrismaClientKnownRequestError && e.code === "P2025") {
+      return NextResponse.json({ error: "این گواهی پیدا نشد" }, { status: 404 });
+    }
+    throw e;
+  }
+}
+
+/**
  * DELETE → حذف یک گواهی.
  *
  * توجه: بعد از حذف، لینک /certificate/<code> دیگه اعتبارسنجی نمی‌شه.

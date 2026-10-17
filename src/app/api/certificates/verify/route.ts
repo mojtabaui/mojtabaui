@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { COHORT_INFO, resolveCohort } from "@/lib/quadcamp";
 
 /** ارقام فارسی (۰-۹) و عربی (٠-٩) رو به لاتین تبدیل می‌کنه */
 function toLatinDigits(input: string): string {
@@ -44,8 +45,13 @@ export async function POST(req: NextRequest) {
   }
 
   const discipline = disciplineLabel(cert.track);
-  // کوادکمپ سال نداره؛ بقیه با «دوره <سال>» نمایش داده می‌شن
-  const courseTitle = cert.year ? `${discipline}، دوره ${cert.year}` : discipline;
+  // کوادکمپ سال نداره ولی ترم داره؛ بقیه با «دوره <سال>» نمایش داده می‌شن
+  const courseTitle =
+    cert.track === "QC"
+      ? `${discipline}، ${COHORT_INFO[resolveCohort(cert.year, cert.startDate)].fa}`
+      : cert.year
+        ? `${discipline}، دوره ${cert.year}`
+        : discipline;
 
   return NextResponse.json({
     found: true,
