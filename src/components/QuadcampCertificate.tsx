@@ -30,7 +30,20 @@ const INK = "#F4EFE6";
 const INK_2 = "rgba(244,239,230,0.68)";
 const INK_3 = "rgba(244,239,230,0.42)";
 const LINE = "rgba(244,239,230,0.10)";
-const VIOLET = "#A78BFA";
+/**
+ * دو تم سند. معمولی بنفشِ برنده؛ «با تمایز» شامپاینی تا از دور هم معلوم
+ * باشه سطح بالاتره، بدون اینکه چیدمان یا محتوا جابه‌جا بشه.
+ */
+interface Theme {
+  key: string;
+  accent: string;
+  /** رنگ درخشش پس‌زمینه */
+  glow: string;
+  /** همون accent به شکل r,g,b برای rgba */
+  rgb: string;
+}
+const STANDARD: Theme = { key: "std", accent: "#A78BFA", glow: "#7C5CFC", rgb: "167,139,250" };
+const DISTINCTION: Theme = { key: "dst", accent: "#E7C47E", glow: "#C08A2E", rgb: "231,196,126" };
 
 const SANS = "var(--font-space-grotesk), var(--font-meem), sans-serif";
 const WIDE = "var(--font-wordmark), var(--font-space-grotesk), sans-serif";
@@ -52,8 +65,8 @@ function enDate(d: Date) {
   }).format(d);
 }
 
-/** پس‌زمینه: درخشش بنفش و شبکه‌ی ریزی که سمت لبه‌ها محو می‌شه */
-function Backdrop() {
+/** پس‌زمینه: درخشش رنگ تم و شبکه‌ی ریزی که سمت لبه‌ها محو می‌شه */
+function Backdrop({ t }: { t: Theme }) {
   return (
     <svg
       className="absolute inset-0 w-full h-full"
@@ -62,14 +75,14 @@ function Backdrop() {
       aria-hidden
     >
       <defs>
-        <radialGradient id="qc-glow-a" cx="0.9" cy="0.02" r="0.62">
-          <stop offset="0" stopColor="#7C5CFC" stopOpacity="0.42" />
-          <stop offset="0.45" stopColor="#7C5CFC" stopOpacity="0.12" />
-          <stop offset="1" stopColor="#7C5CFC" stopOpacity="0" />
+        <radialGradient id={`qc-glow-a-${t.key}`} cx="0.9" cy="0.02" r="0.62">
+          <stop offset="0" stopColor={t.glow} stopOpacity="0.42" />
+          <stop offset="0.45" stopColor={t.glow} stopOpacity="0.12" />
+          <stop offset="1" stopColor={t.glow} stopOpacity="0" />
         </radialGradient>
-        <radialGradient id="qc-glow-b" cx="0.02" cy="1" r="0.5">
-          <stop offset="0" stopColor="#7C5CFC" stopOpacity="0.2" />
-          <stop offset="1" stopColor="#7C5CFC" stopOpacity="0" />
+        <radialGradient id={`qc-glow-b-${t.key}`} cx="0.02" cy="1" r="0.5">
+          <stop offset="0" stopColor={t.glow} stopOpacity="0.2" />
+          <stop offset="1" stopColor={t.glow} stopOpacity="0" />
         </radialGradient>
         <pattern id="qc-grid" width="44" height="44" patternUnits="userSpaceOnUse">
           <path d="M44 0H0V44" fill="none" stroke="#F4EFE6" strokeOpacity="0.05" strokeWidth="1" />
@@ -84,61 +97,61 @@ function Backdrop() {
       </defs>
       <rect width="1414" height="1000" fill={BG} />
       <rect width="1414" height="1000" fill="url(#qc-grid)" mask="url(#qc-grid-mask)" />
-      <rect width="1414" height="1000" fill="url(#qc-glow-a)" />
-      <rect width="1414" height="1000" fill="url(#qc-glow-b)" />
+      <rect width="1414" height="1000" fill={`url(#qc-glow-a-${t.key})`} />
+      <rect width="1414" height="1000" fill={`url(#qc-glow-b-${t.key})`} />
     </svg>
   );
 }
 
 /** مهر روی تقاطع شبکه. وسطش همون چهار خونه‌ست، کوچیک. */
-function Seal() {
+function Seal({ t, label }: { t: Theme; label: string }) {
   const ring = "MELINA DESIGN SCHOOL • PRODUCT DESIGN BOOTCAMP • ";
   return (
     <svg viewBox="0 0 200 200" className="w-full h-full" aria-hidden>
       <defs>
-        <path id="qc-seal-ring" d="M100,100 m-74,0 a74,74 0 1,1 148,0 a74,74 0 1,1 -148,0" />
+        <path id={`qc-seal-ring-${t.key}`} d="M100,100 m-74,0 a74,74 0 1,1 148,0 a74,74 0 1,1 -148,0" />
       </defs>
       <circle cx="100" cy="100" r="98" fill={BG} />
-      <circle cx="100" cy="100" r="92" fill="none" stroke={VIOLET} strokeWidth="2" />
-      <circle cx="100" cy="100" r="58" fill="none" stroke={VIOLET} strokeOpacity="0.35" strokeWidth="1" />
+      <circle cx="100" cy="100" r="92" fill="none" stroke={t.accent} strokeWidth="2" />
+      <circle cx="100" cy="100" r="58" fill="none" stroke={t.accent} strokeOpacity="0.35" strokeWidth="1" />
       {/* یک دور کامل؛ textLength فاصله‌ها رو طوری باز می‌کنه که ته متن
           دقیقاً به سرش برسه و روی هم نیفتن */}
       <text
-        fill={VIOLET}
+        fill={t.accent}
         fontSize="13"
         fontWeight="700"
         textLength="458"
         lengthAdjust="spacing"
         style={{ fontFamily: "var(--font-space-grotesk), sans-serif" }}
       >
-        <textPath href="#qc-seal-ring" startOffset="0" textLength="458" lengthAdjust="spacing">
+        <textPath href={`#qc-seal-ring-${t.key}`} startOffset="0" textLength="458" lengthAdjust="spacing">
           {ring}
         </textPath>
       </text>
       {/* چهار خونه: یکی پر، سه تا خط دور */}
-      <rect x="77" y="70" width="21" height="21" rx="3" fill={VIOLET} />
-      <rect x="102" y="70" width="21" height="21" rx="3" fill="none" stroke={VIOLET} strokeWidth="2" />
-      <rect x="77" y="95" width="21" height="21" rx="3" fill="none" stroke={VIOLET} strokeWidth="2" />
-      <rect x="102" y="95" width="21" height="21" rx="3" fill="none" stroke={VIOLET} strokeWidth="2" />
+      <rect x="77" y="70" width="21" height="21" rx="3" fill={t.accent} />
+      <rect x="102" y="70" width="21" height="21" rx="3" fill="none" stroke={t.accent} strokeWidth="2" />
+      <rect x="77" y="95" width="21" height="21" rx="3" fill="none" stroke={t.accent} strokeWidth="2" />
+      <rect x="102" y="95" width="21" height="21" rx="3" fill="none" stroke={t.accent} strokeWidth="2" />
       <text
         x="100"
         y="137"
         textAnchor="middle"
         fill={INK}
-        fontSize="10"
+        fontSize={label.length > 9 ? 9 : 10}
         fontWeight="700"
-        letterSpacing="2.6"
+        letterSpacing={label.length > 9 ? 1.4 : 2.6}
         style={{ fontFamily: "var(--font-space-grotesk), sans-serif" }}
       >
-        CERTIFIED
+        {label}
       </text>
     </svg>
   );
 }
 
 /** نشانه‌های گوشه‌ی قاب */
-function Corner({ className }: { className: string }) {
-  return <span className={`absolute w-[1.5cqw] h-[1.5cqw] ${className}`} style={{ borderColor: VIOLET }} />;
+function Corner({ className, color }: { className: string; color: string }) {
+  return <span className={`absolute w-[1.5cqw] h-[1.5cqw] ${className}`} style={{ borderColor: color }} />;
 }
 
 function Label({ children, style }: { children: React.ReactNode; style?: CSSProperties }) {
@@ -163,6 +176,8 @@ export default function QuadcampCertificate({
   const cohort = resolveCohort(cert.year, startDate);
   const info = COHORT_INFO[cohort];
   const totalProjects = info.projects.ux + info.projects.ui;
+  const distinction = Boolean(cert.distinction);
+  const t = distinction ? DISTINCTION : STANDARD;
 
   return (
     <div
@@ -171,15 +186,15 @@ export default function QuadcampCertificate({
       className="certificate-sheet relative overflow-hidden flex flex-col"
       style={{ aspectRatio: "1.414 / 1", background: BG, color: INK, fontFamily: SANS }}
     >
-      <Backdrop />
+      <Backdrop t={t} />
       <div className="absolute inset-0 grain-static opacity-[0.05] pointer-events-none" />
 
       {/* قاب و گوشه‌ها */}
       <div className="absolute inset-[1.6cqw] border pointer-events-none" style={{ borderColor: "rgba(244,239,230,0.07)" }}>
-        <Corner className="-top-px -left-px border-t-2 border-l-2" />
-        <Corner className="-top-px -right-px border-t-2 border-r-2" />
-        <Corner className="-bottom-px -left-px border-b-2 border-l-2" />
-        <Corner className="-bottom-px -right-px border-b-2 border-r-2" />
+        <Corner className="-top-px -left-px border-t-2 border-l-2" color={t.accent} />
+        <Corner className="-top-px -right-px border-t-2 border-r-2" color={t.accent} />
+        <Corner className="-bottom-px -left-px border-b-2 border-l-2" color={t.accent} />
+        <Corner className="-bottom-px -right-px border-b-2 border-r-2" color={t.accent} />
       </div>
 
       <div className="relative flex-1 flex flex-col px-[4.6cqw] pt-[3.8cqw] pb-[3.5cqw]">
@@ -208,12 +223,12 @@ export default function QuadcampCertificate({
               className="inline-flex items-center gap-[0.5cqw] uppercase font-bold tracking-[0.2em] rounded-full px-[1.1cqw] py-[0.45cqw]"
               style={{
                 ...fs(0.68),
-                color: VIOLET,
-                background: "rgba(124,92,252,0.14)",
-                border: "1px solid rgba(167,139,250,0.35)",
+                color: t.accent,
+                background: `rgba(${t.rgb},0.12)`,
+                border: `1px solid rgba(${t.rgb},0.35)`,
               }}
             >
-              <span className="w-[0.45cqw] h-[0.45cqw] rounded-full" style={{ background: VIOLET }} />
+              <span className="w-[0.45cqw] h-[0.45cqw] rounded-full" style={{ background: t.accent }} />
               {info.en} cohort
             </span>
           </div>
@@ -224,9 +239,9 @@ export default function QuadcampCertificate({
           {/* ستون چپ: عنوان، نام، متن، آمار */}
           <div className="w-[46cqw] shrink-0 flex flex-col">
             <div className="flex items-center gap-[0.8cqw]">
-              <span className="h-px w-[2.4cqw]" style={{ background: VIOLET }} />
-              <span className="uppercase font-bold tracking-[0.32em]" style={{ ...fs(0.86), color: VIOLET }}>
-                Certificate of Completion
+              <span className="h-px w-[2.4cqw]" style={{ background: t.accent }} />
+              <span className="uppercase font-bold tracking-[0.32em]" style={{ ...fs(0.86), color: t.accent }}>
+                {distinction ? "Certificate of Completion · With Distinction" : "Certificate of Completion"}
               </span>
             </div>
 
@@ -246,14 +261,18 @@ export default function QuadcampCertificate({
             </div>
             <div
               className="h-px w-[88%] mt-[1.1cqw]"
-              style={{ background: "linear-gradient(90deg, #A78BFA 0%, rgba(167,139,250,0.25) 45%, rgba(167,139,250,0) 100%)" }}
+              style={{
+                background: `linear-gradient(90deg, ${t.accent} 0%, rgba(${t.rgb},0.25) 45%, rgba(${t.rgb},0) 100%)`,
+              }}
             />
 
             <p className="mt-[1.3cqw] leading-[1.75] max-w-[44cqw]" style={{ ...fs(1.02), color: INK_2 }}>
               for completing {QC_HOURS} hours of intensive training across four consecutive
               courses — user experience, user interface, interaction and portfolio — and{" "}
-              {deliverableSentence(cohort)}. We wish them continued success in their future
-              endeavours.
+              {deliverableSentence(cohort)}.{" "}
+              {distinction &&
+                "Awarded with distinction, in recognition of outstanding engagement and the quality of their work. "}
+              We wish them continued success in their future endeavours.
             </p>
 
             {/* آمار */}
@@ -277,7 +296,7 @@ export default function QuadcampCertificate({
                       {s.v}
                     </span>
                     {s.sub && (
-                      <span className="font-bold tracking-[0.12em]" style={{ ...fs(0.72), color: VIOLET }}>
+                      <span className="font-bold tracking-[0.12em]" style={{ ...fs(0.72), color: t.accent }}>
                         {s.sub}
                       </span>
                     )}
@@ -307,7 +326,7 @@ export default function QuadcampCertificate({
                     style={{ borderColor: LINE, background: "rgba(244,239,230,0.018)" }}
                   >
                     <div className="flex items-baseline justify-between">
-                      <span data-pdf-nudge style={{ ...fs(0.8), fontFamily: WIDE, color: VIOLET }}>
+                      <span data-pdf-nudge style={{ ...fs(0.8), fontFamily: WIDE, color: t.accent }}>
                         {String(i + 1).padStart(2, "0")}
                       </span>
                       <span className="font-bold tracking-[0.2em]" style={{ ...fs(0.66), color: INK_3 }}>
@@ -326,7 +345,7 @@ export default function QuadcampCertificate({
                         >
                           <span
                             className="mt-[0.5cqw] w-[0.32cqw] h-[0.32cqw] shrink-0"
-                            style={{ background: VIOLET }}
+                            style={{ background: t.accent }}
                           />
                           {s}
                         </li>
@@ -337,7 +356,7 @@ export default function QuadcampCertificate({
               })}
 
               <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[10cqw] aspect-square">
-                <Seal />
+                <Seal t={t} label={distinction ? "DISTINCTION" : "CERTIFIED"} />
               </div>
             </div>
           </div>

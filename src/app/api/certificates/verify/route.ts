@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { isDistinction } from "@/lib/certificate-levels";
 import { COHORT_INFO, resolveCohort } from "@/lib/quadcamp";
 
 /** ارقام فارسی (۰-۹) و عربی (٠-٩) رو به لاتین تبدیل می‌کنه */
@@ -53,11 +54,16 @@ export async function POST(req: NextRequest) {
         ? `${discipline}، دوره ${cert.year}`
         : discipline;
 
+  // کارفرمایی که کد رو استعلام می‌کنه باید همون سطحی رو ببینه که روی سنده
+  const distinction = isDistinction(cert.code);
+  const withLevel = distinction ? `${courseTitle} — با تمایز` : courseTitle;
+
   return NextResponse.json({
     found: true,
     code: cert.code,
     studentName: cert.studentName,
-    courseTitle,
+    courseTitle: withLevel,
+    distinction,
     startDate: cert.startDate,
   });
 }

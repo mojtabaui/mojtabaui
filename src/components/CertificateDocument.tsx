@@ -19,6 +19,8 @@ export interface CertificateData {
   track: string;
   year: string | null;
   startDate: string;
+  /** سطح بالای گواهی — «with Distinction». از lib/certificate-levels میاد، نه دیتابیس */
+  distinction?: boolean;
   createdAt: Date;
 }
 
@@ -26,8 +28,17 @@ export interface CertificateData {
  * مهر گرد سند. با SVG و textPath ساخته شده تا متن واقعاً روی دایره خم بشه،
  * نه اینکه تصویر باشه. این‌طوری موقع چاپ برداری و تیز می‌مونه.
  */
-function Seal({ track }: { track: string }) {
-  const accent = "#7c5cfc";
+/**
+ * رنگ لهجه‌ی سند: بنفش برند برای گواهی معمولی، طلایی تیره برای «با تمایز».
+ * طلایی تیره‌تر از نسخه‌ی سند بوت‌کمپه چون اینجا روی کِرِم می‌شینه و باید
+ * کنتراست داشته باشه. نسخه‌ی روشن برای ستون تیره‌ی کناریه.
+ */
+const ACCENT = {
+  standard: { main: "#7c5cfc", light: "#a78bfa" },
+  distinction: { main: "#a87b2a", light: "#e7c47e" },
+};
+
+function Seal({ track, accent, distinction }: { track: string; accent: string; distinction: boolean }) {
   return (
     <svg viewBox="0 0 200 200" className="w-full h-full" aria-hidden>
       <defs>
@@ -61,7 +72,7 @@ function Seal({ track }: { track: string }) {
         style={{ fontFamily: "var(--font-space-grotesk), sans-serif" }}
       >
         <textPath href="#seal-bottom" startOffset="50%" textAnchor="middle">
-          OFFICIAL SEAL
+          {distinction ? "WITH DISTINCTION" : "OFFICIAL SEAL"}
         </textPath>
       </text>
 
@@ -94,7 +105,7 @@ function Seal({ track }: { track: string }) {
         opacity="0.7"
         style={{ fontFamily: "var(--font-space-grotesk), sans-serif" }}
       >
-        CERTIFIED
+        {distinction ? "DISTINCTION" : "CERTIFIED"}
       </text>
     </svg>
   );
@@ -119,6 +130,8 @@ export default function CertificateDocument({
   if (cert.track === "QC") return <QuadcampCertificate cert={cert} qrDataUrl={qrDataUrl} />;
 
   const { discipline, hours, deliverable, skills } = contentForTrack(cert.track);
+  const distinction = Boolean(cert.distinction);
+  const accent = distinction ? ACCENT.distinction : ACCENT.standard;
 
   // تاریخ شروع رشته‌ی آزاده و دست ادمینه. چون کل سند انگلیسیه، میلادی
   // وارد می‌شه و همون‌طور که هست چاپ می‌شه. اگه خالی باشه بلوکش نمی‌آد.
@@ -145,7 +158,7 @@ export default function CertificateDocument({
           </div>
         </div>
 
-        <div className="font-display text-[clamp(7.5px,0.98cqw,13px)] font-bold tracking-[0.24em] uppercase text-[#a78bfa] mb-[1.4cqw]">
+        <div className="font-display text-[clamp(7.5px,0.98cqw,13px)] font-bold tracking-[0.24em] uppercase mb-[1.4cqw]" style={{ color: accent.light }}>
           Acquired skills
         </div>
 
@@ -155,7 +168,7 @@ export default function CertificateDocument({
               key={s}
               className="flex items-start gap-[0.7cqw] font-display text-[clamp(8px,1.06cqw,14px)] leading-[1.5] text-white/75"
             >
-              <span className="mt-[0.55cqw] w-[0.3cqw] h-[0.3cqw] min-w-[2px] min-h-[2px] rounded-full bg-[#a78bfa] shrink-0" />
+              <span className="mt-[0.55cqw] w-[0.3cqw] h-[0.3cqw] min-w-[2px] min-h-[2px] rounded-full shrink-0" style={{ background: accent.light }} />
               {s}
             </li>
           ))}
@@ -184,11 +197,11 @@ export default function CertificateDocument({
       <section className="flex-1 relative flex flex-col px-[5cqw] py-[4.4cqw]">
         {/* مهر گرد */}
         <div className="absolute top-[4cqw] right-[5cqw] w-[clamp(78px,13cqw,168px)] aspect-square">
-          <Seal track={cert.track} />
+          <Seal track={cert.track} accent={accent.main} distinction={distinction} />
         </div>
 
-        <div className="font-display text-[clamp(7.5px,0.98cqw,13px)] font-bold tracking-[0.3em] uppercase text-[#7c5cfc] mb-[1.2cqw]">
-          Certificate
+        <div className="font-display text-[clamp(7.5px,0.98cqw,13px)] font-bold tracking-[0.3em] uppercase mb-[1.2cqw]" style={{ color: accent.main }}>
+          {distinction ? "Certificate · With Distinction" : "Certificate"}
         </div>
 
         <h1 className="font-display font-bold text-[clamp(24px,4.3cqw,58px)] text-[#1a1714] leading-[1.08] tracking-tight">
@@ -211,7 +224,10 @@ export default function CertificateDocument({
 
         <p className="font-display text-[clamp(8.5px,1.2cqw,16px)] text-[#4a4540] leading-[1.8] mt-[1.8cqw] max-w-[88%]">
           in recognition of completing {hours} hours of rigorous {discipline.toLowerCase()} training,
-          covering the skills listed alongside, and {deliverable}. We wish them continued success
+          covering the skills listed alongside, and {deliverable}.{" "}
+          {distinction &&
+            "Awarded with distinction, in recognition of outstanding engagement and the quality of their work. "}
+          We wish them continued success
           in their future endeavors.
         </p>
 

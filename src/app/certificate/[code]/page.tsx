@@ -7,6 +7,7 @@ import Footer from "@/components/Footer";
 import CertificateDocument from "@/components/CertificateDocument";
 import PrintButton from "@/components/PrintButton";
 import { prisma } from "@/lib/prisma";
+import { isDistinction } from "@/lib/certificate-levels";
 import QRCode from "qrcode";
 import { getLang } from "@/lib/i18n/server";
 import { PAGES } from "@/lib/i18n/dict/pages";
@@ -110,7 +111,10 @@ export default async function CertificatePage({ params }: Props) {
                   : "border-[#e8e2d9] shadow-[0_30px_70px_-40px_rgba(26,23,20,0.5)] bg-white"
               }`}
             >
-              <CertificateDocument cert={cert} qrDataUrl={qrDataUrl} />
+              <CertificateDocument
+                cert={{ ...cert, distinction: isDistinction(cert.code) }}
+                qrDataUrl={qrDataUrl}
+              />
             </div>
           </div>
 
