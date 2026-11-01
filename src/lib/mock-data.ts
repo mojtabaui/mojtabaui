@@ -317,7 +317,7 @@ const allCourses: Course[] = [
       "از فیگما تا دیزاین سیستم. ۵ پروژه‌ی واقعی و ۲۰ ساعت منتورینگ گروهی.",
     longDescription:
       "۵۵ ساعت ویدیو + ۲۰ ساعت منتورینگ آنلاین — یاد می‌گیری چطور با مخاطبیت ارتباط برقرار کنی، برند واقعی بسازی و به عنوان طراح UI حرفه‌ای وارد بازار کار بشی.",
-    price: 8000000,
+    price: 12000000,
     thumbnail: "/assets/courses/ui-infinity.jpg",
     videoHours: 55,
     mentoringHours: 20,
@@ -351,7 +351,7 @@ const allCourses: Course[] = [
       "از تحقیق کاربر تا معماری اطلاعات. ۲ پروژه‌ی واقعی و ۲۰ ساعت منتورینگ.",
     longDescription:
       "۳۵ ساعت ویدیو + ۲۰ ساعت منتورینگ آنلاین — از Design Thinking تا Case Study واقعی. یاد می‌گیری چطور مسئله کاربر رو پیدا کنی، تحلیل کنی و بهش راه‌حل بدی.",
-    price: 8000000,
+    price: 12000000,
     thumbnail: "/assets/courses/ux-infinity.jpg",
     videoHours: 35,
     mentoringHours: 20,
@@ -385,7 +385,7 @@ const allCourses: Course[] = [
       "همون محتوای دوره‌ی بی‌نهایت: ۵۵ ساعت ویدیو، ۵ پروژه‌ی واقعی و یک سال پشتیبانی. فقط جلسات منتورینگ رو نداره.",
     longDescription:
       "همون ویدیوها و پروژه‌های دوره‌ی بی‌نهایت، با یک سال پشتیبانی تلگرامی. برای کسی که می‌خواد با تمپوی خودش جلو بره.",
-    price: 5000000,
+    price: 7000000,
     thumbnail: "/assets/courses/ui-offline.jpg",
     videoHours: 55,
     mentoringHours: 0,
@@ -417,7 +417,7 @@ const allCourses: Course[] = [
       "همان محتوای دوره بی‌نهایت — ۳۵ ساعت ویدیو، ۲ پروژه واقعی، پشتیبانی ۱ ساله. بدون جلسات منتورینگ.",
     longDescription:
       "همون ویدیوها و پروژه‌های دوره‌ی بی‌نهایت، با یک سال پشتیبانی تلگرامی. برای کسی که می‌خواد با تمپوی خودش جلو بره.",
-    price: 5000000,
+    price: 7000000,
     thumbnail: "/assets/courses/ux-offline.jpg",
     videoHours: 35,
     mentoringHours: 0,
@@ -447,7 +447,7 @@ const allCourses: Course[] = [
     subtitle: "PORTFOLIO DESIGN",
     description: "چطور یه پرتفولیو UI/UX بسازی که استخدام‌کننده رو متقاعد کنه — از Case Study تا نمایش پروژه.",
     longDescription: "",
-    price: 4000000,
+    price: 5000000,
     thumbnail: "",
     videoHours: 13,
     mentoringHours: 0,
@@ -477,7 +477,7 @@ const allCourses: Course[] = [
     subtitle: "PROTOTYPE DESIGN",
     description: "ساخت پروتوتایپ تعاملی حرفه‌ای در فیگما — از انیمیشن‌های پایه تا فلوهای پیچیده.",
     longDescription: "",
-    price: 2000000,
+    price: 3000000,
     thumbnail: "",
     videoHours: 11,
     mentoringHours: 0,
