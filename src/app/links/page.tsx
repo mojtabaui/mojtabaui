@@ -78,12 +78,12 @@ export default async function LinksPage() {
         <header className="flex flex-col items-center text-center mb-10">
           <div className="relative mb-5">
             <Image
-              src="/images/instructor-portrait.jpg"
+              src="/images/links-avatar.png"
               alt={t.name}
               width={112}
               height={112}
               priority
-              className="w-28 h-28 rounded-full object-cover object-top border-4 border-white shadow-[0_8px_30px_rgba(26,23,20,0.12)]"
+              className="w-28 h-28 rounded-full object-cover object-[50%_35%] border-4 border-white shadow-[0_8px_30px_rgba(26,23,20,0.12)]"
             />
             <span className="absolute -bottom-1 -end-1 w-9 h-9 rounded-xl bg-[#1a1714] text-[#FAF6F1] flex items-center justify-center border-2 border-[#FAF6F1]">
               <BrandGlyph size={20} />
