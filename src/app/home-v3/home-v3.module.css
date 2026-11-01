@@ -1,0 +1,57 @@
+/*
+ * حرکت‌های نسخه‌ی جسور. همه پشت no-preference هستن: با «کاهش حرکت»
+ * صفحه ساکن و کامل دیده می‌شه، هیچ چیز پنهان نمی‌مونه.
+ */
+
+/* بال‌زدن نشان: سه بار با ریتم ۰.۷۲ ثانیه‌ی برندبوک موقع ورود، بعد آروم.
+   با هاور دوباره بال می‌زنه. حلقه‌ی بی‌پایان نداره. */
+.wingR,
+.wingL {
+  transform-box: view-box;
+  transform-origin: 60px 63px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .wingR { animation: flapR 0.72s ease-in-out 0.4s 3; }
+  .wingL { animation: flapL 0.72s ease-in-out 0.4s 3; }
+  .mark:hover .wingR { animation: flapR 0.72s ease-in-out 0s 2; }
+  .mark:hover .wingL { animation: flapL 0.72s ease-in-out 0s 2; }
+
+  /* تیتر هیرو خط به خط بالا میاد؛ تنها حرکت ورودی صفحه */
+  .line {
+    animation: rise 0.6s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+  }
+  .line:nth-child(2) { animation-delay: 0.08s; }
+  .line:nth-child(3) { animation-delay: 0.16s; }
+
+  /* ردیف دوره: عنوان کمی به سمت جهت خوندن می‌ره، نشونه‌ی «این لینکه» */
+  .row .rowTitle { transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), color 0.2s; }
+  .row:hover .rowTitle,
+  .row:focus-visible .rowTitle { transform: translateX(-10px); }
+  :global([dir="ltr"]) .row:hover .rowTitle,
+  :global([dir="ltr"]) .row:focus-visible .rowTitle { transform: translateX(10px); }
+}
+
+@keyframes flapR {
+  0%, 100% { transform: rotate(0deg); }
+  50% { transform: rotate(-16deg); }
+}
+@keyframes flapL {
+  0%, 100% { transform: rotate(0deg); }
+  50% { transform: rotate(16deg); }
+}
+@keyframes rise {
+  from { opacity: 0; transform: translateY(0.4em); }
+}
+
+.line { display: block; }
+
+/* گالری افقی: اسکرول با انگشت روی موبایل، با snap. نوار اسکرول نازک می‌مونه
+   تا نشونه‌ی «ادامه داره» از بین نره. */
+.rail {
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: 1.25rem;
+  scrollbar-width: thin;
+  overscroll-behavior-x: contain;
+}
+.rail > * { scroll-snap-align: start; }
