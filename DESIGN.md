@@ -32,6 +32,10 @@ Source: transcribed from the brandbook at `src/app/brandbook/page.tsx` (the owne
 - Motion must mean something; if it is only pretty, cut it.
 - Everything respects reduced motion. Content is never hidden waiting for an animation.
 
-## Dials (two explorations of the home page)
-- `/home-v2` editorial: ENERGY 2 / RHYTHM 3 / MOTION 1
-- `/home-v3` bold: ENERGY 3 / RHYTHM 3 / MOTION 2
+## Override for `/home-next` (owner decision, 2026-11-01)
+- The owner chose to break the brandbook's four-colour rule for this exploration: canary yellow becomes the lead colour, because Melina means canary and the brandbook has no yellow.
+- Palette for this page: Canary `#FFD23F` + Ink `#1a1714` as the two cores, Cream `#FAF6F1` and Line `#e8e2d9` as neutrals. Violet is dropped here so yellow carries the identity alone.
+- Secondary text on yellow: `#3d3833` (8.0:1). Ink on yellow: 12.4:1.
+- Structure is also new: the page is a path picker ("where are you now?"), not the hero / courses / testimonials brochure.
+- Corners are sharp (0 to 2px) and borders are 2px ink, to move away from the soft rounded current site.
+- Dial: ENERGY 3 / RHYTHM 3 / MOTION 1 (hover and press, plus one wing flap of the mark when a path is chosen).

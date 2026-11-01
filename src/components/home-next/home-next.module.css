@@ -1,0 +1,40 @@
+/*
+ * تنها حرکت‌های /home-next:
+ * - گزینه‌ها رنگشون با فشردن عوض می‌شه (۱۵۰ تا ۳۰۰ میلی‌ثانیه، برندبوک)
+ * - نشان قناری وقتی مسیری انتخاب می‌شه یک بار بال می‌زنه، یعنی «مسیرت آماده‌ست»
+ * با «کاهش حرکت» هیچ‌کدوم اجرا نمی‌شه و چیزی پنهان نیست.
+ */
+
+.choice {
+  transition: background-color 200ms, color 200ms;
+}
+
+.mark { display: block; }
+
+.wingR,
+.wingL {
+  transform-box: view-box;
+  transform-origin: 60px 63px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .wingR { animation: flapR 0.72s ease-in-out 0.15s 2; }
+  .wingL { animation: flapL 0.72s ease-in-out 0.15s 2; }
+}
+
+@keyframes flapR {
+  0%, 100% { transform: rotate(0deg); }
+  50% { transform: rotate(-18deg); }
+}
+@keyframes flapL {
+  0%, 100% { transform: rotate(0deg); }
+  50% { transform: rotate(18deg); }
+}
+
+.rail {
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: 1.25rem;
+  scrollbar-width: thin;
+  overscroll-behavior-x: contain;
+}
+.rail > * { scroll-snap-align: start; }
