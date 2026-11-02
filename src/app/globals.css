@@ -293,71 +293,6 @@ img, svg, video, canvas {
   }
 }
 
-/* ── هیروی پاییزی (AutumnHero) ── */
-@keyframes ah-run {
-  from { transform: translateX(var(--ah-from)); }
-  to   { transform: translateX(var(--ah-to)); }
-}
-.ah-train {
-  animation: ah-run var(--ah-dur) linear infinite;
-  transform: translateX(var(--ah-from));
-}
-
-/* پُف بخار در جهت مخالفِ قطار و با همون سرعت جابه‌جا می‌شه (--ah-comp)،
-   پس توی صحنه سر جاش می‌مونه و فقط بالا می‌ره و پف می‌کنه */
-@keyframes ah-puff {
-  0%   { transform: translate(0, 0) scale(0.35); opacity: 0; }
-  6%   { opacity: 0.95; }
-  60%  { opacity: 0.8; }
-  100% { transform: translate(calc(var(--ah-comp) + 90px), -380px) scale(5.2); opacity: 0; }
-}
-.ah-steam {
-  transform-box: fill-box;
-  transform-origin: center;
-  animation: ah-puff var(--ah-life) linear infinite;
-}
-
-@keyframes ah-spin { to { transform: rotate(-360deg); } }
-.ah-wheel {
-  transform-box: fill-box;
-  transform-origin: center;
-  animation: ah-spin 0.9s linear infinite;
-}
-@keyframes ah-rod {
-  0%   { transform: translate(4px, 0); }
-  25%  { transform: translate(0, -4px); }
-  50%  { transform: translate(-4px, 0); }
-  75%  { transform: translate(0, 4px); }
-  100% { transform: translate(4px, 0); }
-}
-.ah-rod { animation: ah-rod 0.9s linear infinite; }
-
-@keyframes ah-bob { to { transform: translateY(-1.2px); } }
-.ah-bob { animation: ah-bob 0.45s ease-in-out infinite alternate; }
-
-@keyframes ah-drift {
-  from { transform: translateX(-70px); }
-  to   { transform: translateX(70px); }
-}
-.ah-mist { animation: ah-drift 26s ease-in-out infinite alternate; }
-.ah-mist--slow { animation-duration: 40s; }
-
-@keyframes ah-fall {
-  from { transform: translate(0, 0); }
-  to   { transform: translate(70px, 1050px); }
-}
-.ah-leaf {
-  top: -6%;
-  animation-name: ah-fall;
-  animation-timing-function: linear;
-  animation-iteration-count: infinite;
-}
-@keyframes ah-flutter {
-  from { transform: rotate(-35deg) translateX(-7px); }
-  to   { transform: rotate(35deg) translateX(7px); }
-}
-.ah-flutter { animation: ah-flutter 2.6s ease-in-out infinite alternate; }
-
 /* ── سند گواهی ──────────────────────────────────────────────
    اندازه‌های داخل سند بر حسب cqw تعریف شدن، پس قاب باید
    container باشه تا متن‌ها با عرض سند مقیاس بگیرن. */
@@ -568,33 +503,4 @@ img, svg, video, canvas {
 
 html[lang="fa"] .neo-cap {
   letter-spacing: normal;
-}
-
-/* بعد از قاعده‌های اصلی میاد تا از نظر ترتیب برنده باشه */
-@media (prefers-reduced-motion: reduce) {
-  /* هیروی پاییزی: حرکت‌های ساعت‌محور خاموش، ولی هیچ‌چیز پنهان نمی‌شه.
-     قانون کلیِ بالا انیمیشن رو به حالت پایانی می‌برد و قطار از صحنه بیرون
-     می‌موند، پس این‌جا صریحاً none و یک حالت ثابتِ دیدنی می‌دیم. top و
-     transform همون خاصیت‌های قاعدهٔ اصلی‌ان، پس این بلوک باید بعدش بیاد. */
-  .ah-train {
-    animation: none !important;
-    transform: translateX(600px); /* روی پل */
-  }
-  .ah-steam {
-    animation: none !important;
-    transform: translate(calc(var(--p) * (var(--ah-comp) + 90px)), calc(var(--p) * -380px))
-      scale(calc(0.6 + var(--p) * 4.4));
-    opacity: calc(0.95 - var(--p) * 0.7);
-  }
-  .ah-wheel,
-  .ah-rod,
-  .ah-bob,
-  .ah-mist,
-  .ah-flutter {
-    animation: none !important;
-  }
-  .ah-leaf {
-    animation: none !important;
-    top: var(--ah-rest);
-  }
 }
