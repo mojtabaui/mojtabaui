@@ -80,11 +80,14 @@ export async function generateMetadata(): Promise<Metadata> {
 
 import CustomCursor from "@/components/CustomCursor";
 import Providers from "@/components/Providers";
+import { getCurrentCampaign } from "@/lib/campaign.server";
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   // زبان از پروکسی میاد؛ همین‌جا روی <html> می‌شینه تا جهت، فونت و
   // معنای صفحه برای مرورگر و اسکرین‌ریدر یکی باشه
   const lang = await getLang();
+  // کمپین جاری برای بنرِ نوار بالا؛ کش‌شده‌ست، هر صفحه کوئری جدا نمی‌زنه
+  const { campaign, now } = await getCurrentCampaign();
 
   return (
     <html
@@ -94,7 +97,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       className={`${spaceGrotesk.variable} ${meem.variable} ${michroma.variable}`}
     >
       <body className="antialiased min-h-screen flex flex-col">
-        <Providers lang={lang}>
+        <Providers lang={lang} campaign={{ campaign, serverNow: now }}>
           <CustomCursor />
           {children}
         </Providers>

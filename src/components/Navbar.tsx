@@ -5,12 +5,14 @@ import { useState } from "react";
 import { Menu, X, ArrowLeft, ArrowRight } from "lucide-react";
 import BrandMark from "@/components/BrandMark";
 import LangSwitch from "@/components/LangSwitch";
-import { useLang } from "@/components/Providers";
+import { useLang, useCampaign } from "@/components/Providers";
+import CampaignBanner from "@/components/CampaignBanner";
 import { COMMON } from "@/lib/i18n/dict/common";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const lang = useLang();
+  const { campaign, serverNow } = useCampaign();
   const t = COMMON[lang];
   const rtl = lang === "fa";
 
@@ -31,7 +33,11 @@ export default function Navbar() {
 
   return (
     <header className="fixed top-0 inset-x-0 z-50 bg-[#f7f4ef]/90 backdrop-blur-sm border-b border-[#e8e2d9]">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 h-[var(--nav-h)] flex items-center justify-between relative">
+      {/* بنر کمپین بالای منو، روی همهٔ صفحه‌ها و همیشه دیده می‌شه.
+          ارتفاعش از طریق --nav-h خودکار به فاصلهٔ بالای صفحه‌ها اضافه می‌شه. */}
+      {campaign && <CampaignBanner campaign={campaign} serverNow={serverNow} lang={lang} />}
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 h-[var(--nav-row)] flex items-center justify-between relative">
 
         {/* نشان و نام برند — ابتدای خط */}
         <Link href="/" className="flex items-center gap-2.5 flex-shrink-0">

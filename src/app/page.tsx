@@ -21,7 +21,6 @@ import { getLang } from "@/lib/i18n/server";
 import { HOME } from "@/lib/i18n/dict/home";
 import { TESTIMONIALS } from "@/lib/i18n/dict/testimonials";
 import { localizeCourses } from "@/lib/i18n/content/courses";
-import CampaignBanner from "@/components/CampaignBanner";
 import { getCurrentCampaign } from "@/lib/campaign.server";
 import { applyCampaignPrices } from "@/lib/campaign";
 
@@ -60,14 +59,6 @@ export default async function Home() {
           className="dot-bg overflow-hidden relative flex flex-col pt-[var(--nav-h)]"
           style={{ backgroundColor: "#FAF6F1", minHeight: "clamp(560px, 86vh, 860px)" }}
         >
-
-          {/* بنر کمپین درست زیر منو. منو ثابته، پس بنر باید داخل هیرو و بعد از
-              فاصلهٔ nav-h بیاد، وگرنه زیر منو پنهان می‌شد. */}
-          {campaign && (
-            <div className="relative z-20">
-              <CampaignBanner campaign={campaign} serverNow={now} lang={lang} />
-            </div>
-          )}
 
           <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
 
