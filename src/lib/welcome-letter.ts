@@ -13,21 +13,23 @@ import { SUPPORT_HANDLE, type LicenseCourse } from "@/lib/license-courses";
  * (next.config.ts) کنار تابع روی Vercel می‌رن.
  */
 
-const ROOT = process.cwd();
-const rd = (p: string) => fs.readFileSync(path.join(ROOT, p), "utf8");
-const b64 = (p: string) => fs.readFileSync(path.join(ROOT, p)).toString("base64");
+// مسیرها عمداً از دید باندلر پنهان‌اند؛ فایل‌های لازم صریحاً در
+// next.config.ts فهرست شده‌اند، وگرنه کل پروژه کنار تابع ردگیری می‌شد.
+const at = (...parts: string[]) => path.join(/*turbopackIgnore: true*/ process.cwd(), ...parts);
+const rd = (file: string) => fs.readFileSync(file, "utf8");
+const b64 = (file: string) => fs.readFileSync(file).toString("base64");
 
 let assets: { css: string; fonts: string; glyph: string } | null = null;
 function loadAssets() {
   if (assets) return assets;
   assets = {
-    css: rd("welcome/welcome.css"),
-    glyph: rd("handout/jozve-ai-access.svg").trim(),
+    css: rd(at("welcome", "welcome.css")),
+    glyph: rd(at("handout", "jozve-ai-access.svg")).trim(),
     fonts: `
-@font-face{font-family:"Meem";font-weight:300;font-style:normal;font-display:block;src:url(data:font/ttf;base64,${b64("public/fonts/Meem-Light.ttf")}) format("truetype")}
-@font-face{font-family:"Meem";font-weight:700;font-style:normal;font-display:block;src:url(data:font/ttf;base64,${b64("public/fonts/Meem-Bold.ttf")}) format("truetype")}
-@font-face{font-family:"Michroma";font-weight:400;font-style:normal;font-display:block;src:url(data:font/woff2;base64,${b64("handout/Michroma.woff2")}) format("woff2")}
-@font-face{font-family:"Space Grotesk";font-weight:400 700;font-style:normal;font-display:block;src:url(data:font/woff2;base64,${b64("handout/SpaceGrotesk.woff2")}) format("woff2")}`,
+@font-face{font-family:"Meem";font-weight:300;font-style:normal;font-display:block;src:url(data:font/ttf;base64,${b64(at("public", "fonts", "Meem-Light.ttf"))}) format("truetype")}
+@font-face{font-family:"Meem";font-weight:700;font-style:normal;font-display:block;src:url(data:font/ttf;base64,${b64(at("public", "fonts", "Meem-Bold.ttf"))}) format("truetype")}
+@font-face{font-family:"Michroma";font-weight:400;font-style:normal;font-display:block;src:url(data:font/woff2;base64,${b64(at("handout", "Michroma.woff2"))}) format("woff2")}
+@font-face{font-family:"Space Grotesk";font-weight:400 700;font-style:normal;font-display:block;src:url(data:font/woff2;base64,${b64(at("handout", "SpaceGrotesk.woff2"))}) format("woff2")}`,
   };
   return assets;
 }
