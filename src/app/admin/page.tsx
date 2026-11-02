@@ -21,6 +21,7 @@ import {
   GraduationCap,
   Lightbulb,
   Link2,
+  Megaphone,
 } from "lucide-react";
 
 export const dynamic = "force-dynamic";
@@ -199,6 +200,24 @@ export default async function AdminPage() {
               </p>
             </div>
             <span className="font-body text-sm text-[var(--info)] shrink-0 mt-0.5">←</span>
+          </Link>
+
+          <Link
+            href="/admin/campaigns"
+            className="group bg-[var(--card)] hover:bg-[var(--card-raised)] border border-[var(--line)] hover:border-[var(--violet)]/45 rounded-2xl px-5 py-5 flex items-start gap-4 transition-colors"
+          >
+            <div className="w-9 h-9 rounded-xl bg-[var(--danger)]/15 text-[var(--danger)] flex items-center justify-center shrink-0">
+              <Megaphone size={17} />
+            </div>
+            <div className="min-w-0 flex-1">
+              <h2 className="font-body font-semibold text-[var(--ink)] text-sm mb-1">
+                کمپین‌ها
+              </h2>
+              <p className="font-body text-xs text-[var(--ink-4)] leading-6">
+                تاریخ شروع و پایان، بنر شمارش معکوس صفحهٔ اصلی و قیمت کمپینی هر دوره
+              </p>
+            </div>
+            <span className="font-body text-sm text-[var(--danger)] shrink-0 mt-0.5">←</span>
           </Link>
 
           <Link

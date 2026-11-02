@@ -28,6 +28,8 @@ import { contentFor, disciplineOf, uiVsUxFor, guaranteesFor } from "@/lib/course
 import { getLang } from "@/lib/i18n/server";
 import { COURSE } from "@/lib/i18n/dict/course";
 import { localizeCourse, LEVEL_EN } from "@/lib/i18n/content/courses";
+import { getCurrentCampaign } from "@/lib/campaign.server";
+import { applyCampaignPrice } from "@/lib/campaign";
 import { localizeProjects } from "@/lib/i18n/content/projects";
 
 interface Props {
@@ -52,8 +54,10 @@ export default async function CourseDetailPage({ params }: Props) {
   const num = (n: number | string) =>
     lang === "fa" ? String(n).replace(/\d/g, (d) => "۰۱۲۳۴۵۶۷۸۹"[+d]) : String(n);
 
-  const original = courses.find((c) => c.slug === slug);
-  if (!original) notFound();
+  const found = courses.find((c) => c.slug === slug);
+  if (!found) notFound();
+  const { campaign, now } = await getCurrentCampaign();
+  const original = applyCampaignPrice(found, campaign, now);
   const course = localizeCourse(original, lang);
 
   // این دوره صفحهٔ فروشِ اختصاصی خودش را دارد؛ بقیه با قالب استاندارد می‌آیند
@@ -73,7 +77,8 @@ export default async function CourseDetailPage({ params }: Props) {
   const counterpartSlug = course.type === "infinity"
     ? slug.replace("-infinity", "-offline")
     : slug.replace("-offline", "-infinity");
-  const counterpartFa = courses.find((c) => c.slug === counterpartSlug);
+  const counterpartRaw = courses.find((c) => c.slug === counterpartSlug);
+  const counterpartFa = counterpartRaw && applyCampaignPrice(counterpartRaw, campaign, now);
   const counterpart = counterpartFa && localizeCourse(counterpartFa, lang);
 
   const discountPct = course.originalPrice

@@ -9,6 +9,8 @@ import FormatCompare from "@/components/FormatCompare";
 import { infinityCourses, videoCourses, workshopCourses, courses } from "@/lib/mock-data";
 import { getLang } from "@/lib/i18n/server";
 import { PAGES } from "@/lib/i18n/dict/pages";
+import { getCurrentCampaign } from "@/lib/campaign.server";
+import { applyCampaignPrices } from "@/lib/campaign";
 
 export async function generateMetadata() {
   const t = PAGES[await getLang()].courses;
@@ -22,6 +24,7 @@ export default async function CoursesPage() {
   const lang = await getLang();
   const t = PAGES[lang].courses;
   const num = (n: number | string) => (lang === "fa" ? fa(n) : String(n));
+  const { campaign, now } = await getCurrentCampaign();
 
   const visible = courses.filter((c) => !c.hidden);
   const totalHours = visible.reduce((sum, c) => sum + (c.videoHours ?? 0), 0);
@@ -110,9 +113,9 @@ export default async function CoursesPage() {
         {/* Grid */}
         <section className="pb-24 pt-16 max-w-7xl mx-auto px-4 sm:px-6">
           <CoursesClient
-            infinityCourses={infinityCourses}
-            videoCourses={videoCourses}
-            workshopCourses={workshopCourses}
+            infinityCourses={applyCampaignPrices(infinityCourses, campaign, now)}
+            videoCourses={applyCampaignPrices(videoCourses, campaign, now)}
+            workshopCourses={applyCampaignPrices(workshopCourses, campaign, now)}
           />
         </section>
 

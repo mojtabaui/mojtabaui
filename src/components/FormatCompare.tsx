@@ -4,6 +4,8 @@ import FadeIn from "@/components/FadeIn";
 import { infinityCourses, videoCourses, formatPrice } from "@/lib/mock-data";
 import { getLang } from "@/lib/i18n/server";
 import { COURSE } from "@/lib/i18n/dict/course";
+import { getCurrentCampaign } from "@/lib/campaign.server";
+import { applyCampaignPrice } from "@/lib/campaign";
 
 /** کدوم ردیف‌ها توی نسخهٔ آفلاین هست و کدوم نیست — ترتیبش با دیکشنری یکیه */
 const OFFLINE_HAS = [true, true, false, true, true, true];
@@ -17,12 +19,15 @@ const OFFLINE_HAS = [true, true, false, true, true, true];
 export default async function FormatCompare() {
   const lang = await getLang();
   const t = COURSE[lang].compare;
+  const { campaign, now } = await getCurrentCampaign();
+  const priceOf = (c?: (typeof infinityCourses)[number]) =>
+    c ? applyCampaignPrice(c, campaign, now).price : undefined;
 
   const plans = [
     {
       name: t.infinity.name,
       tag: t.infinity.tag,
-      price: infinityCourses[0]?.price,
+      price: priceOf(infinityCourses[0]),
       desc: t.infinity.desc,
       featured: false,
       rows: t.infinity.rows.map((label) => ({ label, has: true })),
@@ -30,7 +35,7 @@ export default async function FormatCompare() {
     {
       name: t.offline.name,
       tag: t.offline.tag,
-      price: videoCourses.find((c) => c.slug === "ui-offline")?.price,
+      price: priceOf(videoCourses.find((c) => c.slug === "ui-offline")),
       desc: t.offline.desc,
       featured: true,
       rows: t.offline.rows.map((label, i) => ({ label, has: OFFLINE_HAS[i] })),

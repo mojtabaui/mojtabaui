@@ -165,6 +165,17 @@ body {
   animation: marquee 35s linear infinite;
 }
 
+/* نشانهٔ فصلی بین کلمه‌های نوار — برگ و شکوفه آروم تاب می‌خورن.
+   کجیِ پایه با خاصیتِ rotate جدا داده شده تا با این transform جمع بشه. */
+@keyframes season-sway {
+  from { transform: rotate(-14deg) translateY(-1px); }
+  to   { transform: rotate(14deg)  translateY(1px); }
+}
+.season-glyph {
+  animation: season-sway 3.2s ease-in-out infinite alternate;
+  transform-origin: 50% 20%;
+}
+
 /* ── Fade-in-up (CSS-only, for hero stagger) ── */
 @keyframes fadeInUp {
   from { opacity: 0; transform: translateY(22px); }
@@ -271,6 +282,7 @@ img, svg, video, canvas {
     scroll-behavior: auto !important;
   }
   .animate-marquee,
+  .season-glyph,
   .float-slow,
   .pulse-dot,
   .grain-animated {
