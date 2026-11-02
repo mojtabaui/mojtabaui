@@ -56,9 +56,9 @@ const COPY = {
       all: "همه‌ی پروژه‌ها",
     },
     close: {
-      title: "ثبت‌نام دوره‌های بی‌نهایت فعلاً بسته‌ست.",
-      body: "شماره‌ت رو بذار تا وقتی باز شد اول از همه خبرت کنیم. یا همین الان توی تلگرام بپرس.",
-      telegram: "پرسیدن در تلگرام",
+      title: "ثبت‌نام دوره‌های بی‌نهایت بازه.",
+      body: "توی تلگرام پیام بده؛ ظرفیت و قیمت رو می‌گیم و شماره کارت رو می‌فرستیم. اگه منتظر تخفیفی، شماره‌ت رو بذار تا خبرت کنیم.",
+      telegram: "ثبت‌نام در تلگرام",
     },
   },
   en: {
@@ -86,9 +86,9 @@ const COPY = {
       all: "All projects",
     },
     close: {
-      title: "Infinity enrolment is closed for now.",
-      body: "Leave your number and you'll hear first when it opens. Or ask on Telegram right now.",
-      telegram: "Ask on Telegram",
+      title: "Infinity enrolment is open.",
+      body: "Message us on Telegram: we'll tell you the seats and the price and send the card number. Waiting for a discount? Leave your number and we'll let you know.",
+      telegram: "Enrol on Telegram",
     },
   },
 } as const;
@@ -206,7 +206,7 @@ export default async function HomeNext({ searchParams }: { searchParams: Promise
         {/* یادداشت مدرس دلیل زرد بودن صفحه رو می‌گه: ملینا یعنی قناری */}
         <PersonalNote />
 
-        {/* ─── پایان: صادق درباره‌ی بسته بودن ثبت‌نام، فرم توی قاب سفید روی زرد. ─── */}
+        {/* ─── پایان: دعوت به ثبت‌نام از تلگرام، فرم تخفیف توی قاب سفید روی زرد. ─── */}
         <section className="bg-[#FFD23F]">
           <div className="max-w-7xl mx-auto px-5 sm:px-8 py-20 md:py-24 grid lg:grid-cols-2 gap-12 items-center">
             <div>

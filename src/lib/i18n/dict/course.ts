@@ -97,8 +97,8 @@ export const COURSE = {
       details: "جزئیات دوره",
       infinity: {
         name: "بی‌نهایت",
-        tag: "ثبت‌نام بسته",
-        desc: "برای کسی که می‌خواد کنارش کسی باشه. ثبت‌نامش فعلاً باز نیست.",
+        tag: "الان باز است",
+        desc: "برای کسی که می‌خواد کنارش کسی باشه.",
         rows: [
           "۵۵ ساعت ویدیوی کامل",
           "۵ پروژه عملی",
@@ -248,8 +248,8 @@ export const COURSE = {
       details: "Course details",
       infinity: {
         name: "Infinity",
-        tag: "Enrolment closed",
-        desc: "For someone who wants a person alongside them. Enrolment isn't open at the moment.",
+        tag: "Open now",
+        desc: "For someone who wants a person alongside them.",
         rows: [
           "55 hours of full video",
           "5 hands-on projects",

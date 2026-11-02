@@ -165,7 +165,7 @@ export const HOME = {
     cta: {
       badge: "پشتیبانی آنلاین — همین حالا پاسخ‌گوییم",
       title: "آماده‌ای شروع کنی؟",
-      body: "ثبت‌نام دوره‌های بی‌نهایت فعلاً بسته‌ست. برای مشاوره‌ی رایگان و اطلاع از شروع دوره‌ی بعدی، همین حالا در تلگرام پیام بده.",
+      body: "ثبت‌نام دوره‌های بی‌نهایت بازه. برای مشاوره‌ی رایگان و ثبت‌نام همین حالا در تلگرام پیام بده؛ پرداخت کارت‌به‌کارته.",
       stats: [
         { num: "+۸", label: "سال تجربه" },
         { num: "+۶٬۵۰۰", label: "دانشجو" },
@@ -341,7 +341,7 @@ export const HOME = {
     cta: {
       badge: "Support is online — we're answering right now",
       title: "Ready to start?",
-      body: "Enrolment for the Infinity courses is closed at the moment. For free advice and word of when the next one opens, message us on Telegram.",
+      body: "Enrolment for the Infinity courses is open. For free advice and to enrol, message us on Telegram now. Payment is by bank transfer.",
       stats: [
         { num: "8+", label: "years of practice" },
         { num: "6,500+", label: "students" },
