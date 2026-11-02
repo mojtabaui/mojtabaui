@@ -70,6 +70,24 @@ model SpotPlayerLicense {
   @@index([userId])
 }
 
+/// لایسنس‌هایی که از پنل مدیریت دستی صادر می‌شن (فروش کارت‌به‌کارت).
+/// خریدار لازم نیست روی سایت حساب داشته باشه، برای همین به User وصل نیست.
+model SpotLicense {
+  id        String   @id @default(cuid())
+  spotId    String   @unique // _id لایسنس در پنل اسپات‌پلیر
+  key       String
+  url       String   @default("")
+  name      String
+  phone     String // متن واترمارک
+  courseIds String[] // شناسه‌های اسپات‌پلیر
+  devices   Int? // سهمیهٔ دستگاه؛ خالی یعنی پیش‌فرض پنل
+  test      Boolean  @default(false)
+  note      String   @default("")
+  createdAt DateTime @default(now())
+
+  @@index([createdAt])
+}
+
 /// گواهینامه‌های صادرشده — منبع اولیه: فایل‌های اکسل در prisma/certs،
 /// از ۱۴۰۵ به بعد از پنل مدیریت صادر می‌شن.
 model Certificate {

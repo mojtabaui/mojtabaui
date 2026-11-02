@@ -36,16 +36,17 @@ export async function GET(req: NextRequest) {
   });
 
   if (purchase.course.spotplayerId) {
-    const licenseData = await createLicense(
-      purchase.course.spotplayerId,
-      purchase.userId
-    );
+    const licenseData = await createLicense({
+      courses: [purchase.course.spotplayerId],
+      name: purchase.user.name,
+      watermark: purchase.user.phone || purchase.user.email,
+      payload: purchase.id,
+    });
     await prisma.spotPlayerLicense.create({
       data: {
         userId: purchase.userId,
         courseId: purchase.courseId,
-        licenseKey: licenseData.license,
-        expiresAt: licenseData.expires_at ? new Date(licenseData.expires_at) : null,
+        licenseKey: licenseData.key,
       },
     });
   }
