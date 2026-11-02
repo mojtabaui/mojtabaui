@@ -36,12 +36,53 @@ function loadAssets() {
 
 /** چند گروه کنار هم باید جا بشن؛ بقیهٔ قاعده‌ها از welcome.css میان */
 const EXTRA_CSS = `
-.groups{display:flex; flex-direction:column; gap:12px}
-/* چند گروه کنار هم، نه زیر هم — وگرنه برگ از یک A4 بیرون می‌زنه */
-.groups.many{flex-direction:row; flex-wrap:wrap; gap:8px}
-.groups.many > div{flex:1 1 0; min-width:22mm}
-.groups.many .link{font-size:9px}
-.group-name{margin:0 0 5px; font-size:11px; font-weight:700; color:var(--mute); text-align:center}
+/* ══ گروه دوره ══
+   درست زیر کلید و تمام‌عرض، نه ستون باریک کنار مراحل: بعد از کلید،
+   مهم‌ترین چیز همین گروهه. هر کارت خودش لینکه، چون کسی که نامه رو
+   روی گوشی باز کرده نمی‌تونه صفحهٔ خودش رو اسکن کنه. */
+.join{
+  margin:16px 0 0; padding:14px 18px; background:var(--card);
+  border:1px solid var(--line); display:flex; align-items:center; gap:8mm;
+}
+.join-text{flex:1; min-width:0}
+.join-text h2{font-size:15px; margin:0 0 4px}
+.join-text .lede{margin:0}
+.join-hint{margin:8px 0 0; font-size:11.5px; color:var(--ink); font-weight:700; line-height:1.8}
+.join-codes{display:flex; gap:5mm; flex-shrink:0}
+.join-card{display:flex; flex-direction:column; align-items:center; text-decoration:none; color:inherit}
+.join-name{margin:0 0 4px; font-size:11px; font-weight:700; color:var(--mute)}
+/* حاشیهٔ سفید دور QR (quiet zone) برای دوربین لازمه؛ بدونش روی کاغذ
+   کرم خیلی از گوشی‌ها کد رو نمی‌گیرن */
+.join-card .qr{display:block; width:40mm; padding:3.5mm; background:#fff; border:1px solid var(--line)}
+.join-codes.many .join-card .qr{width:34mm; padding:3mm}
+.join-card .qr svg{display:block; width:100%; height:auto}
+.join-btn{
+  margin:6px 0 0; padding:4px 10px; border-radius:6px; background:var(--accent); color:#fff;
+  font-size:11px; font-weight:700; white-space:nowrap;
+}
+.join-url{margin:3px 0 0; font-size:9.5px; color:var(--dim); direction:ltr; unicode-bidi:isolate}
+
+/* مراحل حالا تمام‌عرض‌اند، در دو ستون */
+.howto{margin:18px 0 0}
+.howto .steps{columns:2; column-gap:9mm}
+.howto .steps li{break-inside:avoid}
+
+/* ══ گوشی ══
+   برگ A4 روی صفحهٔ ۳۹۰ پیکسلی جا نمی‌شه و نیمهٔ چپش (جای QR) بیرون
+   می‌افتاد. روی صفحهٔ باریک برگ سیال می‌شه؛ چاپ دست نمی‌خوره. */
+@media screen and (max-width: 760px){
+  .sheet{width:auto; min-height:0; padding:22px 18px 26px}
+  h1{font-size:25px; margin-top:20px}
+  .key{padding:13px 14px 12px}
+  .key-code{font-size:13.5px}
+  .join{flex-direction:column; align-items:stretch; gap:14px; padding:16px}
+  .join-codes{justify-content:center; flex-wrap:wrap}
+  .join-card .qr, .join-codes.many .join-card .qr{width:150px; padding:10px}
+  .join-btn{font-size:14px; padding:9px 18px; margin-top:10px}
+  .howto .steps{columns:1}
+  .notes{margin-top:22px}
+  .foot{flex-direction:column; gap:4px}
+}
 @media screen{
   .bar{position:sticky; top:0; z-index:1; display:flex; justify-content:center; gap:8px;
     padding:10px; background:#1a1714; font-family:"Meem",sans-serif}
@@ -111,9 +152,10 @@ export async function renderWelcomeLetter({
   }
   const groupBlocks = await Promise.all(
     [...groups].map(async ([url, titles]) => {
-      const caption = groups.size > 1 ? `<p class="group-name">${esc(titles.join(" و "))}</p>` : "";
-      return `<div>${caption}<figure class="qr">${await qrSvg(url)}</figure>
-      <p class="link"><a href="${esc(url)}">${esc(url.replace(/^https?:\/\//, ""))}</a></p></div>`;
+      const caption = groups.size > 1 ? `<span class="join-name">${esc(titles.join(" و "))}</span>` : "";
+      return `<a class="join-card" href="${esc(url)}" target="_blank" rel="noopener">${caption}<span class="qr">${await qrSvg(url)}</span>
+      <span class="join-btn">عضویت در گروه</span>
+      <span class="join-url">${esc(url.replace(/^https?:\/\//, ""))}</span></a>`;
     }),
   );
 
@@ -125,10 +167,13 @@ export async function renderWelcomeLetter({
     : `هر فعال‌سازی یکی از سهمیه‌های دستگاهت را می‌سوزاند و برگشتنش دست ما نیست.`;
 
   const groupSection = groupBlocks.length
-    ? `<section class="col">
-      <h2>${groupBlocks.length > 1 ? "گروه‌های دوره" : "گروه دوره"}</h2>
-      <p class="lede">اطلاع‌رسانی و رفع اشکال هر دو همین‌جاست. کانال جدا نداریم، پس خبرهای تازه هم اول همین‌جا می‌آید.</p>
-      <div class="groups${groupBlocks.length > 1 ? " many" : ""}">${groupBlocks.join("")}</div>
+    ? `<section class="join">
+      <div class="join-text">
+        <h2>${groupBlocks.length > 1 ? "قدم اول: عضو گروه‌های دوره شو" : "قدم اول: عضو گروه دوره شو"}</h2>
+        <p class="lede">اطلاع‌رسانی و رفع اشکال هر دو همین‌جاست. کانال جدا نداریم، پس خبرهای تازه هم اول همین‌جا می‌آید.</p>
+        <p class="join-hint">QR را با دوربین گوشی اسکن کن؛ اگر این نامه روی خودِ گوشی‌ات باز است، روی دکمه بزن.</p>
+      </div>
+      <div class="join-codes${groupBlocks.length > 1 ? " many" : ""}">${groupBlocks.join("")}</div>
     </section>`
     : "";
 
@@ -165,8 +210,9 @@ ${bar}
     <p class="key-note">${deviceNote}</p>
   </section>
 
-  <div class="cols">
-    <section class="col">
+  ${groupSection}
+
+    <section class="howto">
       <h2>فعال‌سازی</h2>
       <ol class="steps">
         <li><strong>اسپات‌پلیر را روی کامپیوتر نصب کن.</strong> از <code>spotplayer.ir</code> — ویندوز، مک یا لینوکس. نسخهٔ موبایل هم هست، ولی <strong>همیشه دسکتاپ را ترجیح بده</strong>: صفحهٔ بزرگ‌تر یعنی جزئیاتی که روی ویدیو نشان داده می‌شود واقعاً دیده می‌شود. موبایل برای مرور خوب است، نه برای کار کردن همراهِ درس.</li>
@@ -176,9 +222,6 @@ ${bar}
       </ol>
       <p class="tip">نسخهٔ تحت‌وب هم دارد، ولی روی دستگاه‌های قدیمی‌تر پلیر کند می‌شود. اگر ویدیو برید یا لگ داشت، قبل از اینکه اینترنتت را مقصر بدانی، اپِ دسکتاپ را امتحان کن.</p>
     </section>
-
-    ${groupSection}
-  </div>
 
   <section class="notes">
     <h2>دو چیز که بعداً به کارت می‌آید</h2>
