@@ -23,13 +23,21 @@ import { TESTIMONIALS } from "@/lib/i18n/dict/testimonials";
 import { localizeCourses } from "@/lib/i18n/content/courses";
 import { getCurrentCampaign } from "@/lib/campaign.server";
 import { applyCampaignPrices } from "@/lib/campaign";
+import AutumnHero from "@/components/AutumnHero";
 
 
 /** اعلان دورهٔ پرامپت تا پروداکت روی صفحهٔ اصلی. تا وقتی روی خودِ دوره کار
  *  می‌کنیم خاموشه؛ برای برگردوندنش کافیه true بشه. */
 const SHOW_COURSE_PROMO = false;
 
-export default async function Home() {
+/** هیروی پیش‌فرض. «autumn» = هیروی پاییزیِ قطار؛ تا تأیید نشده فقط با ?hero=autumn دیده می‌شه. */
+const DEFAULT_HERO: "classic" | "autumn" = "classic";
+
+export default async function Home({
+  searchParams,
+}: {
+  searchParams: Promise<{ hero?: string }>;
+}) {
   const lang = await getLang();
   const t = HOME[lang];
   const rtl = lang === "fa";
@@ -43,6 +51,9 @@ export default async function Home() {
   const videos = localizeCourses(applyCampaignPrices(videoCourses, campaign, now), lang);
   const faqs = (infinity[0]?.faqs ?? []).slice(0, 6);
 
+  const heroParam = (await searchParams).hero;
+  const hero = heroParam === "autumn" || heroParam === "classic" ? heroParam : DEFAULT_HERO;
+
   return (
     <>
       <Navbar />
@@ -55,6 +66,9 @@ export default async function Home() {
             از بالا فاصله بگیره. قبلاً این فاصله فقط روی موبایل بود و روی
             نمایشگرِ کوتاه، بلوکِ ته‌چینِ دسکتاپ از بالا می‌زد بیرون و
             نوتِ «+۶٬۵۰۰ نفر» می‌رفت زیر منو. */}
+        {hero === "autumn" ? (
+          <AutumnHero lang={lang} />
+        ) : (
         <section
           className="dot-bg overflow-hidden relative flex flex-col pt-[var(--nav-h)]"
           style={{ backgroundColor: "#FAF6F1", minHeight: "clamp(560px, 86vh, 860px)" }}
@@ -157,6 +171,7 @@ export default async function Home() {
 
           </div>
         </section>
+        )}
 
         {/* ─── Stats band ─── */}
         <section className="bg-[#1a1714] border-b border-[#2a2520]">
