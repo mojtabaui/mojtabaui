@@ -47,7 +47,6 @@ import {
   PROJECTS,
   SLIDES,
   PRICING,
-  LAUNCH_SEATS,
   currentTier,
   type RobotypeOffer,
 } from "@/lib/ai7-curriculum";
@@ -265,13 +264,7 @@ const T = {
     soundOn: "صدا روشن است",
     soundOff: "صدا خاموش است",
     heroCta: "ثبت‌نام",
-    seatsLabel: "ظرفیت پلهٔ فعلی",
-    seatsTaken: "{n} نفر از {cap} نفر ثبت‌نام کرده‌اند",
-    seatsLeft: "فقط {n} جا با این قیمت مانده",
-    tierDone: "تکمیل شد",
-    tierNow: "الان",
     heroCta2: "سرفصل‌ها را ببین",
-    heroSeats: "ظرفیت محدود است",
     briefLabel: "در یک نگاه",
     briefHead: "هفت فصل جلو می‌ریم و آخرش یک محصول واقعی داری.",
     briefLede:
@@ -345,7 +338,7 @@ const T = {
     joinTitle: "ثبت‌نام",
     joinHead: "ثبت‌نام از طریق پشتیبانی انجام می‌شه",
     joinBody:
-      "فعلاً درگاه پرداخت روی سایت نداریم و ثبت‌نام کارت‌به‌کارت انجام می‌شود. توی تلگرام پیام بده؛ همان‌جا می‌گوییم الان قیمت روی کدام پله است، چند ظرفیت باقی مانده و شماره کارت را برایت می‌فرستیم. بعد از پرداخت هم دسترسی‌ات باز می‌شود.",
+      "فعلاً درگاه پرداخت روی سایت نداریم و ثبت‌نام کارت‌به‌کارت انجام می‌شود. توی تلگرام پیام بده؛ همان‌جا شماره کارت را برایت می‌فرستیم. بعد از پرداخت هم دسترسی‌ات باز می‌شود.",
     joinCta: "پیام در تلگرام",
     joinNote: "معمولاً کمتر از یک روز جواب می‌دیم.",
     noteTitle: "چرا این دوره رو ساختم؟",
@@ -360,7 +353,7 @@ const T = {
     showLede:
       "تزئینی نیستن. همین پنج صفحه و همین سیستمِ توکن، فصل‌به‌فصل ساخته می‌شن؛ از پرسشِ اول تا فهرستِ درمانگرها.",
     steps: [
-      { t: "توی تلگرام پیام بده", d: "بهت می‌گیم الان قیمت روی کدوم پله‌ست و چند جا باقی مونده." },
+      { t: "توی تلگرام پیام بده", d: "اگه سؤالی داری همون‌جا بپرس؛ ثبت‌نامت رو از همون‌جا شروع می‌کنیم." },
       { t: "کارت‌به‌کارت کن", d: "شماره کارت رو همون‌جا می‌فرستیم؛ بعد رسید رو برامون بفرست." },
       {
         t: "دسترسی باز می‌شه",
@@ -395,11 +388,7 @@ const T = {
       },
       {
         q: "پرداخت چطوریه؟",
-        a: "فعلاً کارت‌به‌کارت و از طریق پشتیبانی. درگاه پرداخت سایت هنوز فعال نیست. قیمت و پله‌های تخفیف هم شفاف همین صفحه نوشته شده و چیزی پشت پرده نیست.",
-      },
-      {
-        q: "اگه پلهٔ فعلی پر شده باشه چی؟",
-        a: "پلهٔ بعدی فعال می‌شود. توی تلگرام پیام می‌دهی و همان‌جا می‌گوییم الان روی کدام پله هستیم و چند ظرفیت باقی مانده.",
+        a: "فعلاً کارت‌به‌کارت و از طریق پشتیبانی. درگاه پرداخت سایت هنوز فعال نیست. قیمت هم شفاف همین صفحه نوشته شده و چیزی پشت پرده نیست.",
       },
       {
         q: "دسترسی تا کی دارم؟",
@@ -427,13 +416,7 @@ const T = {
     soundOn: "sound on",
     soundOff: "sound off",
     heroCta: "Enrol",
-    seatsLabel: "Seats in this tier",
-    seatsTaken: "{n} of {cap} seats taken",
-    seatsLeft: "Only {n} left at this price",
-    tierDone: "sold out",
-    tierNow: "now",
     heroCta2: "See the outline",
-    heroSeats: "limited seats",
     briefLabel: "At a glance",
     briefHead: "Seven chapters, and at the end something you can send a link to.",
     briefLede:
@@ -510,7 +493,7 @@ const T = {
     showLede:
       "Not decoration. These five screens and this token system are built chapter by chapter — from the first question to the therapist list.",
     steps: [
-      { t: "Message on Telegram", d: "We will tell you which price tier we are on and how many seats are left." },
+      { t: "Message on Telegram", d: "Ask anything you need to there, and we will start your enrolment." },
       { t: "Transfer", d: "We send the account details there and you send back the receipt." },
       { t: "Access opens", d: "The recorded chapters straight away, the rest as they are finished." },
     ],
@@ -522,7 +505,7 @@ const T = {
     joinTitle: "Enrolling",
     joinHead: "Enrolment goes through support",
     joinBody:
-      "There is no checkout on the site yet — enrolment is handled directly. Message us on Telegram: we will tell you how many seats are left in the current tier, send the payment details, and open your access.",
+      "There is no checkout on the site yet — enrolment is handled directly. Message us on Telegram: we will send the payment details and open your access.",
     joinCta: "Message on Telegram",
     joinNote: "We usually reply within a day.",
     faqTitle: "The usual questions",
@@ -553,11 +536,7 @@ const T = {
       },
       {
         q: "How does payment work?",
-        a: "Bank transfer, handled through support. There is no checkout on the site. The price and the discount steps are written above — nothing is held back.",
-      },
-      {
-        q: "What if the first tier is full?",
-        a: "The next one opens. Ask on Telegram and we will tell you which tier we are on and how many seats are left.",
+        a: "Bank transfer, handled through support. There is no checkout on the site. The price is written above — nothing is held back.",
       },
       {
         q: "How long does access last?",
@@ -1066,94 +1045,6 @@ export default function Ai7Minimal({
                 <span style={{ color: MUTE }}>· {offer?.title ?? tier.seat}</span>
               </p>
             )}
-
-            {/*
-              دو نوار، نه یکی: پلهٔ تمام‌شده و پلهٔ باز.
-
-              یک نوار فقط پلهٔ فعلی را نشان می‌داد و «۳۰ جای پُرشده» را
-              به یک برچسبِ متنی تقلیل می‌داد. سی خانهٔ پُر، همان حرف را
-              بدونِ خواندن می‌زند — و کنارِ نوارِ خالیِ زیرش، تازه معنی
-              پیدا می‌کند.
-            */}
-            {price.tiers
-              /* پلهٔ بی‌سقف نوار ندارد: نواری که ۳۰ خانه دارد، سقف اعلام می‌کند */
-              .filter((row) => (row.done || row.now) && !row.full)
-              .map((row) => {
-                const done = row.done;
-                const filled = done ? LAUNCH_SEATS.cap : LAUNCH_SEATS.taken;
-                return (
-                  <SeatMeter
-                    key={row.seat}
-                    label={row.seat}
-                    taken={t.seatsTaken
-                      .replace("{n}", num(filled))
-                      .replace("{cap}", num(LAUNCH_SEATS.cap))}
-                    left={
-                      done
-                        ? t.tierDone
-                        : t.seatsLeft.replace("{n}", num(LAUNCH_SEATS.cap - filled))
-                    }
-                    cap={LAUNCH_SEATS.cap}
-                    filled={filled}
-                    className={done ? "mt-8" : "mt-6"}
-                  />
-                );
-              })}
-
-            {/*
-              کلِ نردبان، نه فقط پله‌های بعدی.
-
-              نسخهٔ قبل پلهٔ اول را بالا نشان می‌داد و بقیه را پایین.
-              حالا که پلهٔ اول تمام شده، حذفش کردن یعنی خواننده هیچ‌وقت
-              نمی‌فهمد قیمت از کجا آمده — و «تکمیل شد» دقیقاً همان چیزی
-              است که نشان می‌دهد این پلکان واقعی است، نه یک فوریتِ ساختگی.
-            */}
-            <ol className="mt-8">
-              {price.tiers.map((row) => (
-                <li
-                  key={row.seat}
-                  className="flex items-baseline gap-4 border-t py-3"
-                  style={{ borderColor: LINE }}
-                >
-                  <span
-                    className="flex-1 text-[0.8rem]"
-                    style={{ color: row.now && !offer ? INK : MUTE }}
-                  >
-                    {row.seat}
-                  </span>
-                  {/* وقتی کمپین در جریانه، «الان» روی ردیف کمپینه نه قیمت اصلی */}
-                  {(row.done || (row.now && !offer)) && (
-                    <span
-                      className="neo-cap text-[0.6rem]"
-                      style={{ color: row.now ? VIOLET : MUTE }}
-                    >
-                      {row.done ? t.tierDone : t.tierNow}
-                    </span>
-                  )}
-                  <span
-                    className="tabular-nums text-[0.85rem]"
-                    style={
-                      row.done
-                        ? { color: MUTE, textDecoration: "line-through" }
-                        : undefined
-                    }
-                  >
-                    {row.price}
-                  </span>
-                </li>
-              ))}
-              {offer && (
-                <li className="flex items-baseline gap-4 border-t py-3" style={{ borderColor: LINE }}>
-                  <span className="flex-1 text-[0.8rem]" style={{ color: INK }}>
-                    {offer.title}
-                  </span>
-                  <span className="neo-cap text-[0.6rem]" style={{ color: VIOLET }}>
-                    {t.tierNow}
-                  </span>
-                  <span className="tabular-nums text-[0.85rem]">{offer.price}</span>
-                </li>
-              )}
-            </ol>
 
             <p className="mt-6 text-xs leading-relaxed" style={{ color: MUTE }}>
               {price.note}
@@ -2301,59 +2192,6 @@ function PathCard({
  * نشانه‌ها زودتر از حروف دیده می‌شوند و می‌فهمد کجای صفحه است.
  * داخلِ یک قابِ مربعِ بی‌گِردی، مثلِ بقیهٔ صفحه.
  */
-/**
- * نوارِ ظرفیتِ پلهٔ تخفیف.
- *
- * سی خانه، نه یک میلهٔ پیوسته: «چند جا مانده» سؤالی است که با
- * شمردن جواب داده می‌شود، و خانه‌ها را می‌شود شمرد. تک‌رنگ می‌ماند —
- * پُر جوهر است و خالی خط، مثلِ بقیهٔ صفحه.
- *
- * عددها از `LAUNCH_SEATS` می‌آیند؛ هر ثبت‌نامِ تازه همان یک خط است.
- */
-function SeatMeter({
-  label,
-  taken,
-  left,
-  cap,
-  filled,
-  className,
-}: {
-  label: string;
-  taken: string;
-  left: string;
-  cap: number;
-  filled: number;
-  className?: string;
-}) {
-  return (
-    <div className={className}>
-      <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
-        <p className="neo-cap text-[0.66rem]" style={{ color: MUTE }}>
-          {label}
-        </p>
-        <p className="text-[0.82rem] font-semibold" style={{ color: INK }}>
-          {left}
-        </p>
-      </div>
-      <div
-        role="meter"
-        aria-valuemin={0}
-        aria-valuemax={cap}
-        aria-valuenow={filled}
-        aria-valuetext={taken}
-        className="mt-3 flex gap-[3px]"
-      >
-        {Array.from({ length: cap }, (_, i) => (
-          <span key={i} className="h-3 flex-1" style={{ background: i < filled ? INK : LINE }} />
-        ))}
-      </div>
-      <p className="mt-2.5 text-xs" style={{ color: MUTE }}>
-        {taken}
-      </p>
-    </div>
-  );
-}
-
 /**
  * انتخابِ زبان.
  *
