@@ -1,3 +1,5 @@
+import { campaignPhase, type CampaignInfo } from "@/lib/campaign";
+
 /**
  * زیرشاخهٔ هر درس، و پروژه‌ای که کنارِ دوره می‌رود.
  *
@@ -1079,3 +1081,41 @@ export const PRICING = {
  */
 export const currentTier = (lang: keyof typeof PRICING) =>
   PRICING[lang].tiers.find((t) => t.now) ?? PRICING[lang].tiers[0];
+
+/** کلید روبوتایپ در قیمت‌های کمپین — این دوره توی mock-data نیست */
+export const ROBOTYPE_CAMPAIGN_ID = "robotype";
+/** همون `PRICING.full` به عدد، برای سنجش قیمت کمپین و درصد تخفیف */
+export const ROBOTYPE_PRICE = 12_000_000;
+
+export interface RobotypeOffer {
+  /** عنوان کمپین، کنار قیمت خط‌خورده */
+  title: string;
+  price: string;
+  off: string;
+}
+
+/**
+ * قیمت کمپینی روبوتایپ، فقط وقتی کمپین در جریانه و براش قیمتی ثبت شده.
+ * بدون قیمت ثبت‌شده null برمی‌گرده و صفحه همون قیمت اصلی رو نشون می‌ده.
+ */
+export function robotypeOffer(
+  campaign: CampaignInfo | null,
+  now: number,
+  lang: keyof typeof PRICING,
+): RobotypeOffer | null {
+  if (!campaign || campaignPhase(campaign, now) !== "live") return null;
+  const amount = campaign.prices[ROBOTYPE_CAMPAIGN_ID];
+  if (!amount || amount >= ROBOTYPE_PRICE) return null;
+  const pct = Math.round((1 - amount / ROBOTYPE_PRICE) * 100);
+  return lang === "fa"
+    ? {
+        title: campaign.title,
+        price: amount.toLocaleString("fa-IR"),
+        off: `${pct.toLocaleString("fa-IR")}٪ تخفیف`,
+      }
+    : {
+        title: campaign.title,
+        price: amount.toLocaleString("en-US"),
+        off: `${pct}% off`,
+      };
+}

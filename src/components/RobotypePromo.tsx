@@ -3,7 +3,7 @@ import Image from "next/image";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import FadeIn from "@/components/FadeIn";
 import { MISSIONS, EPISODE_COUNT } from "@/lib/odyssey";
-import { LAUNCH_SEATS, PRICING, currentTier } from "@/lib/ai7-curriculum";
+import { LAUNCH_SEATS, PRICING, currentTier, type RobotypeOffer } from "@/lib/ai7-curriculum";
 import type { Lang } from "@/lib/i18n";
 
 /**
@@ -48,7 +48,7 @@ const COPY = {
   },
 } as const;
 
-export default function RobotypePromo({ lang }: { lang: Lang }) {
+export default function RobotypePromo({ lang, offer }: { lang: Lang; offer?: RobotypeOffer | null }) {
   const c = COPY[lang];
   const price = PRICING[lang];
   const tier = currentTier(lang);
@@ -95,13 +95,13 @@ export default function RobotypePromo({ lang }: { lang: Lang }) {
           <div className="mt-9 flex flex-wrap items-end gap-x-8 gap-y-5">
             <div>
               <p className="flex flex-wrap items-baseline gap-x-2 font-body">
-                <span className="text-3xl font-light tabular-nums">{tier.price}</span>
+                <span className="text-3xl font-light tabular-nums">{offer?.price ?? tier.price}</span>
                 <span className="text-sm text-white/50">{price.unit}</span>
               </p>
-              {!tier.full && (
+              {(offer || !tier.full) && (
                 <p className="mt-1 flex items-baseline gap-2 font-body text-xs">
                   <span className="tabular-nums text-white/40 line-through">{price.full}</span>
-                  <span className="font-semibold text-emerald-300">{tier.off}</span>
+                  <span className="font-semibold text-emerald-300">{offer?.off ?? tier.off}</span>
                 </p>
               )}
             </div>

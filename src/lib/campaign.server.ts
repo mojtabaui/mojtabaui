@@ -2,6 +2,7 @@ import "server-only";
 import { unstable_cache } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { pickCampaign, type CampaignInfo } from "@/lib/campaign";
+import { robotypeOffer } from "@/lib/ai7-curriculum";
 
 export const CAMPAIGN_TAG = "campaign";
 
@@ -43,6 +44,12 @@ export async function getCurrentCampaign(): Promise<{ campaign: CampaignInfo | n
   const now = Date.now();
   const list = await loadActiveCampaigns();
   return { campaign: pickCampaign(list, now), now };
+}
+
+/** قیمت کمپینی روبوتایپ برای این لحظه؛ null یعنی همون قیمت اصلی */
+export async function getRobotypeOffer(lang: "fa" | "en") {
+  const { campaign, now } = await getCurrentCampaign();
+  return robotypeOffer(campaign, now, lang);
 }
 
 export function normalizePrices(raw: unknown): Record<string, number> {

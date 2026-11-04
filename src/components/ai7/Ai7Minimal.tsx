@@ -49,6 +49,7 @@ import {
   PRICING,
   LAUNCH_SEATS,
   currentTier,
+  type RobotypeOffer,
 } from "@/lib/ai7-curriculum";
 import type { Lang } from "@/lib/i18n";
 import { STAGE_ART } from "./StageArt";
@@ -577,8 +578,11 @@ const T = {
 
 export default function Ai7Minimal({
   lang,
+  offer = null,
 }: {
   lang: Lang;
+  /** قیمت کمپینی که الان در جریانه؛ null یعنی همون قیمت اصلی */
+  offer?: RobotypeOffer | null;
   /**
    * انتخابِ ربات — دیگر مصرفی ندارد و فقط برای سازگاریِ مسیرهای
    * قدیمی (`/ai7/v2` و `/ai7/v3`) پذیرفته می‌شود. صحنه یکی است.
@@ -1041,7 +1045,7 @@ export default function Ai7Minimal({
             {/* عددِ درشت — تنها جایی از صفحه که عدد، تصویر است */}
             <p className="flex flex-wrap items-baseline gap-x-3">
               <span className="font-light leading-none tabular-nums text-[clamp(2.6rem,7vw,4.4rem)]">
-                {tier.price}
+                {offer?.price ?? tier.price}
               </span>
               <span className="text-sm" style={{ color: MUTE }}>
                 {price.unit}
@@ -1053,13 +1057,13 @@ export default function Ai7Minimal({
               قیمتِ خط‌خورده یعنی «قبلاً این‌قدر بود»؛ وقتی پلهٔ فعلی
               خودِ قیمتِ اصلی است، این خط قیمت را روی خودش خط می‌زند.
             */}
-            {!tier.full && (
+            {(offer || !tier.full) && (
               <p className="mt-3 flex flex-wrap items-baseline gap-x-3 text-sm">
                 <span className="tabular-nums line-through" style={{ color: MUTE }}>
                   {price.full}
                 </span>
-                <span style={{ color: INK }}>{tier.off}</span>
-                <span style={{ color: MUTE }}>· {tier.seat}</span>
+                <span style={{ color: INK }}>{offer?.off ?? tier.off}</span>
+                <span style={{ color: MUTE }}>· {offer?.title ?? tier.seat}</span>
               </p>
             )}
 
@@ -1113,11 +1117,12 @@ export default function Ai7Minimal({
                 >
                   <span
                     className="flex-1 text-[0.8rem]"
-                    style={{ color: row.now ? INK : MUTE }}
+                    style={{ color: row.now && !offer ? INK : MUTE }}
                   >
                     {row.seat}
                   </span>
-                  {(row.done || row.now) && (
+                  {/* وقتی کمپین در جریانه، «الان» روی ردیف کمپینه نه قیمت اصلی */}
+                  {(row.done || (row.now && !offer)) && (
                     <span
                       className="neo-cap text-[0.6rem]"
                       style={{ color: row.now ? VIOLET : MUTE }}
@@ -1137,6 +1142,17 @@ export default function Ai7Minimal({
                   </span>
                 </li>
               ))}
+              {offer && (
+                <li className="flex items-baseline gap-4 border-t py-3" style={{ borderColor: LINE }}>
+                  <span className="flex-1 text-[0.8rem]" style={{ color: INK }}>
+                    {offer.title}
+                  </span>
+                  <span className="neo-cap text-[0.6rem]" style={{ color: VIOLET }}>
+                    {t.tierNow}
+                  </span>
+                  <span className="tabular-nums text-[0.85rem]">{offer.price}</span>
+                </li>
+              )}
             </ol>
 
             <p className="mt-6 text-xs leading-relaxed" style={{ color: MUTE }}>

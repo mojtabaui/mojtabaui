@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Ai7Minimal from "@/components/ai7/Ai7Minimal";
+import { getRobotypeOffer } from "@/lib/campaign.server";
 import { getLang } from "@/lib/i18n/server";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -18,5 +19,6 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function Ai7BustPage() {
   const lang = await getLang();
-  return <Ai7Minimal lang={lang} bot="bust" />;
+  const offer = await getRobotypeOffer(lang);
+  return <Ai7Minimal lang={lang} bot="bust" offer={offer} />;
 }

@@ -5,6 +5,7 @@ import { ArrowRight, Megaphone, Plus } from "lucide-react";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { courses } from "@/lib/mock-data";
+import { ROBOTYPE_CAMPAIGN_ID, ROBOTYPE_PRICE } from "@/lib/ai7-curriculum";
 import { normalizePrices } from "@/lib/campaign.server";
 import type { CampaignInfo } from "@/lib/campaign";
 import CampaignForm from "@/components/admin/CampaignForm";
@@ -39,7 +40,11 @@ export default async function CampaignsPage() {
   }));
 
   // همون دوره‌هایی که روی سایت دیده می‌شن، با قیمت پایه‌شون
-  const options = courses.map((c) => ({ id: c.id, title: c.title, price: c.price }));
+  // روبوتایپ صفحهٔ خودش رو داره و توی mock-data نیست، پس دستی اضافه می‌شه
+  const options = [
+    { id: ROBOTYPE_CAMPAIGN_ID, title: "روبوتایپ", price: ROBOTYPE_PRICE },
+    ...courses.map((c) => ({ id: c.id, title: c.title, price: c.price })),
+  ];
   const now = Date.now();
 
   return (

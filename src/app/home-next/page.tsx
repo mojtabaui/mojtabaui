@@ -9,6 +9,7 @@ import PathPicker from "@/components/home-next/PathPicker";
 import { featuredProjects } from "@/lib/mock-data";
 import { getLang } from "@/lib/i18n/server";
 import { getPaths, courseFacts, TELEGRAM } from "./paths";
+import { getRobotypeOffer } from "@/lib/campaign.server";
 import s from "@/components/home-next/home-next.module.css";
 
 /**
@@ -97,7 +98,7 @@ export default async function HomeNext({ searchParams }: { searchParams: Promise
   const lang = await getLang();
   const c = COPY[lang];
   const fa = lang === "fa";
-  const paths = getPaths(lang);
+  const paths = getPaths(lang, await getRobotypeOffer(lang));
   const asked = (await searchParams).path;
   const initial = paths.find((p) => p.id === asked)?.id ?? null;
   const courses = courseFacts(lang);

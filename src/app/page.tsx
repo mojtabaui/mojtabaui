@@ -22,6 +22,7 @@ import { HOME } from "@/lib/i18n/dict/home";
 import { TESTIMONIALS } from "@/lib/i18n/dict/testimonials";
 import { localizeCourses } from "@/lib/i18n/content/courses";
 import { getCurrentCampaign } from "@/lib/campaign.server";
+import { robotypeOffer } from "@/lib/ai7-curriculum";
 import { applyCampaignPrices } from "@/lib/campaign";
 
 
@@ -177,7 +178,7 @@ export default async function Home() {
         {/* ─── دورهٔ ROBOTYPE ───
             سومین چیزی که دیده می‌شود: بعد از هیرو و عددها، قبل از اینکه
             صفحه وارد توضیحِ مدرسه شود. */}
-        <RobotypePromo lang={lang} />
+        <RobotypePromo lang={lang} offer={robotypeOffer(campaign, now, lang)} />
 
         {/* ─── Why Us ─── */}
         <section style={{ backgroundColor: "#E4DAD5" }} className="py-24 border-b border-[#d4c8c2]">

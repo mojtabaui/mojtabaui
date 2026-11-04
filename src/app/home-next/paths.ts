@@ -10,7 +10,7 @@ import { courses as allCourses, formatPrice, articles, freeResources } from "@/l
 import { localizeCourses } from "@/lib/i18n/content/courses";
 import { TESTIMONIALS } from "@/lib/i18n/dict/testimonials";
 import { MISSIONS, EPISODE_COUNT } from "@/lib/odyssey";
-import { PRICING, currentTier } from "@/lib/ai7-curriculum";
+import { PRICING, currentTier, type RobotypeOffer } from "@/lib/ai7-curriculum";
 import type { Lang } from "@/lib/i18n";
 
 export type Fact = { title: string; meta: string[]; href: string; closed?: string };
@@ -55,7 +55,7 @@ export function courseFacts(lang: Lang) {
   }));
 }
 
-export function getPaths(lang: Lang): PathData[] {
+export function getPaths(lang: Lang, offer?: RobotypeOffer | null): PathData[] {
   const fa = lang === "fa";
   const facts = Object.fromEntries(courseFacts(lang).map((c) => [c.slug, c.fact]));
   const t = TESTIMONIALS[lang];
@@ -103,7 +103,7 @@ export function getPaths(lang: Lang): PathData[] {
           meta: [
             fa ? `${num(MISSIONS.length, lang)} فصل` : `${MISSIONS.length} chapters`,
             fa ? `${num(EPISODE_COUNT, lang)} درس ضبط‌شده` : `${EPISODE_COUNT} recorded lessons`,
-            `${tier.price} ${PRICING[lang].unit}`,
+            `${offer?.price ?? tier.price} ${PRICING[lang].unit}`,
           ],
         },
       ],
