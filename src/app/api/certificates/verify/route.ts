@@ -14,6 +14,7 @@ function toLatinDigits(input: string): string {
 function disciplineLabel(track: string): string {
   if (track === "UI") return "طراحی رابط کاربری";
   if (track === "UX") return "طراحی تجربه کاربری";
+  if (track === "MENTOR") return "منتور مدرسه دیزاین ملینا";
   return "کوادکمپ"; // QC
 }
 
@@ -48,7 +49,9 @@ export async function POST(req: NextRequest) {
   const discipline = disciplineLabel(cert.track);
   // کوادکمپ سال نداره ولی ترم داره؛ بقیه با «دوره <سال>» نمایش داده می‌شن
   const courseTitle =
-    cert.track === "QC"
+    cert.track === "MENTOR"
+      ? discipline
+      : cert.track === "QC"
       ? `${discipline}، ${COHORT_INFO[resolveCohort(cert.year, cert.startDate)].fa}`
       : cert.year
         ? `${discipline}، دوره ${cert.year}`

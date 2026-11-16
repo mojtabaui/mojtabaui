@@ -18,7 +18,7 @@ async function requireAdmin() {
   return session?.user?.role === "ADMIN";
 }
 
-const TRACKS: CertTrack[] = ["UI", "UX", "QC"];
+const TRACKS: CertTrack[] = ["UI", "UX", "QC", "MENTOR"];
 
 /** سالِ ورودی رو اعتبارسنجی می‌کنه: کوادکمپ سال نمی‌خواد، بقیه سال ۴ رقمی */
 function normalizeInput(trackRaw: string, yearRaw: string) {
@@ -27,6 +27,9 @@ function normalizeInput(trackRaw: string, yearRaw: string) {
 
   // کوادکمپ سال نداره ولی ترم داره (تابستان / پاییز) و همون توی ستون year
   // می‌شینه — تعداد پروژه‌های روی گواهی ازش میاد. کد گواهی بهش وابسته نیست.
+  // منتور سال و ترم نداره؛ کدش MT + شماره‌ی ۳ رقمی‌ه
+  if (track === "MENTOR") return { track, year: null as string | null };
+
   if (track === "QC") {
     const cohort = parseCohort(yearRaw);
     if (!cohort) return { error: "ترم کوادکمپ رو انتخاب کن (تابستان یا پاییز)" as const };

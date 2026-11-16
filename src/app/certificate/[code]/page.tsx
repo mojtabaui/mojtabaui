@@ -52,6 +52,7 @@ export default async function CertificatePage({ params }: Props) {
   // سند بوت‌کمپ تیره‌ست؛ QR همون تیره روی روشن می‌مونه (اسکنرها نسخه‌ی
   // برعکس رو همیشه نمی‌خونن)، فقط زمینه‌اش کِرِم می‌شه تا با سند جور باشه.
   const isQC = cert.track === "QC";
+  const isMentor = cert.track === "MENTOR";
   const qrDataUrl = await QRCode.toDataURL(
     `https://mojtabaui.ir/certificate/${cert.code}`,
     {
@@ -90,7 +91,7 @@ export default async function CertificatePage({ params }: Props) {
 
             <PrintButton
               fileName={`melina-certificate-${cert.code}`}
-              background={isQC ? "#0A090D" : "#FAF6F1"}
+              background={isQC ? "#0A090D" : isMentor ? "#F7F1E6" : "#FAF6F1"}
             />
           </div>
 
@@ -105,10 +106,12 @@ export default async function CertificatePage({ params }: Props) {
           <div id="cert-scroll" className="overflow-x-auto -mx-4 px-4 sm:mx-0 sm:px-0 pb-2 sm:pb-0">
             <div
               id="cert-card"
-              className={`${isQC ? "min-w-[760px]" : "min-w-[560px]"} sm:min-w-0 rounded-3xl overflow-hidden border ${
+              className={`${isQC ? "min-w-[760px]" : isMentor ? "min-w-[720px]" : "min-w-[560px]"} sm:min-w-0 rounded-3xl overflow-hidden border ${
                 isQC
                   ? "border-[#1d1a24] shadow-[0_40px_90px_-40px_rgba(60,40,140,0.65)] bg-[#0A090D]"
-                  : "border-[#e8e2d9] shadow-[0_30px_70px_-40px_rgba(26,23,20,0.5)] bg-white"
+                  : isMentor
+                    ? "border-[#d9cfbd] shadow-[0_30px_70px_-40px_rgba(26,23,20,0.5)] bg-[#F7F1E6]"
+                    : "border-[#e8e2d9] shadow-[0_30px_70px_-40px_rgba(26,23,20,0.5)] bg-white"
               }`}
             >
               <CertificateDocument

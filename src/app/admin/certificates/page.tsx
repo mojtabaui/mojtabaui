@@ -17,6 +17,7 @@ const TRACK_LABEL: Record<CertTrack, string> = {
   UI: "رابط کاربری",
   UX: "تجربه کاربری",
   QC: "کوادکمپ",
+  MENTOR: "منتور",
 };
 
 interface Props {
@@ -41,7 +42,7 @@ export default async function CertificatesPage({ searchParams }: Props) {
 
   const sp = await searchParams;
   const q = (sp.q ?? "").trim();
-  const track = ["UI", "UX", "QC"].includes(sp.track ?? "") ? (sp.track as CertTrack) : null;
+  const track = ["UI", "UX", "QC", "MENTOR"].includes(sp.track ?? "") ? (sp.track as CertTrack) : null;
   const year = toLatinDigits(sp.year ?? "").trim();
   const page = Math.max(1, parseInt(sp.page ?? "1", 10) || 1);
 
@@ -144,6 +145,7 @@ export default async function CertificatesPage({ searchParams }: Props) {
             <option value="UI">رابط کاربری</option>
             <option value="UX">تجربه کاربری</option>
             <option value="QC">کوادکمپ</option>
+            <option value="MENTOR">منتور</option>
           </select>
 
           <input

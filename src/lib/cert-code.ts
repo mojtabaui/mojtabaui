@@ -16,6 +16,7 @@ import type { CertTrack } from "@prisma/client";
 /** بخش ثابت کدِ یک گروه — کدهای هم‌گروه شماره‌ی ترتیبیِ مشترک می‌گیرن */
 export function codePrefix(track: CertTrack, year: string | null): string {
   if (track === "QC") return "QC";
+  if (track === "MENTOR") return "MT"; // منتور سال نداره: MT001
   return `MU${(year ?? "").trim()}`; // UI و UX در یک سال، یک گروه‌اند
 }
 

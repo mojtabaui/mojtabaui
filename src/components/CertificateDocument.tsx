@@ -2,6 +2,7 @@ import Image from "next/image";
 import { BrandGlyph } from "@/components/BrandMark";
 import { contentForTrack } from "@/lib/certificate-skills";
 import QuadcampCertificate from "@/components/QuadcampCertificate";
+import MentorCertificate from "@/components/MentorCertificate";
 
 /**
  * سند گواهی، A4 افقی، کاملاً انگلیسی و چپ‌چین.
@@ -128,6 +129,8 @@ export default function CertificateDocument({
 }) {
   // بوت‌کمپ سند تیره‌ی خودش رو داره، با چهار دوره و پروژه‌های هر ترم
   if (cert.track === "QC") return <QuadcampCertificate cert={cert} qrDataUrl={qrDataUrl} />;
+  // منتورها سند جدا و کاملاً متفاوت از دانشجوها دارن
+  if (cert.track === "MENTOR") return <MentorCertificate cert={cert} qrDataUrl={qrDataUrl} />;
 
   const { discipline, hours, deliverable, skills } = contentForTrack(cert.track);
   const distinction = Boolean(cert.distinction);

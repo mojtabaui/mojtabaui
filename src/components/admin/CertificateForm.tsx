@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { Award, Check, Copy, FileText, Users, User } from "lucide-react";
 import { COHORT_INFO, QC_COHORTS, type QcCohort } from "@/lib/quadcamp";
 
-type Track = "UI" | "UX" | "QC";
+type Track = "UI" | "UX" | "QC" | "MENTOR";
 type Mode = "single" | "bulk";
 type Row = { name: string; code: string };
 
@@ -49,13 +49,15 @@ export default function CertificateForm() {
   const [copiedAll, setCopiedAll] = useState(false);
 
   const isQC = track === "QC";
+  const isMentor = track === "MENTOR";
   const parsed = parseNames(namesRaw);
   // کوادکمپ به‌جای سال، ترم می‌فرسته؛ سرور همون رو توی ستون year می‌ذاره
-  const yearParam = isQC ? cohort : year;
+  // منتور سال و ترم نداره، پس چیزی نمی‌فرستیم
+  const yearParam = isQC ? cohort : isMentor ? "" : year;
 
   // پیش‌نمایش کدِ بعدی هر بار که دوره یا سال عوض شه.
   useEffect(() => {
-    if (!isQC && !/^\d{4}$/.test(year)) {
+    if (!isQC && !isMentor && !/^\d{4}$/.test(year)) {
       setNextCode(null);
       return;
     }
@@ -69,7 +71,7 @@ export default function CertificateForm() {
     return () => {
       active = false;
     };
-  }, [track, year, isQC, yearParam]);
+  }, [track, year, isQC, isMentor, yearParam]);
 
   function switchMode(next: Mode) {
     setMode(next);
@@ -174,6 +176,7 @@ export default function CertificateForm() {
           <option value="UI">رابط کاربری (UI)</option>
           <option value="UX">تجربه کاربری (UX)</option>
           <option value="QC">کوادکمپ (QuadCamp)</option>
+          <option value="MENTOR">منتور (گواهی همکاری)</option>
         </select>
       </div>
       {isQC && (
@@ -195,7 +198,7 @@ export default function CertificateForm() {
           </select>
         </div>
       )}
-      {!isQC && (
+      {!isQC && !isMentor && (
         <div>
           <label className="block font-body text-sm text-[var(--ink-3)] mb-1.5">سال</label>
           <input
@@ -211,7 +214,8 @@ export default function CertificateForm() {
       )}
       <div>
         <label className="block font-body text-sm text-[var(--ink-3)] mb-1.5">
-          تاریخ شروع <span className="text-[var(--ink-4)]">(اختیاری · میلادی)</span>
+          {isMentor ? "شروع همکاری" : "تاریخ شروع"}{" "}
+          <span className="text-[var(--ink-4)]">(اختیاری · میلادی)</span>
         </label>
         <input
           type="text"
@@ -361,7 +365,7 @@ export default function CertificateForm() {
         {mode === "single" && (
           <form onSubmit={handleSingle} className="space-y-4">
             <div>
-              <label className="block font-body text-sm text-[var(--ink-3)] mb-1.5">نام دانشجو</label>
+              <label className="block font-body text-sm text-[var(--ink-3)] mb-1.5">{isMentor ? "نام منتور" : "نام دانشجو"}</label>
               <input
                 type="text"
                 value={studentName}

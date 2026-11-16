@@ -238,6 +238,7 @@ enum CertTrack {
   UI
   UX
   QC // کوادکمپ
+  MENTOR // منتورهای مدرسه — سند جدا از دانشجوها، بدون سال و ترم
 }
 
 enum Role {
