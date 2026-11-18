@@ -88,6 +88,25 @@ model SpotLicense {
   @@index([createdAt])
 }
 
+/// دانشجوهای دوره‌های بی‌نهایت (ویدیویی روی اسپات‌پلیر).
+/// اسپات‌پلیر هیچ گزارشی از تماشا نمی‌ده، پس مدرس خودش برای هر هفته
+/// دو تیک می‌زنه: ویدیوی اون هفته دیده شده، تسک اون هفته انجام شده.
+/// عددها شمارهٔ هفته‌ان (۱ تا ۱۰) و هر آرایه فقط شمارهٔ هفته‌های تیک‌خورده رو نگه می‌داره.
+model InfinityStudent {
+  id         String   @id @default(cuid())
+  name       String
+  phone      String   @default("")
+  /// slug دوره در mock-data: ui-infinity یا ux-infinity
+  course     String
+  videosDone Int[]    @default([])
+  tasksDone  Int[]    @default([])
+  note       String   @default("")
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([course])
+}
+
 /// گواهینامه‌های صادرشده — منبع اولیه: فایل‌های اکسل در prisma/certs،
 /// از ۱۴۰۵ به بعد از پنل مدیریت صادر می‌شن.
 model Certificate {
