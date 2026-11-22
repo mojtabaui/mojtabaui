@@ -10,9 +10,10 @@ async function requireAdmin() {
 }
 
 /**
- * PATCH → اصلاح تاریخ شروع یک گواهیِ صادرشده.
+ * PATCH → اصلاح تاریخ شروع و/یا تاریخ صدورِ یک گواهیِ صادرشده.
  *
- * فقط همین یک فیلد. کد و نام و دوره بعد از صدور دست‌نخورده می‌مونن، چون
+ * body: { startDate?: string, issueDate?: "YYYY-MM-DD" } — هرکدوم که بیاد
+ * همون عوض می‌شه. کد و نام و دوره بعد از صدور دست‌نخورده می‌مونن، چون
  * کد جای دیگه‌ای پخش شده و عوض کردنش یعنی بی‌اعتبار کردن گواهی‌ای که
  * دست دانشجوئه.
  */
@@ -27,19 +28,38 @@ export async function PATCH(
   const { id } = await params;
   const body = await req.json();
 
-  if (typeof body.startDate !== "string") {
-    return NextResponse.json({ error: "تاریخ شروع نامعتبر است" }, { status: 400 });
+  const data: Prisma.CertificateUpdateInput = {};
+
+  if (body.startDate !== undefined) {
+    if (typeof body.startDate !== "string") {
+      return NextResponse.json({ error: "تاریخ شروع نامعتبر است" }, { status: 400 });
+    }
+    // رشته‌ی آزاده چون روی سند عیناً چاپ می‌شه، ولی طولش محدوده تا خط
+    // پایین سند نشکنه
+    data.startDate = body.startDate.trim().slice(0, 60);
   }
-  // رشته‌ی آزاده چون روی سند عیناً چاپ می‌شه، ولی طولش محدوده تا خط
-  // پایین سند نشکنه
-  const startDate = body.startDate.trim().slice(0, 60);
+
+  if (body.issueDate !== undefined) {
+    // «Date of issue» روی سند از createdAt میاد. ظهرِ UTC ذخیره می‌شه تا
+    // با هیچ منطقهٔ زمانی‌ای روزش یکی عقب یا جلو نیفته.
+    const m = typeof body.issueDate === "string" && /^(\d{4})-(\d{2})-(\d{2})$/.exec(body.issueDate);
+    const d = m ? new Date(Date.UTC(+m[1], +m[2] - 1, +m[3], 12)) : null;
+    if (!m || !d || d.getUTCMonth() !== +m[2] - 1 || d.getUTCFullYear() < 2015 || d.getTime() > Date.now() + 86_400_000) {
+      return NextResponse.json({ error: "تاریخ صدور نامعتبر است" }, { status: 400 });
+    }
+    data.createdAt = d;
+  }
+
+  if (Object.keys(data).length === 0) {
+    return NextResponse.json({ error: "چیزی برای ذخیره نیست" }, { status: 400 });
+  }
 
   try {
     const cert = await prisma.certificate.update({
       where: { id },
-      data: { startDate },
+      data,
     });
-    return NextResponse.json({ ok: true, startDate: cert.startDate });
+    return NextResponse.json({ ok: true, startDate: cert.startDate, issueDate: cert.createdAt.toISOString().slice(0, 10) });
   } catch (e) {
     if (e instanceof Prisma.PrismaClientKnownRequestError && e.code === "P2025") {
       return NextResponse.json({ error: "این گواهی پیدا نشد" }, { status: 404 });

@@ -7,6 +7,7 @@ import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import DeleteCertificateButton from "@/components/admin/DeleteCertificateButton";
 import CertificateStartDate from "@/components/admin/CertificateStartDate";
+import CertificateIssueDate from "@/components/admin/CertificateIssueDate";
 import { COHORT_INFO, resolveCohort } from "@/lib/quadcamp";
 import PanelThemeToggle from "@/components/admin/PanelThemeToggle";
 import { toPersianDigits } from "@/lib/persian-months";
@@ -210,6 +211,7 @@ export default async function CertificatesPage({ searchParams }: Props) {
 
                   <div className="flex items-center gap-1.5 shrink-0">
                     <CertificateStartDate id={cert.id} value={cert.startDate} />
+                    <CertificateIssueDate id={cert.id} value={cert.createdAt.toISOString().slice(0, 10)} />
                     <a
                       href={`/certificate/${cert.code}`}
                       target="_blank"
