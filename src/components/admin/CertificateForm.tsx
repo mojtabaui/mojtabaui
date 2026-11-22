@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { Award, Check, Copy, FileText, Users, User } from "lucide-react";
 import { COHORT_INFO, QC_COHORTS, type QcCohort } from "@/lib/quadcamp";
 
-type Track = "UI" | "UX" | "QC" | "MENTOR";
+type Track = "UI" | "UX" | "QC" | "MENTOR" | "RT";
 type Mode = "single" | "bulk";
 type Row = { name: string; code: string };
 
@@ -50,14 +50,15 @@ export default function CertificateForm() {
 
   const isQC = track === "QC";
   const isMentor = track === "MENTOR";
+  const noYear = isMentor || track === "RT";
   const parsed = parseNames(namesRaw);
   // کوادکمپ به‌جای سال، ترم می‌فرسته؛ سرور همون رو توی ستون year می‌ذاره
   // منتور سال و ترم نداره، پس چیزی نمی‌فرستیم
-  const yearParam = isQC ? cohort : isMentor ? "" : year;
+  const yearParam = isQC ? cohort : noYear ? "" : year;
 
   // پیش‌نمایش کدِ بعدی هر بار که دوره یا سال عوض شه.
   useEffect(() => {
-    if (!isQC && !isMentor && !/^\d{4}$/.test(year)) {
+    if (!isQC && !noYear && !/^\d{4}$/.test(year)) {
       setNextCode(null);
       return;
     }
@@ -71,7 +72,7 @@ export default function CertificateForm() {
     return () => {
       active = false;
     };
-  }, [track, year, isQC, isMentor, yearParam]);
+  }, [track, year, isQC, noYear, yearParam]);
 
   function switchMode(next: Mode) {
     setMode(next);
@@ -177,6 +178,7 @@ export default function CertificateForm() {
           <option value="UX">تجربه کاربری (UX)</option>
           <option value="QC">کوادکمپ (QuadCamp)</option>
           <option value="MENTOR">منتور (گواهی همکاری)</option>
+          <option value="RT">روبوتایپ (ROBOTYPE)</option>
         </select>
       </div>
       {isQC && (
@@ -198,7 +200,7 @@ export default function CertificateForm() {
           </select>
         </div>
       )}
-      {!isQC && !isMentor && (
+      {!isQC && !noYear && (
         <div>
           <label className="block font-body text-sm text-[var(--ink-3)] mb-1.5">سال</label>
           <input

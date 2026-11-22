@@ -15,6 +15,7 @@ function disciplineLabel(track: string): string {
   if (track === "UI") return "طراحی رابط کاربری";
   if (track === "UX") return "طراحی تجربه کاربری";
   if (track === "MENTOR") return "منتور مدرسه دیزاین ملینا";
+  if (track === "RT") return "روبوتایپ — طراحی محصول با هوش مصنوعی";
   return "کوادکمپ"; // QC
 }
 
@@ -49,7 +50,7 @@ export async function POST(req: NextRequest) {
   const discipline = disciplineLabel(cert.track);
   // کوادکمپ سال نداره ولی ترم داره؛ بقیه با «دوره <سال>» نمایش داده می‌شن
   const courseTitle =
-    cert.track === "MENTOR"
+    cert.track === "MENTOR" || cert.track === "RT"
       ? discipline
       : cert.track === "QC"
       ? `${discipline}، ${COHORT_INFO[resolveCohort(cert.year, cert.startDate)].fa}`

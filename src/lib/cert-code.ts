@@ -11,12 +11,14 @@ import type { CertTrack } from "@prisma/client";
  *        پیشوند MU برای هر دو دوره یکیه و شماره بین‌شون مشترکه،
  *        پس از روی کد معلوم نیست UI بوده یا UX.
  *      • کوادکمپ:   QC + شماره‌ی ۴ رقمی (بدون سال) → مثل QC0001
+ *      • روبوتایپ:  RT + شماره‌ی ۳ رقمی (بدون سال) → مثل RT001
  */
 
 /** بخش ثابت کدِ یک گروه — کدهای هم‌گروه شماره‌ی ترتیبیِ مشترک می‌گیرن */
 export function codePrefix(track: CertTrack, year: string | null): string {
   if (track === "QC") return "QC";
   if (track === "MENTOR") return "MT"; // منتور سال نداره: MT001
+  if (track === "RT") return "RT"; // روبوتایپ سال نداره: RT001
   return `MU${(year ?? "").trim()}`; // UI و UX در یک سال، یک گروه‌اند
 }
 

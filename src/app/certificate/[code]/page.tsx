@@ -54,7 +54,8 @@ export default async function CertificatePage({ params }: Props) {
   const isQC = cert.track === "QC";
   const isMentor = cert.track === "MENTOR";
   // منتور هم مثل بوت‌کمپ سند تیره داره
-  const isDark = isQC || isMentor;
+  const isRT = cert.track === "RT";
+  const isDark = isQC || isMentor || isRT;
   const qrDataUrl = await QRCode.toDataURL(
     `https://mojtabaui.ir/certificate/${cert.code}`,
     {
@@ -111,7 +112,9 @@ export default async function CertificatePage({ params }: Props) {
               className={`${isDark ? "min-w-[760px]" : "min-w-[560px]"} sm:min-w-0 rounded-3xl overflow-hidden border ${
                 isQC
                   ? "border-[#1d1a24] shadow-[0_40px_90px_-40px_rgba(60,40,140,0.65)] bg-[#0A090D]"
-                  : isMentor
+                  : isRT
+                    ? "border-[#1d1a24] shadow-[0_40px_90px_-40px_rgba(244,239,230,0.18)] bg-[#0A090D]"
+                    : isMentor
                     ? "border-[#1d1a24] shadow-[0_40px_90px_-40px_rgba(192,138,46,0.55)] bg-[#0A090D]"
                     : "border-[#e8e2d9] shadow-[0_30px_70px_-40px_rgba(26,23,20,0.5)] bg-white"
               }`}

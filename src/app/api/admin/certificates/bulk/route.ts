@@ -18,7 +18,7 @@ async function requireAdmin() {
   return session?.user?.role === "ADMIN";
 }
 
-const TRACKS: CertTrack[] = ["UI", "UX", "QC", "MENTOR"];
+const TRACKS: CertTrack[] = ["UI", "UX", "QC", "MENTOR", "RT"];
 
 function normalizeInput(trackRaw: string, yearRaw: string) {
   const track = trackRaw as CertTrack;
@@ -26,7 +26,7 @@ function normalizeInput(trackRaw: string, yearRaw: string) {
   // کوادکمپ سال نداره ولی ترم داره (تابستان / پاییز) و همون توی ستون year
   // می‌شینه — تعداد پروژه‌های روی گواهی ازش میاد. کد گواهی بهش وابسته نیست.
   // منتور سال و ترم نداره؛ کدش MT + شماره‌ی ۳ رقمی‌ه
-  if (track === "MENTOR") return { track, year: null as string | null };
+  if (track === "MENTOR" || track === "RT") return { track, year: null as string | null };
 
   if (track === "QC") {
     const cohort = parseCohort(yearRaw);
@@ -107,7 +107,7 @@ export async function POST(req: NextRequest) {
   const already = await prisma.certificate.findMany({
     // کوادکمپ یک بار برگزار می‌شه برای هر نفر، پس ترم رو نگاه نمی‌کنیم —
     // گواهی‌های قدیمی‌ترش اصلاً ترم ثبت‌شده ندارن
-    where: track === "QC" || track === "MENTOR"
+    where: track === "QC" || track === "MENTOR" || track === "RT"
       ? { track, studentName: { in: unique } }
       : { track, year, studentName: { in: unique } },
     select: { studentName: true, code: true },
