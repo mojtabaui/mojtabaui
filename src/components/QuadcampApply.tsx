@@ -1,4 +1,6 @@
 import QuadcampForm from "@/components/QuadcampForm";
+import PanelThemeToggle from "@/components/admin/PanelThemeToggle";
+import PanelThemeScript from "@/components/admin/PanelThemeScript";
 import LangSwitch from "@/components/LangSwitch";
 import { COPY } from "@/lib/i18n/dict/quadcamp";
 import type { Lang } from "@/lib/i18n";
@@ -14,6 +16,7 @@ export default function QuadcampApply({ lang }: { lang: Lang }) {
 
   return (
     <main className="panel native-cursor relative min-h-screen bg-[var(--page)] overflow-hidden">
+      <PanelThemeScript />
       {/* هالهٔ بنفش پشت سربرگ، همون لهجه‌ی رنگی خود سایت */}
       <div
         aria-hidden
@@ -27,7 +30,10 @@ export default function QuadcampApply({ lang }: { lang: Lang }) {
       <div className="relative mx-auto w-full max-w-xl px-5 py-14 sm:py-20">
         {/* این صفحه نوار بالای سایت رو نداره، پس سوییچ زبان خودش رو لازم داره */}
         <div className="mb-8 flex justify-end">
-          <LangSwitch tone="panel" />
+          <div className="flex items-center gap-2">
+            <LangSwitch tone="panel" />
+            <PanelThemeToggle />
+          </div>
         </div>
 
         <header className="mb-9">

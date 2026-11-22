@@ -178,6 +178,24 @@ export default async function AdminPage() {
           </Link>
 
           <Link
+            href="/admin/teamup"
+            className="group bg-[var(--card)] hover:bg-[var(--card-raised)] border border-[var(--line)] hover:border-[var(--violet)]/45 rounded-2xl px-5 py-5 flex items-start gap-4 transition-colors"
+          >
+            <div className="w-9 h-9 rounded-xl bg-[var(--info)]/15 text-[var(--info)] flex items-center justify-center shrink-0">
+              <Users size={17} />
+            </div>
+            <div className="min-w-0 flex-1">
+              <h2 className="font-body font-semibold text-[var(--ink)] text-sm mb-1">
+                پروژه تکی یا گروهی
+              </h2>
+              <p className="font-body text-xs text-[var(--ink-4)] leading-6">
+                پاسخ فرم‌های /teamup/ui و /teamup/ux، با خروجی اکسل
+              </p>
+            </div>
+            <span className="font-body text-sm text-[var(--info)] shrink-0 mt-0.5">←</span>
+          </Link>
+
+          <Link
             href="/admin/topics"
             className="group bg-[var(--card)] hover:bg-[var(--card-raised)] border border-[var(--line)] hover:border-[var(--violet)]/45 rounded-2xl px-5 py-5 flex items-start gap-4 transition-colors"
           >

@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import PanelThemeToggle from "@/components/admin/PanelThemeToggle";
+import PanelThemeScript from "@/components/admin/PanelThemeScript";
 import ProjectTopicForm from "@/components/ProjectTopicForm";
 
 export const metadata: Metadata = {
@@ -10,6 +12,7 @@ export const metadata: Metadata = {
 export default function ProjectPage() {
   return (
     <main className="panel native-cursor relative min-h-screen bg-[var(--page)] overflow-hidden">
+      <PanelThemeScript />
       {/* هالهٔ بنفش پشت سربرگ، همون لهجه‌ی رنگی خود سایت */}
       <div
         aria-hidden
@@ -22,6 +25,10 @@ export default function ProjectPage() {
       />
 
       <div className="relative mx-auto w-full max-w-xl px-5 py-14 sm:py-20">
+          <div className="mb-8 flex justify-end">
+            <PanelThemeToggle />
+          </div>
+
         <header className="mb-9">
           <div className="flex items-center gap-3 mb-4">
             <div className="h-px w-6 bg-[var(--violet)]/70" />

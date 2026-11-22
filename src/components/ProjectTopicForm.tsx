@@ -54,7 +54,7 @@ function Steps({ step }: { step: 1 | 2 }) {
               <span
                 className={`grid h-6 w-6 place-items-center rounded-full font-body text-[11px] transition-colors ${
                   state === "done"
-                    ? "bg-[var(--violet)] text-white"
+                    ? "bg-[var(--violet)] text-[var(--page)]"
                     : state === "now"
                       ? "bg-[var(--violet)]/15 text-[var(--violet)] ring-1 ring-[var(--violet)]/50"
                       : "bg-[var(--card)] text-[var(--ink-4)] ring-1 ring-[var(--line-strong)]/50"

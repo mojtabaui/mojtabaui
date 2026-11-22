@@ -276,3 +276,34 @@ enum PurchaseStatus {
   SUCCESS
   FAILED
 }
+
+/// ترجیح پروژهٔ تکی یا گروهی. فرم عمومیه (/teamup/ui و /teamup/ux) و
+/// خروجی اکسلش از پنل گرفته می‌شه. اگه تکی باشه فقط اسم و راه تماس پر می‌شه.
+model TeamupPreference {
+  id           String   @id @default(cuid())
+  /// UI یا UX
+  track        String
+  fullName     String
+  /// موبایل یا آیدی تلگرام. هر نفر در هر مسیر یک ردیف دارد و پر کردن دوباره جایگزینش می‌شه.
+  contact      String
+  /// SOLO یا GROUP
+  mode         String
+  /// کلید منطقه از lib/teamup.ts (فقط گروهی)
+  region       String   @default("")
+  city         String   @default("")
+  /// کلیدهای MORNING / NOON / EVENING
+  timeSlots    String[] @default([])
+  level        Int?
+  /// ابزار (UI) یا روش‌های پژوهش (UX) که بلده
+  skills       String[] @default([])
+  hoursPerWeek String   @default("")
+  teamSize     String   @default("")
+  goal         String   @default("")
+  partnerName  String   @default("")
+  note         String   @default("")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@unique([track, contact])
+  @@index([track, mode])
+}
