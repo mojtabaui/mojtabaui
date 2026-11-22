@@ -9,7 +9,6 @@ import {
   LEVELS,
   REGIONS,
   SKILLS,
-  TEAM_SIZES,
   TIME_SLOTS,
   formatOffset,
   type TeamupMode,
@@ -80,9 +79,7 @@ export default function TeamupForm({ track }: { track: TeamupTrack }) {
   const [level, setLevel] = useState(0);
   const [skills, setSkills] = useState<string[]>([]);
   const [hoursPerWeek, setHoursPerWeek] = useState("");
-  const [teamSize, setTeamSize] = useState("");
   const [goal, setGoal] = useState("");
-  const [partnerName, setPartnerName] = useState("");
   const [note, setNote] = useState("");
   const [website, setWebsite] = useState(""); // تله برای رباط
 
@@ -117,7 +114,7 @@ export default function TeamupForm({ track }: { track: TeamupTrack }) {
           mode,
           website,
           ...(mode === "GROUP"
-            ? { region, city, timeSlots, level, skills, hoursPerWeek, teamSize, goal, partnerName, note }
+            ? { region, city, timeSlots, level, skills, hoursPerWeek, goal, note }
             : {}),
         }),
       });
@@ -354,22 +351,6 @@ export default function TeamupForm({ track }: { track: TeamupTrack }) {
           {/* ── تیم ── */}
           <div className={`${card} p-5 sm:p-6 space-y-5`}>
             <div>
-              <p className={label}>تیم چند نفره باشه؟</p>
-              <div className="grid gap-2 sm:grid-cols-2">
-                {TEAM_SIZES.map((t) => (
-                  <Choice
-                    key={t.key}
-                    type="radio"
-                    name="size"
-                    checked={teamSize === t.key}
-                    onChange={() => setTeamSize(t.key)}
-                    title={t.label}
-                  />
-                ))}
-              </div>
-            </div>
-
-            <div>
               <p className={label}>بیشتر دنبال چی هستی؟</p>
               <div className="space-y-2">
                 {GOALS.map((g) => (
@@ -383,19 +364,6 @@ export default function TeamupForm({ track }: { track: TeamupTrack }) {
                   />
                 ))}
               </div>
-            </div>
-
-            <div>
-              <label htmlFor="tu-partner" className={label}>
-                کسی رو برای هم‌تیمی داری؟ اسمش رو بنویس (اختیاری)
-              </label>
-              <input
-                id="tu-partner"
-                value={partnerName}
-                onChange={(e) => setPartnerName(e.target.value)}
-                maxLength={80}
-                className={field}
-              />
             </div>
 
             <div>

@@ -117,13 +117,6 @@ export const HOURS = [
   { key: "gt15", label: "بیشتر از ۱۵ ساعت" },
 ] as const;
 
-export const TEAM_SIZES = [
-  { key: "2", label: "دو نفره" },
-  { key: "3", label: "سه نفره" },
-  { key: "4", label: "چهار نفره" },
-  { key: "any", label: "فرقی نمی‌کنه" },
-] as const;
-
 export const GOALS = [
   { key: "portfolio", label: "یک نمونه‌کار جدی برای پرتفولیو" },
   { key: "experience", label: "تجربهٔ کار تیمی واقعی" },
@@ -135,7 +128,6 @@ const labelMap = (list: readonly { key: string; label: string }[]) =>
   Object.fromEntries(list.map((x) => [x.key, x.label]));
 
 export const HOURS_LABEL = labelMap(HOURS);
-export const TEAM_SIZE_LABEL = labelMap(TEAM_SIZES);
 export const GOAL_LABEL = labelMap(GOALS);
 
 export function skillLabels(track: TeamupTrack): Record<string, string> {

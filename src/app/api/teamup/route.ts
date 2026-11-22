@@ -7,7 +7,6 @@ import {
   LEVELS,
   REGIONS,
   SKILLS,
-  TEAM_SIZES,
   TIME_SLOTS,
   type TeamupTrack,
 } from "@/lib/teamup";
@@ -80,9 +79,7 @@ export async function POST(req: NextRequest) {
       level: null,
       skills: [],
       hoursPerWeek: "",
-      teamSize: "",
       goal: "",
-      partnerName: "",
       note: "",
     };
     await prisma.teamupPreference.upsert({
@@ -111,9 +108,6 @@ export async function POST(req: NextRequest) {
   const hoursPerWeek = String(body.hoursPerWeek ?? "");
   if (!HOURS.some((h) => h.key === hoursPerWeek)) return bad("بگو هفته‌ای چند ساعت وقت داری");
 
-  const teamSize = String(body.teamSize ?? "");
-  if (!TEAM_SIZES.some((t) => t.key === teamSize)) return bad("اندازهٔ تیم دلخواهت رو انتخاب کن");
-
   const goal = String(body.goal ?? "");
   if (!GOALS.some((g) => g.key === goal)) return bad("هدفت از پروژه رو انتخاب کن");
 
@@ -126,9 +120,7 @@ export async function POST(req: NextRequest) {
     level,
     skills: pickMany(body.skills, SKILLS[track].options.map((o) => o.key)),
     hoursPerWeek,
-    teamSize,
     goal,
-    partnerName: clean(body.partnerName, 80),
     note: clean(body.note, 500),
   };
 

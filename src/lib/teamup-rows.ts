@@ -2,7 +2,6 @@ import {
   GOAL_LABEL,
   HOURS_LABEL,
   MODE_LABEL,
-  TEAM_SIZE_LABEL,
   TIME_LABEL,
   TRACK_LABEL,
   formatOffset,
@@ -23,9 +22,7 @@ type Row = {
   level: number | null;
   skills: string[];
   hoursPerWeek: string;
-  teamSize: string;
   goal: string;
-  partnerName: string;
   note: string;
   createdAt: Date;
 };
@@ -46,9 +43,7 @@ export function toDisplay(r: Row) {
     level: r.level ? `سطح ${r.level}` : "",
     skills: r.skills.map((k) => sk[k] ?? k).join("، "),
     hours: HOURS_LABEL[r.hoursPerWeek] ?? "",
-    teamSize: TEAM_SIZE_LABEL[r.teamSize] ?? "",
     goal: GOAL_LABEL[r.goal] ?? "",
-    partner: r.partnerName,
     note: r.note,
     date: r.createdAt,
   };
@@ -66,10 +61,8 @@ export const COLUMNS: { key: keyof DisplayRow; header: string; width: number }[]
   { key: "offset", header: "اختلاف با ایران", width: 14 },
   { key: "times", header: "ساعت‌های آزاد (ایران)", width: 38 },
   { key: "hours", header: "ساعت در هفته", width: 16 },
-  { key: "teamSize", header: "اندازهٔ تیم", width: 12 },
   { key: "goal", header: "هدف", width: 32 },
   { key: "skills", header: "مهارت‌ها", width: 40 },
-  { key: "partner", header: "هم‌تیمی پیشنهادی", width: 20 },
   { key: "note", header: "توضیح", width: 36 },
   { key: "date", header: "تاریخ ثبت", width: 14 },
 ];
