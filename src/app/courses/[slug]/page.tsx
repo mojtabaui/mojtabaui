@@ -237,6 +237,9 @@ export default async function CourseDetailPage({ params }: Props) {
 
                   <BuyButton
                     slug={slug}
+                    title={course.title}
+                    price={course.price}
+                    originalPrice={course.originalPrice}
                     comingSoon={course.comingSoon}
                     externalUrl={course.externalUrl}
                   />

@@ -73,7 +73,7 @@ export const FORMS = {
     buy: {
       closed: "ثبت‌نام باز نیست",
       closedNote: "تاریخِ برگزاریِ دوره‌ی بعدی به‌زودی اعلام می‌شود",
-      telegram: "ثبت‌نام و مشاوره در تلگرام",
+      enroll: "ثبت‌نام در دوره",
     },
 
     login: {
@@ -178,7 +178,7 @@ export const FORMS = {
     buy: {
       closed: "Enrolment is closed",
       closedNote: "The date of the next run will be announced soon",
-      telegram: "Enrol and ask questions on Telegram",
+      enroll: "Enrol in this course",
     },
 
     login: {

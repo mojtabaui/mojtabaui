@@ -1097,6 +1097,8 @@ export interface RobotypeOffer {
   /** عنوان کمپین، کنار قیمت خط‌خورده */
   title: string;
   price: string;
+  /** همون price به عدد، برای مودال ثبت‌نام */
+  amount: number;
   off: string;
   /** ظرفیتی که ادمین روی کمپین گذاشته؛ null یعنی بدون سقف */
   seats: CampaignSeats | null;
@@ -1122,12 +1124,14 @@ export function robotypeOffer(
     ? {
         title: campaign.title,
         price: amount.toLocaleString("fa-IR"),
+        amount,
         off: `${pct.toLocaleString("fa-IR")}٪ تخفیف`,
         seats,
       }
     : {
         title: campaign.title,
         price: amount.toLocaleString("en-US"),
+        amount,
         off: `${pct}% off`,
         seats,
       };

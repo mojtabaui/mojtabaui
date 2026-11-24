@@ -36,6 +36,8 @@ import { BrandGlyph } from "@/components/BrandMark";
 import { TOOL_MARKS } from "./ToolMarks";
 import { RobotPattern } from "./RobotFlat";
 import { useStill } from "@/components/odyssey/useStill";
+import EnrollModal from "@/components/EnrollModal";
+import { toLatinDigits } from "@/lib/persian-months";
 import { MISSIONS, EPISODE_COUNT } from "@/lib/odyssey";
 import {
   TOPICS,
@@ -48,6 +50,7 @@ import {
   SLIDES,
   PRICING,
   ROBOTYPE_STUDENTS,
+  ROBOTYPE_PRICE,
   currentTier,
   type RobotypeOffer,
 } from "@/lib/ai7-curriculum";
@@ -337,11 +340,11 @@ const T = {
       "آخر هر فصل یک خروجی واقعی داری. این هفت خروجی کنار هم تبدیل می‌شوند به پروژهٔ نهایی.",
     needTitle: "قبل از شروع چی لازم داری؟",
     joinTitle: "ثبت‌نام",
-    joinHead: "ثبت‌نام از طریق پشتیبانی انجام می‌شه",
+    joinHead: "ثبت‌نام کارت‌به‌کارت انجام می‌شه",
     joinBody:
-      "فعلاً درگاه پرداخت روی سایت نداریم و ثبت‌نام کارت‌به‌کارت انجام می‌شود. توی تلگرام پیام بده؛ همان‌جا شماره کارت را برایت می‌فرستیم. بعد از پرداخت هم دسترسی‌ات باز می‌شود.",
-    joinCta: "پیام در تلگرام",
-    joinNote: "معمولاً کمتر از یک روز جواب می‌دیم.",
+      "فعلاً درگاه پرداخت روی سایت نداریم. دکمهٔ ثبت‌نام رو که بزنی مبلغ و شماره کارت رو می‌بینی؛ بعد از پرداخت مشخصاتت رو توی تلگرام برای پشتیبانی می‌فرستی و دسترسی‌ات باز می‌شه.",
+    joinCta: "ثبت‌نام در دوره",
+    joinNote: "سؤال داری؟ توی تلگرام بپرس. معمولاً کمتر از یک روز جواب می‌دیم.",
     noteTitle: "چرا این دوره رو ساختم؟",
     note: "چند ساله کارم طراحی محصوله و بارها به این نقطه رسیدم که چیزی رو طراحی کردم، تحویل دادم و بعد منتظر موندم یکی دیگه بسازتش. AI این قسمت ماجرا رو خیلی تغییر داده. ولی در عوض یک سؤال مهم‌تر به وجود اومده: حالا که می‌تونیم خیلی چیزها رو بسازیم، کجا باید از AI کمک بگیریم و کجا نباید تصمیم رو بهش بسپریم؟ این دوره دربارهٔ همین موضوعه.",
     noteBy: "مجتبی — مدرسه دیزاین ملینا",
@@ -354,8 +357,8 @@ const T = {
     showLede:
       "تزئینی نیستن. همین پنج صفحه و همین سیستمِ توکن، فصل‌به‌فصل ساخته می‌شن؛ از پرسشِ اول تا فهرستِ درمانگرها.",
     steps: [
-      { t: "توی تلگرام پیام بده", d: "اگه سؤالی داری همون‌جا بپرس؛ ثبت‌نامت رو از همون‌جا شروع می‌کنیم." },
-      { t: "کارت‌به‌کارت کن", d: "شماره کارت رو همون‌جا می‌فرستیم؛ بعد رسید رو برامون بفرست." },
+      { t: "کارت‌به‌کارت کن", d: "دکمهٔ ثبت‌نام رو بزن؛ مبلغ و شماره کارت همون‌جا نوشته شده." },
+      { t: "مشخصاتت رو بفرست", d: "اسم، ایمیل، موبایل و تصویر رسید رو توی تلگرام برای پشتیبانی بفرست." },
       {
         t: "دسترسی باز می‌شه",
         d: "فصل‌های ضبط‌شده از همان لحظه در دسترست هستند و فصل‌های بعدی هم به‌محض آماده شدن برایت باز می‌شوند.",
@@ -494,8 +497,8 @@ const T = {
     showLede:
       "Not decoration. These five screens and this token system are built chapter by chapter — from the first question to the therapist list.",
     steps: [
-      { t: "Message on Telegram", d: "Ask anything you need to there, and we will start your enrolment." },
-      { t: "Transfer", d: "We send the account details there and you send back the receipt." },
+      { t: "Transfer", d: "Press enrol; the amount and the card number are right there." },
+      { t: "Send your details", d: "Your name, email, mobile and the receipt photo, to support on Telegram." },
       { t: "Access opens", d: "The recorded chapters straight away, the rest as they are finished." },
     ],
     takeSum: "Put the seven side by side and they are one product you built from nothing, and can tell the story of.",
@@ -504,11 +507,11 @@ const T = {
       "Each chapter ends in a thing you built, not a chapter you finished. These seven are what you hold afterwards.",
     needTitle: "Before you start",
     joinTitle: "Enrolling",
-    joinHead: "Enrolment goes through support",
+    joinHead: "Enrolment is by card transfer",
     joinBody:
-      "There is no checkout on the site yet — enrolment is handled directly. Message us on Telegram: we will send the payment details and open your access.",
-    joinCta: "Message on Telegram",
-    joinNote: "We usually reply within a day.",
+      "There is no checkout on the site yet, so payment is a card transfer. Press enrol for the amount and the card number, then send your details to support on Telegram and we open your access.",
+    joinCta: "Enrol in the course",
+    joinNote: "Questions? Ask on Telegram. We usually reply within a day.",
     faqTitle: "The usual questions",
     faq: [
       {
@@ -578,6 +581,9 @@ export default function Ai7Minimal({
    * که می‌شود کرد این است که دکمهٔ خاموشش را دنبالِ چیزی نگردد.
    */
   const [muted, setMuted] = useState(false);
+  /* همهٔ دکمه‌های ثبت‌نام صفحه یک مودال مشترک را باز می‌کنند */
+  const [enrolling, setEnrolling] = useState(false);
+  const enroll = () => setEnrolling(true);
   const proj = PROJECTS[lang];
   const slides = SLIDES[lang];
   const tools = TOOLS[lang];
@@ -589,6 +595,8 @@ export default function Ai7Minimal({
   const price = PRICING[lang];
   /* پلهٔ باز — نه لزوماً اولی. رجوع به `currentTier` در ai7-curriculum */
   const tier = currentTier(lang);
+  /** مبلغی که در مودال ثبت‌نام می‌آید — همان قیمتی که صفحه نشان می‌دهد */
+  const amount = offer?.amount ?? Number(toLatinDigits(tier.price).replace(/\D/g, ""));
   const Forward = rtl ? ArrowLeft : ArrowRight;
   const still = useStill();
 
@@ -818,16 +826,16 @@ export default function Ai7Minimal({
                 )}
               </button>
 
-              <a
-                href={SUPPORT}
-                target="_blank"
-                rel="noopener noreferrer"
+              <button
+                type="button"
+                onClick={enroll}
+                aria-haspopup="dialog"
                 className="inline-flex items-center gap-2 px-5 py-2.5 text-[0.78rem] font-semibold transition-opacity hover:opacity-85"
                 style={{ background: VIOLET_INK, color: PAPER }}
               >
                 {t.heroCta}
                 <Forward className="size-3.5" aria-hidden="true" />
-              </a>
+              </button>
             </div>
 
           </motion.div>
@@ -1043,16 +1051,16 @@ export default function Ai7Minimal({
               )}
             </div>
 
-            <a
-              href={SUPPORT}
-              target="_blank"
-              rel="noopener noreferrer"
+            <button
+              type="button"
+              onClick={enroll}
+              aria-haspopup="dialog"
               className="mt-9 inline-flex w-full items-center justify-center gap-2.5 px-7 py-4 text-sm font-semibold transition-opacity hover:opacity-85 sm:w-auto"
               style={{ background: VIOLET_INK, color: PAPER }}
             >
               {t.joinCta}
               <Forward className="size-4" aria-hidden="true" />
-            </a>
+            </button>
           </div>
         </section>
       )}
@@ -1139,16 +1147,16 @@ export default function Ai7Minimal({
               {price.note}
             </p>
 
-            <a
-              href={SUPPORT}
-              target="_blank"
-              rel="noopener noreferrer"
+            <button
+              type="button"
+              onClick={enroll}
+              aria-haspopup="dialog"
               className="mt-auto inline-flex items-center justify-center gap-2.5 px-7 py-4 pt-4 text-sm font-semibold transition-opacity hover:opacity-85"
               style={{ background: VIOLET_INK, color: PAPER, marginBlockStart: "2rem" }}
             >
               {t.joinCta}
               <Forward className="size-4" aria-hidden="true" />
-            </a>
+            </button>
           </div>
         </div>
       </Sec>
@@ -1860,18 +1868,20 @@ export default function Ai7Minimal({
             ))}
           </ol>
 
-          <a
-            href={SUPPORT}
-            target="_blank"
-            rel="noopener noreferrer"
+          <button
+            type="button"
+            onClick={enroll}
+            aria-haspopup="dialog"
             className="mt-7 inline-flex items-center gap-2.5 rounded-none px-7 py-3.5 text-sm font-semibold transition-opacity hover:opacity-85"
             style={{ background: VIOLET_INK, color: PAPER }}
           >
             {t.joinCta}
             <Forward className="size-4" aria-hidden="true" />
-          </a>
+          </button>
           <p className="mt-4 text-xs" style={{ color: MUTE }}>
-            {t.joinNote}
+            <a href={SUPPORT} target="_blank" rel="noopener noreferrer" className="underline underline-offset-4">
+              {t.joinNote}
+            </a>
           </p>
         </div>
       </Sec>
@@ -1917,16 +1927,16 @@ export default function Ai7Minimal({
         </p>
 
         <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
-          <a
-            href={SUPPORT}
-            target="_blank"
-            rel="noopener noreferrer"
+          <button
+            type="button"
+            onClick={enroll}
+            aria-haspopup="dialog"
             className="inline-flex items-center gap-2.5 px-7 py-4 text-sm font-semibold transition-opacity hover:opacity-85"
             style={{ background: VIOLET_INK, color: PAPER }}
           >
             {t.cta}
             <Forward className="size-4" aria-hidden="true" />
-          </a>
+          </button>
           <Link
             href="/"
             className="inline-flex items-center gap-2 border px-6 py-4 text-sm transition-opacity hover:opacity-70"
@@ -1983,16 +1993,16 @@ export default function Ai7Minimal({
           </div>
 
           <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-            <a
-              href={SUPPORT}
-              target="_blank"
-              rel="noopener noreferrer"
+            <button
+              type="button"
+              onClick={enroll}
+              aria-haspopup="dialog"
               className="inline-flex items-center gap-2.5 px-6 py-3.5 text-sm font-semibold transition-opacity hover:opacity-85"
               style={{ background: NIGHT_INK, color: NIGHT }}
             >
               {t.cta}
               <Forward className="size-4" aria-hidden="true" />
-            </a>
+            </button>
             <Link
               href="/"
               className="inline-flex items-center gap-2 border px-5 py-3.5 text-sm transition-opacity hover:opacity-70"
@@ -2004,6 +2014,16 @@ export default function Ai7Minimal({
         </div>
       </footer>
 
+      {enrolling && (
+        <EnrollModal
+          lang={lang}
+          theme="robot"
+          course={rtl ? "دورهٔ روبوتایپ" : "ROBOTYPE"}
+          amount={amount}
+          original={ROBOTYPE_PRICE}
+          onClose={() => setEnrolling(false)}
+        />
+      )}
     </div>
   );
 }

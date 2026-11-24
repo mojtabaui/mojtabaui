@@ -17,7 +17,7 @@ export const COURSE = {
     support: (n: string) => `پشتیبانی ${n} ماهه`,
     projects: (n: string) => `${n} پروژه عملی`,
     discount: (n: string) => `↓ ${n}٪ تخفیف`,
-    supportNote: "برای ثبت‌نام و مشاوره، در تلگرام به پشتیبانی پیام بده",
+    supportNote: "پرداخت کارت‌به‌کارته؛ سؤالی داشتی در تلگرام بپرس",
     counterpart: {
       offline: "نسخه آفلاین همین دوره:",
       infinity: "نسخه بی‌نهایت با منتورینگ:",
@@ -85,7 +85,7 @@ export const COURSE = {
     finalCta: {
       title: "هنوز مطمئن نیستی این دوره مناسبته؟",
       body: "قبل از ثبت‌نام بپرس. توی تلگرام بگو الان کجای مسیری و چی می‌خوای — اگه این دوره برات مناسب نبود، خودم صادقانه می‌گم.",
-      telegram: "مشاوره و ثبت‌نام در تلگرام",
+      telegram: "مشاوره در تلگرام",
       compare: "مقایسه با بقیه دوره‌ها",
     },
 
@@ -168,7 +168,7 @@ export const COURSE = {
     support: (n: string) => `${n} months of support`,
     projects: (n: string) => `${n} hands-on projects`,
     discount: (n: string) => `↓ ${n}% off`,
-    supportNote: "To enrol or ask questions, message support on Telegram",
+    supportNote: "Payment is by card transfer; ask us anything on Telegram",
     counterpart: {
       offline: "The offline version of this course:",
       infinity: "The Infinity version, with mentoring:",
@@ -236,7 +236,7 @@ export const COURSE = {
     finalCta: {
       title: "Still not sure this course is the right one?",
       body: "Ask before you enrol. Tell me on Telegram where you are and what you want — if this course isn't right for you, I'll say so honestly.",
-      telegram: "Ask and enrol on Telegram",
+      telegram: "Ask on Telegram",
       compare: "Compare with the other courses",
     },
 

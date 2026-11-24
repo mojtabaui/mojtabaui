@@ -148,7 +148,7 @@ export default function WorkshopLanding({ course }: { course: Course }) {
               </div>
 
               <div className="max-w-xs">
-                <BuyButton slug={course.slug} comingSoon={course.comingSoon} externalUrl={course.externalUrl} />
+                <BuyButton slug={course.slug} title={course.title} price={course.price} originalPrice={course.originalPrice} comingSoon={course.comingSoon} externalUrl={course.externalUrl} />
                 <p className="text-white/30 text-xs font-body">{t.bonus}</p>
               </div>
             </motion.div>
@@ -348,7 +348,7 @@ export default function WorkshopLanding({ course }: { course: Course }) {
           <p className="text-white/45 font-body mb-3">{formatPrice(course.price, lang)}</p>
           <p className="text-[#E88A5C] font-body text-sm mb-10">{course.sessionDate}</p>
           <div className="max-w-xs mx-auto">
-            <BuyButton slug={course.slug} comingSoon={course.comingSoon} externalUrl={course.externalUrl} />
+            <BuyButton slug={course.slug} title={course.title} price={course.price} originalPrice={course.originalPrice} comingSoon={course.comingSoon} externalUrl={course.externalUrl} />
           </div>
         </motion.div>
       </section>

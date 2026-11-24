@@ -1,22 +1,28 @@
 "use client";
 
-// ثبت‌نام موقتاً از طریق پشتیبانی تلگرام انجام می‌شه — درگاه پرداخت و حساب کاربری
-// فعلاً غیرفعالن و فروش کارت‌به‌کارت از طریق پشتیبانی انجام می‌شه.
+// درگاه پرداخت و حساب کاربری فعلاً غیرفعالن. دکمه مودال کارت‌به‌کارت رو باز
+// می‌کنه و مشخصات بعد از پرداخت برای پشتیبانی تلگرام فرستاده می‌شه.
 // برای برگردوندن خرید مستقیم: بلاک پرداختِ کامنت‌شده‌ی پایین رو جایگزین این نسخه کن.
 
+import { useState } from "react";
 import { useLang } from "@/components/Providers";
+import EnrollModal from "@/components/EnrollModal";
 import { FORMS } from "@/lib/i18n/dict/forms";
-
-const SUPPORT_TELEGRAM = "https://t.me/melina_support";
 
 interface Props {
   slug: string;
+  title: string;
+  /** تومان؛ اگه کمپین در جریانه، قیمت کمپینی */
+  price: number;
+  originalPrice?: number;
   comingSoon?: boolean;
   externalUrl?: string;
 }
 
-export default function BuyButton({ comingSoon }: Props) {
-  const t = FORMS[useLang()].buy;
+export default function BuyButton({ title, price, originalPrice, comingSoon }: Props) {
+  const lang = useLang();
+  const t = FORMS[lang].buy;
+  const [open, setOpen] = useState(false);
 
   if (comingSoon) {
     return (
@@ -35,14 +41,25 @@ export default function BuyButton({ comingSoon }: Props) {
   }
 
   return (
-    <a
-      href={SUPPORT_TELEGRAM}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="w-full flex items-center justify-center gap-2 bg-[#1a1714] hover:bg-[#2d2926] text-white font-body font-semibold py-3.5 rounded-2xl transition-all mb-3 text-sm"
-    >
-      {t.telegram}
-    </a>
+    <>
+      <button
+        type="button"
+        onClick={() => setOpen(true)}
+        aria-haspopup="dialog"
+        className="w-full flex items-center justify-center gap-2 bg-[#1a1714] hover:bg-[#2d2926] text-white font-body font-semibold py-3.5 rounded-2xl transition-all mb-3 text-sm"
+      >
+        {t.enroll}
+      </button>
+      {open && (
+        <EnrollModal
+          lang={lang}
+          course={title}
+          amount={price}
+          original={originalPrice}
+          onClose={() => setOpen(false)}
+        />
+      )}
+    </>
   );
 }
 
