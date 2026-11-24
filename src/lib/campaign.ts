@@ -22,6 +22,42 @@ export interface CampaignInfo {
   active: boolean;
   /** شناسهٔ دوره → قیمت کمپین به تومان */
   prices: Record<string, number>;
+  /** ظرفیت روبوتایپ توی این کمپین؛ خالی یعنی بدون سقف */
+  seats?: CampaignSeats | null;
+}
+
+export interface CampaignSeats {
+  cap: number;
+  /** چند نفر تا الان ثبت‌نام کردن — دستی از پنل */
+  taken: number;
+}
+
+/** بیشترین ظرفیت؛ نوار برای هر نفر یک خونه داره و بیشتر از این خونده نمی‌شه */
+export const MAX_SEATS = 100;
+
+/**
+ * کلید ظرفیت داخل همون ستون prices.
+ *
+ * عمداً ستون جدا نیست تا به ساختار دیتابیس زنده دست نخوره. مقدارش شیئه
+ * نه عدد، پس normalizePrices خودش ردش می‌کنه و با قیمت‌ها قاطی نمی‌شه.
+ */
+export const SEATS_KEY = "_seats";
+
+/** { cap, taken } رو تمیز می‌کنه؛ بدون ظرفیت معتبر null */
+export function normalizeSeats(raw: unknown): CampaignSeats | null {
+  if (!raw || typeof raw !== "object") return null;
+  const { cap, taken } = raw as { cap?: unknown; taken?: unknown };
+  const c = Math.floor(Number(cap));
+  if (!Number.isFinite(c) || c < 1) return null;
+  const limit = Math.min(c, MAX_SEATS);
+  const t = Math.floor(Number(taken));
+  return { cap: limit, taken: Number.isFinite(t) ? Math.min(Math.max(t, 0), limit) : 0 };
+}
+
+/** ظرفیت رو از ستون prices در میاره */
+export function seatsFromPrices(prices: unknown): CampaignSeats | null {
+  if (!prices || typeof prices !== "object" || Array.isArray(prices)) return null;
+  return normalizeSeats((prices as Record<string, unknown>)[SEATS_KEY]);
 }
 
 export type CampaignPhase = "upcoming" | "live" | "ended";

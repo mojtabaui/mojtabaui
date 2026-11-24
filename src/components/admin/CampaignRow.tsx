@@ -90,6 +90,12 @@ export default function CampaignRow({
                 })
                 .join(" · ")}
         </p>
+        {campaign.seats && (
+          <p className="font-body text-xs text-[var(--ink-4)] mt-1">
+            ظرفیت روبوتایپ: {toPersianDigits(campaign.seats.taken)} از {toPersianDigits(campaign.seats.cap)} نفر
+            {campaign.seats.taken >= campaign.seats.cap && " — تکمیل"}
+          </p>
+        )}
       </div>
 
       <div className="flex items-center gap-1 shrink-0">

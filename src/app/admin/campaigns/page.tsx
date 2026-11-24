@@ -7,7 +7,7 @@ import { prisma } from "@/lib/prisma";
 import { courses } from "@/lib/mock-data";
 import { ROBOTYPE_CAMPAIGN_ID, ROBOTYPE_PRICE } from "@/lib/ai7-curriculum";
 import { normalizePrices } from "@/lib/campaign.server";
-import type { CampaignInfo } from "@/lib/campaign";
+import { seatsFromPrices, type CampaignInfo } from "@/lib/campaign";
 import CampaignForm from "@/components/admin/CampaignForm";
 import CampaignRow from "@/components/admin/CampaignRow";
 import PanelThemeToggle from "@/components/admin/PanelThemeToggle";
@@ -37,6 +37,7 @@ export default async function CampaignsPage() {
     endsAt: r.endsAt.toISOString(),
     active: r.active,
     prices: normalizePrices(r.prices),
+    seats: seatsFromPrices(r.prices),
   }));
 
   // همون دوره‌هایی که روی سایت دیده می‌شن، با قیمت پایه‌شون

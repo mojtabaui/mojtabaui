@@ -3,7 +3,8 @@
 import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Megaphone, X } from "lucide-react";
-import { fromTehranParts, toTehranParts, formatTehran, type CampaignInfo } from "@/lib/campaign";
+import { MAX_SEATS, fromTehranParts, toTehranParts, formatTehran, type CampaignInfo } from "@/lib/campaign";
+import { ROBOTYPE_CAMPAIGN_ID } from "@/lib/ai7-curriculum";
 import { PERSIAN_MONTHS, toLatinDigits, toPersianDigits } from "@/lib/persian-months";
 
 export interface CampaignCourseOption {
@@ -76,6 +77,8 @@ export default function CampaignForm({
       courses.map((c) => [c.id, initial?.prices[c.id] ? initial.prices[c.id].toLocaleString("fa-IR") : ""]),
     ),
   );
+  const [cap, setCap] = useState(initial?.seats ? toPersianDigits(initial.seats.cap) : "");
+  const [taken, setTaken] = useState(initial?.seats ? toPersianDigits(initial.seats.taken) : "");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
 
@@ -100,6 +103,15 @@ export default function CampaignForm({
       priceMap[c.id] = n;
     }
 
+    // ظرفیت فقط کنار قیمت روبوتایپ معنی داره؛ بدون اون جایی نشون داده نمی‌شه
+    const capN = parseToman(cap);
+    const takenN = parseToman(taken);
+    if (capN && !priceMap[ROBOTYPE_CAMPAIGN_ID])
+      return setError("برای ظرفیت، قیمت کمپینِ روبوتایپ رو هم وارد کن");
+    if (capN > MAX_SEATS) return setError(`ظرفیت بیشتر از ${toPersianDigits(MAX_SEATS)} نفر نمی‌شه`);
+    if (!capN && takenN) return setError("اول ظرفیت رو وارد کن");
+    if (takenN > capN) return setError("تعداد ثبت‌نام‌شده از ظرفیت بیشتره");
+
     setBusy(true);
     try {
       const res = await fetch(initial ? `/api/admin/campaigns/${initial.id}` : "/api/admin/campaigns", {
@@ -112,6 +124,7 @@ export default function CampaignForm({
           endsAt: endDate.toISOString(),
           active: initial?.active ?? true,
           prices: priceMap,
+          seats: capN ? { cap: capN, taken: takenN } : null,
         }),
       });
       const data = await res.json().catch(() => ({}));
@@ -122,6 +135,8 @@ export default function CampaignForm({
           setTitle("");
           setSubtitle("");
           setPrices(Object.fromEntries(courses.map((c) => [c.id, ""])));
+          setCap("");
+          setTaken("");
         }
         router.refresh();
         onDone?.();
@@ -266,6 +281,39 @@ export default function CampaignForm({
               </div>
             );
           })}
+        </div>
+      </div>
+
+      <div>
+        <p className="font-body text-xs text-[var(--ink-3)] mb-1">
+          ظرفیت روبوتایپ <span className="text-[var(--ink-4)]">(اختیاری)</span>
+        </p>
+        <p className="font-body text-[11px] text-[var(--ink-4)] mb-3 leading-5">
+          با قیمت کمپینیِ روبوتایپ، تا وقتی کمپین در جریانه یک بخش تخفیف زیر هیروی صفحهٔ دوره میاد.
+          ظرفیت رو که بنویسی نوار پر شدنش هم نشون داده می‌شه؛ با هر ثبت‌نام عدد دوم رو زیاد کن.
+          پر که بشه، قیمت روبوتایپ خودش به قیمت اصلی برمی‌گرده.
+        </p>
+        <div className="grid grid-cols-2 gap-3 sm:max-w-sm">
+          <label className="block">
+            <span className="font-body text-[11px] text-[var(--ink-4)] mb-1.5 block">ظرفیت (نفر)</span>
+            <input
+              inputMode="numeric"
+              value={cap}
+              onChange={(e) => setCap(e.target.value)}
+              placeholder="مثلاً ۱۰"
+              className={field + " text-center"}
+            />
+          </label>
+          <label className="block">
+            <span className="font-body text-[11px] text-[var(--ink-4)] mb-1.5 block">ثبت‌نام‌شده</span>
+            <input
+              inputMode="numeric"
+              value={taken}
+              onChange={(e) => setTaken(e.target.value)}
+              placeholder="۰"
+              className={field + " text-center"}
+            />
+          </label>
         </div>
       </div>
 

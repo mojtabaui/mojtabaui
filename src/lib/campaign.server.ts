@@ -1,7 +1,7 @@
 import "server-only";
 import { unstable_cache } from "next/cache";
 import { prisma } from "@/lib/prisma";
-import { pickCampaign, type CampaignInfo } from "@/lib/campaign";
+import { pickCampaign, seatsFromPrices, type CampaignInfo } from "@/lib/campaign";
 import { robotypeOffer } from "@/lib/ai7-curriculum";
 
 export const CAMPAIGN_TAG = "campaign";
@@ -28,6 +28,7 @@ const loadActiveCampaigns = unstable_cache(
         endsAt: r.endsAt.toISOString(),
         active: r.active,
         prices: normalizePrices(r.prices),
+        seats: seatsFromPrices(r.prices),
       }));
     } catch (err) {
       // جدول هنوز ساخته نشده یا دیتابیس در دسترس نیست: صفحهٔ اصلی نباید بخوابه

@@ -2,6 +2,7 @@ import "server-only";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { normalizePrices } from "@/lib/campaign.server";
+import { SEATS_KEY, normalizeSeats } from "@/lib/campaign";
 
 export async function requireAdmin() {
   const session = await getServerSession(authOptions);
@@ -18,7 +19,8 @@ export function parseCampaignBody(body: Record<string, unknown>) {
   const startsAt = new Date(String(body.startsAt ?? ""));
   const endsAt = new Date(String(body.endsAt ?? ""));
   const active = body.active === undefined ? true : Boolean(body.active);
-  const prices = normalizePrices(body.prices);
+  const seats = normalizeSeats(body.seats);
+  const prices = { ...normalizePrices(body.prices), ...(seats ? { [SEATS_KEY]: { ...seats } } : {}) };
 
   if (!title) return { error: "عنوان کمپین خالیه" } as const;
   if (Number.isNaN(startsAt.getTime())) return { error: "تاریخ شروع درست نیست" } as const;

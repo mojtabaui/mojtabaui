@@ -975,14 +975,14 @@ export default function Ai7Minimal({
 
           دو ستون از یک خطِ افقیِ مشترک شروع می‌شوند و هر دو با یک
           خط تمام — بدونِ آن، ستونِ کوتاه‌تر معلق می‌ماند. */}
-      {/* ── بلک‌فرایدی ──
+      {/* ── پیشنهاد کمپین ──
           درست زیر پوستر، قبل از هر توضیحی: کسی که برای تخفیف اومده
-          نباید تا سکشن قیمت اسکرول کنه. فقط وقتی هست که پیشنهاد ظرفیت
-          داره (`offer.seats`)؛ با پر شدن ظرفیت خودش برداشته می‌شه.
+          نباید تا سکشن قیمت اسکرول کنه. عنوان، قیمت و ظرفیت همه از
+          کمپینِ پنل میان؛ کمپینی در جریان نباشه، این بخش هم نیست.
 
-          نوار ده‌خونه‌ست نه یک میلهٔ پیوسته، چون ظرفیت ده نفره و هر
-          خونه یک آدمه — «۳ از ۱۰» رو می‌شه شمرد. */}
-      {offer?.seats && (
+          نوار خونه‌خونه‌ست نه یک میلهٔ پیوسته، چون هر خونه یک آدمه —
+          «۳ از ۱۰» رو می‌شه شمرد. کمپین بی‌ظرفیت نوار نداره. */}
+      {offer && (
         <section className="mx-auto max-w-5xl px-5 pt-16 sm:px-6 sm:pt-20" aria-label={offer.title}>
           <div className="border p-6 sm:p-9" style={{ borderColor: INK }}>
             <div className="flex flex-wrap items-center justify-between gap-3">
@@ -1008,14 +1008,10 @@ export default function Ai7Minimal({
                   <span className="tabular-nums line-through" style={{ color: MUTE }}>
                     {price.full}
                   </span>
-                  <span style={{ color: MUTE }}>
-                    {rtl
-                      ? `· تا امروز ${num(ROBOTYPE_STUDENTS)} نفر در دوره شرکت کرده‌اند`
-                      : `· ${ROBOTYPE_STUDENTS} people have joined so far`}
-                  </span>
                 </p>
               </div>
 
+              {offer.seats && (
               <div>
                 <div
                   role="meter"
@@ -1044,6 +1040,7 @@ export default function Ai7Minimal({
                   </span>
                 </p>
               </div>
+              )}
             </div>
 
             <a
@@ -1067,6 +1064,12 @@ export default function Ai7Minimal({
         </h2>
         <p className="mt-5 max-w-md text-sm leading-loose sm:text-base" style={{ color: MUTE }}>
           {t.briefLede}
+        </p>
+        {/* شمار شرکت‌کننده‌ها به کمپین بسته نیست؛ همیشه هست */}
+        <p className="mt-5 text-sm font-semibold sm:text-base">
+          {rtl
+            ? `تا امروز ${num(ROBOTYPE_STUDENTS)} نفر در این دوره شرکت کرده‌اند.`
+            : `${ROBOTYPE_STUDENTS} people have joined this course so far.`}
         </p>
 
         <div className="mt-14 grid gap-x-16 gap-y-14 lg:grid-cols-[1.1fr_1fr]">
