@@ -47,6 +47,7 @@ import {
   PROJECTS,
   SLIDES,
   PRICING,
+  ROBOTYPE_STUDENTS,
   currentTier,
   type RobotypeOffer,
 } from "@/lib/ai7-curriculum";
@@ -974,6 +975,91 @@ export default function Ai7Minimal({
 
           دو ستون از یک خطِ افقیِ مشترک شروع می‌شوند و هر دو با یک
           خط تمام — بدونِ آن، ستونِ کوتاه‌تر معلق می‌ماند. */}
+      {/* ── بلک‌فرایدی ──
+          درست زیر پوستر، قبل از هر توضیحی: کسی که برای تخفیف اومده
+          نباید تا سکشن قیمت اسکرول کنه. فقط وقتی هست که پیشنهاد ظرفیت
+          داره (`offer.seats`)؛ با پر شدن ظرفیت خودش برداشته می‌شه.
+
+          نوار ده‌خونه‌ست نه یک میلهٔ پیوسته، چون ظرفیت ده نفره و هر
+          خونه یک آدمه — «۳ از ۱۰» رو می‌شه شمرد. */}
+      {offer?.seats && (
+        <section className="mx-auto max-w-5xl px-5 pt-16 sm:px-6 sm:pt-20" aria-label={offer.title}>
+          <div className="border p-6 sm:p-9" style={{ borderColor: INK }}>
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <p className="neo-cap text-[0.66rem]" style={{ color: MUTE }}>
+                {offer.title}
+              </p>
+              <p className="px-3 py-1 text-xs font-semibold" style={{ background: VIOLET_INK, color: PAPER }}>
+                {offer.off}
+              </p>
+            </div>
+
+            <div className="mt-7 grid gap-x-14 gap-y-9 lg:grid-cols-[1fr_1.1fr] lg:items-end">
+              <div>
+                <p className="flex flex-wrap items-baseline gap-x-3">
+                  <span className="font-light leading-none tabular-nums text-[clamp(2.4rem,6.4vw,4rem)]">
+                    {offer.price}
+                  </span>
+                  <span className="text-sm" style={{ color: MUTE }}>
+                    {price.unit}
+                  </span>
+                </p>
+                <p className="mt-3 flex flex-wrap items-baseline gap-x-3 text-sm">
+                  <span className="tabular-nums line-through" style={{ color: MUTE }}>
+                    {price.full}
+                  </span>
+                  <span style={{ color: MUTE }}>
+                    {rtl
+                      ? `· تا امروز ${num(ROBOTYPE_STUDENTS)} نفر در دوره شرکت کرده‌اند`
+                      : `· ${ROBOTYPE_STUDENTS} people have joined so far`}
+                  </span>
+                </p>
+              </div>
+
+              <div>
+                <div
+                  role="meter"
+                  aria-valuemin={0}
+                  aria-valuemax={offer.seats.cap}
+                  aria-valuenow={offer.seats.taken}
+                  aria-label={rtl ? "ظرفیت پرشده" : "Seats taken"}
+                  className="flex gap-1"
+                >
+                  {Array.from({ length: offer.seats.cap }, (_, i) => (
+                    <span
+                      key={i}
+                      className="h-3 flex-1"
+                      style={{ background: i < (offer.seats?.taken ?? 0) ? INK : LINE }}
+                    />
+                  ))}
+                </div>
+                <p className="mt-3 flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 text-sm">
+                  <span>
+                    {rtl ? `ظرفیت: ${num(offer.seats.cap)} نفر` : `${offer.seats.cap} seats`}
+                  </span>
+                  <span style={{ color: MUTE }}>
+                    {rtl
+                      ? `${num(offer.seats.taken)} نفر ثبت‌نام کرده‌اند، ${num(offer.seats.cap - offer.seats.taken)} جا مانده`
+                      : `${offer.seats.taken} taken, ${offer.seats.cap - offer.seats.taken} left`}
+                  </span>
+                </p>
+              </div>
+            </div>
+
+            <a
+              href={SUPPORT}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-9 inline-flex w-full items-center justify-center gap-2.5 px-7 py-4 text-sm font-semibold transition-opacity hover:opacity-85 sm:w-auto"
+              style={{ background: VIOLET_INK, color: PAPER }}
+            >
+              {t.joinCta}
+              <Forward className="size-4" aria-hidden="true" />
+            </a>
+          </div>
+        </section>
+      )}
+
       <Sec className="mx-auto max-w-5xl px-5 pt-24 sm:px-6 sm:pt-32" mark="OVERVIEW" icon={Compass}>
         <Eyebrow icon={Compass}>{t.briefLabel}</Eyebrow>
         <h2 className="-mt-4 max-w-[20ch] text-balance font-light leading-[1.14] text-[clamp(1.8rem,4.8vw,3.2rem)]">

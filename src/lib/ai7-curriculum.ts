@@ -1087,11 +1087,37 @@ export const ROBOTYPE_CAMPAIGN_ID = "robotype";
 /** همون `PRICING.full` به عدد، برای سنجش قیمت کمپین و درصد تخفیف */
 export const ROBOTYPE_PRICE = 12_000_000;
 
+/**
+ * شمار کل شرکت‌کننده‌های دوره تا امروز. دستی به‌روز می‌شه، چون ثبت‌نام
+ * کارت‌به‌کارته و جایی توی دیتابیس شمرده نمی‌شه.
+ */
+export const ROBOTYPE_STUDENTS = 103;
+
+/**
+ * بلک‌فرایدی روبوتایپ.
+ *
+ * جدا از «کمپین»ِ پنل مدیریته چون ظرفیت داره و فقط همین یک دوره‌ست؛
+ * کمپین پنل قیمت همهٔ دوره‌ها و بنر صفحهٔ اصلی رو با هم عوض می‌کنه.
+ * تاریخ پایان نداره: با پر شدن ظرفیت (`taken === cap`) یا `on: false`
+ * خودش از هر دو صفحه برداشته می‌شه و قیمت برمی‌گرده روی عدد اصلی.
+ *
+ * `taken` رو با هر ثبت‌نام دستی یکی زیاد کن. عددی که این‌جا نیست روی
+ * صفحه هم نیست، پس نوار ظرفیت همیشه راست می‌گه.
+ */
+export const BLACK_FRIDAY: { on: boolean; price: number; cap: number; taken: number } = {
+  on: true,
+  price: 6_000_000,
+  cap: 10,
+  taken: 0,
+};
+
 export interface RobotypeOffer {
   /** عنوان کمپین، کنار قیمت خط‌خورده */
   title: string;
   price: string;
   off: string;
+  /** فقط وقتی پیشنهاد ظرفیت داره (بلک‌فرایدی)؛ کمپین پنل ظرفیت نداره */
+  seats?: { cap: number; taken: number };
 }
 
 /**
@@ -1103,19 +1129,26 @@ export function robotypeOffer(
   now: number,
   lang: keyof typeof PRICING,
 ): RobotypeOffer | null {
-  if (!campaign || campaignPhase(campaign, now) !== "live") return null;
-  const amount = campaign.prices[ROBOTYPE_CAMPAIGN_ID];
+  const live = campaign && campaignPhase(campaign, now) === "live" ? campaign : null;
+  const campaignAmount = live ? live.prices[ROBOTYPE_CAMPAIGN_ID] : undefined;
+  // کمپین پنل اگه در جریان باشه مقدمه؛ وگرنه بلک‌فرایدی تا ظرفیتش پر نشده
+  const bf = BLACK_FRIDAY.on && BLACK_FRIDAY.taken < BLACK_FRIDAY.cap ? BLACK_FRIDAY : null;
+  const fromCampaign = live && campaignAmount && campaignAmount < ROBOTYPE_PRICE ? live : null;
+  const amount = fromCampaign ? campaignAmount : bf?.price;
   if (!amount || amount >= ROBOTYPE_PRICE) return null;
   const pct = Math.round((1 - amount / ROBOTYPE_PRICE) * 100);
+  const seats = fromCampaign || !bf ? undefined : { cap: bf.cap, taken: bf.taken };
   return lang === "fa"
     ? {
-        title: campaign.title,
+        title: fromCampaign ? fromCampaign.title : "بلک‌فرایدی",
         price: amount.toLocaleString("fa-IR"),
         off: `${pct.toLocaleString("fa-IR")}٪ تخفیف`,
+        seats,
       }
     : {
-        title: campaign.title,
+        title: fromCampaign ? fromCampaign.title : "Black Friday",
         price: amount.toLocaleString("en-US"),
         off: `${pct}% off`,
+        seats,
       };
 }

@@ -3,7 +3,7 @@ import Image from "next/image";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import FadeIn from "@/components/FadeIn";
 import { MISSIONS, EPISODE_COUNT } from "@/lib/odyssey";
-import { LAUNCH_SEATS, PRICING, currentTier, type RobotypeOffer } from "@/lib/ai7-curriculum";
+import { LAUNCH_SEATS, PRICING, ROBOTYPE_STUDENTS, currentTier, type RobotypeOffer } from "@/lib/ai7-curriculum";
 import type { Lang } from "@/lib/i18n";
 
 /**
@@ -30,6 +30,7 @@ const COPY = {
       { k: "دسترسی همیشگی", v: "فصل‌های بعدی هم رایگان" },
     ],
     seats: "{n} جا از {cap} جای پلهٔ فعلی مانده",
+    students: "{s} نفر تا امروز شرکت کرده‌اند",
     cta: "آشنایی با دوره",
     posterAlt: "پوستر دورهٔ ROBOTYPE: پیکرهٔ مشکیِ رباتی با گیتار",
   },
@@ -43,6 +44,7 @@ const COPY = {
       { k: "Lifetime access", v: "later chapters included" },
     ],
     seats: "{n} of {cap} seats left in this tier",
+    students: "{s} people have joined so far",
     cta: "See the course",
     posterAlt: "ROBOTYPE course poster: a black robot figure with a guitar",
   },
@@ -61,7 +63,8 @@ export default function RobotypePromo({ lang, offer }: { lang: Lang; offer?: Rob
       .replace("{ch}", num(MISSIONS.length))
       .replace("{ep}", num(EPISODE_COUNT))
       .replace("{n}", num(left))
-      .replace("{cap}", num(LAUNCH_SEATS.cap));
+      .replace("{cap}", num(LAUNCH_SEATS.cap))
+      .replace("{s}", num(ROBOTYPE_STUDENTS));
 
   return (
     <section className="relative overflow-hidden border-y border-white/10" style={{ background: "#0a0908", color: "#f4efe8" }}>
@@ -130,9 +133,12 @@ export default function RobotypePromo({ lang, offer }: { lang: Lang; offer?: Rob
             )}
           </div>
 
+          {/* شمار شرکت‌کننده‌ها — یک خط، نه یک کارت: خبر است، نه ادعا */}
+          <p className="mt-7 font-body text-sm text-white/70">{fill(c.students)}</p>
+
           <Link
             href="/robotype"
-            className="mt-10 inline-flex items-center gap-2 rounded-2xl bg-[#f4efe8] px-7 py-3.5 font-body font-semibold text-[#0a0908] transition-all hover:scale-[1.02] hover:bg-white active:scale-[0.98]"
+            className="mt-6 inline-flex items-center gap-2 rounded-2xl bg-[#f4efe8] px-7 py-3.5 font-body font-semibold text-[#0a0908] transition-all hover:scale-[1.02] hover:bg-white active:scale-[0.98]"
           >
             {c.cta}
             <Forward size={16} />
