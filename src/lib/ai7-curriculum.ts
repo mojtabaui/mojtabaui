@@ -1091,7 +1091,7 @@ export const ROBOTYPE_PRICE = 12_000_000;
  * شمار کل شرکت‌کننده‌های دوره تا امروز. دستی به‌روز می‌شه، چون ثبت‌نام
  * کارت‌به‌کارته و جایی توی دیتابیس شمرده نمی‌شه.
  */
-export const ROBOTYPE_STUDENTS = 103;
+export const ROBOTYPE_STUDENTS = 110;
 
 export interface RobotypeOffer {
   /** عنوان کمپین، کنار قیمت خط‌خورده */
