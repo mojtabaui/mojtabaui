@@ -45,7 +45,7 @@ const COPY = {
     close: "بستن",
     modeLabel: "نحوهٔ پرداخت",
     full: "یک‌جا",
-    split: (k: number) => (k === 2 ? "دو قسطی" : `${k} قسطی`),
+    split: () => "اقساطی",
     splitSum: (k: number, each: string) => `${k.toLocaleString("fa-IR")} قسط برابر، هر قسط ${each} تومان`,
     firstPay: "قسط اول",
     firstPayHint: (k: number, each: string) =>
