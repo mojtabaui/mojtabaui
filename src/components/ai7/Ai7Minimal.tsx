@@ -135,6 +135,8 @@ const CARD = "var(--neo-card, #fffcf6)";
  * خودش بخشی از پیام است. عددها فقط یک جا نوشته شده‌اند.
  */
 const SUPPORT = "https://t.me/melina_support";
+/** تعداد قسط‌های برابر روبوتایپ؛ هر قسط می‌شه قیمتِ روز تقسیم بر این عدد */
+const INSTALLMENTS = 2;
 /**
  * نشانِ واژه‌ای قابِ اول.
  *
@@ -582,8 +584,9 @@ export default function Ai7Minimal({
    */
   const [muted, setMuted] = useState(false);
   /* همهٔ دکمه‌های ثبت‌نام صفحه یک مودال مشترک را باز می‌کنند */
-  const [enrolling, setEnrolling] = useState(false);
-  const enroll = () => setEnrolling(true);
+  const [enrolling, setEnrolling] = useState<null | "full" | "split">(null);
+  const enroll = () => setEnrolling("full");
+  const enrollSplit = () => setEnrolling("split");
   const proj = PROJECTS[lang];
   const slides = SLIDES[lang];
   const tools = TOOLS[lang];
@@ -598,6 +601,21 @@ export default function Ai7Minimal({
   /** مبلغی که در مودال ثبت‌نام می‌آید — همان قیمتی که صفحه نشان می‌دهد */
   const amount = offer?.amount ?? Number(toLatinDigits(tier.price).replace(/\D/g, ""));
   const Forward = rtl ? ArrowLeft : ArrowRight;
+  /** خط «یا دو قسطی» کنار دکمه‌های ثبت‌نام — همیشه همان مبلغ مودال */
+  const eachInstalment = Math.round(amount / INSTALLMENTS).toLocaleString(rtl ? "fa-IR" : "en-US");
+  const installLine = (
+    <button
+      type="button"
+      onClick={enrollSplit}
+      aria-haspopup="dialog"
+      className="mt-3 block text-start text-xs underline underline-offset-4 transition-opacity hover:opacity-70"
+      style={{ color: MUTE }}
+    >
+      {rtl
+        ? `یا در ${num(INSTALLMENTS)} قسط ${eachInstalment} تومانی`
+        : `or in ${INSTALLMENTS} instalments of ${eachInstalment} toman`}
+    </button>
+  );
   const still = useStill();
 
   const stage = useRef<HTMLDivElement>(null);
@@ -1061,6 +1079,7 @@ export default function Ai7Minimal({
               {t.joinCta}
               <Forward className="size-4" aria-hidden="true" />
             </button>
+            {installLine}
           </div>
         </section>
       )}
@@ -1157,6 +1176,7 @@ export default function Ai7Minimal({
               {t.joinCta}
               <Forward className="size-4" aria-hidden="true" />
             </button>
+            {installLine}
           </div>
         </div>
       </Sec>
@@ -1878,6 +1898,7 @@ export default function Ai7Minimal({
             {t.joinCta}
             <Forward className="size-4" aria-hidden="true" />
           </button>
+            {installLine}
           <p className="mt-4 text-xs" style={{ color: MUTE }}>
             <a href={SUPPORT} target="_blank" rel="noopener noreferrer" className="underline underline-offset-4">
               {t.joinNote}
@@ -2021,7 +2042,9 @@ export default function Ai7Minimal({
           course={rtl ? "دورهٔ روبوتایپ" : "ROBOTYPE"}
           amount={amount}
           original={ROBOTYPE_PRICE}
-          onClose={() => setEnrolling(false)}
+          installments={INSTALLMENTS}
+          startSplit={enrolling === "split"}
+          onClose={() => setEnrolling(null)}
         />
       )}
     </div>

@@ -43,6 +43,13 @@ const COPY = {
     note: "بعد از تأیید پرداخت، اطلاعات دسترسی به دوره برات ارسال می‌شه.",
     ask: "قبل از پرداخت سؤال داری؟ بپرس",
     close: "بستن",
+    modeLabel: "نحوهٔ پرداخت",
+    full: "یک‌جا",
+    split: (k: number) => (k === 2 ? "دو قسطی" : `${k} قسطی`),
+    splitSum: (k: number, each: string) => `${k.toLocaleString("fa-IR")} قسط برابر، هر قسط ${each} تومان`,
+    firstPay: "قسط اول",
+    firstPayHint: (k: number, each: string) =>
+      `فعلاً فقط قسط اول رو کارت‌به‌کارت کن. ${k - 1 === 1 ? "قسط دوم" : "قسط‌های بعدی"} (${each} تومان) رو با پشتیبانی هماهنگ می‌کنی.`,
     message: (c: string, a: string) =>
       `سلام، مبلغ ${a} تومان رو برای ${c} کارت‌به‌کارت کردم.\n\n` +
       "نام و نام خانوادگی فارسی: \nنام و نام خانوادگی انگلیسی: \nایمیل: \nشماره موبایل: \n\n" +
@@ -69,6 +76,13 @@ const COPY = {
     note: "Once the payment is confirmed, we send your course access.",
     ask: "Question before paying? Ask us",
     close: "Close",
+    modeLabel: "How to pay",
+    full: "In full",
+    split: (k: number) => (k === 2 ? "Two instalments" : `${k} instalments`),
+    splitSum: (k: number, each: string) => `${k} equal instalments of ${each} toman`,
+    firstPay: "First instalment",
+    firstPayHint: (k: number, each: string) =>
+      `Transfer only the first instalment now. The ${k - 1 === 1 ? "second one" : "rest"} (${each} toman each) you arrange with support.`,
     message: (c: string, a: string) =>
       `Hi, I transferred ${a} toman for ${c}.\n\n` +
       "Full name in Persian: \nFull name in English: \nEmail: \nMobile number: \n\n" +
@@ -90,6 +104,8 @@ export default function EnrollModal({
   amount,
   original,
   theme = "canary",
+  installments,
+  startSplit = false,
   onClose,
 }: {
   lang: Lang;
@@ -100,12 +116,18 @@ export default function EnrollModal({
   /** قیمت قبل از تخفیف؛ فقط اگر از `amount` بیشتر باشد خط‌خورده دیده می‌شود */
   original?: number;
   theme?: EnrollTheme;
+  /** تعداد قسط‌های برابر؛ خالی یعنی این دوره قسطی ندارد */
+  installments?: number;
+  /** مودال با «قسطی» باز شود (از لینک «دو قسطی» کنار دکمه) */
+  startSplit?: boolean;
   onClose: () => void;
 }) {
   const t = COPY[lang];
   const c = THEME[theme];
   const ref = useRef<HTMLDialogElement>(null);
   const [copied, setCopied] = useState(false);
+  const parts = installments && installments > 1 ? installments : 0;
+  const [split, setSplit] = useState(Boolean(parts && startSplit));
   const n = (v: number) => v.toLocaleString(lang === "fa" ? "fa-IR" : "en-US");
 
   useEffect(() => {
@@ -135,6 +157,9 @@ export default function EnrollModal({
   }
 
   const close = () => ref.current?.close();
+  /** مبلغی که همین الان باید کارت‌به‌کارت شود */
+  const each = parts ? Math.round(amount / parts) : amount;
+  const payNow = split && parts ? each : amount;
 
   return (
     <dialog
@@ -213,21 +238,50 @@ export default function EnrollModal({
             {t.title(course)}
           </h2>
 
+          {parts ? (
+            <div className="mt-4" role="radiogroup" aria-label={t.modeLabel}>
+              <div className="grid grid-cols-2 gap-px border border-[#1a1714] bg-[#1a1714]">
+                {([false, true] as const).map((isSplit) => (
+                  <button
+                    key={String(isSplit)}
+                    type="button"
+                    role="radio"
+                    aria-checked={split === isSplit}
+                    onClick={() => setSplit(isSplit)}
+                    className="min-h-11 px-3 text-sm font-bold transition-colors"
+                    style={
+                      split === isSplit
+                        ? { background: "#1a1714", color: "#FAF6F1" }
+                        : { background: "#FAF6F1", color: "#1a1714" }
+                    }
+                  >
+                    {isSplit ? t.split(parts) : t.full}
+                  </button>
+                ))}
+              </div>
+              {split && (
+                <p className="mt-2 text-center text-xs text-[#6b6560]">{t.splitSum(parts, n(each))}</p>
+              )}
+            </div>
+          ) : null}
+
           <div className="mt-3 flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 border-y border-[#e8e2d9] py-3.5">
-            <span className="text-sm text-[#6b6560]">{t.amount}</span>
+            <span className="text-sm text-[#6b6560]">{split && parts ? t.firstPay : t.amount}</span>
             <span className="text-end">
               <span className="flex flex-wrap items-baseline justify-end gap-x-2.5">
-                {original && original > amount ? (
+                {!split && original && original > amount ? (
                   <span className="text-sm text-[#6b6560] line-through">{n(original)}</span>
                 ) : null}
-                <span className="text-2xl font-bold">{n(amount)}</span>
+                <span className="text-2xl font-bold">{n(payNow)}</span>
                 <span className="text-sm text-[#6b6560]">{t.unit}</span>
               </span>
               {/* اپ‌های بانکی ریال می‌گیرند؛ یک صفر کم، پرداختِ یک‌دهم است */}
-              <span className="mt-0.5 block text-xs text-[#6b6560]">{t.rial(n(amount * 10))}</span>
+              <span className="mt-0.5 block text-xs text-[#6b6560]">{t.rial(n(payNow * 10))}</span>
             </span>
           </div>
-          <p className="mt-3 text-sm leading-7 text-[#6b6560]">{t.pay}</p>
+          <p className="mt-3 text-sm leading-7 text-[#6b6560]">
+            {split && parts ? t.firstPayHint(parts, n(each)) : t.pay}
+          </p>
 
           <h3 className="mt-5 text-sm font-bold">{t.after}</h3>
           <ul className="mt-2.5 grid gap-x-5 gap-y-1.5 sm:grid-cols-2">
@@ -240,7 +294,7 @@ export default function EnrollModal({
           </ul>
 
           <a
-            href={`${SUPPORT}?text=${encodeURIComponent(t.message(course, n(amount)))}`}
+            href={`${SUPPORT}?text=${encodeURIComponent(t.message(course, n(payNow)))}`}
             target="_blank"
             rel="noopener noreferrer"
             className={`mt-6 flex min-h-[52px] w-full items-center justify-center gap-2.5 bg-[#1a1714] px-6 text-[0.95rem] font-bold text-[#FAF6F1] transition-opacity hover:opacity-88 ${c.radius}`}
