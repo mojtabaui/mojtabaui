@@ -103,10 +103,26 @@ model InfinityStudent {
   note       String   @default("")
   /// شمارهٔ گروه تیمی پروژه (۱، ۲، …)؛ خالی یعنی هنوز گروهی نداره
   teamGroup  Int?
+  /// موضوع پروژه و لینک فایل — ادمین دستی از نتایج فرم می‌ذاره
+  topic      String   @default("")
+  fileLink   String   @default("")
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 
   @@index([course])
+}
+
+/// نتایج خامِ فرم عمومی /project: هر بار ثبت یک ردیف، بدون تطبیق با هیچ فهرستی.
+/// ادمین توی /admin/infinity نگاه می‌کنه و دستی به دانشجو وصلش می‌کنه.
+model ProjectSubmission {
+  id          String       @id @default(cuid())
+  studentName String
+  track       ProjectTrack
+  topic       String       @default("")
+  fileLink    String       @default("")
+  createdAt   DateTime     @default(now())
+
+  @@index([createdAt])
 }
 
 /// گواهینامه‌های صادرشده — منبع اولیه: فایل‌های اکسل در prisma/certs،

@@ -29,10 +29,23 @@ export default async function InfinityAdminPage() {
       tasksDone: s.tasksDone,
       note: s.note,
       teamGroup: s.teamGroup,
+      topic: s.topic,
+      fileLink: s.fileLink,
     }));
   } catch {
     // جدول تا وقتی prisma db push نخورده وجود نداره
     tableMissing = true;
+  }
+
+  // نتایج خامِ فرم /project؛ اگه جدولش نبود صفحه خراب نشه
+  let submissions: { id: string; studentName: string; track: string; topic: string; fileLink: string; createdAt: Date }[] = [];
+  try {
+    submissions = await prisma.projectSubmission.findMany({
+      orderBy: { createdAt: "desc" },
+      take: 300,
+    });
+  } catch {
+    submissions = [];
   }
 
   return (
@@ -86,6 +99,57 @@ export default async function InfinityAdminPage() {
         ) : (
           <InfinityBoard students={students} />
         )}
+
+        {/* ── نتایج فرم ثبت موضوع ── */}
+        <section className="mt-10" aria-labelledby="form-results">
+          <h2 id="form-results" className="font-body font-semibold text-[var(--ink)] text-base mb-1">
+            نتایج فرم ثبت موضوع
+          </h2>
+          <p className="font-body text-xs text-[var(--ink-4)] mb-3 leading-6">
+            هر چیزی که هنرجوها توی /project می‌فرستن، با همون اسمی که تایپ کردن. از اینجا
+            کپی کن و توی ستون‌های «موضوع» و «لینک فایل» جدول بالا بذار.
+          </p>
+          <div className="bg-[var(--card)] border border-[var(--line)] rounded-2xl overflow-x-auto">
+            {submissions.length === 0 ? (
+              <p className="px-6 py-10 text-center font-body text-sm text-[var(--ink-4)]">
+                هنوز چیزی از فرم نیومده
+              </p>
+            ) : (
+              <table className="w-full min-w-[720px] text-right font-body text-sm">
+                <thead>
+                  <tr className="text-xs text-[var(--ink-4)]">
+                    <th className="font-normal px-4 py-3 border-b border-[var(--line)]">اسم</th>
+                    <th className="font-normal px-4 py-3 border-b border-[var(--line)]">دوره</th>
+                    <th className="font-normal px-4 py-3 border-b border-[var(--line)]">موضوع</th>
+                    <th className="font-normal px-4 py-3 border-b border-[var(--line)]">لینک فایل</th>
+                    <th className="font-normal px-4 py-3 border-b border-[var(--line)]">زمان</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {submissions.map((r) => (
+                    <tr key={r.id}>
+                      <td className="px-4 py-2.5 border-b border-[var(--line)] text-[var(--ink)]">{r.studentName}</td>
+                      <td className="px-4 py-2.5 border-b border-[var(--line)] text-[var(--ink-3)]">{r.track}</td>
+                      <td className="px-4 py-2.5 border-b border-[var(--line)] text-[var(--ink)]">{r.topic || "—"}</td>
+                      <td dir="ltr" className="px-4 py-2.5 border-b border-[var(--line)] text-left max-w-[260px] truncate">
+                        {r.fileLink ? (
+                          <a href={r.fileLink} target="_blank" rel="noreferrer" className="text-[var(--violet)] underline underline-offset-4">
+                            {r.fileLink}
+                          </a>
+                        ) : (
+                          "—"
+                        )}
+                      </td>
+                      <td className="px-4 py-2.5 border-b border-[var(--line)] text-xs text-[var(--ink-4)] whitespace-nowrap">
+                        {r.createdAt.toLocaleString("fa-IR", { dateStyle: "short", timeStyle: "short" })}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
+          </div>
+        </section>
       </div>
     </div>
   );

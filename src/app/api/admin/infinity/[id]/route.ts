@@ -73,6 +73,12 @@ export async function PATCH(
   if (body.note !== undefined) {
     data.note = String(body.note).trim().slice(0, 600);
   }
+  if (body.topic !== undefined) {
+    data.topic = String(body.topic).trim().slice(0, 300);
+  }
+  if (body.fileLink !== undefined) {
+    data.fileLink = String(body.fileLink).trim().slice(0, 500);
+  }
   if (body.teamGroup !== undefined) {
     if (body.teamGroup === null || body.teamGroup === "") {
       data.teamGroup = null;

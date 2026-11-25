@@ -20,8 +20,6 @@ type Track = "UI" | "UX";
 
 /** شناسهٔ ردیفِ هنوز نساخته؛ موقع ثبت با اسمی که خودِ هنرجو نوشته ساخته می‌شه */
 const NEW_ROW = "new";
-/** ماه ورودی ردیف‌هایی که از همین فرم ساخته می‌شن */
-const NEW_INTAKE_MONTH = "1405-08";
 
 /** فاصله‌های اضافی، نیم‌فاصله، «ی» و «ک» عربی رو یکدست می‌کنه */
 function normalize(name: string): string {
@@ -100,8 +98,8 @@ export async function POST(req: NextRequest) {
   }
 
   const rows = await findRows(name, track);
-  // اسمی که با ثبت‌نام نمی‌خونه خطا نمی‌گیره؛ موقع ثبت یک ردیف جدید با همون اسم
-  // ساخته می‌شه و ادمین فهرست رو دستی تطبیق می‌ده.
+  // اسمی که با ثبت‌نام نمی‌خونه خطا نمی‌گیره؛ فقط توی نتایج فرم ثبت می‌شه
+  // و ادمین دستی چک می‌کنه.
   const isNew = rows.length === 0;
 
   // مرحلهٔ اول: بگو کدوم دوره‌ست، موضوع فعلی‌اش چیه، و چه گزینه‌هایی داره
@@ -161,16 +159,17 @@ export async function POST(req: NextRequest) {
       if (link) data.fileLink = link;
       if (Object.keys(data).length === 0) continue;
 
-      if (id === NEW_ROW) {
-        await prisma.studentProject.create({
-          data: {
-            ...data,
-            studentName: name.trim().replace(/\s+/g, " ").slice(0, 120),
-            track,
-            intakeMonth: NEW_INTAKE_MONTH,
-          },
-        });
-      } else {
+      // هر ثبت یک ردیف خام توی نتایج فرم می‌شینه، با همون اسمی که تایپ شده
+      await prisma.projectSubmission.create({
+        data: {
+          studentName: name.trim().replace(/\s+/g, " ").slice(0, 120),
+          track,
+          topic: data.topic ?? "",
+          fileLink: data.fileLink ?? "",
+        },
+      });
+      // فقط اگه اسم دقیقاً با ردیفی از قبل بخونه اون ردیف هم به‌روز می‌شه
+      if (id !== NEW_ROW) {
         await prisma.studentProject.update({ where: { id }, data });
       }
       saved += 1;

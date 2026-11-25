@@ -21,6 +21,8 @@ export type InfinityStudentView = {
   tasksDone: number[];
   note: string;
   teamGroup: number | null;
+  topic: string;
+  fileLink: string;
 };
 
 type Kind = "video" | "task";
@@ -238,7 +240,7 @@ export default function InfinityBoard({ students }: { students: InfinityStudentV
           </div>
         ) : (
           <div className="overflow-x-auto">
-            <table className="w-full min-w-[980px] border-separate border-spacing-0">
+            <table className="w-full min-w-[1400px] border-separate border-spacing-0">
               <thead>
                 <tr>
                   <th
@@ -277,6 +279,18 @@ export default function InfinityBoard({ students }: { students: InfinityStudentV
                     className="border-b border-[var(--line)] px-3 py-3 text-right font-body text-xs text-[var(--ink-4)] font-normal min-w-[130px]"
                   >
                     جمع
+                  </th>
+                  <th
+                    scope="col"
+                    className="border-b border-[var(--line)] px-3 py-3 text-right font-body text-xs text-[var(--ink-4)] font-normal min-w-[200px]"
+                  >
+                    موضوع
+                  </th>
+                  <th
+                    scope="col"
+                    className="border-b border-[var(--line)] px-3 py-3 text-right font-body text-xs text-[var(--ink-4)] font-normal min-w-[220px]"
+                  >
+                    لینک فایل
                   </th>
                   <th className="border-b border-[var(--line)] w-10" />
                 </tr>
@@ -355,6 +369,28 @@ export default function InfinityBoard({ students }: { students: InfinityStudentV
                           <Bar label="تسک" value={s.tasksDone.length} tone="var(--ok)" />
                         </td>
 
+                        <td className="border-b border-[var(--line)] px-2 py-2 group-hover:bg-[var(--card-raised)] transition-colors">
+                          <CellInput
+                            studentId={s.id}
+                            field="topic"
+                            initial={source.topic}
+                            label={`موضوع ${s.name}`}
+                            placeholder="موضوع"
+                            onError={setError}
+                          />
+                        </td>
+                        <td className="border-b border-[var(--line)] px-2 py-2 group-hover:bg-[var(--card-raised)] transition-colors">
+                          <CellInput
+                            studentId={s.id}
+                            field="fileLink"
+                            initial={source.fileLink}
+                            label={`لینک فایل ${s.name}`}
+                            placeholder="https://…"
+                            ltr
+                            onError={setError}
+                          />
+                        </td>
+
                         <td className="border-b border-[var(--line)] px-1 group-hover:bg-[var(--card-raised)] transition-colors">
                           <button
                             type="button"
@@ -374,7 +410,7 @@ export default function InfinityBoard({ students }: { students: InfinityStudentV
                       {open && (
                         <tr>
                           <td
-                            colSpan={WEEK_COUNT + 3}
+                            colSpan={WEEK_COUNT + 5}
                             className="bg-[var(--card-raised)] border-b border-[var(--line)] px-4 py-4"
                           >
                             <StudentDetail
@@ -393,6 +429,63 @@ export default function InfinityBoard({ students }: { students: InfinityStudentV
         )}
       </div>
     </>
+  );
+}
+
+/** خونهٔ متنی که خودت دستی پر می‌کنی؛ با خارج شدن از خونه ذخیره می‌شه */
+function CellInput({
+  studentId,
+  field,
+  initial,
+  label,
+  placeholder,
+  ltr,
+  onError,
+}: {
+  studentId: string;
+  field: "topic" | "fileLink";
+  initial: string;
+  label: string;
+  placeholder: string;
+  ltr?: boolean;
+  onError: (msg: string) => void;
+}) {
+  const [value, setValue] = useState(initial);
+  const [saved, setSaved] = useState(initial);
+
+  async function save() {
+    const next = value.trim();
+    if (next === saved) return;
+    try {
+      const res = await fetch(`/api/admin/infinity/${studentId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ [field]: next }),
+      });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        onError(data.error || "ذخیره نشد");
+        return;
+      }
+      setSaved(next);
+      setValue(next);
+    } catch {
+      onError("خطا در ارتباط با سرور");
+    }
+  }
+
+  return (
+    <input
+      value={value}
+      onChange={(e) => setValue(e.target.value)}
+      onBlur={save}
+      dir={ltr ? "ltr" : undefined}
+      aria-label={label}
+      placeholder={placeholder}
+      className={`w-full bg-[var(--page)] border border-[var(--line-strong)]/50 focus:border-[var(--violet)] rounded-lg px-2.5 py-1.5 font-body text-xs text-[var(--ink)] placeholder:text-[var(--ink-4)] focus:outline-none transition-colors ${
+        ltr ? "text-left" : ""
+      }`}
+    />
   );
 }
 
