@@ -73,6 +73,17 @@ export async function PATCH(
   if (body.note !== undefined) {
     data.note = String(body.note).trim().slice(0, 600);
   }
+  if (body.teamGroup !== undefined) {
+    if (body.teamGroup === null || body.teamGroup === "") {
+      data.teamGroup = null;
+    } else {
+      const g = Number(body.teamGroup);
+      if (!Number.isInteger(g) || g < 1 || g > 999) {
+        return NextResponse.json({ error: "شمارهٔ گروه نامعتبره" }, { status: 400 });
+      }
+      data.teamGroup = g;
+    }
+  }
   if (body.course !== undefined) {
     const course = String(body.course);
     if (!isInfinityCourse(course)) {

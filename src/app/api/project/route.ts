@@ -18,6 +18,11 @@ import { prisma } from "@/lib/prisma";
 
 type Track = "UI" | "UX";
 
+/** شناسهٔ ردیفِ هنوز نساخته؛ موقع ثبت با اسمی که خودِ هنرجو نوشته ساخته می‌شه */
+const NEW_ROW = "new";
+/** ماه ورودی ردیف‌هایی که از همین فرم ساخته می‌شن */
+const NEW_INTAKE_MONTH = "1405-08";
+
 /** فاصله‌های اضافی، نیم‌فاصله، «ی» و «ک» عربی رو یکدست می‌کنه */
 function normalize(name: string): string {
   return name
@@ -74,13 +79,6 @@ async function findRows(name: string, track: Track) {
   return all.filter((r) => normalize(r.studentName) === target);
 }
 
-/** آیا این اسم اصلاً در دورهٔ دیگه هست — برای اینکه خطا راهنما باشه */
-async function existsInOtherTrack(name: string, track: Track): Promise<boolean> {
-  const other: Track = track === "UI" ? "UX" : "UI";
-  const rows = await findRows(name, other);
-  return rows.length > 0;
-}
-
 const TRACK_LABEL: Record<Track, string> = {
   UI: "طراحی رابط کاربری",
   UX: "طراحی تجربه کاربری",
@@ -97,27 +95,14 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "رمز دوره درست نیست" }, { status: 403 });
   }
 
-  const rows = await findRows(name, track);
-
-  if (rows.length === 0) {
-    // اگه توی دورهٔ دیگه هست، مشکل اسم نیست، رمزه. همینو بگیم.
-    if (await existsInOtherTrack(name, track)) {
-      const other = track === "UI" ? "UX" : "UI";
-      return NextResponse.json(
-        {
-          error: `اسمت پیدا شد ولی توی دورهٔ ${TRACK_LABEL[track]} ثبت نیستی. رمز دورهٔ ${TRACK_LABEL[other]} رو بزن.`,
-        },
-        { status: 404 }
-      );
-    }
-    return NextResponse.json(
-      {
-        error:
-          "با این اسم چیزی پیدا نشد. همون‌طور که موقع ثبت‌نام نوشتی بنویس، یا به پشتیبانی پیام بده.",
-      },
-      { status: 404 }
-    );
+  if (normalize(name).length < 3) {
+    return NextResponse.json({ error: "اسمت رو کامل بنویس" }, { status: 400 });
   }
+
+  const rows = await findRows(name, track);
+  // اسمی که با ثبت‌نام نمی‌خونه خطا نمی‌گیره؛ موقع ثبت یک ردیف جدید با همون اسم
+  // ساخته می‌شه و ادمین فهرست رو دستی تطبیق می‌ده.
+  const isNew = rows.length === 0;
 
   // مرحلهٔ اول: بگو کدوم دوره‌ست، موضوع فعلی‌اش چیه، و چه گزینه‌هایی داره
   if (action === "lookup") {
@@ -136,14 +121,16 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({
       ok: true,
-      name: rows[0].studentName,
+      name: rows[0]?.studentName ?? name.trim(),
       topics,
-      courses: rows.map((r) => ({
-        id: r.id,
-        track: r.track,
-        topic: r.topic,
-        fileLink: r.fileLink,
-      })),
+      courses: isNew
+        ? [{ id: NEW_ROW, track, topic: "", fileLink: "" }]
+        : rows.map((r) => ({
+            id: r.id,
+            track: r.track,
+            topic: r.topic,
+            fileLink: r.fileLink,
+          })),
     });
   }
 
@@ -152,7 +139,7 @@ export async function POST(req: NextRequest) {
     const updates = Array.isArray(body.topics) ? body.topics : [];
     // فقط ردیف‌هایی که همین رمز بازشون کرده. یعنی رمز دورهٔ رابط
     // نمی‌تونه ردیف دورهٔ تجربه رو بنویسه، حتی اگه شناسه‌اش رو بفرسته.
-    const allowed = new Set(rows.map((r) => r.id));
+    const allowed = new Set(isNew ? [NEW_ROW] : rows.map((r) => r.id));
     let saved = 0;
 
     for (const u of updates) {
@@ -174,7 +161,18 @@ export async function POST(req: NextRequest) {
       if (link) data.fileLink = link;
       if (Object.keys(data).length === 0) continue;
 
-      await prisma.studentProject.update({ where: { id }, data });
+      if (id === NEW_ROW) {
+        await prisma.studentProject.create({
+          data: {
+            ...data,
+            studentName: name.trim().replace(/\s+/g, " ").slice(0, 120),
+            track,
+            intakeMonth: NEW_INTAKE_MONTH,
+          },
+        });
+      } else {
+        await prisma.studentProject.update({ where: { id }, data });
+      }
       saved += 1;
     }
 

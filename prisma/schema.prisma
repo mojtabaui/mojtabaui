@@ -101,6 +101,8 @@ model InfinityStudent {
   videosDone Int[]    @default([])
   tasksDone  Int[]    @default([])
   note       String   @default("")
+  /// شمارهٔ گروه تیمی پروژه (۱، ۲، …)؛ خالی یعنی هنوز گروهی نداره
+  teamGroup  Int?
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 
@@ -243,6 +245,7 @@ model StudentProject {
 enum ProjectTrack {
   UI
   UX
+  QC // کوادکمپ — بوت‌کمپ پنج‌ماهه، تابستان ۱۴۰۴
 }
 
 enum StudentGoal {

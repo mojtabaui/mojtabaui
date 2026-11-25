@@ -2,8 +2,8 @@
 
 import { Fragment, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Check, ChevronDown, ClipboardCheck, Play, Search, Trash2, X } from "lucide-react";
-import { toPersianDigits } from "@/lib/persian-months";
+import { Check, ChevronDown, ClipboardCheck, Copy, Play, Search, Trash2, X } from "lucide-react";
+import { toLatinDigits, toPersianDigits } from "@/lib/persian-months";
 import {
   INFINITY_COURSES,
   WEEKS,
@@ -20,6 +20,7 @@ export type InfinityStudentView = {
   videosDone: number[];
   tasksDone: number[];
   note: string;
+  teamGroup: number | null;
 };
 
 type Kind = "video" | "task";
@@ -97,6 +98,25 @@ export default function InfinityBoard({ students }: { students: InfinityStudentV
         onlyBehind ? s.videosDone.length < WEEK_COUNT || s.tasksDone.length < WEEK_COUNT : true
       );
   }, [students, local, q, course, onlyBehind]);
+
+  // فقط «نام + شمارهٔ گروه» برای شیر کردن؛ مرتب بر اساس گروه، کسانی که گروه ندارن نمیان
+  const [copied, setCopied] = useState(false);
+  const shareText = rows
+    .filter((s) => s.teamGroup !== null)
+    .sort((a, b) => a.teamGroup! - b.teamGroup!)
+    .map((s) => `${s.name} — گروه ${fa(s.teamGroup!)}`)
+    .join("\n");
+
+  async function copyGroups() {
+    if (!shareText) return;
+    try {
+      await navigator.clipboard.writeText(shareText);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      setError("کپی نشد — مرورگر اجازهٔ دسترسی به کلیپ‌بورد نداد");
+    }
+  }
 
   // آمار روی همین فهرستِ فیلترشده
   const n = rows.length;
@@ -195,6 +215,15 @@ export default function InfinityBoard({ students }: { students: InfinityStudentV
           </span>
           تسک هفته انجام شده
         </span>
+        <button
+          type="button"
+          onClick={copyGroups}
+          disabled={!shareText}
+          className="mr-auto flex items-center gap-1.5 font-body text-xs px-3 py-1.5 rounded-lg border border-[var(--line-strong)] text-[var(--ink-2,var(--ink-3))] hover:border-[var(--violet)] hover:text-[var(--violet)] disabled:opacity-40 disabled:hover:border-[var(--line-strong)] disabled:hover:text-[var(--ink-3)] transition-colors"
+        >
+          {copied ? <Check size={13} /> : <Copy size={13} />}
+          {copied ? "کپی شد" : "کپی نام و گروه‌ها"}
+        </button>
       </div>
 
       {/* ── ماتریس ── */}
@@ -275,6 +304,11 @@ export default function InfinityBoard({ students }: { students: InfinityStudentV
                               <span className="block font-body text-sm text-[var(--ink)] truncate max-w-[150px]">
                                 {s.name}
                               </span>
+                              {s.teamGroup !== null && (
+                                <span className="block font-body text-[10px] text-[var(--violet)]">
+                                  گروه {fa(s.teamGroup)}
+                                </span>
+                              )}
                               {s.note && (
                                 <span className="block font-body text-[10px] text-[var(--warn)] truncate max-w-[150px]">
                                   {s.note}
@@ -440,6 +474,7 @@ function StudentDetail({
   const [name, setName] = useState(student.name);
   const [phone, setPhone] = useState(student.phone);
   const [note, setNote] = useState(student.note);
+  const [group, setGroup] = useState(student.teamGroup === null ? "" : String(student.teamGroup));
   const [saving, setSaving] = useState(false);
   const [confirming, setConfirming] = useState(false);
   const [error, setError] = useState("");
@@ -493,7 +528,7 @@ function StudentDetail({
 
   return (
     <div className="space-y-4">
-      <div className="grid gap-3 sm:grid-cols-[1fr_1fr_auto]">
+      <div className="grid gap-3 sm:grid-cols-[1fr_1fr_auto_auto]">
         <div>
           <label htmlFor={id("name")} className={labelCls}>
             نام
@@ -521,6 +556,25 @@ function StudentDetail({
             disabled={saving}
             placeholder="09…"
             className={`${field} text-left`}
+          />
+        </div>
+        <div>
+          <label htmlFor={id("group")} className={labelCls}>
+            شمارهٔ گروه
+          </label>
+          <input
+            id={id("group")}
+            dir="ltr"
+            inputMode="numeric"
+            value={group}
+            onChange={(e) => setGroup(toLatinDigits(e.target.value).replace(/\D/g, "").slice(0, 3))}
+            onBlur={() => {
+              const next = group === "" ? null : Number(group);
+              if (next !== student.teamGroup) patch({ teamGroup: next });
+            }}
+            disabled={saving}
+            placeholder="مثلاً ۹۰"
+            className={`${field} text-left w-28`}
           />
         </div>
         <div>

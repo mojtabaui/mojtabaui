@@ -28,6 +28,7 @@ export default async function InfinityAdminPage() {
       videosDone: s.videosDone,
       tasksDone: s.tasksDone,
       note: s.note,
+      teamGroup: s.teamGroup,
     }));
   } catch {
     // جدول تا وقتی prisma db push نخورده وجود نداره
