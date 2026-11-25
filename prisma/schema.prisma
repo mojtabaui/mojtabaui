@@ -261,7 +261,6 @@ model StudentProject {
 enum ProjectTrack {
   UI
   UX
-  QC // کوادکمپ — بوت‌کمپ پنج‌ماهه، تابستان ۱۴۰۴
 }
 
 enum StudentGoal {
