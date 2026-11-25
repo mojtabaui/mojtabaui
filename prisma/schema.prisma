@@ -120,6 +120,8 @@ model ProjectSubmission {
   track       ProjectTrack
   topic       String       @default("")
   fileLink    String       @default("")
+  /// شمارهٔ گروه، یا "solo" برای انفرادی
+  teamGroup   String       @default("")
   createdAt   DateTime     @default(now())
 
   @@index([createdAt])

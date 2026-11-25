@@ -135,6 +135,9 @@ export async function POST(req: NextRequest) {
   // مرحلهٔ دوم: ثبت موضوع و لینک فایل
   if (action === "submit") {
     const updates = Array.isArray(body.topics) ? body.topics : [];
+    // "solo" یا شمارهٔ گروه؛ هر چیز دیگه‌ای خالی ذخیره می‌شه
+    const rawGroup = String(body.teamGroup ?? "").trim();
+    const teamGroup = rawGroup === "solo" || /^\d{1,3}$/.test(rawGroup) ? rawGroup : "";
     // فقط ردیف‌هایی که همین رمز بازشون کرده. یعنی رمز دورهٔ رابط
     // نمی‌تونه ردیف دورهٔ تجربه رو بنویسه، حتی اگه شناسه‌اش رو بفرسته.
     const allowed = new Set(isNew ? [NEW_ROW] : rows.map((r) => r.id));
@@ -162,6 +165,7 @@ export async function POST(req: NextRequest) {
       // هر ثبت یک ردیف خام توی نتایج فرم می‌شینه، با همون اسمی که تایپ شده
       await prisma.projectSubmission.create({
         data: {
+          teamGroup,
           studentName: name.trim().replace(/\s+/g, " ").slice(0, 120),
           track,
           topic: data.topic ?? "",

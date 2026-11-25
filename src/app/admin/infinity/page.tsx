@@ -38,7 +38,7 @@ export default async function InfinityAdminPage() {
   }
 
   // نتایج خامِ فرم /project؛ اگه جدولش نبود صفحه خراب نشه
-  let submissions: { id: string; studentName: string; track: string; topic: string; fileLink: string; createdAt: Date }[] = [];
+  let submissions: { id: string; studentName: string; track: string; teamGroup: string; topic: string; fileLink: string; createdAt: Date }[] = [];
   try {
     submissions = await prisma.projectSubmission.findMany({
       orderBy: { createdAt: "desc" },
@@ -119,6 +119,7 @@ export default async function InfinityAdminPage() {
                 <thead>
                   <tr className="text-xs text-[var(--ink-4)]">
                     <th className="font-normal px-4 py-3 border-b border-[var(--line)]">اسم</th>
+                    <th className="font-normal px-4 py-3 border-b border-[var(--line)]">گروه</th>
                     <th className="font-normal px-4 py-3 border-b border-[var(--line)]">دوره</th>
                     <th className="font-normal px-4 py-3 border-b border-[var(--line)]">موضوع</th>
                     <th className="font-normal px-4 py-3 border-b border-[var(--line)]">لینک فایل</th>
@@ -129,6 +130,9 @@ export default async function InfinityAdminPage() {
                   {submissions.map((r) => (
                     <tr key={r.id}>
                       <td className="px-4 py-2.5 border-b border-[var(--line)] text-[var(--ink)]">{r.studentName}</td>
+                      <td className="px-4 py-2.5 border-b border-[var(--line)] text-[var(--ink)]">
+                        {r.teamGroup === "solo" ? "انفرادی" : r.teamGroup ? `گروه ${Number(r.teamGroup).toLocaleString("fa-IR")}` : "—"}
+                      </td>
                       <td className="px-4 py-2.5 border-b border-[var(--line)] text-[var(--ink-3)]">{r.track}</td>
                       <td className="px-4 py-2.5 border-b border-[var(--line)] text-[var(--ink)]">{r.topic || "—"}</td>
                       <td dir="ltr" className="px-4 py-2.5 border-b border-[var(--line)] text-left max-w-[260px] truncate">

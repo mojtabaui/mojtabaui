@@ -87,6 +87,8 @@ export default function ProjectTopicForm() {
   const [topics, setTopics] = useState<PickableTopic[]>([]);
   /** شناسهٔ دوره‌ای که مودالش بازه */
   const [picking, setPicking] = useState<string | null>(null);
+  /** "solo" یعنی انفرادی، وگرنه شمارهٔ گروه */
+  const [teamGroup, setTeamGroup] = useState("");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const [done, setDone] = useState(false);
@@ -151,7 +153,11 @@ export default function ProjectTopicForm() {
       setError("لینک باید کامل باشه و با https:// شروع بشه");
       return;
     }
-    const data = await send("submit", { topics: payload });
+    if (!teamGroup) {
+      setError("شمارهٔ گروهت رو انتخاب کن. اگه گروهی نیستی «انفرادی» رو بزن.");
+      return;
+    }
+    const data = await send("submit", { topics: payload, teamGroup });
     if (data) setDone(true);
   }
 
@@ -205,6 +211,32 @@ export default function ProjectTopicForm() {
                 اسمت رو اصلاح کن.
               </p>
             </div>
+          </div>
+
+          <div className={`${card} p-5`}>
+            <label
+              htmlFor="team-group"
+              className="block font-body text-xs text-[var(--ink-3)] mb-2"
+            >
+              شمارهٔ گروه
+            </label>
+            <select
+              id="team-group"
+              value={teamGroup}
+              onChange={(e) => setTeamGroup(e.target.value)}
+              className={`${field} cursor-pointer`}
+            >
+              <option value="">انتخاب کن…</option>
+              <option value="solo">انفرادی (گروه ندارم)</option>
+              {[90, 91, 92].map((g) => (
+                <option key={g} value={String(g)}>
+                  گروه {g.toLocaleString("fa-IR")}
+                </option>
+              ))}
+            </select>
+            <p className="mt-2 font-body text-xs text-[var(--ink-4)] leading-6">
+              توی گروه فقط یک نفر فرم رو پر می‌کنه، به نمایندگی از همه.
+            </p>
           </div>
 
           {courses.map((c) => {
