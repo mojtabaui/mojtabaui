@@ -338,7 +338,7 @@ export default function ProjectTopicForm() {
                       <PencilLine size={12} className="inline-block ml-1 align-[-1px]" />
                       موضوع دلخواه خودم رو می‌نویسم
                       <span className="block text-[var(--ink-4)] text-[11px]">
-                        قبلش با منتور هماهنگ کن که برای این دوره مناسب باشه.
+                        سر جلسهٔ دوم با مجتبا هماهنگ کن.
                       </span>
                     </span>
                   </label>
@@ -347,7 +347,7 @@ export default function ProjectTopicForm() {
                 <div>
                   <label className="flex items-center gap-1.5 font-body text-xs text-[var(--ink-3)] mb-2">
                     <Link2 size={13} />
-                    لینک فایل کارت
+                    {c.track === "UX" ? "لینک فایل فیگ‌جم" : "لینک فایل کارت"}
                   </label>
                   <input
                     type="url"
@@ -355,11 +355,18 @@ export default function ProjectTopicForm() {
                     value={v.fileLink}
                     onChange={(e) => set({ fileLink: e.target.value })}
                     maxLength={500}
-                    placeholder="https://figma.com/file/..."
+                    placeholder={
+                      c.track === "UX"
+                        ? "https://figma.com/board/..."
+                        : "https://figma.com/file/..."
+                    }
                     className={`${field} text-left`}
                   />
                   <p className="mt-2 font-body text-xs text-[var(--ink-4)] leading-6">
-                    لینک فیگمای پروژه‌ات. اول توی فیگما دکمهٔ{" "}
+                    {c.track === "UX" ? "لینک فیگ‌جم پروژه‌ات. " : "لینک فیگمای پروژه‌ات. "}
+                    {c.track === "UX" &&
+                      "توی گروه، یک نفر فایل رو می‌سازه و بقیه رو با دسترسی Editor بهش اضافه می‌کنه. "}
+                    اول دکمهٔ{" "}
                     <span dir="ltr" className="text-[var(--ink-3)]">
                       Share
                     </span>{" "}
