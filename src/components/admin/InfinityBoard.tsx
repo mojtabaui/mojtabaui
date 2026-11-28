@@ -240,12 +240,12 @@ export default function InfinityBoard({ students }: { students: InfinityStudentV
           </div>
         ) : (
           <div className="overflow-x-auto">
-            <table className="w-full min-w-[1400px] border-separate border-spacing-0">
+            <table className="w-full min-w-[900px] lg:min-w-0 border-separate border-spacing-0">
               <thead>
                 <tr>
                   <th
                     scope="col"
-                    className="sticky right-0 z-10 bg-[var(--card)] border-b border-[var(--line)] px-4 py-3 text-right font-body text-xs text-[var(--ink-4)] font-normal min-w-[190px]"
+                    className="sticky right-0 z-10 bg-[var(--card)] border-b border-[var(--line)] px-3 py-3 text-right font-body text-xs text-[var(--ink-4)] font-normal w-[170px]"
                   >
                     دانشجو
                   </th>
@@ -253,10 +253,10 @@ export default function InfinityBoard({ students }: { students: InfinityStudentV
                     <th
                       key={w}
                       scope="col"
-                      className="border-b border-[var(--line)] px-1 py-2 font-body font-normal"
+                      className="border-b border-[var(--line)] px-0.5 py-2 font-body font-normal"
                     >
-                      <div className="text-xs text-[var(--ink-3)]">هفتهٔ {fa(w)}</div>
-                      <div className="mt-1 flex items-center justify-center gap-2 text-[10px]">
+                      <div className="text-xs text-[var(--ink-3)]" title={`هفتهٔ ${fa(w)}`}>ه{fa(w)}</div>
+                      <div className="mt-1 flex items-center justify-center gap-1 text-[10px]">
                         <span
                           className="flex items-center gap-0.5 text-[var(--info)]"
                           title={`ویدیوی هفتهٔ ${fa(w)}: ${fa(weekVideo[w - 1])} از ${fa(n)} نفر`}
@@ -276,19 +276,19 @@ export default function InfinityBoard({ students }: { students: InfinityStudentV
                   ))}
                   <th
                     scope="col"
-                    className="border-b border-[var(--line)] px-3 py-3 text-right font-body text-xs text-[var(--ink-4)] font-normal min-w-[130px]"
+                    className="border-b border-[var(--line)] px-3 py-3 text-right font-body text-xs text-[var(--ink-4)] font-normal w-[100px]"
                   >
                     جمع
                   </th>
                   <th
                     scope="col"
-                    className="border-b border-[var(--line)] px-3 py-3 text-right font-body text-xs text-[var(--ink-4)] font-normal min-w-[200px]"
+                    className="border-b border-[var(--line)] px-3 py-3 text-right font-body text-xs text-[var(--ink-4)] font-normal w-[14%]"
                   >
                     موضوع
                   </th>
                   <th
                     scope="col"
-                    className="border-b border-[var(--line)] px-3 py-3 text-right font-body text-xs text-[var(--ink-4)] font-normal min-w-[220px]"
+                    className="border-b border-[var(--line)] px-3 py-3 text-right font-body text-xs text-[var(--ink-4)] font-normal w-[14%]"
                   >
                     لینک فایل
                   </th>
@@ -304,7 +304,7 @@ export default function InfinityBoard({ students }: { students: InfinityStudentV
                       <tr className="group">
                         <th
                           scope="row"
-                          className="sticky right-0 z-10 bg-[var(--card)] group-hover:bg-[var(--card-raised)] border-b border-[var(--line)] px-4 py-2.5 text-right font-normal transition-colors"
+                          className="sticky right-0 z-10 bg-[var(--card)] group-hover:bg-[var(--card-raised)] border-b border-[var(--line)] px-3 py-2.5 text-right font-normal transition-colors"
                         >
                           <div className="flex items-center gap-2">
                             <span
@@ -315,7 +315,7 @@ export default function InfinityBoard({ students }: { students: InfinityStudentV
                               {INFINITY_COURSES.find((c) => c.slug === s.course)?.short ?? "؟"}
                             </span>
                             <span className="min-w-0">
-                              <span className="block font-body text-sm text-[var(--ink)] truncate max-w-[150px]">
+                              <span className="block font-body text-sm text-[var(--ink)] truncate max-w-[125px]">
                                 {s.name}
                               </span>
                               {s.teamGroup !== null && (
@@ -324,7 +324,7 @@ export default function InfinityBoard({ students }: { students: InfinityStudentV
                                 </span>
                               )}
                               {s.note && (
-                                <span className="block font-body text-[10px] text-[var(--warn)] truncate max-w-[150px]">
+                                <span className="block font-body text-[10px] text-[var(--warn)] truncate max-w-[125px]">
                                   {s.note}
                                 </span>
                               )}
@@ -338,7 +338,7 @@ export default function InfinityBoard({ students }: { students: InfinityStudentV
                           return (
                             <td
                               key={w}
-                              className={`border-b border-[var(--line)] px-1 py-2 text-center transition-colors group-hover:bg-[var(--card-raised)] ${
+                              className={`border-b border-[var(--line)] px-0.5 py-2 text-center transition-colors group-hover:bg-[var(--card-raised)] ${
                                 v && t ? "bg-[var(--ok)]/[0.06]" : ""
                               }`}
                             >
@@ -364,7 +364,7 @@ export default function InfinityBoard({ students }: { students: InfinityStudentV
                           );
                         })}
 
-                        <td className="border-b border-[var(--line)] px-3 py-2 group-hover:bg-[var(--card-raised)] transition-colors">
+                        <td className="border-b border-[var(--line)] px-2 py-2 group-hover:bg-[var(--card-raised)] transition-colors">
                           <Bar label="ویدیو" value={s.videosDone.length} tone="var(--info)" />
                           <Bar label="تسک" value={s.tasksDone.length} tone="var(--ok)" />
                         </td>
@@ -480,9 +480,11 @@ function CellInput({
       onChange={(e) => setValue(e.target.value)}
       onBlur={save}
       dir={ltr ? "ltr" : undefined}
+      size={1}
+      title={value}
       aria-label={label}
       placeholder={placeholder}
-      className={`w-full bg-[var(--page)] border border-[var(--line-strong)]/50 focus:border-[var(--violet)] rounded-lg px-2.5 py-1.5 font-body text-xs text-[var(--ink)] placeholder:text-[var(--ink-4)] focus:outline-none transition-colors ${
+      className={`w-full min-w-0 bg-[var(--page)] border border-[var(--line-strong)]/50 focus:border-[var(--violet)] rounded-lg px-2.5 py-1.5 font-body text-xs text-[var(--ink)] placeholder:text-[var(--ink-4)] focus:outline-none transition-colors ${
         ltr ? "text-left" : ""
       }`}
     />
@@ -529,7 +531,7 @@ function Tick({
       aria-pressed={on}
       aria-label={label}
       title={label}
-      className={`w-8 h-6 rounded-md border grid place-items-center transition-colors focus-visible:outline-2 focus-visible:outline-[var(--violet)] ${
+      className={`w-7 h-6 rounded-md border grid place-items-center transition-colors focus-visible:outline-2 focus-visible:outline-[var(--violet)] ${
         on ? onCls : offCls
       }`}
     >

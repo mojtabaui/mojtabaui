@@ -49,8 +49,8 @@ export default async function InfinityAdminPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[var(--page)] py-10 px-4 sm:px-6">
-      <div className="max-w-7xl mx-auto">
+    <div className="min-h-screen bg-[var(--page)] py-8 px-3 sm:px-4">
+      <div className="w-full">
         {/* ── Header ── */}
         <div className="flex items-start justify-between gap-4 mb-6 flex-wrap">
           <div>
@@ -115,7 +115,7 @@ export default async function InfinityAdminPage() {
                 هنوز چیزی از فرم نیومده
               </p>
             ) : (
-              <table className="w-full min-w-[720px] text-right font-body text-sm">
+              <table className="w-full min-w-[720px] lg:min-w-0 text-right font-body text-sm">
                 <thead>
                   <tr className="text-xs text-[var(--ink-4)]">
                     <th className="font-normal px-4 py-3 border-b border-[var(--line)]">اسم</th>
@@ -135,7 +135,7 @@ export default async function InfinityAdminPage() {
                       </td>
                       <td className="px-4 py-2.5 border-b border-[var(--line)] text-[var(--ink-3)]">{r.track}</td>
                       <td className="px-4 py-2.5 border-b border-[var(--line)] text-[var(--ink)]">{r.topic || "—"}</td>
-                      <td dir="ltr" className="px-4 py-2.5 border-b border-[var(--line)] text-left max-w-[260px] truncate">
+                      <td dir="ltr" className="px-4 py-2.5 border-b border-[var(--line)] text-left w-[30%] max-w-0 truncate">
                         {r.fileLink ? (
                           <a href={r.fileLink} target="_blank" rel="noreferrer" className="text-[var(--violet)] underline underline-offset-4">
                             {r.fileLink}
